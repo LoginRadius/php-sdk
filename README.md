@@ -43,4 +43,6 @@ Step 3: Validate the object using 'IsAuthenticated' variable. After successful v
             }  
           ?>
 
+Note: Few providers like Twitter, LinkedIn, etc. doesn't provide email address with User Profile data, so you need to handle these cases in your callback page.
+
 These are the quick and easy steps to integrate Social Login on your PHP website, if you have any questions or need a further assistance please contact us at hello@loginradius.com.
