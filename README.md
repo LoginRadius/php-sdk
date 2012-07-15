@@ -8,14 +8,17 @@ Steps to implement LoginRadius PHP SDK
 
 Step 1: Add SDK file reference to your PHP website
 
-        a. Copy the LoginRadius SDK file to your project directory.
-        b. Include SDK class file on your callback page. 
-            ex: <?php include('LoginRadiusSDK.php'); ?>
+a. Copy the LoginRadius SDK file to your project directory.
+
+b. Include SDK class file on your callback page. 
+
+            <?php include('LoginRadiusSDK.php'); ?>
       
 Step 2: Create LoginRadius object in your PHP file
 
-        On your callback page, create a LoginRadius object using your unique LoginRadius API Secret.
-          ex: <?php 
+On your callback page, create a LoginRadius object using your unique LoginRadius API Secret.
+
+          <?php 
               $obj = new LoginRadius();
               $userprofile = $obj->construct("Your API Secret key goes here");  
             ?>
@@ -24,7 +27,7 @@ Step 3: Validate, authenticate and store data from LoginRadius:
 
 Validate the object using 'IsAuthenticated' variable. After successful validation, access user profile data such as ID, First Name, Last Name, Email using $userprofile->ID, $userprofile->FirstName, $userprofile->LastName, etc.
 
-        ex: <?php  
+        <?php  
           $obj = new LoginRadius();  
           $userprofile = $obj->construct("Your API Secret key goes here");  
           if($obj->IsAuthenticated==TRUE)  
