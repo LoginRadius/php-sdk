@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Php-sdk by LoginRadius</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Php-sdk</h1>
+        <p>LoginRadius PHP SDK is a development kit that lets you integrate Social Login such as Facebook, Google, Twitter and over 20 more on a PHP website. The SDK also fetches user profile data and can be customized from your LoginRadius user account. Ex: social icon sets, login interface, provider settings, etc.</p>
+
+        <p class="view"><a href="https://github.com/LoginRadius/PHP-SDK">View the Project on GitHub <small>LoginRadius/PHP-SDK</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/LoginRadius/PHP-SDK/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/LoginRadius/PHP-SDK/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/LoginRadius/PHP-SDK">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>LoginRadius's PHP SDK is used to implement Social Login on your PHP website</h1>
+
+<p>Description: LoginRadius's PHP SDK is a development kit that lets you integrate Social Login through providers such as Facebook, Google, Twitter, and over 20 more on a PHP website. The SDK also fetches user profile data and can be customized from your LoginRadius user account. Ex: social icon sets, login interface, provider settings, etc.</p>
+
+<p>Download <a href="https://github.com/downloads/LoginRadius/PHP-SDK/LoginRadius-PHP-SDK.zip">Social Login PHP SDK</a></p>
+
+<h1>Steps to implement LoginRadius PHP SDK</h1>
+
+<p>Step 1: Add SDK file reference to your PHP website</p>
+
+<p>a. Copy the LoginRadius SDK file to your project directory.</p>
+
+<p>b. Include SDK class file on your callback page. </p>
+
+<pre><code>        &lt;?php include('LoginRadiusSDK.php'); ?&gt;
+</code></pre>
+
+<p>Step 2: Create LoginRadius object in your PHP file</p>
+
+<p>On your callback page, create a LoginRadius object using your unique LoginRadius API Secret.</p>
+
+<pre><code>      &lt;?php 
+          $obj = new LoginRadius();
+          $userprofile = $obj-&gt;construct("Your API Secret key goes here");  
+        ?&gt;
+</code></pre>
+
+<p>Step 3: Validate, authenticate and store data from LoginRadius: </p>
+
+<p>Validate the object using 'IsAuthenticated' variable. After successful validation, access user profile data such as ID, First Name, Last Name, Email using $userprofile-&gt;ID, $userprofile-&gt;FirstName, $userprofile-&gt;LastName, etc.</p>
+
+<pre><code>    &lt;?php  
+      $obj = new LoginRadius();  
+      $userprofile = $obj-&gt;construct("Your API Secret key goes here");  
+      if($obj-&gt;IsAuthenticated==TRUE)  
+        {  
+        echo "ID=".$ID=$userprofile-&gt;ID."&lt;br&gt;";  
+        echo "Provider=".$Provider=$userprofile-&gt;Provider."&lt;br&gt;";  
+        echo "Prefix=".$Prefix=$userprofile-&gt;Prefix."&lt;br&gt;";  
+        echo "FirstName=".$FirstName=$userprofile-&gt;FirstName."&lt;br&gt;";  
+        echo "LastName=".$LastName=$userprofile-&gt;LastName."&lt;br&gt;";  
+        echo "Suffix=".$Suffix=$userprofile-&gt;Suffix."&lt;br&gt;";  
+        echo "FullName=".$FullName=$userprofile-&gt;FullName."&lt;br&gt;";  
+        echo "NickName=".$NickName=$userprofile-&gt;NickName."&lt;br&gt;";  
+        echo "ProfileName=".$ProfileName=$userprofile-&gt;ProfileName."&lt;br&gt;";  
+        echo "BirthDate=".$BirthDate=$userprofile-&gt;BirthDate."&lt;br&gt;";  
+        echo "Gender=".$Gender=$userprofile-&gt;Gender."&lt;br&gt;";
+        echo "EmailType=".$EmailType=$userprofile-&gt;Email[0]-&gt;Type."&lt;br&gt;";
+        echo "EmailValue=".$EmailValue=$userprofile-&gt;Email[0]-&gt;Value."&lt;br&gt;";
+        echo "Country=".$Country=$userprofile-&gt;Country."&lt;br&gt;";
+        echo "Provider=".$Provider=$userprofile-&gt;Provider."&lt;br&gt;";
+        }  
+      ?&gt;
+</code></pre>
+
+<p>Note: Few providers like Twitter, LinkedIn, etc. doesn't provide email address with User Profile data, so you need to handle these cases in your callback page.</p>
+
+<p>These are the quick and easy steps to integrate Social Login on your PHP website, if you have any questions or need a further assistance please contact us at <a href="mailto:hello@loginradius.com">hello@loginradius.com</a>.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/LoginRadius">LoginRadius</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-22321867-5");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
