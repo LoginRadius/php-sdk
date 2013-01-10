@@ -1,6 +1,7 @@
 <?php 
 class LoginRadius {
 public $IsAuthenticated,$JsonResponse,$UserProfile; 
+const ERR_MISSING_INI_SUPPORT = 1; 
 public function construct($ApiSecrete) {
 $IsAuthenticated = false;
 if(isset($_REQUEST['token'])) {
@@ -33,9 +34,12 @@ $JsonResponse = file_get_contents($ValidateUrl);
 $UserProfile = json_decode($JsonResponse);
 }
 else {
-echo "Please check php.ini settings<br><b>cURL support = enabled <br>or<br>allow_url_fopen = On</b>";
+ throw new LoginRadiusException("Please check php.ini settings<br><b>cURL support = enabled <br>or<br>allow_url_fopen = On</b>",self::ERR_MISSING_INI_SUPPORT); 
 }
 if(isset($UserProfile->ID) && $UserProfile->ID!=''){ 
 $this->IsAuthenticated = true;
 return $UserProfile;
-}}}}?>
+}}}}
+
+class LoginRadiusException extends Exception {} 
+?>
