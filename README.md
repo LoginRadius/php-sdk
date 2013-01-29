@@ -30,24 +30,46 @@ Validate the object using 'IsAuthenticated' variable. After successful validatio
         <?php  
           $obj = new LoginRadius();  
           $userprofile = $obj->construct("Your API Secret key goes here");  
-          if($obj->IsAuthenticated==TRUE)  
-            {  
-            echo "ID=".$ID=$userprofile->ID."<br>";  
-            echo "Provider=".$Provider=$userprofile->Provider."<br>";  
-            echo "Prefix=".$Prefix=$userprofile->Prefix."<br>";  
-            echo "FirstName=".$FirstName=$userprofile->FirstName."<br>";  
-            echo "LastName=".$LastName=$userprofile->LastName."<br>";  
-            echo "Suffix=".$Suffix=$userprofile->Suffix."<br>";  
-            echo "FullName=".$FullName=$userprofile->FullName."<br>";  
-            echo "NickName=".$NickName=$userprofile->NickName."<br>";  
-            echo "ProfileName=".$ProfileName=$userprofile->ProfileName."<br>";  
-            echo "BirthDate=".$BirthDate=$userprofile->BirthDate."<br>";  
-            echo "Gender=".$Gender=$userprofile->Gender."<br>";
-            echo "EmailType=".$EmailType=$userprofile->Email[0]->Type."<br>";
-            echo "EmailValue=".$EmailValue=$userprofile->Email[0]->Value."<br>";
-            echo "Country=".$Country=$userprofile->Country."<br>";
+         if($obj->IsAuthenticated==TRUE)
+            {
+            echo "ID=".$ID=$userprofile->ID."<br>";
             echo "Provider=".$Provider=$userprofile->Provider."<br>";
-            }  
+            echo "Prefix=".$Prefix=$userprofile->Prefix."<br>";
+            echo "FirstName=".$FirstName=$userprofile->FirstName."<br>";
+            echo "LastName=".$LastName=$userprofile->LastName."<br>";
+            echo "Suffix=".$Suffix=$userprofile->Suffix."<br>";
+            echo "FullName=".$FullName=$userprofile->FullName."<br>";
+            echo "NickName=".$NickName=$userprofile->NickName."<br>";
+            echo "ProfileName=".$ProfileName=$userprofile->ProfileName."<br>";
+            echo "BirthDate=".$BirthDate=$userprofile->BirthDate."<br>";
+            echo "Gender=".$Gender=$userprofile->Gender."<br>";
+            
+            
+            echo "EmailType=".$EmailType=isset($userprofile->Email[0]->Type)?$userprofile->Email[0]->Type:"";
+            echo "<br>";  
+            echo "EmailValue=".$EmailValue=isset($userprofile->Email[0]->Value)?$userprofile->Email[0]->Value:$userprofile->Email;
+            echo "<br>";
+            
+            
+            echo "Country Name=";
+            if(isset($userprofile->Country->Name) && is_string($userprofile->Country->Name)){
+            	echo $userprofile->Country->Name."<br>";
+            }elseif(isset($userprofile->Country) && is_string($userprofile->Country) ){
+            	echo $userprofile->Country."<br>";
+            }else{
+            	echo '<br>';
+            }
+            
+             echo "Country Code=";  
+             if(isset($userprofile->Country->Code) && is_string($userprofile->Country->Code)){  
+            		echo $userprofile->Country->Code."<br>";  
+             }else{  
+            		echo '<br>';  
+             }
+            
+            echo "Provider=".$Provider=$userprofile->Provider."<br>";
+            
+            }
           ?>
 
 Note: Few providers like Twitter, LinkedIn, etc. doesn't provide email address with User Profile data, so you need to handle these cases in your callback page.
