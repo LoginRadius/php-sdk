@@ -32,8 +32,6 @@
 
 <p>Description: LoginRadius's PHP SDK is a development kit that lets you integrate Social Login through providers such as Facebook, Google, Twitter, and over 20 more on a PHP website. The SDK also fetches user profile data and can be customized from your LoginRadius user account. Ex: social icon sets, login interface, provider settings, etc.</p>
 
-<p>Download <a href="https://github.com/downloads/LoginRadius/PHP-SDK/LoginRadius-PHP-SDK.zip">Social Login PHP SDK</a></p>
-
 <h1>Steps to implement LoginRadius PHP SDK</h1>
 
 <p>Step 1: Add SDK file reference to your PHP website</p>
@@ -62,24 +60,46 @@
 <pre><code>    &lt;?php  
       $obj = new LoginRadius();  
       $userprofile = $obj-&gt;construct("Your API Secret key goes here");  
-      if($obj-&gt;IsAuthenticated==TRUE)  
-        {  
-        echo "ID=".$ID=$userprofile-&gt;ID."&lt;br&gt;";  
-        echo "Provider=".$Provider=$userprofile-&gt;Provider."&lt;br&gt;";  
-        echo "Prefix=".$Prefix=$userprofile-&gt;Prefix."&lt;br&gt;";  
-        echo "FirstName=".$FirstName=$userprofile-&gt;FirstName."&lt;br&gt;";  
-        echo "LastName=".$LastName=$userprofile-&gt;LastName."&lt;br&gt;";  
-        echo "Suffix=".$Suffix=$userprofile-&gt;Suffix."&lt;br&gt;";  
-        echo "FullName=".$FullName=$userprofile-&gt;FullName."&lt;br&gt;";  
-        echo "NickName=".$NickName=$userprofile-&gt;NickName."&lt;br&gt;";  
-        echo "ProfileName=".$ProfileName=$userprofile-&gt;ProfileName."&lt;br&gt;";  
-        echo "BirthDate=".$BirthDate=$userprofile-&gt;BirthDate."&lt;br&gt;";  
-        echo "Gender=".$Gender=$userprofile-&gt;Gender."&lt;br&gt;";
-        echo "EmailType=".$EmailType=$userprofile-&gt;Email[0]-&gt;Type."&lt;br&gt;";
-        echo "EmailValue=".$EmailValue=$userprofile-&gt;Email[0]-&gt;Value."&lt;br&gt;";
-        echo "Country=".$Country=$userprofile-&gt;Country."&lt;br&gt;";
+     if($obj-&gt;IsAuthenticated==TRUE)
+        {
+        echo "ID=".$ID=$userprofile-&gt;ID."&lt;br&gt;";
         echo "Provider=".$Provider=$userprofile-&gt;Provider."&lt;br&gt;";
-        }  
+        echo "Prefix=".$Prefix=$userprofile-&gt;Prefix."&lt;br&gt;";
+        echo "FirstName=".$FirstName=$userprofile-&gt;FirstName."&lt;br&gt;";
+        echo "LastName=".$LastName=$userprofile-&gt;LastName."&lt;br&gt;";
+        echo "Suffix=".$Suffix=$userprofile-&gt;Suffix."&lt;br&gt;";
+        echo "FullName=".$FullName=$userprofile-&gt;FullName."&lt;br&gt;";
+        echo "NickName=".$NickName=$userprofile-&gt;NickName."&lt;br&gt;";
+        echo "ProfileName=".$ProfileName=$userprofile-&gt;ProfileName."&lt;br&gt;";
+        echo "BirthDate=".$BirthDate=$userprofile-&gt;BirthDate."&lt;br&gt;";
+        echo "Gender=".$Gender=$userprofile-&gt;Gender."&lt;br&gt;";
+
+
+        echo "EmailType=".$EmailType=isset($userprofile-&gt;Email[0]-&gt;Type)?$userprofile-&gt;Email[0]-&gt;Type:"";
+        echo "&lt;br&gt;";  
+        echo "EmailValue=".$EmailValue=isset($userprofile-&gt;Email[0]-&gt;Value)?$userprofile-&gt;Email[0]-&gt;Value:$userprofile-&gt;Email;
+        echo "&lt;br&gt;";
+
+
+        echo "Country Name=";
+        if(isset($userprofile-&gt;Country-&gt;Name) &amp;&amp; is_string($userprofile-&gt;Country-&gt;Name)){
+            echo $userprofile-&gt;Country-&gt;Name."&lt;br&gt;";
+        }elseif(isset($userprofile-&gt;Country) &amp;&amp; is_string($userprofile-&gt;Country) ){
+            echo $userprofile-&gt;Country."&lt;br&gt;";
+        }else{
+            echo '&lt;br&gt;';
+        }
+
+         echo "Country Code=";  
+         if(isset($userprofile-&gt;Country-&gt;Code) &amp;&amp; is_string($userprofile-&gt;Country-&gt;Code)){  
+                echo $userprofile-&gt;Country-&gt;Code."&lt;br&gt;";  
+         }else{  
+                echo '&lt;br&gt;';  
+         }
+
+        echo "Provider=".$Provider=$userprofile-&gt;Provider."&lt;br&gt;";
+
+        }
       ?&gt;
 </code></pre>
 
