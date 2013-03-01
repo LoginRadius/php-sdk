@@ -48,8 +48,10 @@
 <p>On your callback page, create a LoginRadius object using your unique LoginRadius API Secret.</p>
 
 <pre><code>      &lt;?php 
-          $obj = new LoginRadius();
-          $userprofile = $obj-&gt;construct("Your API Secret key goes here");  
+          // create LoginRadius class object. Replace "API_SECRET" with your API Secret
+          $obj = new LoginRadius("API_SECRET");
+          // get user profile data
+          $userprofile = $obj-&gt;loginradius_get_data();  
         ?&gt;
 </code></pre>
 
@@ -57,50 +59,64 @@
 
 <p>Validate the object using 'IsAuthenticated' variable. After successful validation, access user profile data such as ID, First Name, Last Name, Email using $userprofile-&gt;ID, $userprofile-&gt;FirstName, $userprofile-&gt;LastName, etc.</p>
 
-<pre><code>    &lt;?php  
-      $obj = new LoginRadius();  
-      $userprofile = $obj-&gt;construct("Your API Secret key goes here");  
-     if($obj-&gt;IsAuthenticated==TRUE)
-        {
-        echo "ID=".$ID=$userprofile-&gt;ID."&lt;br&gt;";
-        echo "Provider=".$Provider=$userprofile-&gt;Provider."&lt;br&gt;";
-        echo "Prefix=".$Prefix=$userprofile-&gt;Prefix."&lt;br&gt;";
-        echo "FirstName=".$FirstName=$userprofile-&gt;FirstName."&lt;br&gt;";
-        echo "LastName=".$LastName=$userprofile-&gt;LastName."&lt;br&gt;";
-        echo "Suffix=".$Suffix=$userprofile-&gt;Suffix."&lt;br&gt;";
-        echo "FullName=".$FullName=$userprofile-&gt;FullName."&lt;br&gt;";
-        echo "NickName=".$NickName=$userprofile-&gt;NickName."&lt;br&gt;";
-        echo "ProfileName=".$ProfileName=$userprofile-&gt;ProfileName."&lt;br&gt;";
-        echo "BirthDate=".$BirthDate=$userprofile-&gt;BirthDate."&lt;br&gt;";
-        echo "Gender=".$Gender=$userprofile-&gt;Gender."&lt;br&gt;";
-
-
-        echo "EmailType=".$EmailType=isset($userprofile-&gt;Email[0]-&gt;Type)?$userprofile-&gt;Email[0]-&gt;Type:"";
-        echo "&lt;br&gt;";  
-        echo "EmailValue=".$EmailValue=isset($userprofile-&gt;Email[0]-&gt;Value)?$userprofile-&gt;Email[0]-&gt;Value:$userprofile-&gt;Email;
-        echo "&lt;br&gt;";
-
-
-        echo "Country Name=";
-        if(isset($userprofile-&gt;Country-&gt;Name) &amp;&amp; is_string($userprofile-&gt;Country-&gt;Name)){
-            echo $userprofile-&gt;Country-&gt;Name."&lt;br&gt;";
-        }elseif(isset($userprofile-&gt;Country) &amp;&amp; is_string($userprofile-&gt;Country) ){
-            echo $userprofile-&gt;Country."&lt;br&gt;";
-        }else{
-            echo '&lt;br&gt;';
-        }
-
-         echo "Country Code=";  
-         if(isset($userprofile-&gt;Country-&gt;Code) &amp;&amp; is_string($userprofile-&gt;Country-&gt;Code)){  
-                echo $userprofile-&gt;Country-&gt;Code."&lt;br&gt;";  
-         }else{  
+<pre><code>    &lt;?php
+        // include main PHP SDK file
+        include('LoginRadiusSDK.php');
+        // create LoginRadius class object. Replace "API_SECRET" with your API Secret
+        $obj = new LoginRadius("API_SECRET");
+        // get user profile data
+        $userprofile = $obj-&gt;loginradius_get_data();
+        // check if user is authenticated/valid 
+        if($obj-&gt;IsAuthenticated == true){
+                    // print user profile data
+            // social ID  
+            echo "ID=".$ID=$userprofile-&gt;ID."&lt;br&gt;";
+            // Social ID Provider
+            echo "Provider=".$Provider=$userprofile-&gt;Provider."&lt;br&gt;";
+            // Prefix
+            echo "Prefix=".$Prefix=$userprofile-&gt;Prefix."&lt;br&gt;";
+            // First Name
+            echo "FirstName=".$FirstName=$userprofile-&gt;FirstName."&lt;br&gt;";
+            // Middle Name
+            echo "Middle Name=".$MiddleName=$userprofile-&gt;MiddleName."&lt;br&gt;";  
+            // Last Name
+            echo "LastName=".$LastName=$userprofile-&gt;LastName."&lt;br&gt;";  
+            // Suffix
+            echo "Suffix=".$Suffix=$userprofile-&gt;Suffix."&lt;br&gt;";  
+            // Full Name
+            echo "FullName=".$FullName=$userprofile-&gt;FullName."&lt;br&gt;";  
+            // Nick Name
+            echo "NickName=".$NickName=$userprofile-&gt;NickName."&lt;br&gt;";  
+            // Profile Name
+            echo "ProfileName=".$ProfileName=$userprofile-&gt;ProfileName."&lt;br&gt;";  
+            // Birthdate
+            echo "BirthDate=".$BirthDate=$userprofile-&gt;BirthDate."&lt;br&gt;";  
+            // Gender
+            echo "Gender=".$Gender=$userprofile-&gt;Gender."&lt;br&gt;";  
+            // Email type
+            echo "EmailType=".$EmailType=isset($userprofile-&gt;Email[0]-&gt;Type)?$userprofile-&gt;Email[0]-&gt;Type:"";  
+            echo "&lt;br&gt;";    
+            // Email
+            echo "EmailValue=".$EmailValue=isset($userprofile-&gt;Email[0]-&gt;Value)?$userprofile-&gt;Email[0]-&gt;Value:$userprofile-&gt;Email;  
+            echo "&lt;br&gt;";  
+            // Country
+            echo "Country Name=";  
+            if(isset($userprofile-&gt;Country-&gt;Name) &amp;&amp; is_string($userprofile-&gt;Country-&gt;Name)){  
+                echo $userprofile-&gt;Country-&gt;Name."&lt;br&gt;";  
+            }elseif(isset($userprofile-&gt;Country) &amp;&amp; is_string($userprofile-&gt;Country) ){  
+                echo $userprofile-&gt;Country."&lt;br&gt;";  
+            }else{  
                 echo '&lt;br&gt;';  
-         }
-
-        echo "Provider=".$Provider=$userprofile-&gt;Provider."&lt;br&gt;";
-
+            }
+            // Country Code 
+            echo "Country Code=";    
+            if(isset($userprofile-&gt;Country-&gt;Code) &amp;&amp; is_string($userprofile-&gt;Country-&gt;Code)){    
+                echo $userprofile-&gt;Country-&gt;Code."&lt;br&gt;";    
+            }else{    
+                echo '&lt;br&gt;';    
+            }  
         }
-      ?&gt;
+        ?&gt;
 </code></pre>
 
 <p>Note: Few providers like Twitter doesn't provide email address with User Profile data, so you need to handle these cases in your callback page.</p>
