@@ -1,13 +1,13 @@
 <?php
 /**
- * Class to get users's twitter mentions.
+ * Class to get facebook groups followed by the user.
  *
  * Copyright 2013 LoginRadius Inc. - www.LoginRadius.com
  *
  * This file is part of the LoginRadius SDK package.
  *
  */ 
-class LoginRadiusMentions extends LoginRadius{
+class LoginRadiusGroups extends LoginRadius{
 	/**
 	 * Constructor. Calls parent class constructor.
 	 * 
@@ -17,13 +17,13 @@ class LoginRadiusMentions extends LoginRadius{
 		parent::__construct($Secret);
 	}
 	
-    /**
-	 * Get user's twitter mentions.
+	/**
+	 * Get facebook groups followed by user.
 	 * 
-	 * @return array User's twitter mentions.
+	 * @return array Followed facebook groups information.
 	 */ 
-	public function loginradius_get_mentions(){
-		$Url = 'https://hub.loginradius.com/status/mentions/'. $this->LRSecret ."/".$this->LRToken;
+	public function loginradius_get_groups(){
+		$Url = "https://hub.loginradius.com/GetGroups/". $this->LRSecret ."/".$this->LRToken;
 		$Response = $this->loginradius_call_api($Url);
 		return json_decode($Response);
 	}
