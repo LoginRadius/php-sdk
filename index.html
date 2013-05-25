@@ -1,137 +1,557 @@
 <!doctype html>
+<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
+<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Php-sdk by LoginRadius</title>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Php-sdk</h1>
-        <p>LoginRadius PHP SDK is a development kit that lets you integrate Social Login such as Facebook, Google, Twitter and over 20 more on a PHP website. The SDK also fetches user profile data and can be customized from your LoginRadius user account. Ex: social icon sets, login interface, provider settings, etc.</p>
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen"/>
+  <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="javascripts/script.js"></script>
 
-        <p class="view"><a href="https://github.com/LoginRadius/PHP-SDK">View the Project on GitHub <small>LoginRadius/PHP-SDK</small></a></p>
+  <title>Php-sdk</title>
+  <meta name="description" content="LoginRadius PHP SDK is a development kit that lets you integrate Social Login such as Facebook, Google, Twitter and over 20 more on a PHP website. The SDK also fetches user profile data and can be customized from your LoginRadius user account. Ex: social icon sets, login interface, provider settings, etc.">
 
+  <meta name="viewport" content="width=device-width,initial-scale=1">
 
-        <ul>
-          <li><a href="https://github.com/LoginRadius/PHP-SDK/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/LoginRadius/PHP-SDK/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/LoginRadius/PHP-SDK">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>LoginRadius's PHP SDK is used to implement Social Login on your PHP website</h1>
+</head>
 
-<p>Description: LoginRadius's PHP SDK is a development kit that lets you integrate Social Login through providers such as Facebook, Google, Twitter, and over 20 more on a PHP website. The SDK also fetches user profile data and can be customized from your LoginRadius user account. Ex: social icon sets, login interface, provider settings, etc.</p>
+<body>
 
-<h1>Steps to implement LoginRadius PHP SDK for Basic User profile and Social Authentication</h1>
+  <div class="wrapper">
+    <header>
+      <h1 class="title">Php-sdk</h1>
+    </header>
+    <div id="container">
+      <p class="tagline">LoginRadius PHP SDK is a development kit that lets you integrate Social Login such as Facebook, Google, Twitter and over 20 more on a PHP website. The SDK also fetches user profile data and can be customized from your LoginRadius user account. Ex: social icon sets, login interface, provider settings, etc.</p>
+      <div id="main" role="main">
+        <div class="download-bar">
+        <div class="inner">
+          <a href="https://github.com/LoginRadius/PHP-SDK/tarball/master" class="download-button tar"><span>Download</span></a>
+          <a href="https://github.com/LoginRadius/PHP-SDK/zipball/master" class="download-button zip"><span>Download</span></a>
+          <a href="https://github.com/LoginRadius/PHP-SDK" class="code">View Php-sdk on GitHub</a>
+        </div>
+        <span class="blc"></span><span class="trc"></span>
+        </div>
+        <article class="markdown-body">
+          <h1>LoginRadius library for PHP</h1>
 
-<p>Step 1: Add SDK file reference to your PHP website</p>
+<p>PHP SDK for the LoginRadius API. Get social authentication, user profile data and send messages using many social network and email clients such as Facebook, Google, Twitter, Yahoo, LinkedIn, etc.</p>
 
-<p>a. Copy the LoginRadius SDK file to your project directory.</p>
+<h2>Installation</h2>
 
-<p>b. Include SDK class file on your callback page. </p>
+<ol>
+<li>
+<strong>Font-end interface:</strong> Add social login interface code from your LoginRadius user account to your webpage.</li>
+<li>
+<strong>Call-back setup:</strong> Set-up the callback URL in your LoginRadius user account, this is the URL where user would be redirected after authentication.</li>
+<li>
+<strong>Library set-up and installation:</strong> Copy SDK file to your project directory and follow the instructions to implement the SDK into your callback page.</li>
+</ol><p>Steps to call the library:</p>
 
-<pre><code>        &lt;?php include('LoginRadiusSDK.php'); ?&gt;
+<pre><code> 1. Download the LoginRadius SDK and add it to your web project.
+ 2. On the code behind of callback page, create an object of LoginRadius class and pass secret key.
+ 3. If success, call loginradius_get_data method to get user's profile data.
+   [For Premium paid plans: You can call loginradius_get_data method to get Extended user profile data.]
+   visit the link for more information to get list of data: https://www.loginradius.com/product/user-profile-data
 </code></pre>
 
-<p>Step 2: Create LoginRadius object in your PHP file</p>
+<p><strong>Sample code for authentication and get basic profile data</strong></p>
 
-<p>On your callback page, create a LoginRadius object using your unique LoginRadius API Secret.</p>
+<p><strong>PHP</strong></p>
 
-<pre><code>      &lt;?php 
-          // create LoginRadius class object. Replace "API_SECRET" with your API Secret
-          $obj = new LoginRadius("API_SECRET");
-          // get user profile data
-          $userprofile = $obj-&gt;loginradius_get_data();  
-        ?&gt;
+<pre><code>         // include main PHP SDK file
+include('LoginRadiusSDK.php');
+
+ // create LoginRadius class object
+ $obj = new LoginRadius("API_SECRET");
+
+ // get user profile data
+ $userprofile = $obj-&gt;loginradius_get_data();
+
+ // check if user is authenticated/valid 
+ if($obj-&gt;IsAuthenticated == true){
+// print user profile data
+// social ID  
+echo "ID=".$ID=$userprofile-&gt;ID."&lt;br&gt;";
+// Social ID Provider
+echo "Provider=".$Provider=$userprofile-&gt;Provider."&lt;br&gt;";
+// Prefix
+echo "Prefix=".$Prefix=$userprofile-&gt;Prefix."&lt;br&gt;";
+// First Name
+echo "FirstName=".$FirstName=$userprofile-&gt;FirstName."&lt;br&gt;";
+// Middle Name
+echo "Middle Name=".$MiddleName=$userprofile-&gt;MiddleName."&lt;br&gt;";  
+// Last Name
+echo "LastName=".$LastName=$userprofile-&gt;LastName."&lt;br&gt;";  
+// Suffix
+echo "Suffix=".$Suffix=$userprofile-&gt;Suffix."&lt;br&gt;";  
+// Full Name
+echo "FullName=".$FullName=$userprofile-&gt;FullName."&lt;br&gt;";  
+// Nick Name
+echo "NickName=".$NickName=$userprofile-&gt;NickName."&lt;br&gt;";  
+// Profile Name
+echo "ProfileName=".$ProfileName=$userprofile-&gt;ProfileName."&lt;br&gt;";  
+// Birthdate
+echo "BirthDate=".$BirthDate=$userprofile-&gt;BirthDate."&lt;br&gt;";  
+// Gender
+echo "Gender=".$Gender=$userprofile-&gt;Gender."&lt;br&gt;";  
+// Email
+if(isset($userprofile-&gt;Email) &amp;&amp; is_array($userprofile-&gt;Email) &amp;&amp; count($userprofile-&gt;Email) &gt; 0){
+        echo 'Emails:-&lt;br /&gt;';
+        foreach($userprofile-&gt;Email as $email){
+            echo isset($email-&gt;Type) ? 'Email Type='.$email-&gt;Type."&lt;br/&gt;" : '';
+            echo isset($email-&gt;Value) ? "Email=".$email-&gt;Value."&lt;br/&gt;" : '';
+            echo '&lt;br/&gt;';
+   }
+ }
+ echo "&lt;br&gt;";  
+ // Country
+ echo "Country Name=";  
+ if(isset($userprofile-&gt;Country-&gt;Name) &amp;&amp; is_string($userprofile-&gt;Country-&gt;Name))
+ {  
+    echo $userprofile-&gt;Country-&gt;Name."&lt;br&gt;";  
+ }elseif(isset($userprofile-&gt;Country) &amp;&amp; is_string($userprofile-&gt;Country) ){  
+    echo $userprofile-&gt;Country."&lt;br&gt;";  
+ }else{  
+    echo '&lt;br&gt;';  
+ }
+ // Country Code 
+ echo "Country Code=";    
+ if(isset($userprofile-&gt;Country-&gt;Code) &amp;&amp; is_string($userprofile-&gt;Country-&gt;Code))
+ {    
+    echo $userprofile-&gt;Country-&gt;Code."&lt;br&gt;";    
+ }else{    
+    echo '&lt;br&gt;';    
+ }
+}
 </code></pre>
 
-<p>Step 3: Validate, authenticate and store data from LoginRadius: </p>
+<p><strong>Sample code to get Extended user profile (Only for Paid plans - Premium)</strong></p>
 
-<p>Validate the object using 'IsAuthenticated' variable. After successful validation, access user profile data such as ID, First Name, Last Name, Email using $userprofile-&gt;ID, $userprofile-&gt;FirstName, $userprofile-&gt;LastName, etc.</p>
+<p><strong>PHP</strong></p>
 
-<pre><code>    &lt;?php
-        // include main PHP SDK file
-        include('LoginRadiusSDK.php');
-        // create LoginRadius class object. Replace "API_SECRET" with your API Secret
-        $obj = new LoginRadius("API_SECRET");
-        // get user profile data
-        $userprofile = $obj-&gt;loginradius_get_data();
-        // check if user is authenticated/valid 
-        if($obj-&gt;IsAuthenticated == true){
-                    // print user profile data
-            // social ID  
-            echo "ID=".$ID=$userprofile-&gt;ID."&lt;br&gt;";
-            // Social ID Provider
-            echo "Provider=".$Provider=$userprofile-&gt;Provider."&lt;br&gt;";
-            // Prefix
-            echo "Prefix=".$Prefix=$userprofile-&gt;Prefix."&lt;br&gt;";
-            // First Name
-            echo "FirstName=".$FirstName=$userprofile-&gt;FirstName."&lt;br&gt;";
-            // Middle Name
-            echo "Middle Name=".$MiddleName=$userprofile-&gt;MiddleName."&lt;br&gt;";  
-            // Last Name
-            echo "LastName=".$LastName=$userprofile-&gt;LastName."&lt;br&gt;";  
-            // Suffix
-            echo "Suffix=".$Suffix=$userprofile-&gt;Suffix."&lt;br&gt;";  
-            // Full Name
-            echo "FullName=".$FullName=$userprofile-&gt;FullName."&lt;br&gt;";  
-            // Nick Name
-            echo "NickName=".$NickName=$userprofile-&gt;NickName."&lt;br&gt;";  
-            // Profile Name
-            echo "ProfileName=".$ProfileName=$userprofile-&gt;ProfileName."&lt;br&gt;";  
-            // Birthdate
-            echo "BirthDate=".$BirthDate=$userprofile-&gt;BirthDate."&lt;br&gt;";  
-            // Gender
-            echo "Gender=".$Gender=$userprofile-&gt;Gender."&lt;br&gt;";  
-            // Email type
-            echo "EmailType=".$EmailType=isset($userprofile-&gt;Email[0]-&gt;Type)?$userprofile-&gt;Email[0]-&gt;Type:"";  
-            echo "&lt;br&gt;";    
-            // Email
-            echo "EmailValue=".$EmailValue=isset($userprofile-&gt;Email[0]-&gt;Value)?$userprofile-&gt;Email[0]-&gt;Value:$userprofile-&gt;Email;  
-            echo "&lt;br&gt;";  
-            // Country
-            echo "Country Name=";  
-            if(isset($userprofile-&gt;Country-&gt;Name) &amp;&amp; is_string($userprofile-&gt;Country-&gt;Name)){  
-                echo $userprofile-&gt;Country-&gt;Name."&lt;br&gt;";  
-            }elseif(isset($userprofile-&gt;Country) &amp;&amp; is_string($userprofile-&gt;Country) ){  
-                echo $userprofile-&gt;Country."&lt;br&gt;";  
-            }else{  
-                echo '&lt;br&gt;';  
-            }
-            // Country Code 
-            echo "Country Code=";    
-            if(isset($userprofile-&gt;Country-&gt;Code) &amp;&amp; is_string($userprofile-&gt;Country-&gt;Code)){    
-                echo $userprofile-&gt;Country-&gt;Code."&lt;br&gt;";    
-            }else{    
-                echo '&lt;br&gt;';    
-            }  
+<pre><code> // include main PHP SDK file
+ include('LoginRadiusSDK.php');
+
+// create LoginRadius class object
+$obj = new LoginRadius("API_SECRET");
+
+// get user profile data
+$userprofile = $obj-&gt;loginradius_get_data();
+
+// check if user is authenticated/valid 
+if($obj-&gt;IsAuthenticated == true){
+// print user profile data
+// social ID  
+echo "ID=".$ID=$userprofile-&gt;ID."&lt;br&gt;";
+// Social ID Provider
+echo "Provider=".$Provider=$userprofile-&gt;Provider."&lt;br&gt;";
+// Prefix
+echo "Prefix=".$Prefix=$userprofile-&gt;Prefix."&lt;br&gt;";
+// First Name
+echo "FirstName=".$FirstName=$userprofile-&gt;FirstName."&lt;br&gt;";  
+// Middle Name
+echo "Middle Name=".$MiddleName=$userprofile-&gt;MiddleName."&lt;br&gt;";  
+// Last Name
+echo "LastName=".$LastName=$userprofile-&gt;LastName."&lt;br&gt;";  
+// Suffix
+echo "Suffix=".$Suffix=$userprofile-&gt;Suffix."&lt;br&gt;";  
+// Full Name
+echo "FullName=".$FullName=$userprofile-&gt;FullName."&lt;br&gt;";  
+// Nick Name
+echo "NickName=".$NickName=$userprofile-&gt;NickName."&lt;br&gt;";  
+// Profile Name
+echo "ProfileName=".$ProfileName=$userprofile-&gt;ProfileName."&lt;br&gt;";  
+// Birthdate
+echo "BirthDate=".$BirthDate=$userprofile-&gt;BirthDate."&lt;br&gt;";  
+// Gender
+echo "Gender=".$Gender=$userprofile-&gt;Gender."&lt;br&gt;";  
+// Email
+if(isset($userprofile-&gt;Email) &amp;&amp; is_array($userprofile-&gt;Email) &amp;&amp;   count($userprofile-&gt;Email) &gt; 0){
+        echo 'Emails:-&lt;br /&gt;';
+        foreach($userprofile-&gt;Email as $email){
+            echo isset($email-&gt;Type) ? 'Email Type='.$email-&gt;Type."&lt;br/&gt;" : '';
+            echo isset($email-&gt;Value) ? "Email=".$email-&gt;Value."&lt;br/&gt;" : '';
+            echo '&lt;br/&gt;';
         }
-        ?&gt;
+ }
+ echo "&lt;br&gt;";  
+ // Country
+ echo "Country Name=";  
+ if(isset($userprofile-&gt;Country-&gt;Name) &amp;&amp; is_string($userprofile-&gt;Country-&gt;Name))
+ {  
+    echo $userprofile-&gt;Country-&gt;Name."&lt;br&gt;";  
+ }elseif(isset($userprofile-&gt;Country) &amp;&amp; is_string($userprofile-&gt;Country) ){  
+    echo $userprofile-&gt;Country."&lt;br&gt;";  
+ }else{  
+    echo '&lt;br&gt;';  
+}
+// Country Code 
+echo "Country Code=";    
+if(isset($userprofile-&gt;Country-&gt;Code) &amp;&amp; is_string($userprofile-&gt;Country-&gt;Code))
+{    
+    echo $userprofile-&gt;Country-&gt;Code."&lt;br&gt;";    
+}else{    
+     echo '&lt;br&gt;';    
+}
+// Image Url
+echo "Image Url =".$ImageUrl=$userprofile-&gt;ImageUrl."&lt;br&gt;";
+// Profile Url
+echo "Profile Url=".$ProfileUrl=$userprofile-&gt;ProfileUrl."&lt;br&gt;"; 
+// HomeTown
+echo "Home Town=".$Hometown=$userprofile-&gt;HomeTown."&lt;br&gt;"; 
+// State
+echo "State=".$State=$userprofile-&gt;State."&lt;br&gt;"; 
+// City
+echo "City=".$City=$userprofile-&gt;City."&lt;br&gt;"; 
+// About
+echo "About=".$About=$userprofile-&gt;About."&lt;br&gt;"; 
+// Time Zone
+echo "TimeZone=".$TimeZone=$userprofile-&gt;TimeZone."&lt;br&gt;"; 
+// LocalLanguage
+echo "Local Language=".$LocalLanguage=$userprofile-&gt;LocalLanguage."&lt;br&gt;"; 
+// Language
+echo "Language=".$Language=$userprofile-&gt;Language."&lt;br&gt;"; 
+// Verified
+echo "Verified=".$Verified=$userprofile-&gt;Verified."&lt;br&gt;"; 
+// Updated Time
+echo "Updated Time=".$UpdatedTime=$userprofile-&gt;UpdatedTime."&lt;br&gt;"; 
+// Positions
+if(isset($userprofile-&gt;Positions) &amp;&amp; is_array($userprofile-&gt;Positions) &amp;&amp; count($userprofile-&gt;Positions) &gt; 0){
+      echo 'Positions:-&lt;br /&gt;';
+      foreach($userprofile-&gt;Positions as $positions){
+        echo isset($positions-&gt;Position) ? 'Position='.$positions-&gt;Position."&lt;br/&gt;" : '';
+        echo isset($positions-&gt;Summary) ? "Summary=".$positions-&gt;Summary."&lt;br/&gt;" : '';
+        echo isset($positions-&gt;StartDate) ? "Start Date=".$positions-&gt;StartDate."&lt;br/&gt;" : '';
+        echo isset($positions-&gt;EndDate) ? "End Date=".$positions-&gt;EndDate."&lt;br/&gt;" : '';
+        echo isset($positions-&gt;IsCurrent) ? "IsCurrent=".$positions-&gt;IsCurrent."&lt;br/&gt;" : '';
+        echo isset($positions-&gt;comapny-&gt;Name) ? "Company Name=".$positions-&gt;comapny-&gt;Name."&lt;br/&gt;" : '';
+        echo isset($positions-&gt;comapny-&gt;Type) ? "Company Type=".$positions-&gt;comapny-&gt;Type."&lt;br/&gt;" : '';
+        echo isset($positions-&gt;comapny-&gt;Industry) ? "Company Industry=".$positions-&gt;comapny-&gt;Industry."&lt;br/&gt;" : '';
+        echo isset($positions-&gt;Company) ? "Company=".$positions-&gt;Company."&lt;br/&gt;" : '';
+        echo isset($positions-&gt;Location) ? "Location=".$positions-&gt;Location."&lt;br/&gt;" : '';
+        echo '&lt;br/&gt;';
+    }
+} 
+// Educations
+if(isset($userprofile-&gt;Educations) &amp;&amp; is_array($userprofile-&gt;Educations) &amp;&amp; count($userprofile-&gt;Educations) &gt; 0){
+    echo 'Educations:-&lt;br /&gt;';
+    foreach($userprofile-&gt;Educations as $educations){
+        echo isset($educations-&gt;School) ? 'School='.$educations-&gt;School."&lt;br/&gt;" : '';
+        echo isset($educations-&gt;year) ? "Year=".$educations-&gt;year."&lt;br/&gt;" : '';
+        echo isset($educations-&gt;type) ? "Type=".$educations-&gt;type."&lt;br/&gt;" : '';
+        echo isset($educations-&gt;notes) ? "Notes=".$educations-&gt;notes."&lt;br/&gt;" : '';
+        echo isset($educations-&gt;activities) ? "Activities=".$educations-&gt;activities."&lt;br/&gt;" : '';
+        echo isset($educations-&gt;degree) ? "Degree=".$educations-&gt;degree."&lt;br/&gt;" : '';
+        echo isset($educations-&gt;fieldofstudy) ? "Field of Study=".$educations-&gt;fieldofstudy."&lt;br/&gt;" : '';
+        echo isset($educations-&gt;StartDate) ? "Start Date=".$educations-&gt;StartDate."&lt;br/&gt;" : '';
+        echo isset($educations-&gt;EndDate) ? "End Date=".$educations-&gt;EndDate."&lt;br/&gt;" : '';
+        echo '&lt;br/&gt;';
+    }
+}
+
+     // im accounts
+     if(isset($userprofile-&gt;IMAccounts) &amp;&amp; is_array($userprofile-&gt;IMAccounts) &amp;&amp; count($userprofile-&gt;IMAccounts) &gt; 0){
+    echo 'IM Accounts:-&lt;br /&gt;';
+    foreach($userprofile-&gt;IMAccounts as $imAccount){
+        echo isset($imAccount-&gt;AccountType) ? 'Account Type='.$imAccount-&gt;AccountType."&lt;br/&gt;" : '';
+        echo isset($imAccount-&gt;AccountName) ? "Account Name=".$imAccount-&gt;AccountName."&lt;br/&gt;" : '';
+        echo '&lt;br/&gt;';
+         }
+       }
+
+     // Phone Numbers
+     if(isset($userprofile-&gt;PhoneNumbers) &amp;&amp; is_array($userprofile-&gt;PhoneNumbers) &amp;&amp; count($userprofile-&gt;PhoneNumbers) &gt; 0){
+    echo 'Phone Numbers:-&lt;br /&gt;';
+    foreach($userprofile-&gt;PhoneNumbers as $phoneNumber){
+        echo isset($phoneNumber-&gt;AccountType) ? 'Phone Number Type='.$phoneNumber-&gt;PhoneType."&lt;br/&gt;" : '';
+        echo isset($phoneNumber-&gt;AccountName) ? "Phone Number=".$phoneNumber-&gt;PhoneNumber."&lt;br/&gt;" : '';
+        echo '&lt;br/&gt;';
+        }
+      }
+
+     // Addresses
+     if(isset($userprofile-&gt;Addresses) &amp;&amp; is_array($userprofile-&gt;Addresses) &amp;&amp; count($userprofile-&gt;Addresses) &gt; 0){
+    echo 'Addresses:-&lt;br /&gt;';
+    foreach($userprofile-&gt;Addresses as $address){
+        echo isset($address-&gt;Type) ? 'Type='.$address-&gt;Type."&lt;br/&gt;" : '';
+        echo isset($address-&gt;Address1) ? "Address1=".$address-&gt;Address1."&lt;br/&gt;" : '';
+        echo isset($address-&gt;Address2) ? "Address2=".$address-&gt;Address2."&lt;br/&gt;" : '';
+        echo isset($address-&gt;City) ? "City=".$address-&gt;City."&lt;br/&gt;" : '';
+        echo isset($address-&gt;State) ? "State=".$address-&gt;State."&lt;br/&gt;" : '';
+        echo isset($address-&gt;PostalCode) ? "Postal Code=".$address-&gt;PostalCode."&lt;br/&gt;" : '';
+        echo isset($address-&gt;Region) ? "Region=".$address-&gt;Region."&lt;br/&gt;" : '';
+        echo '&lt;br/&gt;';
+         }
+       }
+
+     // Main Address
+     echo "Main Address=".$mainAddress=$userprofile-&gt;MainAddress."&lt;br&gt;"; 
+     // Created
+     echo "Created=".$created=$userprofile-&gt;Created."&lt;br&gt;"; 
+     // Local City
+     echo "Local City=".$localCity=$userprofile-&gt;LocalCity."&lt;br&gt;"; 
+     // Profile City
+     echo "Profile City=".$profileCity=$userprofile-&gt;ProfileCity."&lt;br&gt;"; 
+     // Local Country
+     echo "Local Country=".$localCountry=$userprofile-&gt;LocalCountry."&lt;br&gt;"; 
+     // ProfileCountry
+     echo "ProfileCountry=".$ProfileCountry=$userprofile-&gt;ProfileCountry."&lt;br&gt;"; 
+     // RelationshipStatus
+     echo "RelationshipStatus=".$RelationshipStatus=$userprofile-&gt;RelationshipStatus."&lt;br&gt;"; 
+     // Quotes
+     echo "Quotes=".$Quotes=$userprofile-&gt;Quota."&lt;br&gt;"; 
+     // Interested In
+     echo count($userprofile-&gt;InterestedIn) &gt; 0 ? "Interested In=".implode(',', $userprofile-&gt;InterestedIn) : "Interested In=&lt;br&gt;"; 
+     // Interests
+     echo "Interests=".$Interests=$userprofile-&gt;Interests."&lt;br&gt;"; 
+     // Religion
+     echo "Religion=".$Religion=$userprofile-&gt;Religion."&lt;br&gt;"; 
+     //  Political Views
+     echo "Political Views=".$Political=$userprofile-&gt;Political."&lt;br&gt;"; 
+     // Sports
+     echo "Sports=".$Sports=$userprofile-&gt;Sports."&lt;br&gt;";
+     // Inspirational People
+     if(isset($userprofile-&gt;InspirationalPeople) &amp;&amp; is_array($userprofile-&gt;InspirationalPeople) &amp;&amp; count($userprofile-&gt;InspirationalPeople) &gt; 0){
+     echo 'Inspirational People:-&lt;br /&gt;';
+     foreach($userprofile-&gt;InspirationalPeople as $people){
+        echo isset($people-&gt;Id) ? 'ID='.$people-&gt;Id."&lt;br/&gt;" : '';
+        echo isset($people-&gt;Name) ? "Name=".$people-&gt;Name."&lt;br/&gt;" : '';
+            echo '&lt;br/&gt;';
+         }
+      }
+
+     //  Https Image Url
+     echo "Https Image Url=".$HttpsImageUrl=$userprofile-&gt;HttpsImageUrl."&lt;br&gt;"; 
+     // Followers Count
+     echo "Followers Count=".$FollowersCount=$userprofile-&gt;FollowersCount."&lt;br&gt;"; 
+     //  Friends Count
+     echo "Friends Count=".$FriendsCount=$userprofile-&gt;FriendsCount."&lt;br&gt;"; 
+     // Total Status Count
+     echo "Total Status Count=".$TotalStatusesCount=$userprofile-&gt;TotalStatusesCount."&lt;br&gt;"; 
+     // Associations
+     echo "Associations=".$Associations=$userprofile-&gt;Associations."&lt;br&gt;"; 
+     // Honors
+     echo "Honors=".$Honors=$userprofile-&gt;Honors."&lt;br&gt;"; 
+     // Skills
+    if(isset($userprofile-&gt;Skills) &amp;&amp; is_array($userprofile-&gt;Skills) &amp;&amp; count($userprofile-&gt;Skills) &gt; 0){
+        echo 'Skills:-&lt;br /&gt;';
+        foreach($userprofile-&gt;Skills as $skill){
+            echo isset($skill-&gt;Id) ? 'ID='.$skill-&gt;Id."&lt;br/&gt;" : '';
+            echo isset($skill-&gt;Name) ? "Skill=".$skill-&gt;Name."&lt;br/&gt;" : '';
+            echo '&lt;br/&gt;';
+        }
+    } 
+// Current Status
+if(isset($userprofile-&gt;CurrentStatus) &amp;&amp; is_array($userprofile-&gt;CurrentStatus) &amp;&amp; count($userprofile-&gt;CurrentStatus) &gt; 0){
+        echo 'Current Status:-&lt;br /&gt;';
+        foreach($userprofile-&gt;CurrentStatus as $status){
+            echo isset($status-&gt;Id) ? 'ID='.$status-&gt;Id."&lt;br/&gt;" : '';
+            echo isset($status-&gt;Text) ? "Status=".$status-&gt;Text."&lt;br/&gt;" : '';
+            echo isset($status-&gt;Source) ? "Source=".$status-&gt;Source."&lt;br/&gt;" : '';
+            echo isset($status-&gt;CreatedDate) ? "Created Date=".$status-&gt;CreatedDate."&lt;br/&gt;" : '';
+            echo '&lt;br/&gt;';
+        }
+    }
+    // Certifications
+    echo "Certifications=".$Certifications=$userprofile-&gt;Certifications."&lt;br&gt;"; 
+    // Courses
+    echo "Courses=".$Courses=$userprofile-&gt;Courses."&lt;br&gt;"; 
+    // Volunteer
+    echo "Volunteer=".$Volunteer=$userprofile-&gt;Volunteer."&lt;br&gt;"; 
+    // RecommendationsReceived
+    echo "Recommendations Received=".$RecommendationsReceived=$userprofile-&gt;RecommendationsReceived."&lt;br&gt;"; 
+
+    // languages
+    if(isset($userprofile-&gt;Languages) &amp;&amp; is_array($userprofile-&gt;Languages) &amp;&amp; count($userprofile-&gt;Languages) &gt; 0){
+    echo 'Languages:-&lt;br /&gt;';
+    foreach($userprofile-&gt;Languages as $language){
+        echo isset($language-&gt;Id) ? 'ID='.$language-&gt;Id."&lt;br/&gt;" : '';
+        echo isset($language-&gt;Name) ? "Language=".$language-&gt;Name."&lt;br/&gt;" : '';
+        echo '&lt;br/&gt;';
+    }
+}
+
+    // Public Repository
+    echo "Public Repository=".$PublicRepository=$userprofile-&gt;PublicRepository."&lt;br&gt;"; 
+    // Hireable
+    echo "Hireable=".$Hireable=$userprofile-&gt;Hireable."&lt;br&gt;"; 
+    // Repository Url
+    echo "Repository Url=".$RepositoryUrl=$userprofile-&gt;RepositoryUrl."&lt;br&gt;"; 
+    // Age
+    echo "Age=".$Age=$userprofile-&gt;Age."&lt;br&gt;"; 
+    // Patents
+    echo "Patents=".$Patents=$userprofile-&gt;Patents."&lt;br&gt;"; 
+
+   // Favorite Things
+   echo "Favorite Things=".$favorite=$userprofile-&gt;FavoriteThings."&lt;br&gt;"; 
+   // Professional Headline
+   echo "Professional Headline=".$ProfessionalHeadline=$userprofile-&gt;ProfessionalHeadline."&lt;br&gt;"; 
+   // Patents
+   echo "Patents=".$Patents=$userprofile-&gt;Patents."&lt;br&gt;";
+}   
 </code></pre>
 
-<p>Note: Few providers like Twitter doesn't provide email address with User Profile data, so you need to handle these cases in your callback page.</p>
+<h1>Advance features(for Paid customers only)</h1>
 
-<p>Compltete SDK documentation: <a href="http://support.loginradius.com/customer/portal/articles/983629-php-sdk-documentation-to-access-loginradius-unified-social-api">http://support.loginradius.com/customer/portal/articles/983629-php-sdk-documentation-to-access-loginradius-unified-social-api</a></p>
+<h2>LoginRaidus Contacts API</h2>
 
-<p>These are the quick and easy steps to integrate Social Login on your PHP website, if you have any questions or need a further assistance please contact us at <a href="mailto:hello@loginradius.com">hello@loginradius.com</a>.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/LoginRadius">LoginRadius</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
+<p>You can use this API to fetch contacts from users social networks/email clients - Facebook, Twitter, LinkedIn, Google, Yahoo.</p>
+
+<blockquote>
+<p>LoginRadius generate a unique session token, when user logs in with
+any of social network. The lifetime of LoginRadius token is 15 mins, get/Save this Token to call this API.</p>
+</blockquote>
+
+<p><strong>PHP</strong></p>
+
+<pre><code>include('LoginRadiusContacts.php');    
+$obj = new LoginRadius("Your API Secret");
+</code></pre>
+
+<p>$obj = new LoginRadiusContacts("Your API Secret");
+    $loginRadiusContacts = $obj-&gt;loginradius_get_contacts();</p>
+
+<h2>LoginRadius Post API</h2>
+
+<p>You can use this API to Post data to users social networks/email - Facebook, Twitter, LinkedIn, Google, Yahoo.</p>
+
+<blockquote>
+<p>LoginRadius generate a unique session token, when user logs in with
+any of social network. The lifetime of LoginRadius token is 15 mins, get/Save this Token to call this API.</p>
+</blockquote>
+
+<p><strong>PHP</strong></p>
+
+<pre><code>include('LoginRadiusPosts.php');
+$obj = new LoginRadius("Your API Secret");
+</code></pre>
+
+<p>$obj = new LoginRadiusPosts("Your API Secret");
+    $loginRadiusPosts = $obj-&gt;loginradius_get_posts();</p>
+
+<h2>Get Posts</h2>
+
+<p>You can use this API to get posts from users social network - Facebook</p>
+
+<blockquote>
+<p>LoginRadius generate a unique session token, when user logs in with
+any of social network. The lifetime of LoginRadius token is 15 mins, get/Save this Token to call this API.</p>
+</blockquote>
+
+<p><strong>PHP</strong></p>
+
+<pre><code>include('LoginRadiusPosts.php');
+$obj = new LoginRadius("Your API Secret");
+</code></pre>
+
+<p>$obj = new LoginRadiusPosts("Your API Secret");
+    $loginRadiusPosts = $obj-&gt;loginradius_get_posts();</p>
+
+<h2>Get Twitter Mentions</h2>
+
+<p>You can use this API to get mentions from users social network - Twitter.</p>
+
+<blockquote>
+<p>LoginRadius generate a unique session token, when user logs in with
+any of social network. The lifetime of LoginRadius token is 15 mins, get/Save this Token to call this API.</p>
+</blockquote>
+
+<p><strong>PHP</strong></p>
+
+<pre><code>include('LoginRadiusMentions.php');
+$obj = new LoginRadius("Your API Secret");
+</code></pre>
+
+<p>$obj = new LoginRadiusMentions("Your API Secret");
+    $loginRadiusMentions = $obj-&gt;loginradius_get_mentions();</p>
+
+<h2>Facebook Groups</h2>
+
+<p>You can use this API to get groups from users social network - Facebook.</p>
+
+<blockquote>
+<p>LoginRadius generate a unique session token, when user logs in with
+any of social network. The lifetime of LoginRadius token is 15 mins, get/Save this Token to call this API.</p>
+</blockquote>
+
+<p><strong>PHP</strong></p>
+
+<pre><code>include('LoginRadiusGroups.php');
+$obj = new LoginRadius("Your API Secret");
+</code></pre>
+
+<p>$obj = new LoginRadiusGroups("Your API Secret");
+    $loginRadiusGroups = $obj-&gt;loginradius_get_groups();</p>
+
+<h2>Get LinkedIn follow companies</h2>
+
+<p>You can use this API to get followed companies list from users social network - LinkedIn.</p>
+
+<blockquote>
+<p>LoginRadius generate a unique session token, when user logs in with
+any of social network. The lifetime of LoginRadius token is 15 mins, get/Save this Token to call this API.</p>
+</blockquote>
+
+<p><strong>PHP</strong></p>
+
+<pre><code>include('LoginRadiusCompany.php');
+$obj = new LoginRadius("Your API Secret");
+</code></pre>
+
+<p>$obj = new LoginRadiusCompany("Your API Secret");
+    $loginRadiusCompanies = $obj-&gt;loginradius_get_company();</p>
+
+<h2>LoginRadius direct message API</h2>
+
+<p>You can use this API to send direct message.</p>
+
+<blockquote>
+<p>LoginRadius generate a unique session token, when user logs in with
+any of social network. The lifetime of LoginRadius token is 15 mins, get/Save this Token to call this API.</p>
+</blockquote>
+
+<p><strong>PHP</strong></p>
+
+<pre><code>include('LoginRadiusMessage.php');
+$obj = new LoginRadius("Your API Secret");
+</code></pre>
+
+<p>$obj = new LoginRadiusMessage("Your API Secret");
+    $loginRadiusResponse = $obj-&gt;loginradius_send_message($to,$subject,$message);
+if($loginRadiusResponse === true){
+    echo 'Message sent successfully.';
+    }elseif(isset($loginRadiusResponse-&gt;errormessage)){
+    echo $loginRadiusResponse-&gt;errormessage;
+    }else{
+        echo 'Error in sending message.';
+    }</p>
+
+<p><strong>Request:</strong> Please let us know your feedback and comments. If you have any questions or need a further assistance please contact us at <a href="mailto:hello@loginradius.com">hello@loginradius.com</a>.</p>
+        </article>
+      </div>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
-              <script type="text/javascript">
+    <footer>
+      <div class="owner">
+      <p><a href="https://github.com/LoginRadius" class="avatar"><img src="https://secure.gravatar.com/avatar/d9882d6df450dc0c42c02cab0f786522?s=30&amp;d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png" width="48" height="48"/></a> <a href="https://github.com/LoginRadius">LoginRadius</a> maintains <a href="https://github.com/LoginRadius/PHP-SDK">Php-sdk</a></p>
+
+
+      </div>
+      <div class="creds">
+        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br/>theme by <a href="http://twitter.com/jonrohan/">Jon Rohan</a></small>
+      </div>
+    </footer>
+  </div>
+  <div class="current-section">
+    <a href="#top">Scroll to top</a>
+    <a href="https://github.com/LoginRadius/PHP-SDK/tarball/master" class="tar">tar</a><a href="https://github.com/LoginRadius/PHP-SDK/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
+    <p class="name"></p>
+  </div>
+
+            <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
@@ -142,5 +562,5 @@
             } catch(err) {}
           </script>
 
-  </body>
+</body>
 </html>
