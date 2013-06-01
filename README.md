@@ -8,6 +8,13 @@ Installation
  2. **Call-back setup:** Set-up the callback URL in your LoginRadius user account, this is the URL where user would be redirected after authentication.
  3. **Library set-up and installation:** Copy SDK file to your project directory and follow the instructions to implement the SDK into your callback page.
 
+    **Note**: If you are implementing callback on the same page where you are showing Social Login interface, then implement callback handling as mentioned below:-
+
+**Example Code**
+
+    if(isset($_REQUEST['token'])){
+ 	    // callback handling code
+    }
 Steps to call the library:
 
      1. Download the LoginRadius SDK and add it to your web project.
@@ -20,7 +27,7 @@ Steps to call the library:
 
 **PHP**
 
-             // include main PHP SDK file
+    // include main PHP SDK file
  	include('LoginRadiusSDK.php');
 	
 	 // create LoginRadius class object
@@ -190,7 +197,6 @@ Steps to call the library:
 			echo isset($positions->comapny->Name) ? "Company Name=".$positions->comapny->Name."<br/>" : '';
 			echo isset($positions->comapny->Type) ? "Company Type=".$positions->comapny->Type."<br/>" : '';
 			echo isset($positions->comapny->Industry) ? "Company Industry=".$positions->comapny->Industry."<br/>" : '';
-			echo isset($positions->Company) ? "Company=".$positions->Company."<br/>" : '';
 			echo isset($positions->Location) ? "Location=".$positions->Location."<br/>" : '';
 			echo '<br/>';
 		}
@@ -365,41 +371,48 @@ You can use this API to fetch contacts from users social networks/email clients 
 > any of social network. The lifetime of LoginRadius token is 15 mins, get/Save this Token to call this API.
 
 **PHP**
-
+	
+	include('LoginRadiusSDK.php');
 	include('LoginRadiusContacts.php');    
-	$obj = new LoginRadius("Your API Secret");
-$obj = new LoginRadiusContacts("Your API Secret");
-	$loginRadiusContacts = $obj->loginradius_get_contacts();
+	$obj = new LoginRadiusContacts("Your API Secret");
+$loginRadiusContacts = $obj->loginradius_get_contacts();
 
 
 LoginRadius Post API
 ---
-You can use this API to Post data to users social networks/email - Facebook, Twitter, LinkedIn, Google, Yahoo.
+You can use this API to Post data to users social networks - Facebook, Twitter, LinkedIn.
 
 > LoginRadius generate a unique session token, when user logs in with
 > any of social network. The lifetime of LoginRadius token is 15 mins, get/Save this Token to call this API.
 
 **PHP**
 	
-	include('LoginRadiusPosts.php');
-	$obj = new LoginRadius("Your API Secret");
-$obj = new LoginRadiusPosts("Your API Secret");
-	$loginRadiusPosts = $obj->loginradius_get_posts();
+	include('LoginRadiusSDK.php');
+    include('LoginRadiusStatusUpdate.php');
+	$obj = new LoginRadiusStatusUpdate("Your API Secret");
+$loginRadiusResponse = $obj->loginradius_post_status($to, $title, $url, $imageurl, $status, $caption, $description);
+	if($loginRadiusResponse === true){
+	echo 'Message posted successfully.';
+}elseif(isset($loginRadiusResponse->errormessage)){
+		echo $loginRadiusResponse->errormessage;
+	}else{
+		echo 'Error in posting message.';
+	}
 
 
 Get Posts
 --
-You can use this API to get posts from users social network - Facebook
+You can use this API to get posts from users social networks - Facebook, Twitter, LinkedIn
 
 > LoginRadius generate a unique session token, when user logs in with
 > any of social network. The lifetime of LoginRadius token is 15 mins, get/Save this Token to call this API.
 
 **PHP**
 	
+	include('LoginRadiusSDK.php');
 	include('LoginRadiusPosts.php');
-	$obj = new LoginRadius("Your API Secret");
-$obj = new LoginRadiusPosts("Your API Secret");
-	$loginRadiusPosts = $obj->loginradius_get_posts();
+	$obj = new LoginRadiusPosts("Your API Secret");
+$loginRadiusPosts = $obj->loginradius_get_posts();
 
 
 Get Twitter Mentions
@@ -411,11 +424,11 @@ You can use this API to get mentions from users social network - Twitter.
 > any of social network. The lifetime of LoginRadius token is 15 mins, get/Save this Token to call this API.
 
 **PHP**
-
+	
+	include('LoginRadiusSDK.php');
     include('LoginRadiusMentions.php');
-	$obj = new LoginRadius("Your API Secret");
-$obj = new LoginRadiusMentions("Your API Secret");
-	$loginRadiusMentions = $obj->loginradius_get_mentions();
+	$obj = new LoginRadiusMentions("Your API Secret");
+$loginRadiusMentions = $obj->loginradius_get_mentions();
 
 Facebook Groups
 --
@@ -426,10 +439,10 @@ You can use this API to get groups from users social network - Facebook.
 
 **PHP**
 
+	include('LoginRadiusSDK.php');
 	include('LoginRadiusGroups.php');
-	$obj = new LoginRadius("Your API Secret");
-$obj = new LoginRadiusGroups("Your API Secret");
-	$loginRadiusGroups = $obj->loginradius_get_groups();
+	$obj = new LoginRadiusGroups("Your API Secret");
+$loginRadiusGroups = $obj->loginradius_get_groups();
 
 
 Get LinkedIn follow companies
@@ -441,10 +454,10 @@ You can use this API to get followed companies list from users social network - 
 
 **PHP**
 
+	include('LoginRadiusSDK.php');
     include('LoginRadiusCompany.php');
-	$obj = new LoginRadius("Your API Secret");
-$obj = new LoginRadiusCompany("Your API Secret");
-	$loginRadiusCompanies = $obj->loginradius_get_company();
+	$obj = new LoginRadiusCompany("Your API Secret");
+$loginRadiusCompanies = $obj->loginradius_get_company();
 
 LoginRadius direct message API
 --
@@ -455,14 +468,14 @@ You can use this API to send direct message.
 
 **PHP**
 	
+	include('LoginRadiusSDK.php');
 	include('LoginRadiusMessage.php');
-	$obj = new LoginRadius("Your API Secret");
-$obj = new LoginRadiusMessage("Your API Secret");
+	$obj = new LoginRadiusMessage("Your API Secret");
 	$loginRadiusResponse = $obj->loginradius_send_message($to,$subject,$message);
-if($loginRadiusResponse === true){
-    echo 'Message sent successfully.';
+	if($loginRadiusResponse === true){
+    	echo 'Message sent successfully.';
 	}elseif(isset($loginRadiusResponse->errormessage)){
-    echo $loginRadiusResponse->errormessage;
+    	echo $loginRadiusResponse->errormessage;
 	}else{
     	echo 'Error in sending message.';
 	}
