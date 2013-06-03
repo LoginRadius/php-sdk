@@ -375,7 +375,7 @@ You can use this API to fetch contacts from users social networks/email clients 
 	include('LoginRadiusSDK.php');
 	include('LoginRadiusContacts.php');    
 	$obj = new LoginRadiusContacts("Your API Secret");
-$loginRadiusContacts = $obj->loginradius_get_contacts();
+	$loginRadiusContacts = $obj->loginradius_get_contacts();
 
 
 LoginRadius Post API
@@ -388,15 +388,15 @@ You can use this API to Post data to users social networks - Facebook, Twitter, 
 **PHP**
 	
 	include('LoginRadiusSDK.php');
-    include('LoginRadiusStatusUpdate.php');
+	include('LoginRadiusStatusUpdate.php');
 	$obj = new LoginRadiusStatusUpdate("Your API Secret");
-$loginRadiusResponse = $obj->loginradius_post_status($to, $title, $url, $imageurl, $status, $caption, $description);
+	$loginRadiusResponse = $obj->loginradius_post_status($to, $title, $url, $imageurl, $status, $caption, $description);
 	if($loginRadiusResponse === true){
-	echo 'Message posted successfully.';
-}elseif(isset($loginRadiusResponse->errormessage)){
+		echo 'Message posted successfully.'; }
+	elseif(isset($loginRadiusResponse->errormessage)){
 		echo $loginRadiusResponse->errormessage;
 	}else{
-		echo 'Error in posting message.';
+		echo 'Error in message post.';
 	}
 
 
@@ -412,7 +412,7 @@ You can use this API to get posts from users social networks - Facebook, Twitter
 	include('LoginRadiusSDK.php');
 	include('LoginRadiusPosts.php');
 	$obj = new LoginRadiusPosts("Your API Secret");
-$loginRadiusPosts = $obj->loginradius_get_posts();
+	$loginRadiusPosts = $obj->loginradius_get_posts();
 
 
 Get Twitter Mentions
@@ -426,9 +426,9 @@ You can use this API to get mentions from users social network - Twitter.
 **PHP**
 	
 	include('LoginRadiusSDK.php');
-    include('LoginRadiusMentions.php');
+	include('LoginRadiusMentions.php');
 	$obj = new LoginRadiusMentions("Your API Secret");
-$loginRadiusMentions = $obj->loginradius_get_mentions();
+	$loginRadiusMentions = $obj->loginradius_get_mentions();
 
 Facebook Groups
 --
@@ -442,7 +442,7 @@ You can use this API to get groups from users social network - Facebook.
 	include('LoginRadiusSDK.php');
 	include('LoginRadiusGroups.php');
 	$obj = new LoginRadiusGroups("Your API Secret");
-$loginRadiusGroups = $obj->loginradius_get_groups();
+	$loginRadiusGroups = $obj->loginradius_get_groups();
 
 
 Get LinkedIn follow companies
@@ -455,9 +455,9 @@ You can use this API to get followed companies list from users social network - 
 **PHP**
 
 	include('LoginRadiusSDK.php');
-    include('LoginRadiusCompany.php');
+   	include('LoginRadiusCompany.php');
 	$obj = new LoginRadiusCompany("Your API Secret");
-$loginRadiusCompanies = $obj->loginradius_get_company();
+	$loginRadiusCompanies = $obj->loginradius_get_company();
 
 LoginRadius direct message API
 --
