@@ -16,7 +16,7 @@ if(!isset($_REQUEST['token'])){
 	?>
 	<div style="border:1px solid #000; width:200px; padding: 10px; margin-top:10px">
 	// Change to your LoginRadius API key and Callback URL
-	<script src="http://hub.loginradius.com/include/js/LoginRadius.js" ></script> <script type="text/javascript"> var options={}; options.login=true; LoginRadius_SocialLogin.util.ready(function () { $ui = LoginRadius_SocialLogin.lr_login_settings;$ui.interfacesize = "";$ui.apikey = "Your-LoginRadius-API-Key";$ui.callback="Callback-URL-after-login"; $ui.lrinterfacecontainer ="interfacecontainerdiv"; LoginRadius_SocialLogin.init(options); }); </script>
+	<script src="http://hub.loginradius.com/include/js/LoginRadius.js" ></script> <script type="text/javascript"> var options={}; options.login=true; LoginRadius_SocialLogin.util.ready(function () { $ui = LoginRadius_SocialLogin.lr_login_settings;$ui.interfacesize = "";$ui.apikey = "Your-LoginRadius-API-Key";$ui.callback=""; $ui.lrinterfacecontainer ="interfacecontainerdiv"; LoginRadius_SocialLogin.init(options); }); </script>
 	<div class="interfacecontainerdiv"></div>
 	</div>
 	<?php
@@ -36,7 +36,7 @@ if(!isset($_REQUEST['token'])){
 	$loginRadiusObject = new LoginRadiusContacts($api_secret);
 	$userProfile = $loginRadiusObject->loginradius_get_data();
 	if($loginRadiusObject->IsAuthenticated == TRUE){
-	if($userProfile->Provider == "facebook" || $userProfile->Provider == "twitter"){
+	if($userProfile->Provider == "facebook" || $userProfile->Provider == "twitter" || $userProfile->Provider == "linkedin"){
 		//update status
 		$makepost = new LoginRadiusStatusUpdate($api_secret); 
 		$updateStatus = $makepost->loginradius_post_status($to='', $title='LoginRadius PHP SDK', $url='http://loginradius.com/', $imageurl='http://loginradius.com/', $status='LoginRadius PHP SDK Test', $caption='LoginRadius PHP SDK', $description='LoginRadius PHP SDK Test');
