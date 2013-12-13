@@ -13,8 +13,8 @@ class LoginRadiusPosts extends LoginRadius{
 	 * 
 	 * @param string $Secret LoginRadius API Secret.
 	 */ 
-	function __construct($Secret){
-		parent::__construct($Secret);
+	function __construct($Secret, $Token){
+		parent::__construct($Secret, $Token);
 	}
 	
     /**

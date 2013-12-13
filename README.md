@@ -31,7 +31,7 @@ Steps to call the library:
  	include('LoginRadiusSDK.php');
 	
 	 // create LoginRadius class object
-     $obj = new LoginRadius("API_SECRET");
+     $obj = new LoginRadius("API_SECRET", $_REQUEST['token']);
 	
 	 // get user profile data
      $userprofile = $obj->loginradius_get_data();
@@ -103,7 +103,7 @@ Steps to call the library:
      include('LoginRadiusSDK.php');
 	
 	// create LoginRadius class object
- 	$obj = new LoginRadius("API_SECRET");
+ 	$obj = new LoginRadius("API_SECRET", $_REQUEST['token']);
 
 	// get user profile data
     $userprofile = $obj->loginradius_get_data();
@@ -374,7 +374,7 @@ You can use this API to fetch contacts from users social networks/email clients 
 	
 	include('LoginRadiusSDK.php');
 	include('LoginRadiusContacts.php');    
-	$obj = new LoginRadiusContacts("Your API Secret");
+	$obj = new LoginRadiusContacts("Your API Secret", $_REQUEST['token']);
 	$loginRadiusContacts = $obj->loginradius_get_contacts();
 
 
@@ -389,14 +389,13 @@ You can use this API to Post data to users social networks - Facebook, Twitter, 
 	
 	include('LoginRadiusSDK.php');
 	include('LoginRadiusStatusUpdate.php');
-	$obj = new LoginRadiusStatusUpdate("Your API Secret");
+	$obj = new LoginRadiusStatusUpdate("Your API Secret", $_REQUEST['token']);
 	$loginRadiusResponse = $obj->loginradius_post_status($to, $title, $url, $imageurl, $status, $caption, $description);
-	if($loginRadiusResponse === true){
-		echo 'Message posted successfully.'; }
-	elseif(isset($loginRadiusResponse->errormessage)){
-		echo $loginRadiusResponse->errormessage;
-	}else{
-		echo 'Error in message post.';
+	if($loginRadiusResponse){
+		// message posted successfully
+	else{
+		// error in posting message
+		// check for the possible errors in "error.txt" file in the same folder as SDK
 	}
 
 
@@ -411,7 +410,7 @@ You can use this API to get posts from users social networks - Facebook, Twitter
 	
 	include('LoginRadiusSDK.php');
 	include('LoginRadiusPosts.php');
-	$obj = new LoginRadiusPosts("Your API Secret");
+	$obj = new LoginRadiusPosts("Your API Secret", $_REQUEST['token']);
 	$loginRadiusPosts = $obj->loginradius_get_posts();
 
 
@@ -427,7 +426,7 @@ You can use this API to get mentions from users social network - Twitter.
 	
 	include('LoginRadiusSDK.php');
 	include('LoginRadiusMentions.php');
-	$obj = new LoginRadiusMentions("Your API Secret");
+	$obj = new LoginRadiusMentions("Your API Secret", $_REQUEST['token']);
 	$loginRadiusMentions = $obj->loginradius_get_mentions();
 
 Facebook Groups
@@ -441,7 +440,7 @@ You can use this API to get groups from users social network - Facebook.
 
 	include('LoginRadiusSDK.php');
 	include('LoginRadiusGroups.php');
-	$obj = new LoginRadiusGroups("Your API Secret");
+	$obj = new LoginRadiusGroups("Your API Secret", $_REQUEST['token']);
 	$loginRadiusGroups = $obj->loginradius_get_groups();
 
 
@@ -456,7 +455,7 @@ You can use this API to get followed companies list from users social network - 
 
 	include('LoginRadiusSDK.php');
    	include('LoginRadiusCompany.php');
-	$obj = new LoginRadiusCompany("Your API Secret");
+	$obj = new LoginRadiusCompany("Your API Secret", $_REQUEST['token']);
 	$loginRadiusCompanies = $obj->loginradius_get_company();
 
 LoginRadius direct message API
@@ -470,14 +469,13 @@ You can use this API to send direct message.
 	
 	include('LoginRadiusSDK.php');
 	include('LoginRadiusMessage.php');
-	$obj = new LoginRadiusMessage("Your API Secret");
+	$obj = new LoginRadiusMessage("Your API Secret", $_REQUEST['token']);
 	$loginRadiusResponse = $obj->loginradius_send_message($to,$subject,$message);
-	if($loginRadiusResponse === true){
-    	echo 'Message sent successfully.';
-	}elseif(isset($loginRadiusResponse->errormessage)){
-    	echo $loginRadiusResponse->errormessage;
-	}else{
-    	echo 'Error in sending message.';
+	if($loginRadiusResponse){
+		// message sent successfully
+	else{
+		// error in sending message
+		// check for the possible errors in "error.txt" file in the same folder as SDK
 	}
 
 **Request:** Please let us know your feedback and comments. If you have any questions or need a further assistance please contact us at hello@loginradius.com.

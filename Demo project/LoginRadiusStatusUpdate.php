@@ -13,8 +13,8 @@ class LoginRadiusStatusUpdate extends LoginRadius{
 	 * 
 	 * @param string $Secret LoginRadius API Secret.
 	 */ 
-	function __construct($Secret){
-		parent::__construct($Secret);
+	function __construct($Secret, $Token){
+		parent::__construct($Secret, $Token);
 	}
 
    /**
@@ -41,7 +41,19 @@ class LoginRadiusStatusUpdate extends LoginRadius{
 			'description' => $description
 		));
 		$Response = $this->loginradius_call_api($Url);
-		return json_decode($Response);
+		$Response = json_decode($Response);
+		try{
+			if($Response === true){
+				return true;
+			}elseif(isset($Response->errormessage)){
+				throw new exception($Response->errormessage);
+			}else{
+				throw new exception('Error in sending message');
+			}
+		}catch(Exception $e){
+			$this -> loginradius_log_error($e -> getMessage());
+			return false;
+		}
 	}
 }
 ?>

@@ -15,7 +15,7 @@ table{
 if(!isset($_REQUEST['token'])){
 	?>
 	<div style="border:1px solid #000; width:200px; padding: 10px; margin-top:10px">
-	// Change to your LoginRadius API key and Callback URL
+	// Update LoginRadius API key and Callback URL
 	<script src="http://hub.loginradius.com/include/js/LoginRadius.js" ></script> <script type="text/javascript"> var options={}; options.login=true; LoginRadius_SocialLogin.util.ready(function () { $ui = LoginRadius_SocialLogin.lr_login_settings;$ui.interfacesize = "";$ui.apikey = "Your-LoginRadius-API-Key";$ui.callback=""; $ui.lrinterfacecontainer ="interfacecontainerdiv"; LoginRadius_SocialLogin.init(options); }); </script>
 	<div class="interfacecontainerdiv"></div>
 	</div>
@@ -33,30 +33,30 @@ if(!isset($_REQUEST['token'])){
 	include('LoginRadiusGetStatus.php');
 	// LoginRadius API secret
 	$api_secret = 'Your-LoginRadius-API-Secret';
-	$loginRadiusObject = new LoginRadiusContacts($api_secret);
+	$loginRadiusObject = new LoginRadiusContacts($api_secret, $_REQUEST['token']);
 	$userProfile = $loginRadiusObject->loginradius_get_data();
 	if($loginRadiusObject->IsAuthenticated == TRUE){
 	if($userProfile->Provider == "facebook" || $userProfile->Provider == "twitter" || $userProfile->Provider == "linkedin"){
 		//update status
-		$makepost = new LoginRadiusStatusUpdate($api_secret); 
+		$makepost = new LoginRadiusStatusUpdate($api_secret, $_REQUEST['token']); 
 		$updateStatus = $makepost->loginradius_post_status($to='', $title='LoginRadius PHP SDK', $url='http://loginradius.com/', $imageurl='http://loginradius.com/', $status='LoginRadius PHP SDK Test', $caption='LoginRadius PHP SDK', $description='LoginRadius PHP SDK Test');
 	}
 	if($userProfile->Provider == "linkedin"){
 		//get company
-		$getCompany = new LoginRadiusCompany($api_secret);
+		$getCompany = new LoginRadiusCompany($api_secret, $_REQUEST['token']);
 		$getCompany = $getCompany->loginradius_get_company();
 	}
 	//get contacts
-	$getcontacts = new LoginRadiusContacts($api_secret);
+	$getcontacts = new LoginRadiusContacts($api_secret, $_REQUEST['token']);
     $getcontacts = $getcontacts->loginradius_get_contacts();
 	if($userProfile->Provider == "facebook"){
 		// get groups
-		$getGroups = new LoginRadiusGroups($api_secret);
+		$getGroups = new LoginRadiusGroups($api_secret, $_REQUEST['token']);
 		$getGroups = $getGroups->loginradius_get_groups();
 	}
 	if($userProfile->Provider == "twitter" || $userProfile->Provider == "linkedin"){
 		// send messages
-		$sendMessage = new LoginRadiusMessage($api_secret);
+		$sendMessage = new LoginRadiusMessage($api_secret, $_REQUEST['token']);
 		// Message to Sent - Please change ID, subject and message
 		if(is_array($getcontacts) && count($getcontacts) > 0){
     		$sendMessage = $sendMessage->loginradius_send_message($getcontacts[0]->ID, 'LoginRadius PHP SDK Test', 'This message is sent using LoginRadius PHP SDK');
@@ -64,20 +64,20 @@ if(!isset($_REQUEST['token'])){
 	}
 	if($userProfile->Provider == "facebook"){
 		// get posts
-		$getPosts = new LoginRadiusPosts($api_secret);
+		$getPosts = new LoginRadiusPosts($api_secret, $_REQUEST['token']);
 		$getPosts = $getPosts->loginradius_get_posts();
 	}
 	if($userProfile->Provider == "twitter"){
 		// get Mentions
-		$getMentions = new LoginRadiusMentions($api_secret);
+		$getMentions = new LoginRadiusMentions($api_secret, $_REQUEST['token']);
 		$getMentions = $getMentions->loginradius_get_mentions();
 	}
 	// get status
-	$getStatus = new LoginRadiusGetStatus($api_secret);
+	$getStatus = new LoginRadiusGetStatus($api_secret, $_REQUEST['token']);
     $getStatus = $getStatus->loginradius_get_status();
 	if($userProfile->Provider == "facebook"){
 		// get events
-		$getEvents = new LoginRadiusGetEvents($api_secret);
+		$getEvents = new LoginRadiusGetEvents($api_secret, $_REQUEST['token']);
 		$getEvents = $getEvents->loginradius_get_events();
 	}
 		echo '<h2>User Profile Data</h2>';
@@ -182,9 +182,6 @@ if(!isset($_REQUEST['token'])){
 			echo '<h2>Status Post</h2>';?>
 			<table>
 			<tr>
-				<th>Successful</th>
-			</tr>
-			<tr>
 			<td><?php 
 				if($updateStatus == 1){
 					echo "Status successfully posted on your Facebook wall!";
@@ -199,9 +196,6 @@ if(!isset($_REQUEST['token'])){
 			if(!isset($sendMessage->errorcode)){
 			echo '<h2>Message Sending</h2>';?>
 			<table>
-			<tr>
-				<th>Successful</th>
-			</tr>
 			<tr>
 			<td><?php 
 				if($sendMessage == true){
@@ -219,7 +213,7 @@ if(!isset($_REQUEST['token'])){
 		 echo '<h2>Groups</h2>';?>
 		<table  border='1'>
 		<tr>
-			<th>S.No.</th>
+		<th>S.No.</th>
 		<th>ID</th>
 		<th>Name</th>
 		</tr>
@@ -254,7 +248,7 @@ if(!isset($_REQUEST['token'])){
 		for($i=0;$i<sizeof($getStatus);$i++){
 		?>
 			<tr>
-				<td><?php echo $id = $getStatus[$i]->ID ?></td>
+				<td><?php echo $id = $getStatus[$i]->Id ?></td>
 				<td><?php echo $provider = ucfirst($getStatus[$i]->Text) ?></td>
 				<td><?php echo $Title = $getStatus[$i]->DateTime ?></td>
 				<td><?php echo $StartTime = ucfirst($getStatus[$i]->Likes) ?></td>
