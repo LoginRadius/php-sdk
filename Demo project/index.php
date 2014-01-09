@@ -16,7 +16,7 @@ if(!isset($_REQUEST['token'])){
 	?>
 	<div style="border:1px solid #000; width:200px; padding: 10px; margin-top:10px">
 	// Update LoginRadius API key and Callback URL
-	<script src="http://hub.loginradius.com/include/js/LoginRadius.js" ></script> <script type="text/javascript"> var options={}; options.login=true; LoginRadius_SocialLogin.util.ready(function () { $ui = LoginRadius_SocialLogin.lr_login_settings;$ui.interfacesize = "";$ui.apikey = "Your-LoginRadius-API-Key";$ui.callback=""; $ui.lrinterfacecontainer ="interfacecontainerdiv"; LoginRadius_SocialLogin.init(options); }); </script>
+	<script src="//hub.loginradius.com/include/js/LoginRadius.js" ></script> <script type="text/javascript"> var options={}; options.login=true; LoginRadius_SocialLogin.util.ready(function () { $ui = LoginRadius_SocialLogin.lr_login_settings;$ui.interfacesize = "";$ui.apikey = "API-KEY";$ui.callback=""; $ui.lrinterfacecontainer ="interfacecontainerdiv"; LoginRadius_SocialLogin.init(options); }); </script>
 	<div class="interfacecontainerdiv"></div>
 	</div>
 	<?php
@@ -32,7 +32,7 @@ if(!isset($_REQUEST['token'])){
 	include('LoginRadiusGetEvents.php');
 	include('LoginRadiusGetStatus.php');
 	// LoginRadius API secret
-	$api_secret = 'Your-LoginRadius-API-Secret';
+	$api_secret = 'API-SECRET';
 	$loginRadiusObject = new LoginRadiusContacts($api_secret, $_REQUEST['token']);
 	$userProfile = $loginRadiusObject->loginradius_get_data();
 	if($loginRadiusObject->IsAuthenticated == TRUE){

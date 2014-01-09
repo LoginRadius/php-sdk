@@ -1,4 +1,4 @@
- <?php
+<?php
 /**
  * Class for Social Authentication.
  *
@@ -9,14 +9,19 @@
  *
  * This file is part of the LoginRadius SDK package.
  *
- */ 
+ */
+
+// Define LoginRadius domain
+define('LR_DOMAIN', 'hub.loginradius.com');
+
 class LoginRadius{
 public $IsAuthenticated, $LRToken, $LRSecret;
 
 /**
  * Constructor - It validates LoginRadius API Secret and Session Token. If valid, assigns them to class members; else prints error message.
  * 
- * @param string $Secret LoginRadius API Secret.
+ * @param string $Secret LoginRadius API Secret
+ * @param string $Token  LoginRadius authentication token
  */ 
 public function __construct($Secret, $Token){
 	try{
@@ -55,7 +60,7 @@ private function loginradius_is_valid_guid($value){
  */ 
 public function loginradius_get_data(){
 	$this->IsAuthenticated = false;
-	$ValidateUrl = "https://hub.loginradius.com/userprofile.ashx?token=".$this->LRToken."&apisecrete=".$this->LRSecret."";
+	$ValidateUrl = "https://" . LR_DOMAIN . "/userprofile.ashx?token=".$this->LRToken."&apisecrete=".$this->LRSecret."";
 	$JsonResponse = $this->loginradius_call_api($ValidateUrl);
 	$UserProfile = json_decode($JsonResponse);
 	if(isset($UserProfile->ID) && $UserProfile->ID != ''){

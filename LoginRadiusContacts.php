@@ -12,6 +12,7 @@ class LoginRadiusContacts extends LoginRadius{
 	 * Constructor. Calls parent class constructor.
 	 * 
 	 * @param string $Secret LoginRadius API Secret.
+         * @param string $Token  LoginRadius authentication token
 	 */ 
 	function __construct($Secret, $Token){
 		parent::__construct($Secret, $Token);
@@ -23,7 +24,7 @@ class LoginRadiusContacts extends LoginRadius{
 	 * @return array User's contacts information.
 	 */ 
 	public function loginradius_get_contacts(){
-		$Url = "https://hub.loginradius.com/contacts/". $this->LRSecret ."/".$this->LRToken;
+		$Url = "https://" . LR_DOMAIN . "/contacts/". $this->LRSecret ."/".$this->LRToken;
 		$Response = $this->loginradius_call_api($Url);
 		return json_decode($Response);
 	}

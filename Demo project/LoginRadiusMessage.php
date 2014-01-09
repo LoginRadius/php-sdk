@@ -12,6 +12,7 @@ class LoginRadiusMessage extends LoginRadius{
 	 * Constructor. Calls parent class constructor.
 	 * 
 	 * @param string $Secret LoginRadius API Secret.
+         * @param string $Token  LoginRadius authentication token
 	 */ 
 	function __construct($Secret, $Token){
 		parent::__construct($Secret, $Token);
@@ -27,7 +28,7 @@ class LoginRadiusMessage extends LoginRadius{
 	 * @return bool - true on success, false otherwise.
 	 */ 
 	public function loginradius_send_message($to,$subject,$message){
-		$Url = 'https://hub.loginradius.com/directmessage/'.  $this->LRSecret .'/'.$this->LRToken.'?'.http_build_query(array(
+		$Url = 'https://' . LR_DOMAIN . '/directmessage/'.  $this->LRSecret .'/'.$this->LRToken.'?'.http_build_query(array(
 			'sendto' => $to,
 			'subject' => $subject,
 			'message' => $message

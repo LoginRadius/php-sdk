@@ -12,6 +12,7 @@ class LoginRadiusStatusUpdate extends LoginRadius{
 	 * Constructor. Calls parent class constructor.
 	 * 
 	 * @param string $Secret LoginRadius API Secret.
+         * @param string $Token  LoginRadius authentication token
 	 */ 
 	function __construct($Secret, $Token){
 		parent::__construct($Secret, $Token);
@@ -31,7 +32,7 @@ class LoginRadiusStatusUpdate extends LoginRadius{
 	* @return bool Returns true if successful, false otherwise.
 	*/ 
 	public function loginradius_post_status($to, $title, $url, $imageurl, $status, $caption, $description){
-		$Url = 'https://hub.loginradius.com/status/update/' . $this->LRSecret . '/' . $this->LRToken . '?' . http_build_query(array(
+		$Url = 'https://' . LR_DOMAIN . '/status/update/' . $this->LRSecret . '/' . $this->LRToken . '?' . http_build_query(array(
 			'to' => $to,
 			'title' => $title,
 			'url' => $url,

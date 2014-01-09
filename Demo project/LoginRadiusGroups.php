@@ -12,6 +12,7 @@ class LoginRadiusGroups extends LoginRadius{
 	 * Constructor. Calls parent class constructor.
 	 * 
 	 * @param string $Secret LoginRadius API Secret.
+         * @param string $Token  LoginRadius authentication token
 	 */ 
 	function __construct($Secret, $Token){
 		parent::__construct($Secret, $Token);
@@ -23,7 +24,7 @@ class LoginRadiusGroups extends LoginRadius{
 	 * @return array Followed facebook groups information.
 	 */ 
 	public function loginradius_get_groups(){
-		$Url = "https://hub.loginradius.com/GetGroups/". $this->LRSecret ."/".$this->LRToken;
+		$Url = "https://" . LR_DOMAIN . "/GetGroups/". $this->LRSecret ."/".$this->LRToken;
 		$Response = $this->loginradius_call_api($Url);
 		return json_decode($Response);
 	}
