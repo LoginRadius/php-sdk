@@ -4,7 +4,7 @@ PHP SDK for the LoginRadius API. Get social authentication, user profile data an
 
 Installation
 ----
- 1. **Font-end interface:** Add social login interface code from your LoginRadius user account to your webpage.
+ 1. **Front-end interface:** Add social login interface code from your LoginRadius user account to your webpage.
  2. **Call-back setup:** Set-up the callback URL in your LoginRadius user account, this is the URL where user would be redirected after authentication.
  3. **Library set-up and installation:** Copy SDK file to your project directory and follow the instructions to implement the SDK into your callback page.
 
