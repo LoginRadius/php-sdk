@@ -363,7 +363,7 @@ Steps to call the library:
 Advance features(for Paid customers only)
 ===
 
-LoginRaidus Contacts API
+LoginRadius Contacts API
 -----
 You can use this API to fetch contacts from users social networks/email clients - Facebook, Twitter, LinkedIn, Google, Yahoo.
 
