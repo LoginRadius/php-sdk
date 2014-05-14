@@ -6,7 +6,7 @@ LoginRadius is a unified social API platform that combines 30 major social platf
 websites and mobile apps can implement social login, capture user social data, enable social sharing, add single sign-on, and more.
 
 LoginRadius helps businesses boost user engagement on their web/mobile platform, manage online identities, utilize social media for marketing, 
-capture accurate consumer data, and get unique social insight into their customer base
+capture accurate consumer data, and get unique social insight into their customer base.
 
 
-For more information
+Please visit http://apidocs.loginradius.com/php/index.html for more information.
