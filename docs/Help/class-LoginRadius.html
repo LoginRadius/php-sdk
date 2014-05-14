@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="ApiGen 2.8.0" />
+
+	<title>Class LoginRadius | PhpProject1</title>
+
+	<script type="text/javascript" src="resources/combined.js?2408995326"></script>
+	<script type="text/javascript" src="elementlist.js?2582594231"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+		</div>
+
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li class="active"><a href="class-LoginRadius.html">LoginRadius</a></li>
+			</ul>
+
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="" />
+		<input type="hidden" name="ie" value="UTF-8" />
+		<input type="text" name="q" class="text" />
+		<input type="submit" value="Search" />
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+			</li>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class LoginRadius</h1>
+
+
+	<div class="description">
+	
+<p>Class for Social Authentication.</p>
+
+<p>This is the main class to communicate with LogiRadius Unified Social API. It
+contains functions for Social Authentication with User Profile Data (Basic and
+Extended)</p>
+
+<p>Copyright 2013 LoginRadius Inc. - <a
+href="http://www.LoginRadius.com">www.LoginRadius.com</a></p>
+
+<p>This file is part of the LoginRadius SDK package.</p>
+
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="info">
+		
+		
+		
+		
+
+		<b>Located at</b> <a href="source-class-LoginRadius.html#4-438" title="Go to source code">LoginRadiusSDK.php</a><br />
+	</div>
+
+
+
+	<table class="summary" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="loginradius_is_callback" id="_loginradius_is_callback">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_is_callback">#</a>
+		<code><a href="source-class-LoginRadius.html#27-38" title="Go to source code">loginradius_is_callback</a>( )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - Check, if it is a valid callback i.e. LoginRadius
+authentication token is set</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - Check, if it is a valid callback i.e. LoginRadius
+authentication token is set</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br>True, if a valid callback.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_fetch_access_token" id="_loginradius_fetch_access_token">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_fetch_access_token">#</a>
+		<code><a href="source-class-LoginRadius.html#40-58" title="Go to source code">loginradius_fetch_access_token</a>( <span>string <var>$secret</var></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - Fetch LoginRadius access token after authentication.
+It will be valid for the specific duration of time specified in the
+response.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - Fetch LoginRadius access token after authentication.
+It will be valid for the specific duration of time specified in the
+response.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$secret</var></dt>
+					<dd><code>string</code><br>LoginRadius API Secret</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br>LoginRadius access token.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_get_user_profiledata" id="_loginradius_get_user_profiledata">
+
+		<td class="attributes"><code>
+			 public 
+			object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_get_user_profiledata">#</a>
+		<code><a href="source-class-LoginRadius.html#60-75" title="Go to source code">loginradius_get_user_profiledata</a>( <span>string <var>$accessToken</var></span>, <span>boolean <var>$raw</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To fetch social profile data from the user's social
+account after authentication. The social profile will be retrieved via oAuth and
+OpenID protocols. The data is normalized into LoginRadius' standard data
+format.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To fetch social profile data from the user's social
+account after authentication. The social profile will be retrieved via oAuth and
+OpenID protocols. The data is normalized into LoginRadius' standard data
+format.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$raw</var></dt>
+					<dd><code>boolean</code><br>$raw If true, raw data is fetched</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>object</code><br>User profile data.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_get_photo_albums" id="_loginradius_get_photo_albums">
+
+		<td class="attributes"><code>
+			 public 
+			object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_get_photo_albums">#</a>
+		<code><a href="source-class-LoginRadius.html#77-92" title="Go to source code">loginradius_get_photo_albums</a>( <span>string <var>$accessToken</var></span>, <span>boolean <var>$raw</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To get the Albums data from the user's social account.
+The data will be normalized into LoginRadius' data format.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To get the Albums data from the user's social account.
+The data will be normalized into LoginRadius' data format.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$raw</var></dt>
+					<dd><code>boolean</code><br>$raw If true, raw data is fetched</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>object</code><br>User's albums data.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_get_photos" id="_loginradius_get_photos">
+
+		<td class="attributes"><code>
+			 public 
+			object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_get_photos">#</a>
+		<code><a href="source-class-LoginRadius.html#94-110" title="Go to source code">loginradius_get_photos</a>( <span>string <var>$accessToken</var></span>, <span>string <var>$albumId</var></span>, <span>boolean <var>$raw</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To fetch photo data from the user's social account.
+The data will be normalized into LoginRadius' data format.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To fetch photo data from the user's social account.
+The data will be normalized into LoginRadius' data format.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$albumId</var></dt>
+					<dd><code>string</code><br>$albumId ID of the album to fetch photos from</dd>
+					<dt><var>$raw</var></dt>
+					<dd><code>boolean</code><br>$raw If true, raw data is fetched</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>object</code><br>User's photo data.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_get_checkins" id="_loginradius_get_checkins">
+
+		<td class="attributes"><code>
+			 public 
+			object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_get_checkins">#</a>
+		<code><a href="source-class-LoginRadius.html#112-127" title="Go to source code">loginradius_get_checkins</a>( <span>string <var>$accessToken</var></span>, <span>boolean <var>$raw</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To fetch check-ins data from the user's social
+account. The data will be normalized into LoginRadius' data format.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To fetch check-ins data from the user's social
+account. The data will be normalized into LoginRadius' data format.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$raw</var></dt>
+					<dd><code>boolean</code><br>$raw If true, raw data is fetched</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>object</code><br>User's check-ins.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_get_audio" id="_loginradius_get_audio">
+
+		<td class="attributes"><code>
+			 public 
+			object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_get_audio">#</a>
+		<code><a href="source-class-LoginRadius.html#129-144" title="Go to source code">loginradius_get_audio</a>( <span>string <var>$accessToken</var></span>, <span>boolean <var>$raw</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To fetch user's audio files data from the user's
+social account. The data will be normalized into LoginRadius' data format.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To fetch user's audio files data from the user's
+social account. The data will be normalized into LoginRadius' data format.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$raw</var></dt>
+					<dd><code>boolean</code><br>$raw If true, raw data is fetched</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>object</code><br>User's audio files data.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_send_message" id="_loginradius_send_message">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_send_message">#</a>
+		<code><a href="source-class-LoginRadius.html#146-164" title="Go to source code">loginradius_send_message</a>( <span>string <var>$accessToken</var></span>, <span>string <var>$to</var></span>, <span>string <var>$subject</var></span>, <span>string <var>$message</var></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - Post messages to the user's contacts. After using the
+Contact API, you can send messages to the retrieved contacts.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - Post messages to the user's contacts. After using the
+Contact API, you can send messages to the retrieved contacts.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$to</var></dt>
+					<dd><code>string</code><br>$to Social ID of the receiver</dd>
+					<dt><var>$subject</var></dt>
+					<dd><code>string</code><br>$subject Subject of the message</dd>
+					<dt><var>$message</var></dt>
+					<dd><code>string</code><br>$message Message</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br>True on success, false otherwise<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_get_contacts" id="_loginradius_get_contacts">
+
+		<td class="attributes"><code>
+			 public 
+			object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_get_contacts">#</a>
+		<code><a href="source-class-LoginRadius.html#166-182" title="Go to source code">loginradius_get_contacts</a>( <span>string <var>$accessToken</var></span>, <span>integer <var>$nextCursor</var> = <span class="php-quote">''</span></span>, <span>boolean <var>$raw</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To fetch user's contacts/friends/connections data from
+the user's social account. The data will normalized into LoginRadius' data
+format.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To fetch user's contacts/friends/connections data from
+the user's social account. The data will normalized into LoginRadius' data
+format.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$nextCursor</var></dt>
+					<dd><code>integer</code><br>$nextCursor Offset to start fetching contacts from</dd>
+					<dt><var>$raw</var></dt>
+					<dd><code>boolean</code><br>$raw If true, raw data is fetched</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>object</code><br>User's contacts/friends/followers.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_get_mentions" id="_loginradius_get_mentions">
+
+		<td class="attributes"><code>
+			 public 
+			object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_get_mentions">#</a>
+		<code><a href="source-class-LoginRadius.html#184-199" title="Go to source code">loginradius_get_mentions</a>( <span>string <var>$accessToken</var></span>, <span>boolean <var>$raw</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To get mention data from the user's social account.
+The data will be normalized into LoginRadius' data format.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To get mention data from the user's social account.
+The data will be normalized into LoginRadius' data format.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$raw</var></dt>
+					<dd><code>boolean</code><br>$raw If true, raw data is fetched</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>object</code><br>User's twitter mentions.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_get_following" id="_loginradius_get_following">
+
+		<td class="attributes"><code>
+			 public 
+			object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_get_following">#</a>
+		<code><a href="source-class-LoginRadius.html#201-216" title="Go to source code">loginradius_get_following</a>( <span>string <var>$accessToken</var></span>, <span>boolean <var>$raw</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To fetch information of the people, user is following
+on Twitter.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To fetch information of the people, user is following
+on Twitter.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$raw</var></dt>
+					<dd><code>boolean</code><br>$raw If true, raw data is fetched</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>object</code><br>Information of the people, user is following.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_get_events" id="_loginradius_get_events">
+
+		<td class="attributes"><code>
+			 public 
+			object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_get_events">#</a>
+		<code><a href="source-class-LoginRadius.html#218-233" title="Go to source code">loginradius_get_events</a>( <span>string <var>$accessToken</var></span>, <span>boolean <var>$raw</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To get the event data from the user's social account.
+The data will be normalized into LoginRadius' data format.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To get the event data from the user's social account.
+The data will be normalized into LoginRadius' data format.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$raw</var></dt>
+					<dd><code>boolean</code><br>$raw If true, raw data is fetched</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>object</code><br>User's event data.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_get_posts" id="_loginradius_get_posts">
+
+		<td class="attributes"><code>
+			 public 
+			object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_get_posts">#</a>
+		<code><a href="source-class-LoginRadius.html#235-250" title="Go to source code">loginradius_get_posts</a>( <span>string <var>$accessToken</var></span>, <span>boolean <var>$raw</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To get posted messages from the user's social account.
+The data will be normalized into LoginRadius' data format.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To get posted messages from the user's social account.
+The data will be normalized into LoginRadius' data format.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$raw</var></dt>
+					<dd><code>boolean</code><br>$raw If true, raw data is fetched</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>object</code><br>User's posted messages.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_get_followed_companies" id="_loginradius_get_followed_companies">
+
+		<td class="attributes"><code>
+			 public 
+			object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_get_followed_companies">#</a>
+		<code><a href="source-class-LoginRadius.html#252-267" title="Go to source code">loginradius_get_followed_companies</a>( <span>string <var>$accessToken</var></span>, <span>boolean <var>$raw</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To get the followed company's data in the user's
+social account. The data will be normalized into LoginRadius' data format.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To get the followed company's data in the user's
+social account. The data will be normalized into LoginRadius' data format.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$raw</var></dt>
+					<dd><code>boolean</code><br>$raw If true, raw data is fetched</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>object</code><br>Companies followed by user.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_get_groups" id="_loginradius_get_groups">
+
+		<td class="attributes"><code>
+			 public 
+			object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_get_groups">#</a>
+		<code><a href="source-class-LoginRadius.html#269-284" title="Go to source code">loginradius_get_groups</a>( <span>string <var>$accessToken</var></span>, <span>boolean <var>$raw</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To get group data from the user's social account. The
+data will be normalized into LoginRadius' data format.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To get group data from the user's social account. The
+data will be normalized into LoginRadius' data format.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$raw</var></dt>
+					<dd><code>boolean</code><br>$raw If true, raw data is fetched</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>object</code><br>Group data.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_get_status" id="_loginradius_get_status">
+
+		<td class="attributes"><code>
+			 public 
+			object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_get_status">#</a>
+		<code><a href="source-class-LoginRadius.html#286-301" title="Go to source code">loginradius_get_status</a>( <span>string <var>$accessToken</var></span>, <span>boolean <var>$raw</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To get the status messages from the user's social
+account. The data will be normalized into LoginRadius' data format.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To get the status messages from the user's social
+account. The data will be normalized into LoginRadius' data format.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$raw</var></dt>
+					<dd><code>boolean</code><br>$raw If true, raw data is fetched</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>object</code><br>Status messages.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_post_status" id="_loginradius_post_status">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_post_status">#</a>
+		<code><a href="source-class-LoginRadius.html#303-327" title="Go to source code">loginradius_post_status</a>( <span>string <var>$accessToken</var></span>, <span>string <var>$title</var></span>, <span>string <var>$url</var></span>, <span>string <var>$imageurl</var></span>, <span>string <var>$status</var></span>, <span>string <var>$caption</var></span>, <span>string <var>$description</var></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To update the status on the user's wall.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To update the status on the user's wall.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$title</var></dt>
+					<dd><code>string</code><br>$title Title for status message (Optional).</dd>
+					<dt><var>$url</var></dt>
+					<dd><code>string</code><br>$url A web link of the status message (Optional).</dd>
+					<dt><var>$imageurl</var></dt>
+					<dd><code>string</code><br>$imageurl An image URL of the status message (Optional).</dd>
+					<dt><var>$status</var></dt>
+					<dd><code>string</code><br>$status The status message text (Required).</dd>
+					<dt><var>$caption</var></dt>
+					<dd><code>string</code><br>$caption Caption of the status message (Optional).</dd>
+					<dt><var>$description</var></dt>
+					<dd><code>string</code><br>$description Description of the status message (Optional).</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br>Returns true if successful, false otherwise.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_get_videos" id="_loginradius_get_videos">
+
+		<td class="attributes"><code>
+			 public 
+			object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_get_videos">#</a>
+		<code><a href="source-class-LoginRadius.html#329-344" title="Go to source code">loginradius_get_videos</a>( <span>string <var>$accessToken</var></span>, <span>boolean <var>$raw</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To get videos data from the user's social account. The
+data will be normalized into LoginRadius' data format.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To get videos data from the user's social account. The
+data will be normalized into LoginRadius' data format.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$raw</var></dt>
+					<dd><code>boolean</code><br>$raw If true, raw data is fetched</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>object</code><br>Videos data.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_get_likes" id="_loginradius_get_likes">
+
+		<td class="attributes"><code>
+			 public 
+			object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_get_likes">#</a>
+		<code><a href="source-class-LoginRadius.html#346-361" title="Go to source code">loginradius_get_likes</a>( <span>string <var>$accessToken</var></span>, <span>boolean <var>$raw</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To get likes data from the user's social account. The
+data will be normalized into LoginRadius' data format.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To get likes data from the user's social account. The
+data will be normalized into LoginRadius' data format.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$raw</var></dt>
+					<dd><code>boolean</code><br>$raw If true, raw data is fetched</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>object</code><br>Videos data.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="loginradius_get_pages" id="_loginradius_get_pages">
+
+		<td class="attributes"><code>
+			 public 
+			object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_loginradius_get_pages">#</a>
+		<code><a href="source-class-LoginRadius.html#363-379" title="Go to source code">loginradius_get_pages</a>( <span>string <var>$accessToken</var></span>, <span>string <var>$pageName</var></span>, <span>boolean <var>$raw</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			
+<p>LoginRadius function - To get the page data from the user's social account.
+The data will be normalized into LoginRadius' data format.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>LoginRadius function - To get the page data from the user's social account.
+The data will be normalized into LoginRadius' data format.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$accessToken</var></dt>
+					<dd><code>string</code><br>$accessToken LoginRadius access token</dd>
+					<dt><var>$pageName</var></dt>
+					<dd><code>string</code><br>$pageName Page name</dd>
+					<dt><var>$raw</var></dt>
+					<dd><code>boolean</code><br>$raw If true, raw data is fetched</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>object</code><br>Page data.<br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		PhpProject1 API documentation generated by <a href="http://apigen.org">ApiGen 2.8.0</a>
+	</div>
+</div>
+</div>
+</body>
+</html>
