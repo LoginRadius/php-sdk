@@ -27,4 +27,4 @@
 
 	To run a simple test with the composer class, you can copy the file test.php to your root directory, and run
 	=> $ php test.php
-	in your command line. If you see a sentence like "Call back failed, but class is found.", then it means loginradius class is successfully imported.
+	in your command line. If you see a sentence like "Call back failed, but loginradius class is found.", then it means loginradius class is successfully imported.
