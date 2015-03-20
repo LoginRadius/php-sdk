@@ -1,78 +1,158 @@
 <?php
 
 // Define LoginRadius domain
-define('LR_DOMAIN', 'api.loginradius.com');
+define('LR_API_ENDPOINT', 'https://api.loginradius.com/api/v2');
+
+// Define LoginRadius CDN domain
+define('LR_CDN_ENDPOINT', 'https://cdn.loginradius.com');
 
 /**
  * Class for Social Authentication.
  *
- * This is the main class to communicate with LogiRadius Unified Social API. It contains functions for Social Authentication with User Profile Data (Basic and Extended)
+ * This is the main class to communicate with LoginRadius Unified Social API. It contains functions for Social Authentication with User Profile Data (Basic and Extended)
  *
- * Copyright 2013 LoginRadius Inc. - www.LoginRadius.com
+ * Copyright 2015 LoginRadius Inc. - www.LoginRadius.com
  *
  * This file is part of the LoginRadius SDK package.
  *
  */
-class LoginRadius
-{
+class LoginRadius {
 
     /**
      * LoginRadius function - It validates against GUID format of keys.
-     * 
+     *
      * @param string $value data to validate.
      *
      * @return boolean If valid - true, else - false
      */
-    private function loginradius_is_valid_guid($value)
-    {
+    private function loginradius_is_valid_guid($value) {
         return preg_match('/^\{?[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}?$/i', $value);
     }
 
     /**
      * LoginRadius function - Check, if it is a valid callback i.e. LoginRadius authentication token is set
      *
-     * @return boolean True, if a valid callback.
+     * @return boolean true, if a valid callback.
      */
-    public function loginradius_is_callback()
-    {
-        if (isset($_REQUEST['token']))
-        {
+    public function loginradius_is_callback() {
+        if (isset($_REQUEST['token'])) {
             return true;
-        } else
-        {
+        } else {
             return false;
         }
     }
 
     /**
+     *
      * LoginRadius function - Fetch LoginRadius access token after authentication. It will be valid for the specific duration of time specified in the response.
+     * @deprecated use loginradius_exchange_access_token instead of this method
      *
      * @param string LoginRadius API Secret
-     * @param boolean if true then return object with expiry time and token else only token 
-	 *
+     * @param boolean if true then return object with expiry time and token else only token
+     *
      * @return mixed string|object LoginRadius access token.
+     *
+     * try{
+     *   $accesstoken = $loginradiusObject->loginradius_fetch_access_token($secret);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_fetch_access_token($secret, $isExpiryTime = false)
-    {
-        if (!$this->loginradius_is_valid_guid($secret))
-        {
-            die('Invalid API secret');
-        }
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/access_token?token=" . $_REQUEST['token'] . "&secret=" . $secret;
-        $Response = json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_fetch_access_token($secret, $isAccessTokenObjectReturn = false) {
 
-        if ($isExpiryTime)
-        {
-            return $Response;
+        if (!$this->loginradius_is_valid_guid($secret)) {
+            // Invalid API secret
+            throw new LoginRadiusException('Invalid API secret');
         }
 
-        if (isset($Response->access_token) && $Response->access_token != '')
-        {
-            return $Response->access_token;
-        } else
-        {
-            die('Error in fetching access token.');
+        $requestToken = '';
+        if (isset($_REQUEST['token'])) {
+            $requestToken = $_REQUEST['token'];
+        } else {
+            throw new LoginRadiusException('Request token require to access LoginRadius access token API');
         }
+
+        $url = LR_API_ENDPOINT . "/access_token?token=" . $requestToken . "&secret=" . $secret;
+        $response = json_decode($this->loginradius_api_client($url));
+
+        
+		if ($isAccessTokenObjectReturn) {
+			return $response;
+		}
+
+		return $response->access_token;
+        
+    }
+
+    /**
+     *
+     * LoginRadius function - Fetch LoginRadius access token after authentication. It will be valid for the specific duration of time specified in the response.
+     * @param string LoginRadius API Secret
+     * @param string LoginRadius API token
+     *
+     * @return mixed string|object LoginRadius access token.
+     *
+     * try{
+     *   $accesstoken = $loginradiusObject->loginradius_exchange_access_token($secret);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
+     */
+    public function loginradius_exchange_access_token($secret, $requestToken = false) {
+        if (!$this->loginradius_is_valid_guid($secret)) {
+            throw new LoginRadiusException('Invalid API secret');
+        }
+
+        if (!$requestToken) {
+            if (isset($_REQUEST['token'])) {
+                $requestToken = $_REQUEST['token'];
+            } else {
+                throw new LoginRadiusException('Request token require to access LoginRadius access token API');
+            }
+        }
+
+        $url = LR_API_ENDPOINT . "/access_token?token=" . $requestToken . "&secret=" . $secret;
+        $response = json_decode($this->loginradius_api_client($url));
+		return $response;
+    }
+
+    /**
+     * LoginRadius function - To fetch social login providers
+     *
+     * @param string $apikey data to validate.
+     *
+     * @return object Social Login Providers/error messages.
+     *
+     * try{
+     *   $providers = $loginradiusObject->loginradius_get_providers($apikey);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     * }
+     */
+    public function loginradius_get_providers($apikey) {
+        // Check for valid GUID format and not empty API Key
+        if (empty($apikey) || !$this->loginradius_is_valid_guid($apikey)) {
+            throw new LoginRadiusException('API Key is not valid');
+        }
+
+        $url = LR_CDN_ENDPOINT . "/interface/json/" . $apikey . ".json";
+
+        // providers from API - string
+        $response = $this->loginradius_api_client($url);
+
+        $jsonResponse = explode('(', $response);
+
+        if ($jsonResponse[0] == 'loginRadiusAppJsonLoaded') {
+            $providers = str_replace(')', '', $jsonResponse[1]);
+            return json_decode($providers, TRUE);
+        }
+
+        throw new LoginRadiusException('Error Retrieving Providers List');
     }
 
     /**
@@ -82,16 +162,19 @@ class LoginRadius
      * @param boolean $raw        If true, raw data is fetched
      *
      * @return object User profile data.
+     *
+     * try{
+     *   $userProfileData = $loginradiusObject->loginradius_get_user_profiledata($accessToken);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_get_user_profiledata($accessToken, $raw = false)
-    {
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/userprofile?access_token=" . $accessToken;
-        if ($raw)
-        {
-            $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/userprofile/raw?access_token=" . $accessToken;
-            return $this->loginradius_call_api($ValidateUrl);
-        }
-        return json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_get_user_profiledata($accessToken, $raw = false) {
+        $url = LR_API_ENDPOINT . "/userprofile" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken;
+        $result = $this->loginradius_api_client($url);
+        return $raw ? $result : json_decode($result);
     }
 
     /**
@@ -101,16 +184,19 @@ class LoginRadius
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's albums data.
+     *
+     * try{
+     *   $photoAlbums = $loginradiusObject->loginradius_get_photo_albums($accessToken);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_get_photo_albums($accessToken, $raw = false)
-    {
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/album?access_token=" . $accessToken;
-        if ($raw)
-        {
-            $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/album/raw?access_token=" . $accessToken;
-            return $this->loginradius_call_api($ValidateUrl);
-        }
-        return json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_get_photo_albums($accessToken, $raw = false) {
+        $url = LR_API_ENDPOINT . "/album" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken;
+        $result = $this->loginradius_api_client($url);
+        return $raw ? $result : json_decode($result);
     }
 
     /**
@@ -121,16 +207,19 @@ class LoginRadius
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's photo data.
+     *
+     * try{
+     *   $photos = $loginradiusObject->loginradius_get_photos($accessToken, $albumId);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_get_photos($accessToken, $albumId, $raw = false)
-    {
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/photo?access_token=" . $accessToken . "&albumid=" . $albumId;
-        if ($raw)
-        {
-            $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/photo/raw?access_token=" . $accessToken . "&albumid=" . $albumId;
-            return $this->loginradius_call_api($ValidateUrl);
-        }
-        return json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_get_photos($accessToken, $albumId, $raw = false) {
+        $url = LR_API_ENDPOINT . "/photo" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken . "&albumid=" . $albumId;
+        $result = $this->loginradius_api_client($url);
+        return $raw ? $result : json_decode($result);
     }
 
     /**
@@ -140,16 +229,19 @@ class LoginRadius
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's check-ins.
+     *
+     * try{
+     *   $checkins = $loginradiusObject->loginradius_get_checkins($accessToken);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_get_checkins($accessToken, $raw = false)
-    {
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/checkin?access_token=" . $accessToken;
-        if ($raw)
-        {
-            $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/checkin/raw?access_token=" . $accessToken;
-            return $this->loginradius_call_api($ValidateUrl);
-        }
-        return json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_get_checkins($accessToken, $raw = false) {
+        $url = LR_API_ENDPOINT . "/checkin" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken;
+        $result = $this->loginradius_api_client($url);
+        return $raw ? $result : json_decode($result);
     }
 
     /**
@@ -159,16 +251,19 @@ class LoginRadius
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's audio files data.
+     *
+     * try{
+     *   $audio = $loginradiusObject->loginradius_get_audio($accessToken);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_get_audio($accessToken, $raw = false)
-    {
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/audio?access_token=" . $accessToken;
-        if ($raw)
-        {
-            $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/audio/raw?access_token=" . $accessToken;
-            return $this->loginradius_call_api($ValidateUrl);
-        }
-        return json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_get_audio($accessToken, $raw = false) {
+        $url = LR_API_ENDPOINT . "/audio" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken;
+        $result = $this->loginradius_api_client($url);
+        return $raw ? $result : json_decode($result);
     }
 
     /**
@@ -180,16 +275,23 @@ class LoginRadius
      * @param string $message     Message
      *
      * @return bool True on success, false otherwise
+     *
+     * try{
+     *  $result = $loginradiusObject->loginradius_send_message($accessToken, $to, $subject, $message);
+     * }
+     * catch (LoginRadiusException $e){
+     *    $e->getMessage();
+     *    $e->getErrorResponse();
+     * }
      */
-    public function loginradius_send_message($accessToken, $to, $subject, $message)
-    {
-        $Url = "https://" . LR_DOMAIN . "/api/v2/message?" . http_build_query(array(
+    public function loginradius_send_message($accessToken, $to, $subject, $message) {
+        $url = LR_API_ENDPOINT . "/message?" . http_build_query(array(
                     'access_token' => $accessToken,
                     'to' => $to,
                     'subject' => $subject,
                     'message' => $message
         ));
-        return json_decode($this->loginradius_call_api($Url, true));
+        return json_decode($this->loginradius_api_client($url, true));
     }
 
     /**
@@ -200,16 +302,19 @@ class LoginRadius
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's contacts/friends/followers.
+     *
+     * try{
+     *   $contacts = $loginradiusObject->loginradius_get_contacts($accessToken, $nextCursor);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_get_contacts($accessToken, $nextCursor = '', $raw = false)
-    {
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/contact?access_token=" . $accessToken . "&nextcursor=" . $nextCursor;
-        if ($raw)
-        {
-            $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/contact/raw?access_token=" . $accessToken . "&nextcursor=" . $nextCursor;
-            return $this->loginradius_call_api($ValidateUrl);
-        }
-        return json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_get_contacts($accessToken, $nextCursor = '', $raw = false) {
+        $url = LR_API_ENDPOINT . "/contact" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken . "&nextcursor=" . $nextCursor;
+        $result = $this->loginradius_api_client($url);
+        return $raw ? $result : json_decode($result);
     }
 
     /**
@@ -219,16 +324,19 @@ class LoginRadius
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's twitter mentions.
+     *
+     * try{
+     *   $mentions = $loginradiusObject->loginradius_get_mentions($accessToken);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_get_mentions($accessToken, $raw = false)
-    {
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/mention?access_token=" . $accessToken;
-        if ($raw)
-        {
-            $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/mention/raw?access_token=" . $accessToken;
-            return $this->loginradius_call_api($ValidateUrl);
-        }
-        return json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_get_mentions($accessToken, $raw = false) {
+        $url = LR_API_ENDPOINT . "/mention" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken;
+        $result = $this->loginradius_api_client($url);
+        return $raw ? $result : json_decode($result);
     }
 
     /**
@@ -238,16 +346,19 @@ class LoginRadius
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Information of the people, user is following.
+     *
+     * try{
+     *   $following = $loginradiusObject->loginradius_get_following($accessToken);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_get_following($accessToken, $raw = false)
-    {
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/following?access_token=" . $accessToken;
-        if ($raw)
-        {
-            $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/following/raw?access_token=" . $accessToken;
-            return $this->loginradius_call_api($ValidateUrl);
-        }
-        return json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_get_following($accessToken, $raw = false) {
+        $url = LR_API_ENDPOINT . "/following" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken;
+        $result = $this->loginradius_api_client($url);
+        return $raw ? $result : json_decode($result);
     }
 
     /**
@@ -257,16 +368,19 @@ class LoginRadius
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's event data.
+     *
+     * try{
+     *   $events = $loginradiusObject->loginradius_get_events($accessToken);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_get_events($accessToken, $raw = false)
-    {
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/event?access_token=" . $accessToken;
-        if ($raw)
-        {
-            $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/event/raw?access_token=" . $accessToken;
-            return $this->loginradius_call_api($ValidateUrl);
-        }
-        return json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_get_events($accessToken, $raw = false) {
+        $url = LR_API_ENDPOINT . "/event" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken;
+        $result = $this->loginradius_api_client($url);
+        return $raw ? $result : json_decode($result);
     }
 
     /**
@@ -276,16 +390,19 @@ class LoginRadius
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's posted messages.
+     *
+     * try{
+     *   $posts = $loginradiusObject->loginradius_get_posts($accessToken);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_get_posts($accessToken, $raw = false)
-    {
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/post?access_token=" . $accessToken;
-        if ($raw)
-        {
-            $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/post/raw?access_token=" . $accessToken;
-            return $this->loginradius_call_api($ValidateUrl);
-        }
-        return json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_get_posts($accessToken, $raw = false) {
+        $url = LR_API_ENDPOINT . "/post" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken;
+        $result = $this->loginradius_api_client($url);
+        return $raw ? $result : json_decode($result);
     }
 
     /**
@@ -295,16 +412,19 @@ class LoginRadius
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Companies followed by user.
+     *
+     * try{
+     *   $companies = $loginradiusObject->loginradius_get_followed_companies($accessToken);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_get_followed_companies($accessToken, $raw = false)
-    {
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/company?access_token=" . $accessToken;
-        if ($raw)
-        {
-            $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/company/raw?access_token=" . $accessToken;
-            return $this->loginradius_call_api($ValidateUrl);
-        }
-        return json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_get_followed_companies($accessToken, $raw = false) {
+        $url = LR_API_ENDPOINT . "/company" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken;
+        $result = $this->loginradius_api_client($url);
+        return $raw ? $result : json_decode($result);
     }
 
     /**
@@ -314,16 +434,19 @@ class LoginRadius
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Group data.
+     *
+     * try{
+     *   $groups = $loginradiusObject->loginradius_get_groups($accessToken);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_get_groups($accessToken, $raw = false)
-    {
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/group?access_token=" . $accessToken;
-        if ($raw)
-        {
-            $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/group/raw?access_token=" . $accessToken;
-            return $this->loginradius_call_api($ValidateUrl);
-        }
-        return json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_get_groups($accessToken, $raw = false) {
+        $url = LR_API_ENDPOINT . "/group" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken;
+        $result = $this->loginradius_api_client($url);
+        return $raw ? $result : json_decode($result);
     }
 
     /**
@@ -333,21 +456,24 @@ class LoginRadius
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Status messages.
+     *
+     * try{
+     *   $status = $loginradiusObject->loginradius_get_status($accessToken);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_get_status($accessToken, $raw = false)
-    {
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/status?access_token=" . $accessToken;
-        if ($raw)
-        {
-            $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/status/raw?access_token=" . $accessToken;
-            return $this->loginradius_call_api($ValidateUrl);
-        }
-        return json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_get_status($accessToken, $raw = false) {
+        $url = LR_API_ENDPOINT . "/status" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken;
+        $result = $this->loginradius_api_client($url);
+        return $raw ? $result : json_decode($result);
     }
 
     /**
      * LoginRadius function - To update the status on the user's wall.
-     * 
+     *
      * @param string $accessToken LoginRadius access token
      * @param string $title       Title for status message (Optional).
      * @param string $url         A web link of the status message (Optional).
@@ -357,10 +483,18 @@ class LoginRadius
      * @param string $description Description of the status message (Optional).
      *
      * @return boolean Returns true if successful, false otherwise.
+     * 
+     * try{
+     *  $result = $loginradiusObject->loginradius_post_status($accessToken, $title, $url, $imageurl, $status, $caption, $description);
+     * }
+     * catch (LoginRadiusException $e){
+     *    $e->getMessage();
+     *    $e->getErrorResponse();
+     * }
+     * 
      */
-    public function loginradius_post_status($accessToken, $title, $url, $imageurl, $status, $caption, $description)
-    {
-        $Url = "https://" . LR_DOMAIN . "/api/v2/status?" . http_build_query(array(
+    public function loginradius_post_status($accessToken, $title, $url, $imageurl, $status, $caption, $description) {
+        $url = LR_API_ENDPOINT . "/status?" . http_build_query(array(
                     'access_token' => $accessToken,
                     'title' => $title,
                     'url' => $url,
@@ -369,7 +503,7 @@ class LoginRadius
                     'caption' => $caption,
                     'description' => $description
         ));
-        return json_decode($this->loginradius_call_api($Url, true));
+        return json_decode($this->loginradius_api_client($url, true));
     }
 
     /**
@@ -379,16 +513,19 @@ class LoginRadius
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Videos data.
+     *
+     * try{
+     *   $videos = $loginradiusObject->loginradius_get_videos($accessToken);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_get_videos($accessToken, $raw = false)
-    {
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/video?access_token=" . $accessToken;
-        if ($raw)
-        {
-            $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/video/raw?access_token=" . $accessToken;
-            return $this->loginradius_call_api($ValidateUrl);
-        }
-        return json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_get_videos($accessToken, $raw = false) {
+        $url = LR_API_ENDPOINT . "/video" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken;
+        $result = $this->loginradius_api_client($url);
+        return $raw ? $result : json_decode($result);
     }
 
     /**
@@ -397,17 +534,20 @@ class LoginRadius
      * @param string $accessToken LoginRadius access token
      * @param boolean $raw If true, raw data is fetched
      *
-     * @return object Videos data.
+     * @return object likes data.
+     *
+     * try{
+     *   $likes = $loginradiusObject->loginradius_get_likes($accessToken);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_get_likes($accessToken, $raw = false)
-    {
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/like?access_token=" . $accessToken;
-        if ($raw)
-        {
-            $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/like/raw?access_token=" . $accessToken;
-            return $this->loginradius_call_api($ValidateUrl);
-        }
-        return json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_get_likes($accessToken, $raw = false) {
+        $url = LR_API_ENDPOINT . "/like" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken;
+        $result = $this->loginradius_api_client($url);
+        return $raw ? $result : json_decode($result);
     }
 
     /**
@@ -418,47 +558,45 @@ class LoginRadius
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Page data.
+     *
+     * try{
+     *   $pages = $loginradiusObject->loginradius_get_pages($accessToken, $pageName);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
      */
-    public function loginradius_get_pages($accessToken, $pageName, $raw = false)
-    {
-        $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/page?access_token=" . $accessToken . "&pagename=" . $pageName;
-        if ($raw)
-        {
-            $ValidateUrl = "https://" . LR_DOMAIN . "/api/v2/page/raw?access_token=" . $accessToken . "&pagename=" . $pageName;
-            return $this->loginradius_call_api($ValidateUrl);
-        }
-        return json_decode($this->loginradius_call_api($ValidateUrl));
+    public function loginradius_get_pages($accessToken, $pageName, $raw = false) {
+        $url = LR_API_ENDPOINT . "/page" . $this->loginradius_get_raw_data($raw) . "?access_token=" . $accessToken . "&pagename=" . $pageName;
+        $result = $this->loginradius_api_client($url);
+        return $raw ? $result : json_decode($result);
     }
 
     /**
      * LoginRadius function - To fetch data from the LoginRadius API URL.
-     * 
-     * @param string $ValidateUrl Target URL to fetch data from.
+     *
+     * @param string $url Target URL to fetch data from.
      *
      * @return string Data fetched from the LoginRadius API.
      */
-    private function loginradius_call_api($ValidateUrl, $post = false)
-    {
-        if (in_array('curl', get_loaded_extensions()))
-        {
+    private function loginradius_api_client($url, $post = false) {
+        if (in_array('curl', get_loaded_extensions())) {
             $curl_handle = curl_init();
-            curl_setopt($curl_handle, CURLOPT_URL, $ValidateUrl);
+            curl_setopt($curl_handle, CURLOPT_URL, $url);
             curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 5);
-            curl_setopt($curl_handle, CURLOPT_TIMEOUT, 5);
+            curl_setopt($curl_handle, CURLOPT_TIMEOUT, 15);
             curl_setopt($curl_handle, CURLOPT_ENCODING, 'json');
             curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
-            if ($post)
-            {
+            if ($post) {
                 curl_setopt($curl_handle, CURLOPT_POST, 1);
                 curl_setopt($curl_handle, CURLOPT_POSTFIELDS, '');
             }
-            if (ini_get('open_basedir') == '' && (ini_get('safe_mode') == 'Off' or ! ini_get('safe_mode')))
-            {
+            if (ini_get('open_basedir') == '' && (ini_get('safe_mode') == 'Off' or ! ini_get('safe_mode'))) {
                 curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, 1);
                 curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
-                $JsonResponse = curl_exec($curl_handle);
-            } else
-            {
+                $jsonResponse = curl_exec($curl_handle);
+            } else {
                 curl_setopt($curl_handle, CURLOPT_HEADER, 1);
                 $url = curl_getinfo($curl_handle, CURLINFO_EFFECTIVE_URL);
                 curl_close($curl_handle);
@@ -466,36 +604,73 @@ class LoginRadius
                 $url = str_replace('?', '/?', $url);
                 curl_setopt($ch, CURLOPT_URL, $url);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $JsonResponse = curl_exec($ch);
+                $jsonResponse = curl_exec($ch);
                 curl_close($ch);
             }
-        } else
-        {
-            if ($post)
-            {
-                $postdata = http_build_query(
-                        array(
-                            'var1' => 'val'
-                        )
-                );
+        } else {
+            if ($post) {
                 $options = array('http' =>
                     array(
                         'method' => 'POST',
                         'timeout' => 10,
                         'header' => 'Content-type: application/x-www-form-urlencoded',
-                        'content' => $postdata
+                        'content' => ''
                     )
                 );
                 $context = stream_context_create($options);
-            } else
-            {
+            } else {
                 $context = NULL;
             }
-            $JsonResponse = file_get_contents($ValidateUrl, false, $context);
+            $jsonResponse = file_get_contents($url, false, $context);
         }
-        return $JsonResponse;
+
+        $result = json_decode($jsonResponse);
+
+        if (isset($result->errorCode) && !empty($result->errorCode)) {
+            throw new LoginRadiusException($result->message, $result);
+        }
+
+        return $jsonResponse;
     }
 
+    /**
+     * LoginRadius function - To fetch data from the LoginRadius Raw API URL.
+     *
+     * @param boolean $raw If true, raw data is fetched
+     *
+     * @return string Data to add in API URL.
+     */
+    private function loginradius_get_raw_data($raw) {
+        if ($raw) {
+            return '/raw';
+        }
+        return '';
+    }
+
+}
+
+/**
+ * Class For LoginRadius Exception
+ *
+ * This is the Loginradius Exception class to handle exception when you access LoginRadius APIs.
+ *
+ * Copyright 2015 LoginRadius Inc. - www.LoginRadius.com
+ *
+ * This file is part of the LoginRadius SDK package.
+ */
+class LoginRadiusException extends Exception {
+
+    public $errorResponse;
+
+    public function __construct($message, $errorResponse = array()) {
+        parent::__construct($message);
+
+        $this->errorResponse = $errorResponse;
+    }
+
+    public function getErrorResponse() {
+        return $this->errorResponse;
+    }
 }
 
 ?>

@@ -1,5 +1,5 @@
 <?php
-	define('LR_DOMAIN', 'api.loginradius.com');
+
 	define('LR_APIKEY', 'LOGINRADIUS_API_KEY');
 	define('LR_SECRETKEY', 'LOGINRADIUS_API_SECRET_KEY');
 	//Ex :- http://www.example.com/ or http://localhost/
