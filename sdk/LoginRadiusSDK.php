@@ -1,25 +1,25 @@
 <?php
 
-// Define loginradius domain
+// Define LoginRadius domain
 define('LR_API_ENDPOINT', 'https://api.loginradius.com/api/v2');
 
-// Define loginradius CDN domain
+// Define LoginRadius CDN domain
 define('LR_CDN_ENDPOINT', 'https://cdn.loginradius.com');
 
 /**
  * Class for Social Authentication.
  *
- * This is the main class to communicate with loginradius Unified Social API. It contains functions for Social Authentication with User Profile Data (Basic and Extended)
+ * This is the main class to communicate with LoginRadius Unified Social API. It contains functions for Social Authentication with User Profile Data (Basic and Extended)
  *
- * Copyright 2015 loginradius Inc. - www.loginradius.com
+ * Copyright 2015 LoginRadius Inc. - www.LoginRadius.com
  *
- * This file is part of the loginradius SDK package.
+ * This file is part of the LoginRadius SDK package.
  *
  */
-class loginradius {
+class LoginRadius {
 
     /**
-     * loginradius function - It validates against GUID format of keys.
+     * LoginRadius function - It validates against GUID format of keys.
      *
      * @param string $value data to validate.
      *
@@ -30,7 +30,7 @@ class loginradius {
     }
 
     /**
-     * loginradius function - Check, if it is a valid callback i.e. loginradius authentication token is set
+     * LoginRadius function - Check, if it is a valid callback i.e. LoginRadius authentication token is set
      *
      * @return boolean true, if a valid callback.
      */
@@ -40,18 +40,18 @@ class loginradius {
 
     /**
      *
-     * loginradius function - Fetch loginradius access token after authentication. It will be valid for the specific duration of time specified in the response.
+     * LoginRadius function - Fetch LoginRadius access token after authentication. It will be valid for the specific duration of time specified in the response.
      * @deprecated use loginradius_exchange_access_token instead of this method
      *
-     * @param string loginradius API Secret
+     * @param string LoginRadius API Secret
      * @param boolean if true then return object with expiry time and token else only token
      *
-     * @return mixed string|object loginradius access token.
+     * @return mixed string|object LoginRadius access token.
      *
      * try{
      *   $accesstoken = $loginradiusObject->loginradius_fetch_access_token($secret);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -60,14 +60,14 @@ class loginradius {
 
         if (empty($secret) || !$this->loginradius_is_valid_guid($secret)) {
             // Invalid API secret
-            throw new loginradiusException('Invalid API secret');
+            throw new LoginRadiusException('Invalid API secret');
         }
 
         $requestToken = '';
         if (isset($_REQUEST['token'])) {
             $requestToken = $_REQUEST['token'];
         } else {
-            throw new loginradiusException('Request token require to access loginradius access token API');
+            throw new LoginRadiusException('Request token require to access LoginRadius access token API');
         }
 
         $url = LR_API_ENDPOINT . "/access_token?token=" . $requestToken . "&secret=" . $secret;
@@ -84,30 +84,30 @@ class loginradius {
 
     /**
      *
-     * loginradius function - Fetch loginradius access token after authentication. It will be valid for the specific duration of time specified in the response.
-     * @param string loginradius API Secret
-     * @param string loginradius API token
+     * LoginRadius function - Fetch LoginRadius access token after authentication. It will be valid for the specific duration of time specified in the response.
+     * @param string LoginRadius API Secret
+     * @param string LoginRadius API token
      *
-     * @return mixed string|object loginradius access token.
+     * @return mixed string|object LoginRadius access token.
      *
      * try{
      *   $accesstoken = $loginradiusObject->loginradius_exchange_access_token($secret);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
      */
     public function loginradius_exchange_access_token($secret, $requestToken = false) {
         if (!$this->loginradius_is_valid_guid($secret)) {
-            throw new loginradiusException('Invalid API secret');
+            throw new LoginRadiusException('Invalid API secret');
         }
 
         if (!$requestToken) {
             if (isset($_REQUEST['token'])) {
                 $requestToken = $_REQUEST['token'];
             } else {
-                throw new loginradiusException('Request token require to access loginradius access token API');
+                throw new LoginRadiusException('Request token require to access LoginRadius access token API');
             }
         }
 
@@ -116,7 +116,7 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To fetch social login providers
+     * LoginRadius function - To fetch social login providers
      *
      * @param string $apikey data to validate.
      *
@@ -125,14 +125,14 @@ class loginradius {
      * try{
      *   $providers = $loginradiusObject->loginradius_get_providers($apikey);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      * }
      */
     public function loginradius_get_providers($apikey) {
         // Check for valid GUID format and not empty API Key
         if (empty($apikey) || !$this->loginradius_is_valid_guid($apikey)) {
-            throw new loginradiusException('API Key is not valid');
+            throw new LoginRadiusException('API Key is not valid');
         }
 
         $url = LR_CDN_ENDPOINT . "/interface/json/" . $apikey . ".json";
@@ -142,18 +142,18 @@ class loginradius {
 
         $jsonResponse = explode('(', $response);
 
-        if ($jsonResponse[0] == 'loginradiusAppJsonLoaded') {
+        if ($jsonResponse[0] == 'loginRadiusAppJsonLoaded') {
             $providers = str_replace(')', '', $jsonResponse[1]);
             return json_decode($providers, TRUE);
         }
 
-        throw new loginradiusException('Error Retrieving Providers List');
+        throw new LoginRadiusException('Error Retrieving Providers List');
     }
 
     /**
-     * loginradius function - To fetch social profile data from the user's social account after authentication. The social profile will be retrieved via oAuth and OpenID protocols. The data is normalized into loginradius' standard data format.
+     * LoginRadius function - To fetch social profile data from the user's social account after authentication. The social profile will be retrieved via oAuth and OpenID protocols. The data is normalized into LoginRadius' standard data format.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param boolean $raw        If true, raw data is fetched
      *
      * @return object User profile data.
@@ -161,7 +161,7 @@ class loginradius {
      * try{
      *   $userProfileData = $loginradiusObject->loginradius_get_user_profiledata($accessToken);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -173,9 +173,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To get the Albums data from the user's social account. The data will be normalized into loginradius' data format.
+     * LoginRadius function - To get the Albums data from the user's social account. The data will be normalized into LoginRadius' data format.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's albums data.
@@ -183,7 +183,7 @@ class loginradius {
      * try{
      *   $photoAlbums = $loginradiusObject->loginradius_get_photo_albums($accessToken);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -195,9 +195,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To fetch photo data from the user's social account. The data will be normalized into loginradius' data format.
+     * LoginRadius function - To fetch photo data from the user's social account. The data will be normalized into LoginRadius' data format.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param string $albumId ID of the album to fetch photos from
      * @param boolean $raw If true, raw data is fetched
      *
@@ -206,7 +206,7 @@ class loginradius {
      * try{
      *   $photos = $loginradiusObject->loginradius_get_photos($accessToken, $albumId);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -218,9 +218,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To fetch check-ins data from the user's social account. The data will be normalized into loginradius' data format.
+     * LoginRadius function - To fetch check-ins data from the user's social account. The data will be normalized into LoginRadius' data format.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's check-ins.
@@ -228,7 +228,7 @@ class loginradius {
      * try{
      *   $checkins = $loginradiusObject->loginradius_get_checkins($accessToken);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -240,9 +240,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To fetch user's audio files data from the user's social account. The data will be normalized into loginradius' data format.
+     * LoginRadius function - To fetch user's audio files data from the user's social account. The data will be normalized into LoginRadius' data format.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's audio files data.
@@ -250,7 +250,7 @@ class loginradius {
      * try{
      *   $audio = $loginradiusObject->loginradius_get_audio($accessToken);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -262,9 +262,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - Post messages to the user's contacts. After using the Contact API, you can send messages to the retrieved contacts.
+     * LoginRadius function - Post messages to the user's contacts. After using the Contact API, you can send messages to the retrieved contacts.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param string $to          Social ID of the receiver
      * @param string $subject     Subject of the message
      * @param string $message     Message
@@ -274,7 +274,7 @@ class loginradius {
      * try{
      *  $result = $loginradiusObject->loginradius_send_message($accessToken, $to, $subject, $message);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *    $e->getMessage();
      *    $e->getErrorResponse();
      * }
@@ -290,9 +290,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To fetch user's contacts/friends/connections data from the user's social account. The data will normalized into loginradius' data format.
+     * LoginRadius function - To fetch user's contacts/friends/connections data from the user's social account. The data will normalized into LoginRadius' data format.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param integer $nextCursor Offset to start fetching contacts from
      * @param boolean $raw If true, raw data is fetched
      *
@@ -301,7 +301,7 @@ class loginradius {
      * try{
      *   $contacts = $loginradiusObject->loginradius_get_contacts($accessToken, $nextCursor);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -313,9 +313,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To get mention data from the user's social account. The data will be normalized into loginradius' data format.
+     * LoginRadius function - To get mention data from the user's social account. The data will be normalized into LoginRadius' data format.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's twitter mentions.
@@ -323,7 +323,7 @@ class loginradius {
      * try{
      *   $mentions = $loginradiusObject->loginradius_get_mentions($accessToken);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -335,9 +335,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To fetch information of the people, user is following on Twitter.
+     * LoginRadius function - To fetch information of the people, user is following on Twitter.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Information of the people, user is following.
@@ -345,7 +345,7 @@ class loginradius {
      * try{
      *   $following = $loginradiusObject->loginradius_get_following($accessToken);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -357,9 +357,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To get the event data from the user's social account. The data will be normalized into loginradius' data format.
+     * LoginRadius function - To get the event data from the user's social account. The data will be normalized into LoginRadius' data format.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's event data.
@@ -367,7 +367,7 @@ class loginradius {
      * try{
      *   $events = $loginradiusObject->loginradius_get_events($accessToken);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -379,9 +379,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To get posted messages from the user's social account. The data will be normalized into loginradius' data format.
+     * LoginRadius function - To get posted messages from the user's social account. The data will be normalized into LoginRadius' data format.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's posted messages.
@@ -389,7 +389,7 @@ class loginradius {
      * try{
      *   $posts = $loginradiusObject->loginradius_get_posts($accessToken);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -401,9 +401,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To get the followed company's data in the user's social account. The data will be normalized into loginradius' data format.
+     * LoginRadius function - To get the followed company's data in the user's social account. The data will be normalized into LoginRadius' data format.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Companies followed by user.
@@ -411,7 +411,7 @@ class loginradius {
      * try{
      *   $companies = $loginradiusObject->loginradius_get_followed_companies($accessToken);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -423,9 +423,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To get group data from the user's social account. The data will be normalized into loginradius' data format.
+     * LoginRadius function - To get group data from the user's social account. The data will be normalized into LoginRadius' data format.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Group data.
@@ -433,7 +433,7 @@ class loginradius {
      * try{
      *   $groups = $loginradiusObject->loginradius_get_groups($accessToken);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -445,9 +445,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To get the status messages from the user's social account. The data will be normalized into loginradius' data format.
+     * LoginRadius function - To get the status messages from the user's social account. The data will be normalized into LoginRadius' data format.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Status messages.
@@ -455,7 +455,7 @@ class loginradius {
      * try{
      *   $status = $loginradiusObject->loginradius_get_status($accessToken);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -467,9 +467,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To update the status on the user's wall.
+     * LoginRadius function - To update the status on the user's wall.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param string $title       Title for status message (Optional).
      * @param string $url         A web link of the status message (Optional).
      * @param string $imageurl    An image URL of the status message (Optional).
@@ -482,7 +482,7 @@ class loginradius {
      * try{
      *  $result = $loginradiusObject->loginradius_post_status($accessToken, $title, $url, $imageurl, $status, $caption, $description);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *    $e->getMessage();
      *    $e->getErrorResponse();
      * }
@@ -502,9 +502,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To get videos data from the user's social account. The data will be normalized into loginradius' data format.
+     * LoginRadius function - To get videos data from the user's social account. The data will be normalized into LoginRadius' data format.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Videos data.
@@ -512,7 +512,7 @@ class loginradius {
      * try{
      *   $videos = $loginradiusObject->loginradius_get_videos($accessToken);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -524,9 +524,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To get likes data from the user's social account. The data will be normalized into loginradius' data format.
+     * LoginRadius function - To get likes data from the user's social account. The data will be normalized into LoginRadius' data format.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object likes data.
@@ -534,7 +534,7 @@ class loginradius {
      * try{
      *   $likes = $loginradiusObject->loginradius_get_likes($accessToken);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -546,9 +546,9 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To get the page data from the user's social account. The data will be normalized into loginradius' data format.
+     * LoginRadius function - To get the page data from the user's social account. The data will be normalized into LoginRadius' data format.
      *
-     * @param string $accessToken loginradius access token
+     * @param string $accessToken LoginRadius access token
      * @param string $pageName Page name
      * @param boolean $raw If true, raw data is fetched
      *
@@ -557,7 +557,7 @@ class loginradius {
      * try{
      *   $pages = $loginradiusObject->loginradius_get_pages($accessToken, $pageName);
      * }
-     * catch (loginradiusException $e){
+     * catch (LoginRadiusException $e){
      *   $e->getMessage();
      *   $e->getErrorResponse();
      * }
@@ -569,11 +569,11 @@ class loginradius {
     }
 
     /**
-     * loginradius function - To fetch data from the loginradius API URL.
+     * LoginRadius function - To fetch data from the LoginRadius API URL.
      *
      * @param string $url Target URL to fetch data from.
      *
-     * @return string Data fetched from the loginradius API.
+     * @return string Data fetched from the LoginRadius API.
      */
     private function loginradius_api_client($url, $post = false) {
         if (in_array('curl', get_loaded_extensions())) {
@@ -593,7 +593,7 @@ class loginradius {
                 curl_setopt($curlHandle,CURLOPT_FAILONERROR,true);
                 $jsonResponse = curl_exec($curlHandle);
                 if (curl_errno($curlHandle)) {
-                    throw new loginradiusException('cURL Error:  ' . curl_error($curlHandle));
+                    throw new LoginRadiusException('cURL Error:  ' . curl_error($curlHandle));
                 }
                 curl_close($curlHandle);
             } else {
@@ -607,7 +607,7 @@ class loginradius {
                 curl_setopt($ch,CURLOPT_FAILONERROR,true);
                 $jsonResponse = curl_exec($ch);
                 if (curl_errno($ch)) {
-                    throw new loginradiusException('cURL Error:  ' . curl_error($ch));
+                    throw new LoginRadiusException('cURL Error:  ' . curl_error($ch));
                 }
                 curl_close($ch);
             }
@@ -624,25 +624,27 @@ class loginradius {
                 );
                 $context = stream_context_create($options);
             }
-            $jsonResponse = file_get_contents($url, false, $context);
-            if ($jsonResponse) {
+            $jsonResponse = @file_get_contents($url, false, $context);
+            if(strpos(@$http_response_header[0], "400") !== false || strpos(@$http_response_header[0], "401") !== false || strpos(@$http_response_header[0], "403") !== false || strpos(@$http_response_header[0], "404") !== false || strpos(@$http_response_header[0], "500") !== false || strpos(@$http_response_header[0], "503") !== false) {
                 throw new loginradiusException('file_get_contents error:  ' . $http_response_header[0]);
             }
+            elseif (!$jsonResponse) {
+                throw new LoginRadiusException('file_get_contents error');
+            }
         } else {
-            $jsonResponse = '';
-            throw new loginradiusException('cURL or FSOCKOPEN is not enabled, enable cURL or FSOCKOPEN to get response from loginradius API.');
+            throw new LoginRadiusException('cURL or FSOCKOPEN is not enabled, enable cURL or FSOCKOPEN to get response from LoginRadius API.');
         }
 
         $result = json_decode($jsonResponse);
         if (isset($result->errorCode) && !empty($result->errorCode)) {
-            throw new loginradiusException($result->message, $result);
+            throw new LoginRadiusException($result->message, $result);
         }
 
         return $jsonResponse;
     }
 
     /**
-     * loginradius function - To fetch data from the loginradius Raw API URL.
+     * LoginRadius function - To fetch data from the LoginRadius Raw API URL.
      *
      * @param boolean $raw If true, raw data is fetched
      *
@@ -655,13 +657,13 @@ class loginradius {
 }
 
 /**
- * Class For loginradius Exception
+ * Class For LoginRadius Exception
  *
- * This is the loginradius Exception class to handle exception when you access loginradius APIs.
+ * This is the Loginradius Exception class to handle exception when you access LoginRadius APIs.
  *
- * Copyright 2015 loginradius Inc. - www.loginradius.com
+ * Copyright 2015 LoginRadius Inc. - www.LoginRadius.com
  */
-class loginradiusException extends Exception {
+class LoginRadiusException extends Exception {
 
     public $errorResponse;
 

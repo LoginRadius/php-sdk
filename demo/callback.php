@@ -19,8 +19,11 @@ include_once('LoginRadiusSDK.php');
                 $result_accesstoken = $loginradius->loginradius_exchange_access_token(LR_SECRETKEY);
 				$lraccesstoken = $result_accesstoken->access_token;
             } catch (LoginRadiusException $e) {
-                echo $UserProfileData->Provider . ' Access Token API :- ';
-                echo $e->getMessage() . '<br>';
+                echo ' Access Token API :- ';
+                echo $e->getMessage() . '<br><br>';
+                echo 'Redirecting to home page in 5 seconds.....<br>';
+                header( "refresh:5;url=".YOUR_DOMAIN );
+                exit();
             }
             if (isset($lraccesstoken) && !empty($lraccesstoken)) {
                 $UserPhotoalbums = '';
@@ -44,7 +47,7 @@ include_once('LoginRadiusSDK.php');
                 try {
                     $UserProfileData = $loginradius->loginradius_get_user_profiledata($lraccesstoken);
                 } catch (LoginRadiusException $e) {
-                    echo $UserProfileData->Provider . ' User Profile Data API :- ';
+                    echo ' User Profile Data API :- ';
                     echo $e->getMessage() . '<br>';
                 }
                 if (!empty($UserProfileData) && is_object($UserProfileData)) {
@@ -52,7 +55,7 @@ include_once('LoginRadiusSDK.php');
                         try {
                             $UserPhotos = $loginradius->loginradius_get_photos($lraccesstoken);
                         } catch (LoginRadiusException $e) {
-                            echo $UserProfileData->Provider . ' Photo API :- ';
+                            echo ' Photo API :- ';
                             echo $e->getMessage() . '<br>';
                         }
                     }
@@ -60,7 +63,7 @@ include_once('LoginRadiusSDK.php');
                         try {
                             $UserPhotoalbums = $loginradius->loginradius_get_photo_albums($lraccesstoken);
                         } catch (LoginRadiusException $e) {
-                            echo $UserProfileData->Provider . ' Photo Albums API :- ';
+                            echo ' Photo Albums API :- ';
                             echo $e->getMessage() . '<br>';
                         }
                     }
@@ -68,7 +71,7 @@ include_once('LoginRadiusSDK.php');
                         try {
                             $UserCheckins = $loginradius->loginradius_get_checkins($lraccesstoken);
                         } catch (LoginRadiusException $e) {
-                            echo $UserProfileData->Provider . ' Checkins API :- ';
+                            echo ' Checkins API :- ';
                             echo $e->getMessage() . '<br>';
                         }
                     }
@@ -76,7 +79,7 @@ include_once('LoginRadiusSDK.php');
                         try {
                             $UserAudio = $loginradius->loginradius_get_audio($lraccesstoken);
                         } catch (LoginRadiusException $e) {
-                            echo $UserProfileData->Provider . ' Audio API :- ';
+                            echo ' Audio API :- ';
                             echo $e->getMessage() . '<br>';
                         }
                     }
@@ -84,7 +87,7 @@ include_once('LoginRadiusSDK.php');
                         try {
                             $UserContacts = $loginradius->loginradius_get_contacts($lraccesstoken);
                         } catch (LoginRadiusException $e) {
-                            echo $UserProfileData->Provider . ' Contact API :- ';
+                            echo ' Contact API :- ';
                             echo $e->getMessage() . '<br>';
                         }
                         if (isset($UserContacts->isProviderError)) {
@@ -95,7 +98,7 @@ include_once('LoginRadiusSDK.php');
                         try {
                             $UserMentions = $loginradius->loginradius_get_mentions($lraccesstoken);
                         } catch (LoginRadiusException $e) {
-                            echo $UserProfileData->Provider . ' Mentions API :- ';
+                            echo ' Mentions API :- ';
                             echo $e->getMessage() . '<br>';
                         }
                     }
@@ -103,7 +106,7 @@ include_once('LoginRadiusSDK.php');
                         try {
                             $UserFollowing = $loginradius->loginradius_get_following($lraccesstoken);
                         } catch (LoginRadiusException $e) {
-                            echo $UserProfileData->Provider . ' Following API :- ';
+                            echo ' Following API :- ';
                             echo $e->getMessage() . '<br>';
                         }
                     }
@@ -111,7 +114,7 @@ include_once('LoginRadiusSDK.php');
                         try {
                             $UserEvents = $loginradius->loginradius_get_events($lraccesstoken);
                         } catch (LoginRadiusException $e) {
-                            echo $UserProfileData->Provider . ' Events API :- ';
+                            echo ' Events API :- ';
                             echo $e->getMessage() . '<br>';
                         }
                     }
@@ -119,7 +122,7 @@ include_once('LoginRadiusSDK.php');
                         try {
                             $UserGetPost = $loginradius->loginradius_get_posts($lraccesstoken);
                         } catch (LoginRadiusException $e) {
-                            echo $UserProfileData->Provider . ' Posts API :- ';
+                            echo ' Posts API :- ';
                             echo $e->getMessage() . '<br>';
                         }
                     }
@@ -127,7 +130,7 @@ include_once('LoginRadiusSDK.php');
                         try {
                             $UserFollowedCompanies = $loginradius->loginradius_get_followed_companies($lraccesstoken);
                         } catch (LoginRadiusException $e) {
-                            echo $UserProfileData->Provider . ' Companies API :- ';
+                            echo ' Companies API :- ';
                             echo $e->getMessage() . '<br>';
                         }
                     }
@@ -135,7 +138,7 @@ include_once('LoginRadiusSDK.php');
                         try {
                             $UserGroups = $loginradius->loginradius_get_groups($lraccesstoken);
                         } catch (LoginRadiusException $e) {
-                            echo $UserProfileData->Provider . ' Groups API :- ';
+                            echo ' Groups API :- ';
                             echo $e->getMessage() . '<br>';
                         }
                     }
@@ -143,7 +146,7 @@ include_once('LoginRadiusSDK.php');
                         try {
                             $UserGetStatus = $loginradius->loginradius_get_status($lraccesstoken);
                         } catch (LoginRadiusException $e) {
-                            echo $UserProfileData->Provider . ' Status API :- ';
+                            echo ' Status API :- ';
                             echo $e->getMessage() . '<br>';
                         }
                     }
@@ -151,7 +154,7 @@ include_once('LoginRadiusSDK.php');
                         try {
                             $UserVideos = $loginradius->loginradius_get_videos($lraccesstoken);
                         } catch (LoginRadiusException $e) {
-                            echo $UserProfileData->Provider . ' Videos API :- ';
+                            echo ' Videos API :- ';
                             echo $e->getMessage() . '<br>';
                         }
                         if (isset($UserVideos->isProviderError)) {
@@ -163,7 +166,7 @@ include_once('LoginRadiusSDK.php');
                         try {
                             $UserLikes = $loginradius->loginradius_get_likes($lraccesstoken);
                         } catch (LoginRadiusException $e) {
-                            echo $UserProfileData->Provider . ' Likes API :- ';
+                            echo ' Likes API :- ';
                             echo $e->getMessage() . '<br>';
                         }
                     }

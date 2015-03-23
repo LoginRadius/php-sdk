@@ -35,11 +35,7 @@ class LoginRadius {
      * @return boolean true, if a valid callback.
      */
     public function loginradius_is_callback() {
-        if (isset($_REQUEST['token'])) {
-            return true;
-        } else {
-            return false;
-        }
+        return isset($_REQUEST['token']) ? true : false;
     }
 
     /**
@@ -62,7 +58,7 @@ class LoginRadius {
      */
     public function loginradius_fetch_access_token($secret, $isAccessTokenObjectReturn = false) {
 
-        if (!$this->loginradius_is_valid_guid($secret)) {
+        if (empty($secret) || !$this->loginradius_is_valid_guid($secret)) {
             // Invalid API secret
             throw new LoginRadiusException('Invalid API secret');
         }
@@ -77,13 +73,13 @@ class LoginRadius {
         $url = LR_API_ENDPOINT . "/access_token?token=" . $requestToken . "&secret=" . $secret;
         $response = json_decode($this->loginradius_api_client($url));
 
-        
-		if ($isAccessTokenObjectReturn) {
-			return $response;
-		}
 
-		return $response->access_token;
-        
+        if ($isAccessTokenObjectReturn) {
+            return $response;
+        }
+
+        return $response->access_token;
+
     }
 
     /**
@@ -116,8 +112,7 @@ class LoginRadius {
         }
 
         $url = LR_API_ENDPOINT . "/access_token?token=" . $requestToken . "&secret=" . $secret;
-        $response = json_decode($this->loginradius_api_client($url));
-		return $response;
+        return json_decode($this->loginradius_api_client($url));
     }
 
     /**
@@ -483,7 +478,7 @@ class LoginRadius {
      * @param string $description Description of the status message (Optional).
      *
      * @return boolean Returns true if successful, false otherwise.
-     * 
+     *
      * try{
      *  $result = $loginradiusObject->loginradius_post_status($accessToken, $title, $url, $imageurl, $status, $caption, $description);
      * }
@@ -491,7 +486,7 @@ class LoginRadius {
      *    $e->getMessage();
      *    $e->getErrorResponse();
      * }
-     * 
+     *
      */
     public function loginradius_post_status($accessToken, $title, $url, $imageurl, $status, $caption, $description) {
         $url = LR_API_ENDPOINT . "/status?" . http_build_query(array(
@@ -582,50 +577,65 @@ class LoginRadius {
      */
     private function loginradius_api_client($url, $post = false) {
         if (in_array('curl', get_loaded_extensions())) {
-            $curl_handle = curl_init();
-            curl_setopt($curl_handle, CURLOPT_URL, $url);
-            curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 5);
-            curl_setopt($curl_handle, CURLOPT_TIMEOUT, 15);
-            curl_setopt($curl_handle, CURLOPT_ENCODING, 'json');
-            curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+            $curlHandle = curl_init();
+            curl_setopt($curlHandle, CURLOPT_URL, $url);
+            curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, 5);
+            curl_setopt($curlHandle, CURLOPT_TIMEOUT, 15);
+            curl_setopt($curlHandle, CURLOPT_ENCODING, 'json');
+            curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, false);
             if ($post) {
-                curl_setopt($curl_handle, CURLOPT_POST, 1);
-                curl_setopt($curl_handle, CURLOPT_POSTFIELDS, '');
+                curl_setopt($curlHandle, CURLOPT_POST, 1);
+                curl_setopt($curlHandle, CURLOPT_POSTFIELDS, '');
             }
             if (ini_get('open_basedir') == '' && (ini_get('safe_mode') == 'Off' or ! ini_get('safe_mode'))) {
-                curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, 1);
-                curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
-                $jsonResponse = curl_exec($curl_handle);
+                curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, 1);
+                curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($curlHandle,CURLOPT_FAILONERROR,true);
+                $jsonResponse = curl_exec($curlHandle);
+                if (curl_errno($curlHandle)) {
+                    throw new LoginRadiusException('cURL Error:  ' . curl_error($curlHandle));
+                }
+                curl_close($curlHandle);
             } else {
-                curl_setopt($curl_handle, CURLOPT_HEADER, 1);
-                $url = curl_getinfo($curl_handle, CURLINFO_EFFECTIVE_URL);
-                curl_close($curl_handle);
+                curl_setopt($curlHandle, CURLOPT_HEADER, 1);
+                $url = curl_getinfo($curlHandle, CURLINFO_EFFECTIVE_URL);
+                curl_close($curlHandle);
                 $ch = curl_init();
                 $url = str_replace('?', '/?', $url);
                 curl_setopt($ch, CURLOPT_URL, $url);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch,CURLOPT_FAILONERROR,true);
                 $jsonResponse = curl_exec($ch);
+                if (curl_errno($ch)) {
+                    throw new LoginRadiusException('cURL Error:  ' . curl_error($ch));
+                }
                 curl_close($ch);
             }
-        } else {
+        } elseif (ini_get('allow_url_fopen')) {
+            $context = NULL;
             if ($post) {
                 $options = array('http' =>
                     array(
                         'method' => 'POST',
                         'timeout' => 10,
                         'header' => 'Content-type: application/x-www-form-urlencoded',
-                        'content' => ''
+                        'content' => '',
                     )
                 );
                 $context = stream_context_create($options);
-            } else {
-                $context = NULL;
             }
-            $jsonResponse = file_get_contents($url, false, $context);
+            $jsonResponse = @file_get_contents($url, false, $context);
+            if(strpos(@$http_response_header[0], "400") !== false || strpos(@$http_response_header[0], "401") !== false || strpos(@$http_response_header[0], "403") !== false || strpos(@$http_response_header[0], "404") !== false || strpos(@$http_response_header[0], "500") !== false || strpos(@$http_response_header[0], "503") !== false) {
+                throw new loginradiusException('file_get_contents error:  ' . $http_response_header[0]);
+            }
+            elseif (!$jsonResponse) {
+                throw new LoginRadiusException('file_get_contents error');
+            }
+        } else {
+            throw new LoginRadiusException('cURL or FSOCKOPEN is not enabled, enable cURL or FSOCKOPEN to get response from LoginRadius API.');
         }
 
         $result = json_decode($jsonResponse);
-
         if (isset($result->errorCode) && !empty($result->errorCode)) {
             throw new LoginRadiusException($result->message, $result);
         }
@@ -636,15 +646,12 @@ class LoginRadius {
     /**
      * LoginRadius function - To fetch data from the LoginRadius Raw API URL.
      *
-     * @param boolean $raw If true, raw data is fetched
+     * @param boolean $raw If true, raw data is fetched 
      *
      * @return string Data to add in API URL.
      */
     private function loginradius_get_raw_data($raw) {
-        if ($raw) {
-            return '/raw';
-        }
-        return '';
+        return $raw ? '/raw' : '';
     }
 
 }
@@ -655,8 +662,6 @@ class LoginRadius {
  * This is the Loginradius Exception class to handle exception when you access LoginRadius APIs.
  *
  * Copyright 2015 LoginRadius Inc. - www.LoginRadius.com
- *
- * This file is part of the LoginRadius SDK package.
  */
 class LoginRadiusException extends Exception {
 
