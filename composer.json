@@ -1,0 +1,22 @@
+{
+    "name": "loginradius/php-sdk",
+    "description": "LoginRadius SDK for PHP",
+    "keywords": ["loginradius", "phpsdk"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "LoginRadius Team",
+            "email": "developers@loginradius.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+		
+    },
+    "autoload": {
+        "psr-4": {
+            "LoginRadiusSDK\\": "src/LoginRadiusSDK/"
+        }
+    }
+}
