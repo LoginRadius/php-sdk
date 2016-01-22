@@ -1,5 +1,0 @@
-{
-	"require": {
-		"loginradius/php-sdk-2.0": "dev-master"
-	}
-}
