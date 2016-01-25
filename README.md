@@ -26,7 +26,7 @@ curl -sS https://getcomposer.org/installer | php
 Next, run the Composer command to install the latest stable version of library:
 
 ```bash
-composer require loginradius/php-sdk
+composer require loginradius/php-sdk-2.0:dev-master
 ```
 
 You can then later update LoginRadius PHP SDK using composer:
