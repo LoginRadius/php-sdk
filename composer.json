@@ -1,5 +1,5 @@
 {
-    "name": "loginradius/php-sdk",
+    "name": "loginradius/php-sdk-3.0",
     "description": "LoginRadius SDK for PHP",
     "keywords": ["loginradius", "phpsdk"],
     "type": "library",
