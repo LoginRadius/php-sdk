@@ -1,0 +1,111 @@
+/*// =============================================================*/
+/*// Start Customer Registration template*/
+/*// =============================================================*/
+/*// =============================================================*/
+/*// Form templates*/
+/*// Removing this will remove all the form styling*/
+form[name*="loginradius-raas"] {
+  width: 100%;
+  display: inline-block;
+  margin-bottom: 15px;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+form[name*="loginradius-raas"] > div {
+  margin: 0 0 15px 0;
+}
+
+form[name*="loginradius-raas"] label {
+  margin-bottom: 5px;
+  display: inline-block;
+}
+
+form[name*="loginradius-raas"] input {
+  /*better font rendering for mac*/
+  -webkit-font-smoothing: antialiased;
+  -webkit-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+form[name*="loginradius-raas"] input:focus {
+  outline: none;
+}
+form[name*="loginradius-raas"] input[type="text"], form[name*="loginradius-raas"] input[type="email"], form[name*="loginradius-raas"] input[type="password"], form[name*="loginradius-raas"] input[type="date"], form[name*="loginradius-raas"] input select {
+  width: 100%;
+  font-size: 100%;
+  padding: 10px;
+  border-radius: 3px;
+  background: #fcfcfc;
+  border: 1px solid #eee;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+form[name*="loginradius-raas"] input[type="text"]:focus, form[name*="loginradius-raas"] input[type="email"]:focus, form[name*="loginradius-raas"] input[type="password"]:focus, form[name*="loginradius-raas"] input[type="date"]:focus, form[name*="loginradius-raas"] input select:focus {
+  border: 1px solid #00b0f0;
+}
+form[name*="loginradius-raas"] input[type="submit"] {
+  padding: 8px 20px;
+  background: #2299dd;
+  color: #fff;
+  border-radius: 2px;
+  cursor: pointer;
+  border: none;
+  font-size: 100%;
+  float: right;
+}
+form[name*="loginradius-raas"] input[type="submit"]:hover {
+  background: #00b0f0;
+}
+form[name*="loginradius-raas"] select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100%;
+  font-size: 100%;
+  padding: 10px;
+  border-radius: 3px;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVQYV2NkIBIwEqmOgfHMmTP/iVFMvEKQaYRMNTExYYS7EZdikCKQYSieQVcMU4ShENkZyIqwKsQVAkSHIwCrtBbRk+bFjAAAAABJRU5ErkJggg==) no-repeat right #fcfcfc;
+  background-position: 98%;
+  border: 1px solid #eee;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  /*better font rendering for mac*/
+  -webkit-font-smoothing: antialiased;
+  -webkit-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+form[name*="loginradius-raas"] select:focus {
+  border: 1px solid #00b0f0;
+}
+form[name*="loginradius-raas"] select:focus {
+  outline: none;
+}
+form[name*="loginradius-raas"] .recaptcha_widget {
+  position: relative;
+}
+form[name*="loginradius-raas"] .recaptcha_options {
+  position: absolute;
+  top: 3px;
+  left: 305px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+form[name*="loginradius-raas"] .recaptcha_options .captcha_hide {
+  display: none;
+}
+form[name*="loginradius-raas"] .recaptcha_options li img {
+  display: block;
+}
+
+form[name*="loginradius-raas"] .recaptcha_widget .recaptcha_input {
+  margin: 15px 0;
+}
