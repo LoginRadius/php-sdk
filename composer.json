@@ -1,6 +1,5 @@
 {
     "name": "loginradius/php-sdk",
-    "replace": {"loginradius/php-sdk-2.0": "self.version"},
     "description": "LoginRadius PHP SDK v3.0",
     "keywords": ["loginradius", "phpsdk"],
     "type": "library",
