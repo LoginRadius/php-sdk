@@ -235,7 +235,7 @@ class AccountAPI
      */
     public function setStatus($uid, $action = true)
     {
-        return $this->apiClientHandler("status", array('uid' => $uid), array('method' => 'post', 'post_data' => array('isblock' => $action)));
+        return $this->apiClientHandler("status", array('accountid' => $uid), array('method' => 'post', 'post_data' => array('isblock' => $action)));
     }
 
     /**
