@@ -1,3 +1,4 @@
+
 LoginRadius
 ==========
 -----------------------------------------------
@@ -13,6 +14,7 @@ PHP Library
 --------------
 
 This document contains information and examples regarding the LoginRadius PHP SDK. It provides guidance for working with social authentication, capture user profile data, enable social login, enable social sharing, single sign-on, user profile data and sending messages with a variety of social networks such as Facebook, Google, Twitter, Yahoo, LinkedIn, and more.
+
 
 ## Installation
 
@@ -40,8 +42,23 @@ After installing, you need to require Composer's autoloader:
 ```bush
 require 'vendor/autoload.php'
 ```
-
-
+```bush
+include_once "LoginRadiusSDK/Utility/Functions.php";
+include_once "LoginRadiusSDK/LoginRadiusException.php";
+include_once "LoginRadiusSDK/Clients/IHttpClient.php";
+include_once "LoginRadiusSDK/Clients/DefaultHttpClient.php";
+include_once "LoginRadiusSDK/Utility/SOTT.php";
+include_once "LoginRadiusSDK/CustomerRegistration/Social/ProvidersAPI.php";
+include_once "LoginRadiusSDK/CustomerRegistration/Social/SocialLoginAPI.php";
+include_once "LoginRadiusSDK/CustomerRegistration/Social/AdvanceSocialLoginAPI.php";
+include_once "LoginRadiusSDK/CustomerRegistration/Authentication/UserAPI.php";
+include_once "LoginRadiusSDK/CustomerRegistration/Authentication/AuthCustomObjectAPI.php";
+include_once "LoginRadiusSDK/CustomerRegistration/Management/AccountAPI.php";
+include_once "LoginRadiusSDK/CustomerRegistration/Management/RoleAPI.php";
+include_once "LoginRadiusSDK/CustomerRegistration/Management/CustomObjectAPI.php";
+include_once "LoginRadiusSDK/CustomerRegistration/Management/SchemaAPI.php";
+include_once "LoginRadiusSDK/Advance/RestHooksAPI.php";
+```
 
 ##Configuration
 
@@ -57,30 +74,49 @@ After successfully install, you need to define following LoginRadius Account inf
 ##Implementation
 Importing/aliasing with the use operator.
 ```bush
-use LoginRadiusSDK\LoginRadius;
+use LoginRadiusSDK\Utility\Functions;
 use LoginRadiusSDK\LoginRadiusException;
-use LoginRadiusSDK\SocialLogin\GetProvidersAPI;
-use LoginRadiusSDK\SocialLogin\SocialLoginAPI;
-use LoginRadiusSDK\CustomerRegistration\UserAPI;
-use LoginRadiusSDK\CustomerRegistration\AccountAPI;
-use LoginRadiusSDK\CustomerRegistration\CustomObjectAPI;
+use LoginRadiusSDK\Clients\IHttpClient;
+use LoginRadiusSDK\Clients\DefaultHttpClient;
+use LoginRadiusSDK\Utility\SOTT;
+use LoginRadiusSDK\CustomerRegistration\Social\ProvidersAPI;
+use LoginRadiusSDK\CustomerRegistration\Social\SocialLoginAPI;
+use LoginRadiusSDK\CustomerRegistration\Social\AdvanceSocialLoginAPI;
+use LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI;
+use LoginRadiusSDK\CustomerRegistration\Authentication\AuthCustomObjectAPI;
+use LoginRadiusSDK\CustomerRegistration\Management\AccountAPI;
+use LoginRadiusSDK\CustomerRegistration\Management\RoleAPI;
+use LoginRadiusSDK\CustomerRegistration\Management\CustomObjectAPI;
+use LoginRadiusSDK\CustomerRegistration\Management\SchemaAPI;
+use LoginRadiusSDK\Advance\RestHooksAPI;
 ```
 Create a LoginRadius object using API & Secret key:
 ```bush
-// Social API's
-$getProviderObject = new GetProvidersAPI(LR_API_KEY, LR_API_SECRET, array('authentication'=>false, 'output_format' => 'json'));
+// Social APIs
+$getProviderObject = new ProvidersAPI(LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
 
-$socialLoginObject = new SocialLoginAPI (LR_API_KEY, LR_API_SECRET, array('authentication'=>false, 'output_format' => 'json'));
+$socialLoginObject = new SocialLoginAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
 
-// Customer Registration API's
-$userObject = new UserAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
+$advanceSocialLoginObject = new AdvanceSocialLoginAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
+
+// Authentication APIs
+$authenticationObject = new UserAPI(LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
+
+$authCustomObject = new AuthCustomObjectAPI(LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
 
 $accountObject = new AccountAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
 
+$schemaObject = new SchemaAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
+
+$accountObject = new AccountAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
+
+$roleObject = new RoleAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
+
 $customObject = new CustomObjectAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
+
+$resthookObject = new RestHooksAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
         
 ```
-
 ####Call GetProvidersAPI API's
 Get list of provider selected in LoginRadius user account.
 ```bush
@@ -92,7 +128,6 @@ catch (LoginRadiusException $e){
     $e->getErrorResponse();
 }
 ```
-
 #### Call SocialLoginAPI API's
 #####Get Access token
 http://apidocs.loginradius.com/docs/access-token
@@ -304,37 +339,149 @@ catch (LoginRadiusException $e){
     $e->getErrorResponse();
 }
 ```
-
-#### Call UserAPI API's
-#####Create User
-This API is used to create a new user on your site. This API bypasses the normal email verification process and manually creates the user for your system.
-http://apidocs.loginradius.com/docs/create-user
+#####Token Validate
 ```bush
-    /**
-     * $data = array("emailid" => "example@example.com",
-     * "password" => "FakePass",
-     * "firstname" => "Joe",
-     * "lastname" => "Smith",
-     * "gender" => "M",
-     * "birthdate" => "11-08-1987",
-     * "Country" => "USA",
-     * "city" => "Chicago",
-     * "state" => "Illinois ",
-     * "phonenumber" => "1232333232",
-     * "address1" => "23/43, II Street",
-     * "address2" => "Near Paris garden",
-     * "company" => "Orange Inc.",
-     * "postalcode" => "43435",
-     * "emailsubscription" => "true",
-     * "customfields" => array(
-     *      "example_field1" => "some data 1",
-     *      "example_field2" => "some data 2",
-     *      "example_field3" => "some data 3"
-     * )
-     * );
-     * /
 try{
-    $profile= $userObject->create($data);
+    $validate= $socialLoginObject->tokenValidate($access_token);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Token Invalidate
+```bush
+try{
+    $invalidate= $socialLoginObject->tokenInvalidate($access_token);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####validate Key and Secret Message Data
+```bush
+try{
+    $invalidatekey= $socialLoginObject->validateKeyandSecret();
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+
+
+#### Advance Social API's
+#####Get access token by passing facebook token
+```bush
+try{
+    $result= $advanceSocialLoginObject->getAccessTokenByPassingFacebookToken($fb_access_token);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get access token by passing twitter token
+```bush
+try{
+    $result= $advanceSocialLoginObject->getAccessTokenByPassingTwitterToken($tw_access_token, $tw_token_secret);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Refresh User Profile
+```bush
+try{
+    $result= $advanceSocialLoginObject->refreshUserProfile($access_token);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Refresh Access Token
+```bush
+try{
+    $result= $advanceSocialLoginObject->refreshAccessToken($access_token);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Trackable Status Fetching
+```bush
+try{
+    $result= $advanceSocialLoginObject->trackableStatus($postid);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Trackable Status Stats
+```bush
+try{
+    $result= $advanceSocialLoginObject->trackableStatusStats($access_token, $status, $title , $url , $imageurl , $caption, $description );
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Shorten Url
+```bush
+try{
+   $result= $advanceSocialLoginObject->shortenUrl($url);
+}
+catch (LoginRadiusException $e){
+   $e->getMessage();
+   $e->getErrorResponse();
+}
+```
+#####Trakable Status Posting
+```bush
+try{
+    $result= $advanceSocialLoginObject->trackableStatusPosting($access_token, $status, $title , $url , $imageurl , $caption, $description );
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+
+#### Call User APIs
+#####Login By Email
+This api used to provide login with email/password combination.
+```bush   
+try{
+    $result= $authenticationObject->loginByEmail($email, $password, $verification_url, $login_url, $email_template);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Login By Username
+This api used to provide login with username/password combination
+```bush
+   
+try{
+    $result= $authenticationObject->loginByUsername($username, $password, $verification_url, $login_url, $email_template);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Login By Phone
+This api used to provide login with phone/password combination.
+```bush
+try{
+    $result= $authenticationObject->loginByPhone($phone, $password, $verification_url, $login_url, $sms_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -342,136 +489,234 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Register User
-This API used to register user from server side, verification email will be send to provided email address
-http://apidocs.loginradius.com/docs/registration-api
+This api used to register a user.
 ```bush
-    /**
-     * $data = array("emailid" => "example@example.com",
-     * "password" => "FakePass",
-     * "firstname" => "Joe",
-     * "lastname" => "Smith",
-     * "gender" => "M",
-     * "birthdate" => "11-08-1987",
-     * "Country" => "USA",
-     * "city" => "Chicago",
-     * "state" => "Illinois ",
-     * "phonenumber" => "1232333232",
-     * "address1" => "23/43, II Street",
-     * "address2" => "Near Paris garden",
-     * "company" => "Orange Inc.",
-     * "postalcode" => "43435",
-     * "emailsubscription" => "true",
-     * "customfields" => array(
-     *      "example_field1" => "some data 1",
-     *      "example_field2" => "some data 2",
-     *      "example_field3" => "some data 3"
-     * ),
-     * "EmailVerificationUrl" => "http://yoursite.com/verifyemail"
-     * );
-     * /
 try{
-    $profile= $userObject->registration($data);
+    $profile= $authenticationObject->register($userprofile, $verification_url, $email_template, $sms_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-##### Update User
-This API is used to Modify/Update details of an existing user.
-http://apidocs.loginradius.com/docs/update-user
+#####Resend Email Verification
+This api used to resend email verification link.
 ```bush
-    /**
-     * $user_id = 'xxxxxxxxxxxxxxxxx'; // The LoginRadius user identifier for a particular social platform(like "Facebook", "Twitter") attached with that user account.
-     *  $data = array(
-     *  firstname => 'first name',
-     *  lastname => 'last name',
-     *  gender => 'm',
-     *  birthdate => 'MM-DD-YYYY',
-     *  ....................
-     *  ....................
-     * );
-     * /
 try{
-    $result= $userObject->edit($user_id, $data);
+    $profile= $authenticationObject->resendEmailVerification($email, $verification_url, $email_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-##### Delete User with Email Confirmation
-This API is used to remove an user's account from LoginRadius system. For security and mis-click concerns, it will send a delete confirmation email to user's email inbox to ask user to confirm the action.
-http://apidocs.loginradius.com/docs/user-delete-with-email-confirmation
+#####Get Profile
+This API is used to get profile by access token.
 ```bush
-/**
- * $user_id = 'xxxxxxxxxxxxxxxxx'; // The LoginRadius user identifier for a particular social platform(like "Facebook", "Twitter") attached with that user account.
- * $deleteuserlink Website link where delete user link will handle.
- *
- */
 try{
-    $result= $userObject->deleteUserEmail($user_id, $delete_user_link);
+    $profile= $authenticationObject->getProfile($access_token);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-##### User Authentication
-This API is used to authenticate users and returns the profile data associated with the authenticated user.
-http://apidocs.loginradius.com/docs/user-authentication
+#####Update Profile
+This API is used to update user profile by access token.
 ```bush
-/**
- * $user_name = 'username';//email id
- * $password = 'xxxxxxxxxx';
- */
 try{
-    $result= $userObject->signIn($user_name, $password);
+    $profile= $authenticationObject->updateProfile($access_token, $userprofile, $verification_url, $email_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-#####Get User Profile By User ID
-This API retrieves the profile data associated with the specific user using the users unique UserID.
-http://apidocs.loginradius.com/docs/get-user-profile
+#####Delete Account By Email Confirmation
+Delete account after email confirmation.
 ```bush
-/**
- * $user_id = 'xxxxxxxxxx';
- */
 try{
-    $result= $userObject->getProfileByID($user_id);
+    $profile= $authenticationObject->deleteAccountByEmailConfirmation($access_token, $delete_url, $email_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-##### Get User Profile By Email
-This API retrieves the profile data associated with the specific user using the passing in email address.
-http://apidocs.loginradius.com/docs/user-profile-by-email
+#####Forgot Password
 ```bush
-/**
- * $email = 'example@doamin.com';
- */
 try{
-    $result= $userObject->getProfileByEmail($email);
+    $profile= $authenticationObject->forgotPassword($email, $reset_password_url, $email_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-#####Check User Email Availability
-This API is used to check the availability of an email from your Customer registration system.
-http://apidocs.loginradius.com/docs/user-email-availability-server
+#####Reset Password
 ```bush
-/**
- * $email = 'example@doamin.com';
- */
 try{
-    $result= $userObject->checkEmail($email);
+    $profile= $authenticationObject->resetPassword($vtoken, $password, $welcome_email_template);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Change account Password
+```bush
+try{
+    $profile= $authenticationObject->changeAccountPassword($access_token, $old_password, $new_password);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Add Email
+```bush
+try{
+    $profile= $authenticationObject->addEmail($access_token, $email, $type, $verification_url, $email_template);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Remove Email
+```bush
+try{
+    $profile= $authenticationObject->removeEmail($access_token, $email);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Verify Email
+```bush
+try{
+    $profile= $authenticationObject->verifyEmail($vtoken, $url, $welcome_email_template);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Check Availability Of Email
+```bush
+try{
+    $profile= $authenticationObject->checkAvailablityOfEmail($email);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Change Username
+```bush
+try{
+    $profile= $authenticationObject->changeUsername($access_token, $username);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Check Username
+```bush
+try{
+    $profile= $authenticationObject->checkUsername($username);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Account Link
+```bush
+try{
+    $profile= $authenticationObject->accountLink($access_token, $candidate_token);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Account Unlink
+```bush
+try{
+    $profile= $authenticationObject->accountUnlink($access_token, $id, $provider);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get Social Profile
+```bush
+try{
+    $profile= $authenticationObject->getSocialProfile($access_token, $email_template );
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Check Availability of phone
+```bush
+try{
+    $profile= $authenticationObject->checkAvailablityOfPhone($phone);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Update Phone
+```bush
+try{
+    $profile= $authenticationObject->updatePhone($access_token, $phone, $smsTemplate);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Resend OTP
+```bush
+try{
+    $profile= $authenticationObject->resendOTP($phone, $sms_template);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Resend OTP By Token
+```bush
+try{
+    $profile= $authenticationObject->resendOTPByToken($access_token, $phone, $sms_template);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Verify OTP
+```bush
+try{
+    $profile= $authenticationObject->verifyOTP($otp, $phone,$sms_template);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Verify OTP by token
+```bush
+try{
+    $profile= $authenticationObject->verifyOTPByToken($access_token, $otp, $sms_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -479,70 +724,52 @@ catch (LoginRadiusException $e){
 }
 ```
 
-#### Call AccountAPI API's
-##### Link Account
-This API is used to link a user account with a specified providers user account.
-http://apidocs.loginradius.com/docs/link-user
-```bush
-/**
- * @param type $uid
- * @param type $id
- * @param type $provider
- */
+#### Call Custom Object APIs
+This API is used to manage a custom object for the user and relies on the User Entity object. If you are unsure of your Object ID you can reach out to the support team for details on this. If you haven't already initialized the User Registration Custom Object API do so now.
+#####Insert Data in Custom Object
+```bush    
 try{
-    $result = $accountObject->accountLink($uid, $id, $provider);
+    $profile= $authCustomObject->createCustomObject($access_token, $objectname, $data);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-#####Unlink Account
-This API is used to unlink a user account with a specified providers user account.
-http://apidocs.loginradius.com/docs/unlink-user
-```bush
-/**
- * @param type $uid
- * @param type $id
- * @param type $provider
- */
+#####Update Custom Object Data
+```bush    
 try{
-    $result = $accountObject->accountUnlink($uid, $id, $provider);
+    $profile= $authCustomObject->updateCustomObjectData($access_token, $objectname, $object_record_id, $data);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-#####Block/Unblock Account
-This API is used to block or un-block a user using the users unique UserID (UID).
-http://apidocs.loginradius.com/docs/account-blockunblock
-```bush
-/**
- * $uid = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
- * $action = true/false(boolean)
- */
+#####Get Custom Object Sets by token
+```bush    
 try{
-    $result= $accountObject->setStatus($uid, true/false);
+    $profile= $authCustomObject->getCustomObjectSetsByToken($access_token, $object_name);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-##### Create Registration Profile
-This API is used to create a user using the currently logged in social provider.
-http://apidocs.loginradius.com/docs/create-user-registration-profile
+#####Get Custom Object Set By ID
 ```bush
-/**
- * $data = array(
- *      'accountid'=> uid,
- *      'password'=> 'xxxxxxxxxx',
- *      'emailid'=> 'example@doamin.com'
- * );
- */
 try{
-    $result = $accountObject->createUserRegistrationProfile($data);
+    $profile= $authCustomObject->getCustomObjectSetByID($access_token, $object_name, $object_record_id);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Delete Custom Object Set
+```bush
+try{
+    $profile= $authCustomObject->deleteCustomObjectSet($access_token, $object_name, $object_record_id);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -550,112 +777,92 @@ catch (LoginRadiusException $e){
 }
 ```
 
-#####Get User Profiles
-This API is used to retrieve all of the profile data from each of the linked social provider accounts associated with the account. For ex: A user has linked facebook and google account then this api will retrieve both profile data.
-http://apidocs.loginradius.com/docs/get-user-profiles
+
+#### Call Account API's
+#####Create User
 ```bush
-/**
- * $uid = 'xxxxxxxxxxx';
- */
+   /**
+*    $data  =   '{
+* "Prefix":"",
+* "FirstName":"Kunal",
+* "MiddleName":null,
+* "LastName":"Saini",
+* "Suffix":null,
+* "FullName":"Kunal Saini",
+* "NickName":null,
+*  "ProfileName":null,
+* "BirthDate":"10-12-1985",
+*  "Gender":"M",
+*  "Website":null,
+* "EmailVerified":"true",
+*  "Password" : "*********",
+* "Email":[
+* {
+* "Type":"Primary",
+* "Value":"xxxxx@xxxxx.com"
+* },
+* ]}';
+*/
 try{
-    $result = $accountObject->getAccounts($uid);
+    $result = $accountObject->create($data);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-##### Set User Email
-This API is used to add or remove a particular email from one user's account.
-http://apidocs.loginradius.com/docs/user-email-set
+#####Update Account
 ```bush
-/**
- * $uid = 'xxxxxxxxxxx';
- * $action Add or remove
- * $data = array(
- *      'emailid'=> 'example@doamin.com',
- *      'emailType'=> 'Business', //Email Type like "Business" or Personal
- *
- * );
- */
+  /**
+*    $data  =   '{
+* "Prefix":"",
+* "FirstName":"Kunal",
+* "MiddleName":null,
+* "LastName":"Saini",
+* "Suffix":null,
+* "FullName":"Kunal Saini",
+* "NickName":null,
+*  "ProfileName":null,
+* "BirthDate":"10-12-1985",
+*  "Gender":"M",
+*  "Website":null
+*  }';
+*/
 try{
-    $result = $accountObject->userAdditionalEmail($uid, $action, $data);
+    $result = $accountObject->update($uid, $data);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-###### Forgot Password token
-This API generates a forgot password token so you can manually pass into the reset password page and reset some's password.
-http://apidocs.loginradius.com/docs/user-password-forgot-token
+#####Delete Account
 ```bush
-/**
- * $email = 'example@doamin.com';
- */
+  /**
+*
+* $uid = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'; //UID, the identifier for each user    
+* account, it may have multiple IDs(identifier for each social platform) attached 
+*  with
+*
+*/
 try{
-    $result = $accountObject->forgotPassword($email);
+    $result= $accountObject->delete($uid);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-#####Account Delete
-Delete an account from your LoginRadius app.
-http://apidocs.loginradius.com/docs/account-delete
-```bush
-/**
- * $uid = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'; 
- */
-try{
-    $result = $accountObject->deleteAccount($uid);
-}
-catch (LoginRadiusException $e){
-    $e->getMessage();
-    $e->getErrorResponse();
-}
-```
-#####Change Account Password
-This API is used to change the password field of an account, you need to know the old password before you change it.
-http://apidocs.loginradius.com/docs/account-password-change
-```bush
-/**
- * $uid = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'; 
- * $old_password => 'xxxxxxxxxx';
- * $new_password => 'xxxxxxxxxx';
- */
-try{
-    $result = $accountObject->changeAccountPassword($uid, $old_password, $new_password);
-}
-catch (LoginRadiusException $e){
-    $e->getMessage();
-    $e->getErrorResponse();
-}
-```
-#####Get Account Password
-This API is used to get the password field of an account.
-http://apidocs.loginradius.com/docs/account-password-get
-```bush
-/**
- * $uid = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
- */
-try{
-    $result = $accountObject->getHashPassword($uid);
-}
-catch (LoginRadiusException $e){
-    $e->getMessage();
-    $e->getErrorResponse();
-}
-```
-#####Set Account Password
+#####Set Password
 This API is used to set a password for an account. It does not require to know the previous(old) password.
-http://apidocs.loginradius.com/docs/account-password-set
 ```bush
-/**
- * $uid = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
- * $password = 'xxxxxxxxxx';
- */
+  /**
+*
+* $uid = 'xxxxxx'; // UID, the identifier for each user account, it may have multiple 
+* IDs(identifier for each social platform) attached with
+* $password = 'xxxxxxxxxx';
+*
+*/
 try{
     $result = $accountObject->setPassword($uid, $password);
 }
@@ -664,226 +871,402 @@ catch (LoginRadiusException $e){
     $e->getErrorResponse();
 }
 ```
-#####Change UserName
-This API is used for changing user name by account Id.
-http://apidocs.loginradius.com/docs/user-name-change
+#####Get Hash Password
+This API is used to get the password field of an account.
 ```bush
-/**
- * $uid = 'xxxxxx'; // UID, the identifier for each user account, it may have multiple IDs(identifier for each social platform) attached with
- * @param type $uid
- * @param type $username
- * @param type $new_username
- */
+  /**
+*
+* $uid = 'xxxxxxxxxxx';
+*
+*/
 try{
-    $result = $accountObject->changeUsername($uid, $username, $new_username);
+    $result = $accountObject->getHashPassword($uid);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-#####Check UserName
-This API is used to check username exists or not on your site.
-http://apidocs.loginradius.com/docs/user-name-check-server
+#####Get Profile by Email
+This API retrieves the profile data associated with the specific user using the passing in email address.
 ```bush
-/**
- * $username = 'xxxxxx'; //Username that you want to validate
- */
+  /**
+*
+* $email = 'xxxxxxxxxxx';
+*
+*/
 try{
-    $result = $accountObject->checkUsername($username);
+    $result = $accountObject->getProfileByEmail($email);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-#####Set UserName
-This API is used for set user name by user Id.
-http://apidocs.loginradius.com/docs/user-name-set
+#####Get Profile by username
 ```bush
-/**
- * $uid = 'xxxxxx'; // UID, the identifier for each user account, it may have multiple IDs(identifier for each social platform) attached with
- * $newusername = 'xxxxxx'  //New username
- */
+  /**
+*
+* $username = '************';
+*
+*/
 try{
-    $result = $accountObject->setUsername($uid, $newusername);
+    $result = $accountObject->getProfileByUsername($username);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-#####Resend Email Verification
-This API is used to generate an email-token that can be sent out to a user in a link in order to verify their email.
-http://apidocs.loginradius.com/docs/verification-email-resend
+#####Get Profile by phone
 ```bush
-/**
- * $uid = 'xxxxxx'; // UID, the identifier for each user account, it may have multiple IDs(identifier for each social platform) attached with
- * $email = 'example@doamin.com' //email id //required
- * $link  = 'example.com' //Verification Url link address //required
- * $template = 'xxxxx'  //Verification Email Template
- */
+  /**
+*
+* $phone = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+*
+*/
 try{
-    $result = $accountObject->resendEmailVerification($email, $link, $template);
+    $result = $accountObject->getProfileByPhone($phone);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-#### Call CustomObjectAPI API's
-This API is used to retrieve all of the custom objects by account ID (UID).
-http://apidocs.loginradius.com/docs/get-custom-object-by-account-id
+#####Get Profile by uid
 ```bush
-/**
- *
- * $object_id = 'xxxxxxxxxxxx';
- * $account_id = 'xxxxxxxxxxxx';
- *
- */
+  /**
+*
+* $uid = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+*
+*/
 try{
-    $result= $customObject->getObjectByAccountid($object_id, $account_id);
+    $result = $accountObject->getProfileByUid($uid);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-This API is used to retrieve all of the custom objects via a list of account IDs(UID) separated by , (Max 20).
-http://apidocs.loginradius.com/docs/get-custom-object-by-multiple-account-ids
+
+
+#### Call Role APIs
+If you still not created Role object
+#####Get Role
 ```bush
-/**
- *
- * $object_id = 'xxxxxxxxxxxx';
- * $account_ids = 'xxxxxxxxxxxx,xxxxxxxxxxxx,xxxxxxxxxxxx';
- *
- */
+   
 try{
-    $result= $customObject->getObjectByAccountIds($object_id, $account_ids);
+    $result = $roleObject->get();
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-This API is used to retrieve all of the custom objects by an object’s unique ID and filtered by a query
-http://apidocs.loginradius.com/docs/get-custom-objects-by-query
+#####Create roles
 ```bush
 /**
- *
- * $object_id = 'xxxxxxxxxxxx';
- * $query = "<Expression LogicalOperation='AND'>
- *              <Field Name='Provider' ComparisonOperator='Equal'>facebook</Field>
- *              <Expression LogicalOperation='OR'>
- *                  <Field Name='Gender' ComparisonOperator='Equal'>M</Field>
- *                  <Field Name='Gender' ComparisonOperator='Equal'>U</Field>
- *              </Expression>
- *          </Expression>";
- * ------------------ OR ------------------
- * $query = "<Field Name='Gender' ComparisonOperator='Equal'>F</Field>";
- *
- * $nextCursor=>[1]; (optional)
- */
+*$roles = '{"Roles":[
+*   {"Name":"Administrator",
+*   "Permissions":{"Edit":true, "Manage":true}}]}';
+*
+*/
 try{
-    $result= $customObject->getObjectByQuery($object_id, $query, $next_cursor);
+    $result = $roleObject->create($roles);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-This API is used to retrieve all records from a custom object.
-http://apidocs.loginradius.com/docs/get-all-custom-object-records
+#####Delete role
 ```bush
 /**
- *
- * $object_id = 'xxxxxxxxxxxx';
- * $nextCursor=>[1]; (optional)
- */
+* $role = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'; //Name of Role
+*
+*/
 try{
-    $result= $customObject->getAllObjects($object_id, $next_cursor);
+    $result = $roleObject->delete($role);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-This API is used to retrieve stats associated with a custom object
-http://apidocs.loginradius.com/docs/get-custom-object-stats
+#####Add Permission
 ```bush
 /**
- *
- * $object_id = 'xxxxxxxxxxxx';
- */
+*
+* $role = 'xxxxxx'; // role name
+* $permissions ='{"Permissions":["EditUser","DeleteUser"] }';
+*
+*/
 try{
-    $result= $customObject->getStats($object_id);
+    $result = $roleObject->addPermission($role, $permissions);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-This API is used to save custom objects, by providing ID of object, to a specified account if the object is not exist it will create a new object.
+#####Remove Permission
 ```bush
 /**
- *
- * $object_id = 'xxxxxxxxxxxx';
- * $account_id = 'xxxxxxxxxx';
- * $data = array(
- *  firstname => 'first name',
- *  lastname => 'last name',
- *  gender => 'm',
- *  birthdate => 'MM-DD-YYYY',
- *  ....................
- *  ....................
- * );
- */
+*
+* $role = 'xxxxxx'; // role name
+* $permissions = {"Permissions": ["Edit User", "Delete User"] }';
+*
+*/
 try{
-    $result= $customObject->upsert($object_id, $account_id, $data);
+    $result = $roleObject->removePermission($role, $permissions);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-This API is used to block Custom Object.
+#####Get Account Role by UID
 ```bush
 /**
- *
- * $object_id = 'xxxxxxxxxxxx';
- * $account_id = 'xxxxxxxxxx';
- * $action = true/false(boolean)
- */
+* $uid = 'xxxxxx'; // UID, the identifier for each user account, it may have multiple
+* @param $data = '{"Roles" : ["Role1","Role2"]}';
+* @return type
+*/
 try{
-    $result= $customObject->setStatus($object_id, $account_id, $action);
+    $result = $roleObject->assignRolesByUid($uid, $data);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-This API is used to check the existence of a custom object under an account id.
+#####Assign Roles by UID
 ```bush
 /**
- *
- * $object_id = 'xxxxxxxxxxxx';
- * $account_id = 'xxxxxxxxxx';
- */
+* $uid = 'xxxxxx'; // UID, the identifier for each user account, it may have multiple
+* @param $data = '{"Roles" : ["Role1","Role2"]}';
+*
+*/
 try{
-    $result= $customObject->checkObject($object_id, $account_id);
+    $result = $roleObject->assignRolesByUid($uid, $data);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
+#####Delete Account Roles
+```bush
+/**
+*
+* $role = 'xxxxxx'; // role name
+* $permissions = {"Permissions": ["Edit User", "Delete User"] }';
+*
+*/
+try{
+    $result = $roleObject->removePermission($role, $permissions);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+
+
+
+#### Call Custom Object APIs
+#####Insert Custom Object
+This API is used to create custom objects.
+```bush
+   /**
+*
+* @param $uid='xxxxxx';//// UID, the identifier for each user account
+* @param $object_name= 'xxxxxxxxxxxx';//LoginRadius Custom Object name
+* @param $data='{"objectdataa":"field1"}';
+* @return type
+*/
+try{
+    $result= $customObject->insert($uid, $object_name, $data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get Object By Accountid
+This API is used to retrieve the Custom Object for the specified account based on the account ID(UID).
+```bush
+/**
+*
+* @param $uid='xxxxxx';//// UID, the identifier for each user account
+* @param $object_name= 'xxxxxxxxxxxx';//LoginRadius Custom Object name
+* @return type
+*/
+try{
+    $result= $customObject->getObjectByAccountid($uid, $object_name);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Update Object By RecordID
+This API is used to retrieve the Custom Object for the specified account based on the account ID(UID).
+```bush
+/**
+*
+* @param $uid='xxxxxx';//// UID, the identifier for each user account
+* @param $object_name= 'xxxxxxxxxxxx';//LoginRadius Custom Object name
+* @param $object_record_id='xxxxxxxxx';//Unique identifier of the user's record in 
+* Custom Object
+* @param $data='{"objectdataa":"field1"}';
+* @return type
+*/
+try{
+    $result= $customObject->updateObjectByRecordID($uid, $object_name, $object_record_id, $data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get Object By RecordID
+This API is used to retrieve the Custom Object for the specified account based on the record ID($object_record_id).
+```bush
+/**
+*
+* @param $uid='xxxxxx';//// UID, the identifier for each user account
+* @param $object_name= 'xxxxxxxxxxxx';//LoginRadius Custom Object name
+* @param $object_record_id='xxxxxxxxx';//Unique identifier of the user's record in 
+* Custom Object
+* @return type
+*/
+try{
+    $result= $customObject->getObjectByRecordID($uid, $object_name, $object_record_id, $data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Delete Custom Object
+Gets information on the specified custom object. http://apidocs.loginradius.com/docs/get-custom-object-stats
+```bush
+/**
+* @param $uid='xxxxxx';//// UID, the identifier for each user account
+* @param $object_name= 'xxxxxxxxxxxx';//LoginRadius Custom Object name
+* @param $object_record_id='xxxxxxxxx';//Unique identifier of the user's record in 
+* Custom Object
+* @return type
+*/
+try{
+    $result= $customObject->delete($uid, $object_name, $object_record_id);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Schema API
+if you still not created schema object then create
+######Get schema of Registration form
+```bush
+try{
+    $result= $schemaObject->getSchemaList();
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+
+
+#### Call Rest Hook APIs
+#####User List
+```bush
+try{
+    $result= $resthookObject->userList($from, $select = '', $where = '', $orderby = '', $skip = '', $limit );
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Insights
+```bush
+/**
+* @param $from From Date
+* @param $to To Date
+* @param $first_data_point Aggregation Field
+* @param $stats_type Type of users should apply to
+* @return type
+*/
+try{
+    $result= $resthookObject->insights($from, $to, $first_data_point, $stats_type);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Rest Hooks Settings
+```bush
+try{
+    $result= $resthookObject->restHooksSettings();
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Field List
+```bush
+try{
+    $result= $resthookObject->fieldList();
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get Rest Hooks Subscribed Urls
+```bush
+try{
+    $result= $resthookObject->getRestHooksSubscribedUrls();
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Subscribe RestHooks
+```bush
+try{
+    $result= $resthookObject->subscribeRestHooks($target_url, $event);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Unsubscribe Rest Hooks
+```bush
+try{
+    $result= $resthookObject->unsubscribeRestHooks($target_url);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+
+
 ##Implement Custom HTTP Client
 1. In order to implement custom http client.  Create the customhttpclient.php file in your project.
 ```bush
 <?php
 namespace LoginRadiusSDK\Clients\IHttpClient;
-
-use LoginRadiusSDK\LoginRadius;
+use LoginRadiusSDK\Utility\Functions;
 use LoginRadiusSDK\LoginRadiusException;
 
 class CustomHttpClient implements IHttpClient {
