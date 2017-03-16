@@ -239,6 +239,23 @@ class AccountAPI
     }
 
     /**
+     * This API is used to Invalidate an email verification. It will send another email to verify the email.
+     *
+     * $UID = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' //Account ID, this is the UID of the profile.
+     * $link  = 'example.com' //Verification Url link address //required
+     * $template = 'xxxxx'  //Verification Email Template
+     *
+     * return { "Guid":"234324343432432324" }
+     */
+    public function invalidateEmail($uid, $link, $template)
+    {
+        $query = array('accountId' => $uid, 'link' => $link, 'template' => $template);
+        $options = array('method' => 'put');
+
+        return $this->apiClientHandler("invalidateemail", $query, $options);
+    }
+
+    /**
      * handle account APIs
      *
      * @param type $path

@@ -85,6 +85,11 @@ class DefaultHttpClient implements IHttpClient
             }
         }
 
+        if ($method == 'put') {
+             curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, "PUT");
+             curl_setopt($curl_handle, CURLOPT_PUT, 1);
+        }
+
         if (ini_get('open_basedir') == '' && (ini_get('safe_mode') == 'Off' or !ini_get('safe_mode'))) {
             curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, 1);
             curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
