@@ -5,7 +5,7 @@
  * @category : LoginRadiusSDK
  * @package : LoginRadiusException
  * @author : LoginRadius Team
- * @version : 4.0.0
+ * @version : 4.1.0
  * @license : https://opensource.org/licenses/MIT
  */
 namespace LoginRadiusSDK;
@@ -14,7 +14,6 @@ namespace LoginRadiusSDK;
  * Class For LoginRadius Exception
  * This is the Loginradius Exception class to handle exception when you access LoginRadius APIs.
  *
- * Copyright 2016 LoginRadius Inc. - www.LoginRadius.com
  */
 class LoginRadiusException extends \Exception
 {

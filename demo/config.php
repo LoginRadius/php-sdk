@@ -2,7 +2,7 @@
 if(session_id() == '') {
     session_start();
 }
-define('API_KEY','<APi Key>');
+define('API_KEY','<API Key>');
 define('API_SECRET','<API Secret>');
 define( 'DEMO_ROOT_DIR',dirname(__FILE__) );
 include 'LoginRadiusSDK/Utility/Functions.php';

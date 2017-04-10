@@ -4,7 +4,7 @@
  * @category : LoginRadiusSDK
  * @package : LoginRadius
  * @author : LoginRadius Team
- * @version : 4.0.0
+ * @version : 4.1.0
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -21,12 +21,11 @@ define('LR_CDN_ENDPOINT', 'https://cdn.loginradius.com');
  * Class For LoginRadius
  * This is the Loginradius class to handle response of LoginRadius APIs.
  *
- * Copyright 2016 LoginRadius Inc. - www.LoginRadius.com
  */
 class Functions
 {
 
-    const version = '4.0.0';
+    const version = '4.1.0';
 
     private static $apikey;
     private static $apisecret;

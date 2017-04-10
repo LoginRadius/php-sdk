@@ -1,10 +1,16 @@
 # LoginRadius PHP SDK Change Log
 
-### Version 4.0.0
-Released on **Feb 28, 2017**
 
-##### Enhancements
+# Version 4.1.0 
+Released on **April 10, 2017**
+## Enhancements
+  - Added user impersonation API
+  - Added Check token validity and invalidate token API
+  - Added Two-Factor authentication API's
 
+# 4.0.0
+## Enhancements
+Released on **February 28, 2017**
   - Significantly improved code performance.
   - Wrapper methods for latest LoginRadius APIs have been added in Account API and User API
   - Added email,username and phone login api's
@@ -14,4 +20,6 @@ Released on **Feb 28, 2017**
   - Added add or remove email api's
   - Added Custom object api's
  
+
+
  

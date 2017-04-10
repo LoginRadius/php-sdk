@@ -495,6 +495,30 @@ class AccountAPI
     {
         return $this->apiClientHandler("/" . $uid);
     }
+    
+      /**
+     * This API is used to retrieve Access Token based on UID or user impersonation API.
+     *
+     * $uid = uid; uid; UID, the identifier for each user account, it may have multiple IDs(identifier for each social platform) attached with
+     *
+     * return Array of user profile
+     */
+    public function getAccessTokenByUid($uid)
+    {
+        return $this->apiClientHandler("/access_token", array('uid' => $uid));
+    }
+    
+    /**
+     * Remove or Reset Google Authenticator settings.
+     *
+     * @param $uid
+     * @return "IsDeleted": "true"
+     */
+    public function removeOrResetGoogleAuthenticator($uid, $otpauthenticator, $googleauthenticator) 
+    {
+        $data =  array('otpauthenticator' => $otpauthenticator, 'googleauthenticator'=>$googleauthenticator);
+        return $this->apiClientHandler("/2FA/authenticator", array('uid' => $uid), array('method' => 'delete', 'post_data' => json_encode($data), 'content_type' => 'json'));
+    } 
 
 
     /**

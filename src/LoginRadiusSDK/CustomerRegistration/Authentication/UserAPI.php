@@ -395,6 +395,153 @@ class UserAPI
     public function verifyOTPByToken($access_token, $otp) {
         return $this->apiClientHandler("phone/otp", array('access_token' => $access_token, 'Otp' => $otp, 'smsTemplate' => $sms_template), array('method' => 'put', 'post_data' => json_encode(array('phone' => '')), 'content_type' => 'json'));
     }
+    
+    /**
+     * Validates access token, if valid then returns a response with its expiry otherwise error
+     *
+     * @param $access_token     * 
+     * @return type
+     */
+    public function checkTokenValidity($access_token) {
+            return $this->apiClientHandler("access_token/Validate", array('access_token' => $access_token));
+    }
+    
+    /**
+     * InValidates access token or expires an access token validity.
+     *
+     * @param $access_token     * 
+     * @return "IsPosted": "true"
+     */
+    public function invalidateTokenByAccessToken($access_token) {
+            return $this->apiClientHandler("access_token/InValidate", array('access_token' => $access_token));
+    }   
+    
+    /**
+     * This api used to provide two-factor login with email/password combination.
+     *
+     * @param $email
+     * @param $password    
+     * @param string $login_url url from where user is going login
+     * @param string $verification_url  email verification
+     * @param string $email_template email template name
+     * @param string $sms_template2FA sms template 2fa name
+     * @return type SecondFactorAuthentication object
+     */
+    public function twoFALoginByEmail($email, $password, $login_url = '', $verification_url = '',  $email_template = '', $sms_template2FA='')
+    {
+        return $this->apiClientHandler("login/2fa", array('email' => $email, 'password' => $password, 'loginUrl' => $login_url, 'verificationUrl' => $verification_url,  'emailTemplate' => $email_template, 'smsTemplate2FA' => $sms_template2FA));
+    }
+    
+    /**
+     * This API can be used to verify the google authenticator code or otp to enable the two-factor-authentication.
+     *
+     * @param $access_token
+     * @param $google_auth_code
+     * @param $otp    
+     * @param string $sms_template sms template name  
+     * @return type 
+     */
+    public function verifyTwoFAGoogleAuthenticatorOrOtpByToken($access_token, $google_auth_code, $otp, $sms_template='')
+    {
+        return $this->apiClientHandler("account/2fa/verification", array('access_token' => $access_token, 'googleAuthenticatorCode' => $google_auth_code, 'otp' => $otp, 'smsTemplate' => $sms_template));
+    }
+    
+    /**
+     * This api used to provide two-factor login with phone/password combination.
+     *
+     * @param $phone
+     * @param $password
+     * @param string $login_url url from where user is going login
+     * @param string $verification_url  email verification
+     * @param string $sms_template sms template name
+     * @param string $sms_template2FA sms template 2fa name
+     * @return type SecondFactorAuthentication object
+     */
+    public function twoFALoginByPhone($phone, $password, $login_url = '', $verification_url = '', $sms_template = '', $sms_template2FA='')
+    {
+        return $this->apiClientHandler("login/2fa", array('phone' => $phone, 'password' => $password, 'loginUrl' => $login_url, 'verificationUrl' => $verification_url,  'smsTemplate' => $sms_template, 'smsTemplate2FA' => $sms_template2FA));
+    }
+    
+    /**
+     * This API is used to configure the two-factor-authentication after login by using the access token
+     *
+     * @param $access_token
+     * @param string $sms_template2FA sms template 2fa name
+     * @return type 
+     */
+    public function configureTwoFAByToken($access_token, $sms_template2FA='')
+    {
+        return $this->apiClientHandler("account/2fa", array('access_token' => $access_token, 'smsTemplate2FA' => $sms_template2FA));
+    }
+    
+    /**
+     * This api used to provide two-factor login with username/password combination.
+     *
+     * @param $username
+     * @param $password    
+     * @param string $login_url url from where user is going login
+     * @param string $verification_url  email verification
+     * @param string $email_template email template name
+     * @param string $sms_template2FA sms template 2fa name
+     * @return type SecondFactorAuthentication object
+     */
+    public function twoFALoginByUsername($username, $password, $login_url = '', $verification_url = '',  $email_template = '', $sms_template2FA='')
+    {
+        return $this->apiClientHandler("login/2fa", array('username' => $username, 'password' => $password, 'loginUrl' => $login_url, 'verificationUrl' => $verification_url,  'emailTemplate' => $email_template, 'smsTemplate2FA' => $sms_template2FA));
+    }
+    
+    /**
+     * This API is used to log in by completing the two-factor-authentication by passing the google authenticator code or one time password
+     *
+     * @param $second_factor_auth_token
+     * @param $google_auth_code
+     * @param $otp    
+     * @param string $sms_template2FA sms template 2fa name
+     * @return type userprofile object
+     */
+    public function verifyTwoFAByGoogleAuthCodeOrOtp($second_factor_auth_token, $google_auth_code, $otp, $sms_template2FA = '')
+    {
+        return $this->apiClientHandler("login/2fa/verification", array('SecondFactorAuthenticationToken' => $second_factor_auth_token, 'googleAuthenticatorCode' => $google_auth_code, 'otp' => $otp, 'smsTemplate2FA' => $sms_template2FA));
+    }
+    
+    /**
+     * This API is used to update the two-factor-authentication phone number by sending the verification OTP to the provided phone number.
+     *
+     * @param $second_factor_auth_token
+     * @param $data phoneno json.
+      * @param string $sms_template2FA
+     * @return type
+     */
+
+    public function twoFAUupdatePhoneNoByOtp($second_factor_auth_token, $data, $sms_template2FA = '')
+    {
+        return $this->apiClientHandler("login/2fa", array('SecondFactorAuthenticationToken' => $second_factor_auth_token, 'smsTemplate2FA' => $sms_template2FA), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+    }
+    /**
+     * This API is used to update the two-factor-authentication phone number by sending the access token to the provided phone number.
+     *
+     * @param $access_token
+     * @param $data phoneno json.
+      * @param string $sms_template
+     * @return type
+     */
+
+    public function twoFAUupdatePhoneNoByToken($access_token, $data, $sms_template = '')
+    {
+        return $this->apiClientHandler("account/2fa", array('access_token' => $access_token, 'smsTemplate' => $sms_template), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+    }
+    
+    /**
+     * Remove or Reset Google Authenticator settings.
+     *
+     * @param $uid
+     * @return "IsDeleted": "true"
+     */
+    public function removeOrResetGoogleAuthenticatorOnClient($access_token, $otpauthenticator= false, $googleauthenticator= false) {
+   
+        $data =  array('otpauthenticator' => $otpauthenticator, 'googleauthenticator'=>$googleauthenticator);
+        return $this->apiClientHandler("account/2fa/authenticator", array('access_token' => $access_token), array('method' => 'delete', 'post_data' => json_encode($data), 'content_type' => 'json'));
+    } 
 
     /**
      * handle User APIs
