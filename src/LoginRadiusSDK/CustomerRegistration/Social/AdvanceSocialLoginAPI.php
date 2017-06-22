@@ -2,8 +2,8 @@
 
 /**
  * @link                : http://www.loginradius.com
- * @category            : SocialLogin
- * @package             : SocialLoginAPI
+ * @category            : CustomerRegistration
+ * @package             : AdvanceSocialLoginAPI
  * @author              : LoginRadius Team
  * @license             : https://opensource.org/licenses/MIT
  */

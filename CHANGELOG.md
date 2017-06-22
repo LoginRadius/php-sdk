@@ -1,5 +1,11 @@
 # LoginRadius PHP SDK Change Log
 
+# Version 4.2.0 
+Released on **June 20, 2017**
+## Enhancements
+  - Added Roles API's
+  - Added Web hooks API's
+  - Added Email Prompt Auto Login API's
 
 # Version 4.1.0 
 Released on **April 10, 2017**

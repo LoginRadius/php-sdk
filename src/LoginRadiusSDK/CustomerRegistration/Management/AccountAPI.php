@@ -400,14 +400,19 @@ class AccountAPI
      * "CustomFields":null,
      * "IsEmailSubscribed":false,
      * "UserName":null,
-     *"PhoneId":null
+     * "PhoneId":null
      * }
-     *
+     * 
+     * $is_null_support = true
+     * Currently Supporting fields for this feature: “UserName�?,"Prefix", "FirstName", "MiddleName", "LastName", "Suffix", "NickName", "ProfileName", "BirthDate", "Gender",     "Website", "ThumbnailImageUrl", "ImageUrl", "Favicon", "ProfileUrl", "HomeTown", "State", "City", "Industry", "About", "TimeZone",
+     * "LocalLanguage", "CoverPhoto", "TagLine" , "Language", "MainAddress", "LocalCity", "ProfileCity", "LocalCountry",   "RelationshipStatus", "Religion", "Political", "HttpsImageUrl", "IsGeoEnabled", "Associations", "Honors",
+     * "PublicRepository", "RepositoryUrl", "ProfessionalHeadline", "Currency", "StarredUrl", "GistsUrl", "Company",  "GravatarImageUrl", Languages , PlacesLived , Addresses , PhoneNumbers
+     * 
      * return {"isPosted": true}
      */
-    public function update($uid, $data)
+    public function update($uid, $data, $is_null_support='false')
     {
-        return $this->apiClientHandler('/' . $uid, array(), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler('/' . $uid, array('nullsupport'=>$is_null_support), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -428,7 +433,7 @@ class AccountAPI
      * $uid = 'xxxxxx'; // UID, the identifier for each user account, it may have multiple IDs(identifier for each social platform) attached with
      * $password = 'xxxxxxxxxx';
      *
-     * return {“PasswordHash” : “passwordhash”}
+     * return {“PasswordHash�? : “passwordhash�?}
      */
     public function setPassword($uid, $password)
     {
@@ -441,7 +446,7 @@ class AccountAPI
      *
      * $uid = 'xxxxxx'; // UID, the identifier for each user account, it may have multiple IDs(identifier for each social platform) attached with
      *
-     * return {“passwordHash” : “passwordhash”}
+     * return {“passwordHash�? : “passwordhash�?}
      */
     public function getHashPassword($uid)
     {
@@ -499,7 +504,7 @@ class AccountAPI
       /**
      * This API is used to retrieve Access Token based on UID or user impersonation API.
      *
-     * $uid = uid; uid; UID, the identifier for each user account, it may have multiple IDs(identifier for each social platform) attached with
+     * $uid = uid; UID, the identifier for each user account, it may have multiple IDs(identifier for each social platform) attached with
      *
      * return Array of user profile
      */
@@ -509,7 +514,7 @@ class AccountAPI
     }
     
     /**
-     * Remove or Reset Google Authenticator settings.
+     * Remove Google Authenticator and SMS Authenticator By UID.
      *
      * @param $uid
      * @return "IsDeleted": "true"
@@ -518,6 +523,26 @@ class AccountAPI
     {
         $data =  array('otpauthenticator' => $otpauthenticator, 'googleauthenticator'=>$googleauthenticator);
         return $this->apiClientHandler("/2FA/authenticator", array('uid' => $uid), array('method' => 'delete', 'post_data' => json_encode($data), 'content_type' => 'json'));
+    } 
+    /**
+     * This API is used to receive a backup code to login via the UID.
+     *
+     * @param $uid
+     * @return 
+     */
+    public function getBackupCodeForLoginbyUID($uid) 
+    {
+        return $this->apiClientHandler("/2fa/backupcode", array('uid' => $uid));
+    } 
+    /**
+     * This API is used to get backup codes for login by the UID.
+     *
+     * @param $uid
+     * @return 
+     */
+    public function resetBackupCodeForLoginbyUID($uid) 
+    {
+        return $this->apiClientHandler("/2fa/backupcode/reset", array('uid' => $uid));
     } 
 
 

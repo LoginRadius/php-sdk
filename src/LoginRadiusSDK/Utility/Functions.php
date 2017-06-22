@@ -1,10 +1,10 @@
 <?php
 /**
  * @link : http://www.loginradius.com
- * @category : LoginRadiusSDK
- * @package : LoginRadius
+ * @category : Utility
+ * @package : Functions
  * @author : LoginRadius Team
- * @version : 4.1.0
+ * @version : 4.2.0
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -25,7 +25,7 @@ define('LR_CDN_ENDPOINT', 'https://cdn.loginradius.com');
 class Functions
 {
 
-    const version = '4.1.0';
+    const version = '4.2.0';
 
     private static $apikey;
     private static $apisecret;

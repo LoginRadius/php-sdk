@@ -3,7 +3,7 @@
 /**
  * @link                : http://www.loginradius.com
  * @category            : CustomerRegistration
- * @package             : UserAPI
+ * @package             : AuthCustomObjectAPI
  * @author              : LoginRadius Team
  * @license             : https://opensource.org/licenses/MIT
  */

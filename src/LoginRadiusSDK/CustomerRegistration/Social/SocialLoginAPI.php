@@ -2,7 +2,7 @@
 
 /**
  * @link                : http://www.loginradius.com
- * @category            : SocialLogin
+ * @category            : CustomerRegistration
  * @package             : SocialLoginAPI
  * @author              : LoginRadius Team
  * @license             : https://opensource.org/licenses/MIT

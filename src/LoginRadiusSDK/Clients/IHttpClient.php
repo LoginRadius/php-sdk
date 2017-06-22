@@ -2,10 +2,10 @@
 
 /**
  * @link : http://www.loginradius.com
- * @category : LoginRadiusSDK
- * @package : LoginRadius
+ * @category : Clients
+ * @package : IHttpClient
  * @author : LoginRadius Team
- * @version : 4.1.0
+ * @version : 4.2.0
  * @license : https://opensource.org/licenses/MIT
  */
 

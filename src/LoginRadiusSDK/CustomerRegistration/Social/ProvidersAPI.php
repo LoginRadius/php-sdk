@@ -2,8 +2,8 @@
 
 /**
  * @link                : http://www.loginradius.com
- * @category            : SocialLogin
- * @package             : GetProviders
+ * @category            : CustomerRegistration
+ * @package             : ProvidersAPI
  * @author              : LoginRadius Team
  * @license             : https://opensource.org/licenses/MIT
  */
