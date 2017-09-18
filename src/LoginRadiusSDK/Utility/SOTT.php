@@ -42,7 +42,7 @@ class SOTT {
      * @return string
      */
     public function encrypt($time = '10', $getLRserverTime = false) {
-        if ($getLRserverTime) {      
+        if ($getLRserverTime) {     
             $result = Functions::apiClient("/identity/v2/serverinfo", array("TimeDifference" => $time), array('output_format' => 'json'));
             $startTime = isset($result->Sott) ? $result->Sott->StartTime : '';
             $startTime = str_replace("-", "/", $startTime);
@@ -97,3 +97,5 @@ class SOTT {
     }
 
 }
+
+

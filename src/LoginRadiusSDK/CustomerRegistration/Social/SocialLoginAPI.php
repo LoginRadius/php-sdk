@@ -49,9 +49,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function exchangeAccessToken($request_token)
+    public function exchangeAccessToken($request_token, $fields = '*')
     {
-        return $this->apiClientHandler('access_token', false, array("token" => $request_token, "secret" => Functions::getApiSecret()));
+        return $this->apiClientHandler('access_token', false, array("token" => $request_token, "secret" => Functions::getApiSecret(), 'fields' => $fields));
     }
 
     /**
@@ -70,9 +70,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getUserProfiledata($access_token, $raw = false)
+    public function getUserProfiledata($access_token, $raw = false, $fields = '*')
     {
-        return $this->apiClientHandler('userprofile', $raw, array("access_token" => $access_token));
+        return $this->apiClientHandler('userprofile', $raw, array("access_token" => $access_token, 'fields' => $fields));
     }
     
     /**
@@ -92,8 +92,8 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getUserCustomFields($apiKey, $secret, $raw = false) {
-        return $this->apiClientHandler('userprofile/fields', $raw, array('apikey' => $apiKey, 'apisecret' => $secret));
+    public function getUserCustomFields($apiKey, $secret, $raw = false, $fields = '*') {
+        return $this->apiClientHandler('userprofile/fields', $raw, array('apikey' => $apiKey, 'apisecret' => $secret, 'fields' => $fields));
     }
 	
 	    /**
@@ -112,9 +112,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function tokenValidate($access_token)
+    public function tokenValidate($access_token, $fields = '*')
     {
-        return $this->apiClientHandler('access_token/Validate', false, array("key" => Functions::getApiKey(),"secret" => Functions::getApiSecret(),"access_token" => $access_token));
+        return $this->apiClientHandler('access_token/Validate', false, array("key" => Functions::getApiKey(),"secret" => Functions::getApiSecret(),"access_token" => $access_token, 'fields' => $fields));
     }
 	
 	    /**
@@ -132,9 +132,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function tokenInvalidate($access_token)
+    public function tokenInvalidate($access_token, $fields = '*')
     {
-        return $this->apiClientHandler('access_token/invalidate', false, array("key" => Functions::getApiKey(),"secret" => Functions::getApiSecret(),"access_token" => $access_token));
+        return $this->apiClientHandler('access_token/invalidate', false, array("key" => Functions::getApiKey(),"secret" => Functions::getApiSecret(),"access_token" => $access_token, 'fields' => $fields));
     }
 
 
@@ -151,9 +151,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function validateKeyandSecret()
+    public function validateKeyandSecret($fields = '*')
     {
-         return $this->apiClientHandler('app/validate', false, array("apikey" => rawurlencode(Functions::getApiKey()),"apisecret" => rawurlencode(Functions::getApiSecret())));
+         return $this->apiClientHandler('app/validate', false, array("apikey" => rawurlencode(Functions::getApiKey()),"apisecret" => rawurlencode(Functions::getApiSecret()), 'fields' => $fields));
     }
 
 
@@ -173,9 +173,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getPhotoAlbums($access_token, $raw = false)
+    public function getPhotoAlbums($access_token, $raw = false, $fields = '*')
     {
-        return $this->apiClientHandler('album', $raw, array("access_token" => $access_token));
+        return $this->apiClientHandler('album', $raw, array("access_token" => $access_token, 'fields' => $fields));
     }
 
     /**
@@ -195,9 +195,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getPhotos($access_token, $album_id, $raw = false)
+    public function getPhotos($access_token, $album_id, $raw = false, $fields = '*')
     {
-        return $this->apiClientHandler("photo", $raw, array("access_token" => $access_token, "albumid" => $album_id));
+        return $this->apiClientHandler("photo", $raw, array("access_token" => $access_token, "albumid" => $album_id, 'fields' => $fields));
     }
 
     /**
@@ -216,9 +216,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getCheckins($access_token, $raw = false)
+    public function getCheckins($access_token, $raw = false, $fields = '*')
     {
-        return $this->apiClientHandler('checkin', $raw, array("access_token" => $access_token));
+        return $this->apiClientHandler('checkin', $raw, array("access_token" => $access_token, 'fields' => $fields));
     }
 
     /**
@@ -237,9 +237,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getAudio($access_token, $raw = false)
+    public function getAudio($access_token, $raw = false, $fields = '*')
     {
-        return $this->apiClientHandler("audio", $raw, array("access_token" => $access_token));
+        return $this->apiClientHandler("audio", $raw, array("access_token" => $access_token, 'fields' => $fields));
     }
 
     /**
@@ -259,9 +259,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getContacts($access_token, $next_cursor = '', $raw = false)
+    public function getContacts($access_token, $next_cursor = '', $raw = false, $fields = '*')
     {
-        return $this->apiClientHandler("contact", $raw, array("access_token" => $access_token, "nextcursor" => $next_cursor));
+        return $this->apiClientHandler("contact", $raw, array("access_token" => $access_token, "nextcursor" => $next_cursor, 'fields' => $fields));
     }
 
     /**
@@ -280,9 +280,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getMentions($access_token, $raw = false)
+    public function getMentions($access_token, $raw = false, $fields = '*')
     {
-        return $this->apiClientHandler("mention", $raw, array("access_token" => $access_token));
+        return $this->apiClientHandler("mention", $raw, array("access_token" => $access_token, 'fields' => $fields));
     }
 
     /**
@@ -301,9 +301,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getFollowing($access_token, $raw = false)
+    public function getFollowing($access_token, $raw = false, $fields = '*')
     {
-        return $this->apiClientHandler("following", $raw, array("access_token" => $access_token));
+        return $this->apiClientHandler("following", $raw, array("access_token" => $access_token, 'fields' => $fields));
     }
 
     /**
@@ -322,9 +322,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getEvents($access_token, $raw = false)
+    public function getEvents($access_token, $raw = false, $fields = '*')
     {
-        return $this->apiClientHandler("event", $raw, array("access_token" => $access_token));
+        return $this->apiClientHandler("event", $raw, array("access_token" => $access_token, 'fields' => $fields));
     }
 
     /**
@@ -343,9 +343,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getPosts($access_token, $raw = false)
+    public function getPosts($access_token, $raw = false, $fields = '*')
     {
-        return $this->apiClientHandler("post", $raw, array("access_token" => $access_token));
+        return $this->apiClientHandler("post", $raw, array("access_token" => $access_token, 'fields' => $fields));
     }
 
     /**
@@ -364,9 +364,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getFollowedCompanies($access_token, $raw = false)
+    public function getFollowedCompanies($access_token, $raw = false, $fields = '*')
     {
-        return $this->apiClientHandler("company", $raw, array("access_token" => $access_token));
+        return $this->apiClientHandler("company", $raw, array("access_token" => $access_token, 'fields' => $fields));
     }
 
     /**
@@ -385,9 +385,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getGroups($access_token, $raw = false)
+    public function getGroups($access_token, $raw = false, $fields = '*')
     {
-        return $this->apiClientHandler("group", $raw, array("access_token" => $access_token));
+        return $this->apiClientHandler("group", $raw, array("access_token" => $access_token, 'fields' => $fields));
     }
 
     /**
@@ -406,9 +406,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getStatus($access_token, $raw = false)
+    public function getStatus($access_token, $raw = false, $fields = '*')
     {
-        return $this->apiClientHandler("status", $raw, array("access_token" => $access_token));
+        return $this->apiClientHandler("status", $raw, array("access_token" => $access_token, 'fields' => $fields));
     }
 
     /**
@@ -427,9 +427,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getVideos($access_token, $raw = false)
+    public function getVideos($access_token, $raw = false, $fields = '*')
     {
-        return $this->apiClientHandler("video", $raw, array("access_token" => $access_token));
+        return $this->apiClientHandler("video", $raw, array("access_token" => $access_token, 'fields' => $fields));
     }
 
     /**
@@ -448,9 +448,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getLikes($access_token, $raw = false)
-    {
-        return $this->apiClientHandler("like", $raw, array("access_token" => $access_token));
+    public function getLikes($access_token, $raw = false, $fields = '*')
+    { 
+        return $this->apiClientHandler("like", $raw, array("access_token" => $access_token, 'fields' => $fields));
     }
 
     /**
@@ -470,9 +470,9 @@ class SocialLoginAPI
      *   $e->getErrorResponse();
      * }
      */
-    public function getPages($access_token, $page_name, $raw = false)
+    public function getPages($access_token, $page_name, $raw = false, $fields = '*')
     {
-        return $this->apiClientHandler("page", $raw, array("access_token" => $access_token, "pagename" => $page_name));
+        return $this->apiClientHandler("page", $raw, array("access_token" => $access_token, "pagename" => $page_name, 'fields' => $fields));
     }
 
     /**
@@ -497,7 +497,7 @@ class SocialLoginAPI
      * }
      *
      */
-    public function postStatus($access_token, $status, $title = '', $url = '', $imageurl = '', $caption = '', $description = '')
+    public function postStatus($access_token, $status, $title = '', $url = '', $imageurl = '', $caption = '', $description = '', $fields = '*')
     {
         $data = array(
             'access_token' => $access_token,
@@ -506,7 +506,8 @@ class SocialLoginAPI
             'imageurl' => $imageurl,
             'status' => $status,
             'caption' => $caption,
-            'description' => $description
+            'description' => $description,
+            'fields' => $fields
         );
         return $this->apiClientHandler("status", false, $data, array('method' => 'post', 'post_data' => true));
     }
@@ -529,13 +530,14 @@ class SocialLoginAPI
      *    $e->getErrorResponse();
      * }
      */
-    public function sendMessage($access_token, $to, $subject, $message)
+    public function sendMessage($access_token, $to, $subject, $message, $fields = '*')
     {
         $data = array(
             'access_token' => $access_token,
             'to' => $to,
             'subject' => $subject,
-            'message' => $message
+            'message' => $message,
+            'fields' => $fields
         );
         return $this->apiClientHandler("message", false, $data, array('method' => 'post', 'post_data' => true));
     }

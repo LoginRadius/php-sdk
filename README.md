@@ -1,6 +1,9 @@
 
 LoginRadius
 ==========
+
+![Home Image](http://docs.lrcontent.com/resources/github/banner-1544x500.png)
+
 -----------------------------------------------
 LoginRadius PHP wrapper provides access to LoginRadius.
 
@@ -28,7 +31,7 @@ curl -sS https://getcomposer.org/installer | php
 Next, run the Composer command to install the latest stable version of library:
 
 ```bash
-composer require loginradius/php-sdk:dev-master
+composer require loginradius/php-sdk-2.0:4.3.0
 ```
 
 You can then later update LoginRadius PHP SDK using composer:
@@ -54,10 +57,11 @@ include_once "LoginRadiusSDK/CustomerRegistration/Social/AdvanceSocialLoginAPI.p
 include_once "LoginRadiusSDK/CustomerRegistration/Authentication/UserAPI.php";
 include_once "LoginRadiusSDK/CustomerRegistration/Authentication/AuthCustomObjectAPI.php";
 include_once "LoginRadiusSDK/CustomerRegistration/Management/AccountAPI.php";
+include_once "LoginRadiusSDK/CustomerRegistration/Management/CustomRegistrationDataAPI.php";
 include_once "LoginRadiusSDK/CustomerRegistration/Management/RoleAPI.php";
 include_once "LoginRadiusSDK/CustomerRegistration/Management/CustomObjectAPI.php";
 include_once "LoginRadiusSDK/CustomerRegistration/Management/SchemaAPI.php";
-include_once "LoginRadiusSDK/Advance/RestHooksAPI.php";
+include_once "LoginRadiusSDK/Advance/WebHooksAPI.php";
 ```
 
 ##Configuration
@@ -68,6 +72,10 @@ After successfully install, you need to define following LoginRadius Account inf
     define('LR_APP_NAME', 'LOGINRADIUS_SITE_NAME_HERE'); // Replace LOGINRADIUS_SITE_NAME_HERE with your site name that provide in LoginRadius account.
     define('LR_API_KEY', 'LOGINRADIUS_API_KEY_HERE'); // Replace LOGINRADIUS_API_KEY_HERE with your site API key that provide in LoginRadius account.
     define('LR_API_SECRET', 'LOGINRADIUS_API_SECRET_HERE'); // Replace LOGINRADIUS_API_SECRET_HERE with your site Secret key that provide in LoginRadius account.
+    define('HOST', 'PROXY_HOST'); // Replace PROXY_HOST with your proxy server host.
+    define('PORT', 'PROXY_PORT'); // Replace PROXY_PORT with your proxy server port.
+    define('USER', 'PROXY_USER'); // Replace PROXY_USER with your proxy server username.
+    define('PASSWORD', 'PROXY_PASSWORD'); // Replace PROXY_PASSWORD with your proxy server password.
 ?>
 ```
 
@@ -85,36 +93,74 @@ use LoginRadiusSDK\CustomerRegistration\Social\AdvanceSocialLoginAPI;
 use LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI;
 use LoginRadiusSDK\CustomerRegistration\Authentication\AuthCustomObjectAPI;
 use LoginRadiusSDK\CustomerRegistration\Management\AccountAPI;
+use LoginRadiusSDK\CustomerRegistration\Management\CustomRegistrationDataAPI;
 use LoginRadiusSDK\CustomerRegistration\Management\RoleAPI;
 use LoginRadiusSDK\CustomerRegistration\Management\CustomObjectAPI;
 use LoginRadiusSDK\CustomerRegistration\Management\SchemaAPI;
-use LoginRadiusSDK\Advance\RestHooksAPI;
+use LoginRadiusSDK\Advance\WebHooksAPI;
 ```
 Create a LoginRadius object using API & Secret key:
 ```bush
-// Social APIs
 $getProviderObject = new ProvidersAPI(LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
 
 $socialLoginObject = new SocialLoginAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
 
 $advanceSocialLoginObject = new AdvanceSocialLoginAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
 
-// Authentication APIs
 $authenticationObject = new UserAPI(LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
 
 $authCustomObject = new AuthCustomObjectAPI(LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
 
 $accountObject = new AccountAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
 
-$schemaObject = new SchemaAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
+$customRegistrationDataObject = new CustomRegistrationDataAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
 
-$accountObject = new AccountAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
+$schemaObject = new SchemaAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
 
 $roleObject = new RoleAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
 
 $customObject = new CustomObjectAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
 
-$resthookObject = new RestHooksAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
+$webhookObject = new WebHooksAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
+        
+```
+If you are using proxy server then create a LoginRadius object using API & Secret key & proxy server details.
+```bush
+** Example **
+
+$accountObject = new AccountAPI(LR_API_KEY, LR_API_SECRET, array('output_format' => 'json', 'proxy'=> array('host' => '','port' => '','user' => '','password' => ''))); 
+        
+```
+
+###API Examples
+####Partial API response
+```bush
+
+We have an option to select fields(partial response) which you require as an API response.<br>
+For this you need to pass an extra parameter(optional) at the end of each API function..
+
+- If any field passed is does not exists in response, will be ignored.
+- In case of nested, only root object is selectable.
+- Values should be separated by comma.
+
+**Example:**
+
+$fields= "email, username";
+
+  try {
+        $result = $accountObject->getProfileByEmail($email, $fields);  
+    }
+    catch (LoginRadiusException $e) { 
+            $e->getErrorResponse();
+    }
+
+
+**Output Response:**
+
+{ 
+    UserName: 'test1213',
+    Email: [ { Type: 'Primary', Value: 'test1213@sthus.com' } ]
+}
         
 ```
 ####Call GetProvidersAPI API's
@@ -130,7 +176,6 @@ catch (LoginRadiusException $e){
 ```
 #### Call SocialLoginAPI API's
 #####Get Access token
-http://apidocs.loginradius.com/docs/access-token
 ```bush
 try{
     $accesstoken = $socialLoginObject->exchangeAccessToken($request_token);//$request_token loginradius token get from social/traditional interface after success authentication.
@@ -142,7 +187,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Get User Profile Data
-http://apidocs.loginradius.com/docs/user-profile
 ```bush
 try{
     $userProfileData = $socialLoginObject->getUserProfiledata($access_token);
@@ -153,7 +197,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Get photo Albums Data
-http://apidocs.loginradius.com/docs/album
 ```bush
 try{
     $photoAlbums = $socialLoginObject->getPhotoAlbums($access_token);
@@ -164,7 +207,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Get photos Data
-http://apidocs.loginradius.com/docs/photo
 ```bush
 try{
     $photos = $socialLoginObject->getPhotos($access_token, $album_id);
@@ -175,7 +217,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Get Checkins Data
-http://apidocs.loginradius.com/docs/check-in
 ```bush
 try{
     $checkins = $socialLoginObject->getCheckins($access_token);
@@ -186,7 +227,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Get Audio Data
-http://apidocs.loginradius.com/docs/audio
 ```bush
 try{
     $audio = $socialLoginObject->getAudio($access_token);
@@ -197,7 +237,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Get Contacts Data
-http://apidocs.loginradius.com/docs/contact
 ```bush
 try{
     $contacts = $socialLoginObject->getContacts($access_token);
@@ -208,7 +247,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Get Mentions Data
-http://apidocs.loginradius.com/docs/mention
 ```bush
 try{
     $mentions= $socialLoginObject->getMentions($access_token);
@@ -219,7 +257,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Get Following Data
-http://apidocs.loginradius.com/docs/following
 ```bush
 try{
     $following = $socialLoginObject->getFollowing($access_token);
@@ -230,7 +267,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Get Events Data
-http://apidocs.loginradius.com/docs/event
 ```bush
 try{
     $events= $socialLoginObject->getEvents($access_token);
@@ -241,7 +277,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Get Posts Data
-http://apidocs.loginradius.com/docs/post
 ```bush
 try{
     $posts= $socialLoginObject->getPosts($access_token);
@@ -252,7 +287,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Get Followed Companies Data
-http://apidocs.loginradius.com/docs/following
 ```bush
 try{
     $followedCompanies= $socialLoginObject->getFollowedCompanies($access_token);
@@ -263,7 +297,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Get groups Data
-http://apidocs.loginradius.com/docs/group
 ```bush
 try{
     $groups= $socialLoginObject->getGroups($access_token);
@@ -274,7 +307,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Get status Data
-http://apidocs.loginradius.com/docs/get-status-posting
 ```bush
 try{
     $status= $socialLoginObject->getStatus($access_token);
@@ -285,7 +317,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Get Videos Data
-http://apidocs.loginradius.com/docs/video
 ```bush
 try{
     $videos= $socialLoginObject->getVideos($access_token);
@@ -296,7 +327,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Get Likes Data
-http://apidocs.loginradius.com/docs/like
 ```bush
 try{
     $likes= $socialLoginObject->getLikes($access_token);
@@ -307,7 +337,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Get Pages Data
-http://apidocs.loginradius.com/docs/page
 ```bush
 try{
     $pages= $socialLoginObject->getPages($access_token, $page_name);
@@ -318,7 +347,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Post Status Data
-http://apidocs.loginradius.com/docs/post-status-posting
 ```bush
 try{
     $postStatus= $socialLoginObject->postStatus($access_token, $title, $url, $imageurl, $status, $caption, $description);
@@ -329,7 +357,6 @@ catch (LoginRadiusException $e){
 }
 ```
 #####Send Message Data
-http://apidocs.loginradius.com/docs/post-message
 ```bush
 try{
     $sendMessage= $socialLoginObject->sendMessage($access_token, $to, $subject, $message);
@@ -458,7 +485,7 @@ catch (LoginRadiusException $e){
 This api used to provide login with email/password combination.
 ```bush   
 try{
-    $result= $authenticationObject->loginByEmail($email, $password, $verification_url, $login_url, $email_template);
+    $result= $authenticationObject->authLoginByEmail($verification_url, $login_url, $email_template, $g_recaptcha_response, $data);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -470,7 +497,7 @@ This api used to provide login with username/password combination
 ```bush
    
 try{
-    $result= $authenticationObject->loginByUsername($username, $password, $verification_url, $login_url, $email_template);
+    $result= $authenticationObject->authLoginByUsername($verification_url, $login_url, $email_template, $g_recaptcha_response, $data);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -481,18 +508,29 @@ catch (LoginRadiusException $e){
 This api used to provide login with phone/password combination.
 ```bush
 try{
-    $result= $authenticationObject->loginByPhone($phone, $password, $verification_url, $login_url, $sms_template);
+    $result= $authenticationObject->authLoginByPhone($login_url, $sms_template, $g_recaptcha_response, $data);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-#####Register User
-This api used to register a user.
+#####Register User by email
+This api used to register a user using email.
 ```bush
 try{
-    $profile= $authenticationObject->register($userprofile, $verification_url, $email_template, $sms_template);
+    $result= $authenticationObject->registerByEmail($userprofile, $sott, $verification_url, $email_template, $sms_template);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Register User by phone
+This api used to register a user using phone number.
+```bush
+try{
+    $result= $authenticationObject->registerByPhone($userprofile, $sott, $verification_url, $sms_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -503,7 +541,7 @@ catch (LoginRadiusException $e){
 This api used to resend email verification link.
 ```bush
 try{
-    $profile= $authenticationObject->resendEmailVerification($email, $verification_url, $email_template);
+    $result= $authenticationObject->resendEmailVerification($email, $verification_url, $email_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -514,7 +552,7 @@ catch (LoginRadiusException $e){
 This API is used to get profile by access token.
 ```bush
 try{
-    $profile= $authenticationObject->getProfile($access_token);
+    $result= $authenticationObject->getProfile($access_token);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -525,7 +563,7 @@ catch (LoginRadiusException $e){
 This API is used to update user profile by access token.
 ```bush
 try{
-    $profile= $authenticationObject->updateProfile($access_token, $userprofile, $verification_url, $email_template);
+    $result= $authenticationObject->updateProfile($access_token, $userprofile, $verification_url, $email_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -536,7 +574,7 @@ catch (LoginRadiusException $e){
 Delete account after email confirmation.
 ```bush
 try{
-    $profile= $authenticationObject->deleteAccountByEmailConfirmation($access_token, $delete_url, $email_template);
+    $result= $authenticationObject->deleteAccountByEmailConfirmation($access_token, $delete_url, $email_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -546,7 +584,7 @@ catch (LoginRadiusException $e){
 #####Forgot Password
 ```bush
 try{
-    $profile= $authenticationObject->forgotPassword($email, $reset_password_url, $email_template);
+    $result= $authenticationObject->forgotPassword($email, $reset_password_url, $email_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -556,7 +594,7 @@ catch (LoginRadiusException $e){
 #####Reset Password
 ```bush
 try{
-    $profile= $authenticationObject->resetPassword($vtoken, $password, $welcome_email_template);
+    $result= $authenticationObject->resetPassword($vtoken, $password, $welcome_email_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -566,7 +604,7 @@ catch (LoginRadiusException $e){
 #####Change account Password
 ```bush
 try{
-    $profile= $authenticationObject->changeAccountPassword($access_token, $old_password, $new_password);
+    $result= $authenticationObject->changeAccountPassword($access_token, $old_password, $new_password);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -576,7 +614,7 @@ catch (LoginRadiusException $e){
 #####Add Email
 ```bush
 try{
-    $profile= $authenticationObject->addEmail($access_token, $email, $type, $verification_url, $email_template);
+    $result= $authenticationObject->addEmail($access_token, $email, $type, $verification_url, $email_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -586,7 +624,7 @@ catch (LoginRadiusException $e){
 #####Remove Email
 ```bush
 try{
-    $profile= $authenticationObject->removeEmail($access_token, $email);
+    $result= $authenticationObject->removeEmail($access_token, $email);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -596,7 +634,7 @@ catch (LoginRadiusException $e){
 #####Verify Email
 ```bush
 try{
-    $profile= $authenticationObject->verifyEmail($vtoken, $url, $welcome_email_template);
+    $result= $authenticationObject->verifyEmail($vtoken, $url, $welcome_email_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -606,7 +644,7 @@ catch (LoginRadiusException $e){
 #####Check Availability Of Email
 ```bush
 try{
-    $profile= $authenticationObject->checkAvailablityOfEmail($email);
+    $result= $authenticationObject->checkAvailablityOfEmail($email);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -616,7 +654,7 @@ catch (LoginRadiusException $e){
 #####Change Username
 ```bush
 try{
-    $profile= $authenticationObject->changeUsername($access_token, $username);
+    $result= $authenticationObject->changeUsername($access_token, $username);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -626,7 +664,7 @@ catch (LoginRadiusException $e){
 #####Check Username
 ```bush
 try{
-    $profile= $authenticationObject->checkUsername($username);
+    $result= $authenticationObject->checkUsername($username);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -636,7 +674,7 @@ catch (LoginRadiusException $e){
 #####Account Link
 ```bush
 try{
-    $profile= $authenticationObject->accountLink($access_token, $candidate_token);
+    $result= $authenticationObject->accountLink($access_token, $candidate_token);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -646,7 +684,7 @@ catch (LoginRadiusException $e){
 #####Account Unlink
 ```bush
 try{
-    $profile= $authenticationObject->accountUnlink($access_token, $id, $provider);
+    $result= $authenticationObject->accountUnlink($access_token, $id, $provider);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -656,7 +694,7 @@ catch (LoginRadiusException $e){
 #####Get Social Profile
 ```bush
 try{
-    $profile= $authenticationObject->getSocialProfile($access_token, $email_template );
+    $result= $authenticationObject->getSocialProfile($access_token, $email_template );
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -666,7 +704,7 @@ catch (LoginRadiusException $e){
 #####Check Availability of phone
 ```bush
 try{
-    $profile= $authenticationObject->checkAvailablityOfPhone($phone);
+    $result= $authenticationObject->checkAvailablityOfPhone($phone);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -676,7 +714,7 @@ catch (LoginRadiusException $e){
 #####Update Phone
 ```bush
 try{
-    $profile= $authenticationObject->updatePhone($access_token, $phone, $smsTemplate);
+    $result= $authenticationObject->updatePhone($access_token, $phone, $smsTemplate);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -686,7 +724,7 @@ catch (LoginRadiusException $e){
 #####Resend OTP
 ```bush
 try{
-    $profile= $authenticationObject->resendOTP($phone, $sms_template);
+    $result= $authenticationObject->resendOTP($phone, $sms_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -696,7 +734,7 @@ catch (LoginRadiusException $e){
 #####Resend OTP By Token
 ```bush
 try{
-    $profile= $authenticationObject->resendOTPByToken($access_token, $phone, $sms_template);
+    $result= $authenticationObject->resendOTPByToken($access_token, $phone, $sms_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -706,7 +744,7 @@ catch (LoginRadiusException $e){
 #####Verify OTP
 ```bush
 try{
-    $profile= $authenticationObject->verifyOTP($otp, $phone,$sms_template);
+    $result= $authenticationObject->verifyOTP($otp, $phone,$sms_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -716,72 +754,97 @@ catch (LoginRadiusException $e){
 #####Verify OTP by token
 ```bush
 try{
-    $profile= $authenticationObject->verifyOTPByToken($access_token, $otp, $sms_template);
+    $result= $authenticationObject->verifyOTPByToken($access_token, $otp, $sms_template);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-
-#### Call Custom Object APIs
-This API is used to manage a custom object for the user and relies on the User Entity object. If you are unsure of your Object ID you can reach out to the support team for details on this. If you haven't already initialized the User Registration Custom Object API do so now.
-#####Insert Data in Custom Object
-```bush    
-try{
-    $profile= $authCustomObject->createCustomObject($access_token, $objectname, $data);
-}
-catch (LoginRadiusException $e){
-    $e->getMessage();
-    $e->getErrorResponse();
-}
-```
-#####Update Custom Object Data
-```bush    
-try{
-    $profile= $authCustomObject->updateCustomObjectData($access_token, $objectname, $object_record_id, $data);
-}
-catch (LoginRadiusException $e){
-    $e->getMessage();
-    $e->getErrorResponse();
-}
-```
-#####Get Custom Object Sets by token
-```bush    
-try{
-    $profile= $authCustomObject->getCustomObjectSetsByToken($access_token, $object_name);
-}
-catch (LoginRadiusException $e){
-    $e->getMessage();
-    $e->getErrorResponse();
-}
-```
-#####Get Custom Object Set By ID
+#####Check token validity
 ```bush
 try{
-    $profile= $authCustomObject->getCustomObjectSetByID($access_token, $object_name, $object_record_id);
+    $result= $authenticationObject->checkTokenValidity($access_token);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-#####Delete Custom Object Set
+#####Invalidate token by access token
 ```bush
 try{
-    $profile= $authCustomObject->deleteCustomObjectSet($access_token, $object_name, $object_record_id);
+    $result= $authenticationObject->invalidateTokenByAccessToken($access_token);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-
-
+#####Get Security Questions By Access Token
+```bush
+try{
+    $result= $authenticationObject->getSecurityQuestionsByAccessToken($access_token);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get Security Questions By Email
+```bush
+try{
+    $result= $authenticationObject->getSecurityQuestionsByEmail($email);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get Security Questions By User Name
+```bush
+try{
+    $result= $authenticationObject->getSecurityQuestionsByUserName($username);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get Security Questions By Phone
+```bush
+try{
+    $result= $authenticationObject->getSecurityQuestionsByPhone($phone);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Auth Reset Password by Security Question
+```bush
+try{
+    $result= $authenticationObject->authResetPasswordBySecurityQuestion($data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Update Security Question by Access token
+```bush
+try{
+    $result= $authenticationObject->updateSecurityQuestionByAccessToken($access_token, $data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
 #### Call Account API's
 #####Create User
 ```bush
-   /**
+/**
 *    $data  =   '{
 * "Prefix":"",
 * "FirstName":"Kunal",
@@ -813,7 +876,7 @@ catch (LoginRadiusException $e){
 ```
 #####Update Account
 ```bush
-  /**
+/**
 *    $data  =   '{
 * "Prefix":"",
 * "FirstName":"Kunal",
@@ -948,7 +1011,437 @@ catch (LoginRadiusException $e){
     $e->getErrorResponse();
 }
 ```
+#####User impersonation API
+```bush
+   
+try{
+    $result = $accountObject->getAccessTokenByUid($uid);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Remove Google Authenticator and SMS Authenticator By UID
+```bush
+   
+try{
+    $result = $accountObject->removeOrResetGoogleAuthenticator($uid, $otpauthenticator, $googleauthenticator);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get Backup code for login by UID
+```bush
+   
+try{
+    $result = $accountObject->getBackupCodeForLoginbyUID($uid);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Reset Backup code for login by UID
+```bush
+   
+try{
+    $result = $accountObject->resetBackupCodeForLoginbyUID($uid);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Reset phone ID verification
+```bush
+   
+try{
+    $result = $accountObject->resetPhoneIdVerification($uid, $data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Account Update Security Question Configuration
+```bush
+   
+try{
+    $result = $accountObject->updateSecurityQuestionByUid($uid, $data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get Server Time
+```bush
+   
+try{
+    $result = $accountObject->getServerTime($time_difference);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Generate SOTT
+```bush
+   
+try{
+    $result = $accountObject->generateSOTT($time_difference);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
 
+#### Two Factor Authentication API's
+#####2FA Email Login
+```bush
+try{
+    $result= $authenticationObject->twoFALoginByEmail($email, $password, $login_url, $verification_url, $email_template, $sms_template2FA);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####2FA by Google Authenticator Code OR OTP by Token
+```bush
+try{
+    $result= $authenticationObject->verifyTwoFAGoogleAuthenticatorOrOtpByToken($access_token, $google_auth_code, $otp, $sms_template);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####2FA Phone Login
+```bush
+try{
+    $result= $authenticationObject->twoFALoginByPhone($phone, $password, $login_url, $verification_url, $email_template, $sms_template2FA);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####2FA by Token
+```bush
+try{
+    $result= $authenticationObject->configureTwoFAByToken($access_token, $sms_template2FA);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####2FA UserName Login
+```bush
+try{
+    $result= $authenticationObject->twoFALoginByUsername($username, $password, $login_url, $verification_url, $email_template, $sms_template2FA);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####2FA Verify Google Authenticator Code OR OTP
+```bush
+try{
+    $result= $authenticationObject->verifyTwoFAByGoogleAuthCodeOrOtp($second_factor_auth_token, $google_auth_code, $otp, $sms_template2FA);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####2FA Update Phone Number
+```bush
+try{
+    $result= $authenticationObject->twoFAUpdatePhoneNoByOtp($second_factor_auth_token, $data, $sms_template2FA);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####2FA Update Phone Number by Token
+```bush
+try{
+    $result= $authenticationObject->twoFAUpdatePhoneNoByToken($second_factor_auth_token, $data, $sms_template2FA);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Remove Google Authenticator and SMS Authenticator By Token
+```bush
+try{
+    $result= $authenticationObject->removeOrResetGoogleAuthenticatorByToken($second_factor_auth_token, $data, $sms_template2FA);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get Backup code for login by access token
+```bush
+try{
+    $result= $authenticationObject->getBackupCodeForLoginbyAccessToken($access_token);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get login By Backup code
+```bush
+try{
+    $result= $authenticationObject->getLoginbyBackupCode($access_token);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Reset Back Up code by access token
+```bush
+try{
+    $result= $authenticationObject->resetBackupCodebyAccessToken($access_token);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+
+#### Instant Link login API's
+#####Instant Link Login By Email
+```bush
+try{
+    $result= $authenticationObject->instantLinkLoginByEmail($email, $oneclicksignintemplate, $verificationurl);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+
+```
+#####Instant Link Login By UserName
+```bush
+try{
+    $result= $authenticationObject->instantLinkLoginByUserName($username, $oneclicksignintemplate, $verificationurl);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+
+```
+#####Instant Link Login Verification
+```bush
+try{
+    $result= $authenticationObject->instantLinkLoginVerification($verificationtoken, $welcomeemailtemplate);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+
+```
+#### Email Prompt Auto login API's
+#####Auto Login to any device after email verification by email
+```bush
+try{
+    $result= $authenticationObject->emailPromptAutoLoginbyEmail($clientguid, $email, $autologinemailtemplate, $welcomeemailtemplate, $redirecturl);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+
+#####Auto Login to any device after email verification by username
+```bush
+try{
+    $result= $authenticationObject->emailPromptAutoLoginbyUserName($clientguid, $username, $autologinemailtemplate, $welcomeemailtemplate,$redirecturl);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Ping login api to verify user in different device
+```bush
+try{
+    $result= $authenticationObject->emailPromptAutoLoginPing($clientguid);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Verify Auto Login Email for Login
+```bush
+try{
+    $result= $authenticationObject->verifyAutoLoginEmailForLogin($vtoken, $welcomeemailtemplate);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#### Simplified Registration API's
+#####Simplified Instant Registration By Email Id
+```bush
+try{
+    $result= $authenticationObject->simplifiedInstantRegistrationByEmail($email, $name, $clientguid, $redirecturl, $noregistrationemailtemplate, welcomeemailtemplate);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Simplified Instant Registration By Phone
+```bush
+try{
+    $result= $authenticationObject->simplifiedInstantRegistrationByPhone($phone, $name, $smstemplate);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+#####Simplified Instant Registration OTP Verification
+```bush
+try{
+    $result= $authenticationObject->simplifiedInstantRegistrationOTPVerification($otp, $data, $sms_template);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#### Custom Registration Data API's
+#####Add Registration Data
+```bush
+try{
+    $result= $customRegistrationDataObject->addRegistrationData($data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Validate Registration Data Code
+```bush
+try{
+    $result= $authenticationObject->validateRegistrationDataCode($data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get Registration Data
+```bush
+try{
+    $result= $customRegistrationDataObject->getRegistrationData($type, $parent_id, $skip, $limit);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Auth Get Registration Data Server
+```bush
+try{
+    $result= $authenticationObject->authGetRegistrationDataServer($type, $parent_id, $skip, $limit);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Update Registration Data
+```bush
+try{
+    $result= $customRegistrationDataObject->updateRegistrationData($recordid, $data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Delete Registration Data
+```bush
+try{
+    $result= $customRegistrationDataObject->deleteRegistrationData($recordid);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+
+#### Call Custom Object APIs
+This API is used to manage a custom object for the user and relies on the User Entity object. If you are unsure of your Object ID you can reach out to the support team for details on this. If you haven't already initialized the User Registration Custom Object API do so now.
+#####Insert Data in Custom Object
+```bush    
+try{
+    $result= $authCustomObject->createCustomObject($access_token, $objectname, $data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Update Custom Object Data
+```bush    
+try{
+    $result= $authCustomObject->updateCustomObjectData($access_token, $objectname, $object_record_id, $update_type, $data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get Custom Object Sets by token
+```bush    
+try{
+    $result= $authCustomObject->getCustomObjectSetsByToken($access_token, $object_name);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get Custom Object Set By ID
+```bush
+try{
+    $result= $authCustomObject->getCustomObjectSetByID($access_token, $object_name, $object_record_id);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Delete Custom Object Set
+```bush
+try{
+    $result= $authCustomObject->deleteCustomObjectSet($access_token, $object_name, $object_record_id);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
 
 #### Call Role APIs
 If you still not created Role object
@@ -957,6 +1450,61 @@ If you still not created Role object
    
 try{
     $result = $roleObject->get();
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get Context with Roles and Permissions
+```bush
+   
+try{
+    $result = $roleObject->getContext($uid);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Add/Update Roles Context
+```bush
+   
+try{
+    $result = $roleObject->upsertContext($uid, $rolesContext);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Delete Roles Context by Role Context Name
+```bush
+   
+try{
+    $result = $roleObject->deleteContextbyContextName($uid, $roleContextName);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Delete Roles From Context
+```bush
+   
+try{
+    $result = $roleObject->deleteRoleFromContext($uid, $roleContextName, $roles);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Delete Additional Permission by Role Context Name
+```bush
+   
+try{
+    $result = $roleObject->deleteAdditionalPermissionFromContext($uid, $roleContextName, $additionalPermission);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -1118,12 +1666,16 @@ This API is used to retrieve the Custom Object for the specified account based o
 * @param $uid='xxxxxx';//// UID, the identifier for each user account
 * @param $object_name= 'xxxxxxxxxxxx';//LoginRadius Custom Object name
 * @param $object_record_id='xxxxxxxxx';//Unique identifier of the user's record in 
+* @param $update_type='xxxxxxxxx';
 * Custom Object
-* @param $data='{"objectdataa":"field1"}';
+* @param $data='{
+     * "field1": "Store my field1 value",
+     * "field2": "Store my field2 value"
+     * }';
 * @return type
 */
 try{
-    $result= $customObject->updateObjectByRecordID($uid, $object_name, $object_record_id, $data);
+    $result= $customObject->updateObjectByRecordID($uid, $object_name, $object_record_id, $update_type, $data);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -1180,79 +1732,41 @@ catch (LoginRadiusException $e){
 }
 ```
 
-
-#### Call Rest Hook APIs
-#####User List
+#### Call Web Hook APIs
+#####Web Hooks Settings
 ```bush
 try{
-    $result= $resthookObject->userList($from, $select = '', $where = '', $orderby = '', $skip = '', $limit );
+    $result= $webhookObject->webHooksSettings();
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-#####Insights
+#####Subscribe WebHooks
 ```bush
-/**
-* @param $from From Date
-* @param $to To Date
-* @param $first_data_point Aggregation Field
-* @param $stats_type Type of users should apply to
-* @return type
-*/
 try{
-    $result= $resthookObject->insights($from, $to, $first_data_point, $stats_type);
+    $result= $webhookObject->subscribeWebHooks($target_url, $event);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-#####Rest Hooks Settings
+#####Get Web Hooks Subscribed Urls
 ```bush
 try{
-    $result= $resthookObject->restHooksSettings();
+    $result= $webhookObject->getWebHooksSubscribedUrls($event);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
 ```
-#####Field List
+#####Unsubscribe Web Hooks
 ```bush
 try{
-    $result= $resthookObject->fieldList();
-}
-catch (LoginRadiusException $e){
-    $e->getMessage();
-    $e->getErrorResponse();
-}
-```
-#####Get Rest Hooks Subscribed Urls
-```bush
-try{
-    $result= $resthookObject->getRestHooksSubscribedUrls();
-}
-catch (LoginRadiusException $e){
-    $e->getMessage();
-    $e->getErrorResponse();
-}
-```
-#####Subscribe RestHooks
-```bush
-try{
-    $result= $resthookObject->subscribeRestHooks($target_url, $event);
-}
-catch (LoginRadiusException $e){
-    $e->getMessage();
-    $e->getErrorResponse();
-}
-```
-#####Unsubscribe Rest Hooks
-```bush
-try{
-    $result= $resthookObject->unsubscribeRestHooks($target_url);
+    $result= $webhookObject->unsubscribeWebHooks($target_url, $event);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();

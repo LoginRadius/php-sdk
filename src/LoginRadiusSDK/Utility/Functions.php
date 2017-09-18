@@ -4,7 +4,7 @@
  * @category : Utility
  * @package : Functions
  * @author : LoginRadius Team
- * @version : 4.2.0
+ * @version : 4.3.0
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -25,7 +25,7 @@ define('LR_CDN_ENDPOINT', 'https://cdn.loginradius.com');
 class Functions
 {
 
-    const version = '4.2.0';
+    const version = '4.3.0';
 
     private static $apikey;
     private static $apisecret;
@@ -191,7 +191,6 @@ class Functions
             $result = array('apikey' => Functions::getApiKey(), 'apisecret' => Functions::getApiSecret());
         }
 
-
         if (is_array($array) && sizeof($array) > 0) {
             $result = array_merge($result, $array);
         }
@@ -206,8 +205,7 @@ class Functions
      * @return type
      */
     public static function queryBuild($data = array())
-    {
-	
+    {	
         if (is_array($data) && sizeof($data) > 0) {
             return http_build_query($data);
         } else {

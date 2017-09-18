@@ -39,21 +39,24 @@ class AuthCustomObjectAPI
      * @param $data
      * @return type
      */
-    public function createCustomObject($access_token, $objectname, $data)
+    public function createCustomObject($access_token, $objectname, $data, $fields = '*')
     {
-        return $this->apiClientHandler("CustomObject", array('access_token' => $access_token,'ObjectName' => $objectname), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("CustomObject", array('access_token' => $access_token,'ObjectName' => $objectname, 'fields' => $fields), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
      * Update custom object data.
      *
+     * @param $access_token
+     * @param $object_name
      * @param $object_record_id
+     * @param $update_type
      * @param $data
      * @return type
      */
-    public function updateCustomObjectData($access_token, $objectname, $object_record_id, $data)
+    public function updateCustomObjectData($access_token, $object_name, $object_record_id, $update_type, $data, $fields = '*')
     {
-        return $this->apiClientHandler("CustomObject/" . $object_record_id, array('access_token' => $access_token,'ObjectName' => $objectname), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("CustomObject/" . $object_record_id, array('access_token' => $access_token,'ObjectName' => $object_name,'updatetype' => $update_type, 'fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -64,9 +67,9 @@ class AuthCustomObjectAPI
      * @param $object_name
      * @return type
      */
-    public function getCustomObjectSetsByToken($access_token, $object_name)
+    public function getCustomObjectSetsByToken($access_token, $object_name, $fields = '*')
     {
-        return $this->apiClientHandler("CustomObject", array('access_token' => $access_token, 'ObjectName' => $object_name));
+        return $this->apiClientHandler("CustomObject", array('access_token' => $access_token, 'ObjectName' => $object_name, 'fields' => $fields));
     }
 
     /**
@@ -76,20 +79,20 @@ class AuthCustomObjectAPI
      * @param $object_name
      * @return type
      */
-    public function getCustomObjectSetByID($access_token, $object_name, $object_record_id)
+    public function getCustomObjectSetByID($access_token, $object_name, $object_record_id, $fields = '*')
     {
-        return $this->apiClientHandler("CustomObject/" . $object_record_id, array('access_token' => $access_token, 'ObjectName' => $object_name));
+        return $this->apiClientHandler("CustomObject/" . $object_record_id, array('access_token' => $access_token, 'ObjectName' => $object_name, 'fields' => $fields));
     }
 
     /**
-     * Delete custom object.
+     * Delete custom object using ObjectRecordId.
      *
      * @param $object_record_id
      * @return type
      */
-    public function deleteCustomObjectSet($access_token, $object_name, $object_record_id)
+    public function deleteCustomObjectSet($access_token, $object_name, $object_record_id, $fields = '*')
     {
-        return $this->apiClientHandler("CustomObject/" . $object_record_id, array('access_token' => $access_token, 'ObjectName' => $object_name), array('method' => 'delete', 'post_data' => true));
+        return $this->apiClientHandler("CustomObject/" . $object_record_id, array('access_token' => $access_token, 'ObjectName' => $object_name, 'fields' => $fields), array('method' => 'delete', 'post_data' => true));
     }
 
     /**

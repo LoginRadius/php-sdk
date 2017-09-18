@@ -17,8 +17,7 @@ use LoginRadiusSDK\Utility\Functions;
  *
  * This is the main class to communicate with LoginRadius Customer Registration Account API.
  */
-class AccountAPI
-{
+class AccountAPI {
 
     /**
      *
@@ -26,8 +25,7 @@ class AccountAPI
      * @param type $apisecret
      * @param type $customize_options
      */
-    public function __construct($apikey = '', $apisecret = '', $customize_options = array())
-    {
+    public function __construct($apikey = '', $apisecret = '', $customize_options = array()) {
         $options = array_merge(array('authentication' => 'secret'), $customize_options);
         new Functions($apikey, $apisecret, $options);
     }
@@ -39,11 +37,11 @@ class AccountAPI
      * @return type
      *      {
      * "Prefix":"",
-     * "FirstName":"Kunal",
+     * "FirstName":"",
      * "MiddleName":null,
      * "LastName":"",
      * "Suffix":null,
-     * "FullName":"Karl wittig",
+     * "FullName":"",
      * "NickName":null,
      *  "ProfileName":null,
      * "BirthDate":"10-12-1985",
@@ -52,7 +50,7 @@ class AccountAPI
      * "Email":[
      * {
      * "Type":"Primary",
-     * "Value":"kunal@loginradius.com"
+     * "Value":"example@example.com"
      * }
      * ],
      * "Country":{
@@ -214,28 +212,27 @@ class AccountAPI
      * "CustomFields":null,
      * "IsEmailSubscribed":false,
      * "UserName":null,
-     *"PhoneId":null
+     * "PhoneId":null
      * }
      */
-    public function create($data)
-    {
-        return $this->apiClientHandler("", array(), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+    public function create($data, $fields = '*') {
+        return $this->apiClientHandler("", array('fields' => $fields), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
      * This API is used to Modify/Update details of an existing user.
      *
      * $uid //The LoginRadius user identifier for a particular social platform(like "Facebook", "Twitter") attached with that user account
-    /**
+      /**
      * @param json type $data
      * @return type
      *      {
      * "Prefix":"",
-     * "FirstName":"Kunal",
+     * "FirstName":"",
      * "MiddleName":null,
      * "LastName":"",
      * "Suffix":null,
-     * "FullName":"Karl wittig",
+     * "FullName":"",
      * "NickName":null,
      *  "ProfileName":null,
      * "BirthDate":"10-12-1985",
@@ -404,15 +401,14 @@ class AccountAPI
      * }
      * 
      * $is_null_support = true
-     * Currently Supporting fields for this feature: “UserName�?,"Prefix", "FirstName", "MiddleName", "LastName", "Suffix", "NickName", "ProfileName", "BirthDate", "Gender",     "Website", "ThumbnailImageUrl", "ImageUrl", "Favicon", "ProfileUrl", "HomeTown", "State", "City", "Industry", "About", "TimeZone",
+     * Currently Supporting fields for this feature: “UserName�?,"Prefix", "FirstName", "MiddleName", "LastName", "Suffix", "NickName", "ProfileName", "BirthDate", "Gender",     "Website", "ThumbnailImageUrl", "ImageUrl", "Favicon", "ProfileUrl", "HomeTown", "State", "City", "Industry", "About", "TimeZone",
      * "LocalLanguage", "CoverPhoto", "TagLine" , "Language", "MainAddress", "LocalCity", "ProfileCity", "LocalCountry",   "RelationshipStatus", "Religion", "Political", "HttpsImageUrl", "IsGeoEnabled", "Associations", "Honors",
      * "PublicRepository", "RepositoryUrl", "ProfessionalHeadline", "Currency", "StarredUrl", "GistsUrl", "Company",  "GravatarImageUrl", Languages , PlacesLived , Addresses , PhoneNumbers
      * 
      * return {"isPosted": true}
      */
-    public function update($uid, $data, $is_null_support='false')
-    {
-        return $this->apiClientHandler('/' . $uid, array('nullsupport'=>$is_null_support), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+    public function update($uid, $data, $is_null_support = 'false', $fields = '*') {
+        return $this->apiClientHandler('/' . $uid, array('nullsupport' => $is_null_support, 'fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -422,9 +418,8 @@ class AccountAPI
      *
      * return {"IsDeleted": "true"}
      */
-    public function delete($uid)
-    {
-        return $this->apiClientHandler('/' . $uid, array(), array('method' => 'delete', 'post_data' => true));
+    public function delete($uid, $fields = '*') {
+        return $this->apiClientHandler('/' . $uid, array('fields' => $fields), array('method' => 'delete', 'post_data' => true));
     }
 
     /**
@@ -433,12 +428,11 @@ class AccountAPI
      * $uid = 'xxxxxx'; // UID, the identifier for each user account, it may have multiple IDs(identifier for each social platform) attached with
      * $password = 'xxxxxxxxxx';
      *
-     * return {“PasswordHash�? : “passwordhash�?}
+     * return {“PasswordHash�? : “passwordhash�?}
      */
-    public function setPassword($uid, $password)
-    {
-        $data =  array('password' => $password);
-        return $this->apiClientHandler("/" . $uid . "/password", array(), array('method' => 'put', 'post_data' => json_encode($data), 'content_type' => 'json'));
+    public function setPassword($uid, $password, $fields = '*') {
+        $data = array('password' => $password);
+        return $this->apiClientHandler("/" . $uid . "/password", array('fields' => $fields), array('method' => 'put', 'post_data' => json_encode($data), 'content_type' => 'json'));
     }
 
     /**
@@ -446,11 +440,10 @@ class AccountAPI
      *
      * $uid = 'xxxxxx'; // UID, the identifier for each user account, it may have multiple IDs(identifier for each social platform) attached with
      *
-     * return {“passwordHash�? : “passwordhash�?}
+     * return {“passwordHash�? : “passwordhash�?}
      */
-    public function getHashPassword($uid)
-    {
-        return $this->apiClientHandler("/" . $uid . "/password");
+    public function getHashPassword($uid, $fields = '*') {
+        return $this->apiClientHandler("/" . $uid . "/password", array('fields' => $fields));
     }
 
     /**
@@ -460,9 +453,8 @@ class AccountAPI
      *
      * return all user profile
      */
-    public function getProfileByEmail($email)
-    {
-        return $this->apiClientHandler('', array('email' => $email));
+    public function getProfileByEmail($email, $fields = '*') {
+        return $this->apiClientHandler('', array('email' => $email, 'fields' => $fields));
     }
 
     /**
@@ -472,9 +464,8 @@ class AccountAPI
      *
      * return all user profile
      */
-    public function getProfileByUsername($username)
-    {
-        return $this->apiClientHandler('', array('username' => $username));
+    public function getProfileByUsername($username, $fields = '*') {
+        return $this->apiClientHandler('', array('username' => $username, 'fields' => $fields));
     }
 
     /**
@@ -484,9 +475,8 @@ class AccountAPI
      *
      * return all user profile
      */
-    public function getProfileByPhone($phone)
-    {
-        return $this->apiClientHandler('', array('phone' => $phone));
+    public function getProfileByPhone($phone, $fields = '*') {
+        return $this->apiClientHandler('', array('phone' => $phone, 'fields' => $fields));
     }
 
     /**
@@ -496,55 +486,98 @@ class AccountAPI
      *
      * return Array of user profile
      */
-    public function getProfileByUid($uid)
-    {
-        return $this->apiClientHandler("/" . $uid);
+    public function getProfileByUid($uid, $fields = '*') {
+        return $this->apiClientHandler("/" . $uid, array('fields' => $fields));
     }
-    
-      /**
+
+    /**
      * This API is used to retrieve Access Token based on UID or user impersonation API.
      *
      * $uid = uid; UID, the identifier for each user account, it may have multiple IDs(identifier for each social platform) attached with
      *
      * return Array of user profile
      */
-    public function getAccessTokenByUid($uid)
-    {
-        return $this->apiClientHandler("/access_token", array('uid' => $uid));
+    public function getAccessTokenByUid($uid, $fields = '*') {
+        return $this->apiClientHandler("/access_token", array('uid' => $uid, 'fields' => $fields));
     }
-    
+
     /**
      * Remove Google Authenticator and SMS Authenticator By UID.
      *
      * @param $uid
      * @return "IsDeleted": "true"
      */
-    public function removeOrResetGoogleAuthenticator($uid, $otpauthenticator, $googleauthenticator) 
-    {
-        $data =  array('otpauthenticator' => $otpauthenticator, 'googleauthenticator'=>$googleauthenticator);
-        return $this->apiClientHandler("/2FA/authenticator", array('uid' => $uid), array('method' => 'delete', 'post_data' => json_encode($data), 'content_type' => 'json'));
-    } 
+    public function removeOrResetGoogleAuthenticator($uid, $otpauthenticator, $googleauthenticator, $fields = '*') {
+        $data = array('otpauthenticator' => $otpauthenticator, 'googleauthenticator' => $googleauthenticator);
+        return $this->apiClientHandler("/2FA/authenticator", array('uid' => $uid, 'fields' => $fields), array('method' => 'delete', 'post_data' => json_encode($data), 'content_type' => 'json'));
+    }
+
     /**
      * This API is used to receive a backup code to login via the UID.
      *
      * @param $uid
      * @return 
      */
-    public function getBackupCodeForLoginbyUID($uid) 
-    {
-        return $this->apiClientHandler("/2fa/backupcode", array('uid' => $uid));
-    } 
+    public function getBackupCodeForLoginbyUID($uid, $fields = '*') {
+        return $this->apiClientHandler("/2fa/backupcode", array('uid' => $uid, 'fields' => $fields));
+    }
+
     /**
      * This API is used to get backup codes for login by the UID.
      *
      * @param $uid
      * @return 
      */
-    public function resetBackupCodeForLoginbyUID($uid) 
-    {
-        return $this->apiClientHandler("/2fa/backupcode/reset", array('uid' => $uid));
-    } 
+    public function resetBackupCodeForLoginbyUID($uid, $fields = '*') {
+        return $this->apiClientHandler("/2fa/backupcode/reset", array('uid' => $uid, 'fields' => $fields));
+    }
 
+    /**
+     * This API is used to reset phone id verification by the UID.
+     *
+     * @param $uid
+     * @param $data = true(boolean type) if have you no body parameters
+     * @return 
+     */
+    public function resetPhoneIdVerification($uid, $data, $fields = '*') {
+        return $this->apiClientHandler('/' . $uid . '/invalidatephone', array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+    }
+
+    /**
+     * This API allows you to query your LoginRadius account for basic server information and server time information which is useful when generating an SOTT token.
+     *
+     * @param $time_difference   
+     * @return 
+     */
+    public function getServerTime($time_difference = '10', $fields = '*') {
+        return Functions::apiClient("/identity/v2/serverinfo", array("timedifference" => $time_difference, 'fields' => $fields), array('output_format' => 'json'));
+    }
+
+    /**
+     * This API allows you to generate SOTT with a given expiration time.
+     *
+     * @param $time_difference
+     * @return 
+     */
+    public function generateSOTT($time_difference = '10', $fields = '*') {
+        return $this->apiClientHandler("/sott", array('timedifference' => $time_difference, 'fields' => $fields));
+    }
+
+    /**
+     * This API is used to update security questions configuration using uid.
+     * 
+     * @param $uid
+     * {
+     * "securityquestionanswer": {
+     * "MiddleName": "value1",
+     * "PetName": "value1"
+     * }
+     * }
+     * @return 
+     */
+    public function updateSecurityQuestionByUid($uid, $data, $fields = '*') {
+        return $this->apiClientHandler("/" . $uid, array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+    }
 
     /**
      * handle account APIs
@@ -554,8 +587,7 @@ class AccountAPI
      * @param type $options
      * @return type
      */
-    private function apiClientHandler($path, $query_array = array(), $options = array())
-    {
+    private function apiClientHandler($path, $query_array = array(), $options = array()) {
         return Functions::apiClient("/identity/v2/manage/account" . $path, $query_array, $options);
     }
 
