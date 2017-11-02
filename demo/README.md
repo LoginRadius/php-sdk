@@ -12,5 +12,5 @@
 4. You can now navigate to the index.php page in your browser and view the demo site. 
 
 
-Please visit [http://apidocs.loginradius.com/v2.0/docs/php-library-user-registration-service](http://apidocs.loginradius.com/v2.0/docs/php-library-user-registration-service) for more information.
+Please visit [https://docs.loginradius.com/api/v1/sdk-libraries/php](https://docs.loginradius.com/api/v1/sdk-libraries/php) for more information.
 
