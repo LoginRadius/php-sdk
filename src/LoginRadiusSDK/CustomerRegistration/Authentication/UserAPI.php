@@ -838,6 +838,63 @@ class UserAPI {
     public function authResetPasswordBySecurityQuestion($data, $fields = '*') {
         return $this->apiClientHandler("password/securityanswer", array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
     }
+    
+    /**
+     * This API is used to reset password for the specified account By email.
+     *
+     * @param $data  
+     * {
+     * "securityanswer": {
+     * "cb7*******3e40ef8a****01fb****20": "Answer"
+     * },
+     * "email": "",
+     * "password": "xxxxxxxxxx",
+     * "resetpasswordemailtemplate": ""
+     * }
+     * @return {"IsPosted" : "true"}
+     */    
+    
+    public function authResetPasswordBySecurityAnswerAndEmail($data, $fields = '*') {
+        return $this->apiClientHandler("password/securityanswer", array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+    }
+    
+    /**
+     * This API is used to reset password for the specified account By phone.
+     *
+     * @param $data  
+     * {
+     * "securityanswer": {
+     * "cb7*******3e40ef8a****01fb****20": "Answer"
+     * },
+     * "phone": "",
+     * "password": "xxxxxxxxxx",
+     * "resetpasswordemailtemplate": ""
+     * }
+     * @return {"IsPosted" : "true"}
+     */    
+    
+    public function authResetPasswordBySecurityAnswerAndPhone($data, $fields = '*') {
+        return $this->apiClientHandler("password/securityanswer", array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+    }
+    
+    /**
+     * This API is used to reset password for the specified account By UserName.
+     *
+     * @param $data  
+     * {
+     * "securityanswer": {
+     * "cb7*******3e40ef8a****01fb****20": "Answer"
+     * },
+     * "userName": "",
+     * "password": "xxxxxxxxxx",
+     * "resetpasswordemailtemplate": ""
+     * }
+     * @return {"IsPosted" : "true"}
+     */    
+    
+    public function authResetPasswordBySecurityAnswerAndUserName($data, $fields = '*') {
+        return $this->apiClientHandler("password/securityanswer", array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+    }
 
     /**
      * This API is used to update security questions by the access token.
@@ -858,7 +915,7 @@ class UserAPI {
      * handle User APIs
      *
      * @param type $path
-     * @param type $query_array
+     * @param type $query_array1
      * @param type $options
      * @return type
      */

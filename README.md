@@ -31,7 +31,7 @@ curl -sS https://getcomposer.org/installer | php
 Next, run the Composer command to install the latest stable version of library:
 
 ```bash
-composer require loginradius/php-sdk-2.0:4.3.0
+composer require loginradius/php-sdk:4.4.0
 ```
 
 You can then later update LoginRadius PHP SDK using composer:
@@ -62,6 +62,7 @@ include_once "LoginRadiusSDK/CustomerRegistration/Management/RoleAPI.php";
 include_once "LoginRadiusSDK/CustomerRegistration/Management/CustomObjectAPI.php";
 include_once "LoginRadiusSDK/CustomerRegistration/Management/SchemaAPI.php";
 include_once "LoginRadiusSDK/Advance/WebHooksAPI.php";
+include_once "LoginRadiusSDK/Advance/CloudAPI.php";
 ```
 
 ##Configuration
@@ -98,6 +99,7 @@ use LoginRadiusSDK\CustomerRegistration\Management\RoleAPI;
 use LoginRadiusSDK\CustomerRegistration\Management\CustomObjectAPI;
 use LoginRadiusSDK\CustomerRegistration\Management\SchemaAPI;
 use LoginRadiusSDK\Advance\WebHooksAPI;
+use LoginRadiusSDK\Advance\CloudAPI;
 ```
 Create a LoginRadius object using API & Secret key:
 ```bush
@@ -122,6 +124,8 @@ $roleObject = new RoleAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => '
 $customObject = new CustomObjectAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
 
 $webhookObject = new WebHooksAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
+
+$cloudObject = new CloudAPI (LR_API_KEY, LR_API_SECRET, array('output_format' => 'json'));
         
 ```
 If you are using proxy server then create a LoginRadius object using API & Secret key & proxy server details.
@@ -157,11 +161,22 @@ $fields= "email, username";
 
 **Output Response:**
 
-{ 
+{
     UserName: 'test1213',
     Email: [ { Type: 'Primary', Value: 'test1213@sthus.com' } ]
 }
         
+```
+####Call Get Configuraton API's
+Get list of configuration selected in LoginRadius user account.
+```bush
+try{
+    $result = $cloudObject->getConfigurationList();
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
 ```
 ####Call GetProvidersAPI API's
 Get list of provider selected in LoginRadius user account.
@@ -433,6 +448,16 @@ catch (LoginRadiusException $e){
 ```bush
 try{
     $result= $advanceSocialLoginObject->refreshAccessToken($access_token);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get all active seesions
+```bush
+try{
+    $result= $advanceSocialLoginObject->getActiveSessionByToken($access_token);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -831,6 +856,39 @@ catch (LoginRadiusException $e){
     $e->getErrorResponse();
 }
 ```
+
+#####Auth Reset Password by Security Question and Email
+```bush
+try{
+    $result= $authenticationObject->authResetPasswordBySecurityAnswerAndEmail($data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+
+#####Auth Reset Password by Security Question and Phone
+```bush
+try{
+    $result= $authenticationObject->authResetPasswordBySecurityAnswerAndPhone($data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+
+#####Auth Reset Password by Security Question and Username
+```bush
+try{
+    $result= $authenticationObject->authResetPasswordBySecurityAnswerAndUserName($data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
 #####Update Security Question by Access token
 ```bush
 try{
@@ -1071,6 +1129,28 @@ catch (LoginRadiusException $e){
    
 try{
     $result = $accountObject->updateSecurityQuestionByUid($uid, $data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Remove an email by uid 
+```bush
+   
+try{
+    $result = $accountObject->removeEmailByUidAndEmail($uid, $data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Update or insert an email by uid
+```bush
+   
+try{
+    $result = $accountObject->updateOrInsertEmailByUid($uid, $data);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();

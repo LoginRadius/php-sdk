@@ -55,7 +55,7 @@ class AdvanceSocialLoginAPI
     {
         return $this->apiClientHandler('access_token/twitter', array("key" => Functions::getApiKey(), "tw_access_token" => $tw_access_token, 'tw_token_secret' => $tw_token_secret, 'fields' => $fields));
     }
-
+    
     /**
      * The User Profile API is used to get the latest updated social profile data from the user’s social account after authentication.
      * The social profile will be retrieved via oAuth and OpenID protocols.
@@ -81,6 +81,19 @@ class AdvanceSocialLoginAPI
     public function refreshAccessToken($access_token, $fields = '*')
     {
         return $this->apiClientHandler('access_token/refresh', array('access_token' => $access_token, "secret" => Functions::getApiSecret(), 'fields' => $fields));
+    }
+    
+    
+    /**
+     * Get all active seesions by Access Token
+     *
+     * @param $access_token
+     * @return type
+     */
+    
+    public function getActiveSessionByToken($access_token, $fields = '*')
+    {
+        return $this->apiClientHandler('access_token/activesession', array('token' => $access_token, "key" => Functions::getApiKey(), "secret" => Functions::getApiSecret(), 'fields' => $fields));
     }
 
 
@@ -126,7 +139,7 @@ class AdvanceSocialLoginAPI
         return $this->apiClientHandler('status/js', array('access_token' => $access_token, "title" => $title, 'url' => $url, 'imageurl' => $imageurl, 'status' => $status, 'caption' => $caption, 'description' => $description, 'fields' => $fields));
     }
 
-        /**
+    /**
      * The Shorten URL API is used to convert your URLs to the LoginRadius short URL - ish.re
      *
      * @param $url

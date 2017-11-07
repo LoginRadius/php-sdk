@@ -5,7 +5,7 @@
  * @category : Clients
  * @package : DefaultHttpClient
  * @author : LoginRadius Team
- * @version : 4.3.0
+ * @version : 4.4.0
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -49,7 +49,7 @@ class DefaultHttpClient implements IHttpClient
             }
             $request_url .= Functions::queryBuild($query_array);
         }
-
+        
         if (in_array('curl', get_loaded_extensions())) {
             $response = $this->curlApiMethod($request_url, $options);
         } elseif (ini_get('allow_url_fopen')) {
@@ -76,7 +76,6 @@ class DefaultHttpClient implements IHttpClient
      */
     private function curlApiMethod($request_url, $options = array())
     {
-
         $ssl_verify = isset($options['ssl_verify']) ? $options['ssl_verify'] : false;
         $method = isset($options['method']) ? strtolower($options['method']) : 'get';
         $data = isset($options['post_data']) ? $options['post_data'] : array();
@@ -96,10 +95,11 @@ class DefaultHttpClient implements IHttpClient
             if (($content_type == 'json') && (is_array($data) || is_object($data))) {
                 $data = json_encode($data);
             }
-
             curl_setopt($curl_handle, CURLOPT_HTTPHEADER, array('Content-type: application/' . $content_type, 'X-LoginRadius-Sott:' . $sott_header_content));
             curl_setopt($curl_handle, CURLOPT_POSTFIELDS, (($content_type == 'json') ? $data : Functions::queryBuild($data)));
     
+            
+            
         if ($method == 'post') {                
                 curl_setopt($curl_handle, CURLOPT_POST, 1);
             } elseif ($method == 'delete') {                
@@ -108,15 +108,10 @@ class DefaultHttpClient implements IHttpClient
                 curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, "PUT");
             }
         }
-        if (ini_get('open_basedir') == '' && (ini_get('safe_mode') == 'Off' or !ini_get('safe_mode'))) {
-            curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
-        } else {
-            $url = str_replace('?', '/?', $request_url);
-            curl_setopt($curl_handle, CURLOPT_URL, $url);
-            curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
-        }
-
+        
+        curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);     
+             
         $json_response = curl_exec($curl_handle);
         if (curl_error($curl_handle)) {    
            $json_response = curl_error($curl_handle);

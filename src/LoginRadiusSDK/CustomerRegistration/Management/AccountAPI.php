@@ -577,6 +577,41 @@ class AccountAPI {
      */
     public function updateSecurityQuestionByUid($uid, $data, $fields = '*') {
         return $this->apiClientHandler("/" . $uid, array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+    } 
+
+    /**
+     * This API is used to remove email using uid.
+     * 
+     * @param $uid
+     * @param $data
+     * {
+     *   “Email” : “abc@mailinator.com”
+     * }
+     * @return 
+     */
+    
+    public function removeEmailByUidAndEmail($uid, $data, $fields = '*') {
+        return $this->apiClientHandler('/' . $uid . '/email', array('fields' => $fields), array('method' => 'delete', 'post_data' => $data, 'content_type' => 'json'));
+    }
+    
+    /**
+     * This API is used to update or insert email using uid.
+     * 
+     * @param $uid
+     * @param $data
+     * {
+     *   “Email” : [
+     *  {
+     *   “Type” : “Primary”,
+     *   “Value” : “abc@mailinator.com”
+     *   }
+     *   ]
+     *   }
+     * @return 
+     */
+    
+    public function updateOrInsertEmailByUid($uid, $data, $fields = '*') {
+        return $this->apiClientHandler('/' . $uid . '/email', array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -590,5 +625,4 @@ class AccountAPI {
     private function apiClientHandler($path, $query_array = array(), $options = array()) {
         return Functions::apiClient("/identity/v2/manage/account" . $path, $query_array, $options);
     }
-
 }

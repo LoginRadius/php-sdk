@@ -96,67 +96,6 @@ class SocialLoginAPI
         return $this->apiClientHandler('userprofile/fields', $raw, array('apikey' => $apiKey, 'apisecret' => $secret, 'fields' => $fields));
     }
 	
-	    /**
-     * LoginRadius function - This API is used to validate access_token, check it is valid, expired or active.
-     *
-     * @param string $access_token LoginRadius access token
-     *
-     * @return object User profile data.
-     *
-     * try{
-     *   $userProfileData = $loginradiusObject->tokenValidate
-	 * ($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
-     */
-    public function tokenValidate($access_token, $fields = '*')
-    {
-        return $this->apiClientHandler('access_token/Validate', false, array("key" => Functions::getApiKey(),"secret" => Functions::getApiSecret(),"access_token" => $access_token, 'fields' => $fields));
-    }
-	
-	    /**
-     * LoginRadius function - This API is used to invalidate access token, means expiring token. After this API call passed access_token no longer be active and will not accepted by LoginRadius APIs.
-     *
-     * @param string $access_token LoginRadius access token
-     *
-     * @return object User profile data.
-     *
-     * try{
-     *   $userProfileData = $loginradiusObject->tokenInvalidate($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
-     */
-    public function tokenInvalidate($access_token, $fields = '*')
-    {
-        return $this->apiClientHandler('access_token/invalidate', false, array("key" => Functions::getApiKey(),"secret" => Functions::getApiSecret(),"access_token" => $access_token, 'fields' => $fields));
-    }
-
-
-      /**
-     * LoginRadius function - This API is used to validate API key and Secret.
-     *
-     * @return object.
-     *
-     * try{
-     *   $userProfileData = $loginradiusObject->validateKeyandSecret();
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
-     */
-    public function validateKeyandSecret($fields = '*')
-    {
-         return $this->apiClientHandler('app/validate', false, array("apikey" => rawurlencode(Functions::getApiKey()),"apisecret" => rawurlencode(Functions::getApiSecret()), 'fields' => $fields));
-    }
-
-
     /**
      * LoginRadius function - To get the Albums data from the user's social account. The data will be normalized into LoginRadius' data format.
      *
@@ -540,6 +479,66 @@ class SocialLoginAPI
             'fields' => $fields
         );
         return $this->apiClientHandler("message", false, $data, array('method' => 'post', 'post_data' => true));
+    }
+    
+    /**
+     * LoginRadius function - This API is used to validate access_token, check it is valid, expired or active.
+     *
+     * @param string $access_token LoginRadius access token
+     *
+     * @return object User profile data.
+     *
+     * try{
+     *   $userProfileData = $loginradiusObject->tokenValidate
+	 * ($access_token);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
+     */
+    public function tokenValidate($access_token, $fields = '*')
+    {
+        return $this->apiClientHandler('access_token/Validate', false, array("key" => Functions::getApiKey(),"secret" => Functions::getApiSecret(),"access_token" => $access_token, 'fields' => $fields));
+    }
+	
+	    /**
+     * LoginRadius function - This API is used to invalidate access token, means expiring token. After this API call passed access_token no longer be active and will not accepted by LoginRadius APIs.
+     *
+     * @param string $access_token LoginRadius access token
+     *
+     * @return object User profile data.
+     *
+     * try{
+     *   $userProfileData = $loginradiusObject->tokenInvalidate($access_token);
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
+     */
+    public function tokenInvalidate($access_token, $fields = '*')
+    {
+        return $this->apiClientHandler('access_token/invalidate', false, array("key" => Functions::getApiKey(),"secret" => Functions::getApiSecret(),"access_token" => $access_token, 'fields' => $fields));
+    }
+
+
+      /**
+     * LoginRadius function - This API is used to validate API key and Secret.
+     *
+     * @return object.
+     *
+     * try{
+     *   $userProfileData = $loginradiusObject->validateKeyandSecret();
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     *   $e->getErrorResponse();
+     * }
+     */
+    public function validateKeyandSecret($fields = '*')
+    {
+         return $this->apiClientHandler('app/validate', false, array("apikey" => rawurlencode(Functions::getApiKey()),"apisecret" => rawurlencode(Functions::getApiSecret()), 'fields' => $fields));
     }
 
     /**

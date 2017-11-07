@@ -1,18 +1,27 @@
 # LoginRadius PHP SDK Change Log
 
+
+# Version 4.4.0 
+Released on **Novemeber 7, 2017**
+## Enhancements
+  - Added Configuration API
+  - Added API to get all active session details  
+  - Added Reset password by Security Answer API
+  - Added Remove Email Management API
+  
 # Version 4.3.0 
 Released on **September 15, 2017**
 ## Enhancements
   - Ability to support proxy server
-  - Projection of fields in API's
-  - Added management API to generate a new SOTT
+  - Projection of fields in api's
+  - Added management api to generate a new SOTT
   - Custom object edit API enhancements
-  - Added security questions API's
-  - Added invalidate phone API
-  - Added instant link login APIs
-  - Added pre-registration validation API's
-  - Auto login API enhancement
-  
+  - Added security questions api's
+  - Added invalidate phone api
+  - Added instant link login api
+  - Added simplified instant registration data api's
+  - Auto login api enhancement
+
 # Version 4.2.0 
 Released on **June 20, 2017**
 ## Enhancements
