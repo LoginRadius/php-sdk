@@ -615,6 +615,24 @@ class AccountAPI {
     }
 
     /**
+     *  This method returns a forgot password token.
+     *
+     * @param $email
+     * {
+     *  "email": "mail@domain.tld"
+     * }
+     * @return type
+     * {
+     *  "ForgotToken": "xxxxxxx",
+     *  "IdentityProviders": null
+     * }
+     */
+    public function forgotPasswordToken($email) {
+        $data = json_encode(['email' => $email]);
+        return $this->apiClientHandler('/forgot/token', array(), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+    }
+
+    /**
      * handle account APIs
      *
      * @param type $path
