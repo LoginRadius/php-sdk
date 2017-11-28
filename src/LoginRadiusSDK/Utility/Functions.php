@@ -183,7 +183,7 @@ class Functions
 
         } else if ($secure == 'secret') {
 
-            $result = array('apiKey' => Functions::getApiKey(), 'apiSecret' => Functions::getApiSecret());
+            $result = array('apikey' => Functions::getApiKey(), 'apisecret' => Functions::getApiSecret());
        
         } else if ($secure == 'headsecure') {
 

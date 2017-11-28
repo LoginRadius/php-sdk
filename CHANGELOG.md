@@ -7,10 +7,10 @@ Released on **Novemeber 28, 2017**
   - Added API to get Identities
   - Added API to invalidate email
   - Added API to get email verification token
-  - Added API to get forgot password token
-  - Added API to get email templates name
-  - Passed APIKey and APISecret in header for management API's
+  - Added API to get forgot password token  
+  - Passed APIkey and APISecret key in header for management Api's
   - Removed mcrypt dependency (function deprecated in php 7)
+
 
 # Version 4.4.0 
 Released on **Novemeber 7, 2017**

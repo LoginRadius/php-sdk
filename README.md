@@ -177,17 +177,7 @@ catch (LoginRadiusException $e){
     $e->getMessage();
     $e->getErrorResponse();
 }
-```
-####Call Get Email Templates Name API
-Get list of email templates selected in LoginRadius user account.
-```bush
-try{
-    $result = $cloudObject->getEmailTemplateList();
-}
-catch (LoginRadiusException $e){
-    $e->getMessage();
-    $e->getErrorResponse();
-}
+
 ```
 ####Call GetProvidersAPI API's
 Get list of provider selected in LoginRadius user account.

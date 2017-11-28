@@ -52,26 +52,5 @@ class CloudAPI
         $url = LR_CLOUD_ENDPOINT . "/configuration/ciam/appInfo";
         return Functions::apiClient($url, '', $options);        
     }
-    
-     /**
-     * LoginRadius function - To fetch email templates name on dashboard
-     *
-     * @param string $apikey to validate.
-     * @param string $apiSecret to validate.
-     *
-     * @return object options/error messages.
-     *
-     * try {
-     *   $response = $cloudObject->getEmailTemplateList();
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     * }
-     */
-    public function getEmailTemplateList()
-    {
-        $options = array('authentication' => 'secret');
-        $url = LR_CLOUD_ENDPOINT . "/configuration/ciam/appInfo/templates";
-        return Functions::apiClient($url, '', $options);        
-    }
+   
 }
