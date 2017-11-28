@@ -29,8 +29,7 @@ class SocialLoginAPI
      */
     function __construct($apikey = '', $apisecret = '', $customize_options = array())
     {
-        $options = array_merge(array('authentication' => true), $customize_options);
-        new Functions($apikey, $apisecret, $options);
+        new Functions($apikey, $apisecret, $customize_options);
     }
 
     /**

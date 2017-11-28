@@ -29,8 +29,7 @@ class AuthCustomObjectAPI
      */
     public function __construct($apikey = '', $apisecret = '', $customize_options = array())
     {
-        $options = array_merge(array('authentication' => 'key'), $customize_options);
-        new Functions($apikey, $apisecret, $options);
+        new Functions($apikey, $apisecret, $customize_options);
     }
     
     /**
@@ -103,8 +102,9 @@ class AuthCustomObjectAPI
      * @param type $options
      * @return type
      */
-    private function apiClientHandler($path, $query_array = array(), $options = array())
+    private function apiClientHandler($path, $query_array = array(), $customize_options = array())
     {
+        $options = array_merge(array('authentication' => 'key'), $customize_options);
         return Functions::apiClient("/identity/v2/auth/" . $path, $query_array, $options);
     }
 }

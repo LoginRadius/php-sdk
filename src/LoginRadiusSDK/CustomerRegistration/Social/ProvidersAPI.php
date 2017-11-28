@@ -29,8 +29,7 @@ class ProvidersAPI
      */
     public function __construct($apikey = '', $apisecret = '', $customize_options = array())
     {
-        $options = array_merge(array('authentication' => ''), $customize_options);
-        new Functions($apikey, $apisecret, $options);
+        new Functions($apikey, $apisecret, $customize_options);
     }
 
     /**
@@ -50,7 +49,7 @@ class ProvidersAPI
     public function getProvidersList()
     {
         $url = LR_CDN_ENDPOINT . "/interface/json/" . Functions::getApiKey() . ".json";
-        $response = Functions::apiClient($url, false);
+        $response = Functions::apiClient($url);
         $json_response = explode('(', $response);
         if ($json_response[0] == 'loginRadiusAppJsonLoaded') {
             return str_replace(')', '', $json_response[1]);

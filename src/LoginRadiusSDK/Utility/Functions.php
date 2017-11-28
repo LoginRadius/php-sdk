@@ -4,7 +4,7 @@
  * @category : Utility
  * @package : Functions
  * @author : LoginRadius Team
- * @version : 4.4.0
+ * @version : 4.5.0
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -26,7 +26,7 @@ define('LR_CLOUD_ENDPOINT', 'https://cloud-api.loginradius.com');
 class Functions
 {
 
-    const version = '4.4.0';
+    const version = '4.5.0';
 
     private static $apikey;
     private static $apisecret;
@@ -41,11 +41,10 @@ class Functions
      */
     public function __construct($apikey = '', $apisecret = '', $customize_options = array())
     {
-
         if (!empty($apikey) && !empty($apisecret)) {
             self::setDefaultApplication($apikey, $apisecret);
-        } elseif (empty($apikey) || empty($apisecret)) {
-            if (empty(self::$apikey) || empty(self::$apisecret)) {
+        } elseif (empty($apikey) || empty($apisecret)) {            
+            if (empty(self::$apikey) || empty(self::$apisecret)) {                
                 if (defined('LR_API_KEY') && defined('LR_API_SECRET')) {
                     self::setDefaultApplication(LR_API_KEY, LR_API_SECRET);
                 } else {
@@ -53,8 +52,7 @@ class Functions
                 }
             }
         }
-
-        self::$options = array_merge(self::$options, $customize_options);
+        self::$options = array_merge(self::$options, $customize_options);       
     }
 
     /**
@@ -79,7 +77,6 @@ class Functions
      */
     private static function checkAPIValidation($apikey, $apisecret)
     {
-
         if (empty($apikey) || !self::isValidGuid($apikey)) {
             throw new LoginRadiusException('Required "LoginRadius" API key in valid guid format.');
         }
@@ -158,9 +155,7 @@ class Functions
     {
 
         global $apiClient_class;
-
         $merge_options = array_merge($options, self::$options);
-
         if (isset($apiClient_class) && class_exists($apiClient_class)) {
             $client = new $apiClient_class();
         } else {
@@ -188,7 +183,11 @@ class Functions
 
         } else if ($secure == 'secret') {
 
-            $result = array('apikey' => Functions::getApiKey(), 'apisecret' => Functions::getApiSecret());
+            $result = array('apiKey' => Functions::getApiKey(), 'apiSecret' => Functions::getApiSecret());
+       
+        } else if ($secure == 'headsecure') {
+
+            $result = array('X-LoginRadius-ApiKey' => Functions::getApiKey(), 'X-LoginRadius-ApiSecret' => Functions::getApiSecret());
         }
 
         if (is_array($array) && sizeof($array) > 0) {

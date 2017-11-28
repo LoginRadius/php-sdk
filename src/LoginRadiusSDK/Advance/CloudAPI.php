@@ -29,8 +29,7 @@ class CloudAPI
      */
     public function __construct($apikey = '', $apisecret = '', $customize_options = array())
     {
-        $options = array_merge(array('authentication' => 'key'), $customize_options);
-        new Functions($apikey, $apisecret, $options);
+        new Functions($apikey, $apisecret, $customize_options);
     }
 
     /**
@@ -40,8 +39,8 @@ class CloudAPI
      *
      * @return object options/error messages.
      *
-     * try{
-     *   $response = $cloudObject->getOptionsList();
+     * try {
+     *   $response = $cloudObject->getConfigurationList();
      * }
      * catch (LoginRadiusException $e){
      *   $e->getMessage();
@@ -49,7 +48,30 @@ class CloudAPI
      */
     public function getConfigurationList()
     {
+        $options = array('authentication' => 'key');
         $url = LR_CLOUD_ENDPOINT . "/configuration/ciam/appInfo";
-        return Functions::apiClient($url);        
+        return Functions::apiClient($url, '', $options);        
+    }
+    
+     /**
+     * LoginRadius function - To fetch email templates name on dashboard
+     *
+     * @param string $apikey to validate.
+     * @param string $apiSecret to validate.
+     *
+     * @return object options/error messages.
+     *
+     * try {
+     *   $response = $cloudObject->getEmailTemplateList();
+     * }
+     * catch (LoginRadiusException $e){
+     *   $e->getMessage();
+     * }
+     */
+    public function getEmailTemplateList()
+    {
+        $options = array('authentication' => 'secret');
+        $url = LR_CLOUD_ENDPOINT . "/configuration/ciam/appInfo/templates";
+        return Functions::apiClient($url, '', $options);        
     }
 }

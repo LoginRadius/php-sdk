@@ -31,7 +31,7 @@ curl -sS https://getcomposer.org/installer | php
 Next, run the Composer command to install the latest stable version of library:
 
 ```bash
-composer require loginradius/php-sdk:4.4.0
+composer require loginradius/php-sdk:4.5.0
 ```
 
 You can then later update LoginRadius PHP SDK using composer:
@@ -167,11 +167,22 @@ $fields= "email, username";
 }
         
 ```
-####Call Get Configuraton API's
+####Call Get Configuraton API
 Get list of configuration selected in LoginRadius user account.
 ```bush
 try{
     $result = $cloudObject->getConfigurationList();
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+####Call Get Email Templates Name API
+Get list of email templates selected in LoginRadius user account.
+```bush
+try{
+    $result = $cloudObject->getEmailTemplateList();
 }
 catch (LoginRadiusException $e){
     $e->getMessage();
@@ -1074,6 +1085,50 @@ catch (LoginRadiusException $e){
    
 try{
     $result = $accountObject->getAccessTokenByUid($uid);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Invalidate Email API
+```bush
+   
+try{
+    $result = $accountObject->invalidateEmail($uid, $data);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get All Identities
+```bush
+   
+try{
+    $result = $accountObject->getIdentitiesByEmail($email);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get Email Verification Token
+```bush
+   
+try{
+    $result = $accountObject->getEmailVerificationToken($email);
+}
+catch (LoginRadiusException $e){
+    $e->getMessage();
+    $e->getErrorResponse();
+}
+```
+#####Get Forgot Password Token
+```bush
+   
+try{
+    $result = $accountObject->getForgotPasswordToken($email);
 }
 catch (LoginRadiusException $e){
     $e->getMessage();

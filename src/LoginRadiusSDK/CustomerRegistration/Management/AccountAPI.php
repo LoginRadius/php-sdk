@@ -26,8 +26,7 @@ class AccountAPI {
      * @param type $customize_options
      */
     public function __construct($apikey = '', $apisecret = '', $customize_options = array()) {
-        $options = array_merge(array('authentication' => 'secret'), $customize_options);
-        new Functions($apikey, $apisecret, $options);
+        new Functions($apikey, $apisecret, $customize_options);
     }
 
     /**
@@ -499,6 +498,90 @@ class AccountAPI {
      */
     public function getAccessTokenByUid($uid, $fields = '*') {
         return $this->apiClientHandler("/access_token", array('uid' => $uid, 'fields' => $fields));
+    }    
+    
+    /**
+     * This API is used to invalidate the account.
+     * 
+     * @param $uid
+     * @param $data = true (boolean type) if have you no body parameters
+     * 
+     * @return array
+     */
+    
+    public function invalidateEmail($uid, $data, $fields = '*') {
+        return $this->apiClientHandler("/" . $uid . '/invalidateemail', array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+    }
+     
+    /**
+     * This API is used to Get Identities by Email Id.
+     * 
+     * @param $email
+     * @return array
+     */
+    
+    public function getIdentitiesByEmail($email, $fields = '*') {
+        return $this->apiClientHandler('/identities', array('email' => $email, 'fields' => $fields));
+    }
+    
+    /**
+     * This API Returns an Email Verification token.
+     * 
+     * @param $email
+     *
+     * @return 
+     */
+    
+    public function getEmailVerificationToken($email, $fields = '*') {
+        $data = json_encode(['Email' => $email]);        
+        return $this->apiClientHandler('/verify/token', array('fields' => $fields), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+    }
+    
+    /**
+     * This API Returns a forgot password token.
+     * 
+     * @param $email
+     *
+     * @return 
+     */
+    
+    public function getForgotPasswordToken($email, $fields = '*') {
+        $data = json_encode(['Email' => $email]);  
+        return $this->apiClientHandler('/forgot/token', array('fields' => $fields), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+    }
+
+    /**
+     * This API is used to remove email using uid.
+     * 
+     * @param $uid
+     * @param $email
+     *
+     * @return 
+     */
+    
+    public function removeEmailByUidAndEmail($uid, $email, $fields = '*') {
+        $data = json_encode(['Email' => $email]);  
+        return $this->apiClientHandler('/' . $uid . '/email', array('fields' => $fields), array('method' => 'delete', 'post_data' => $data, 'content_type' => 'json'));
+    }
+    
+    /**
+     * This API is used to update or insert email using uid.
+     * 
+     * @param $uid
+     * @param $data
+     * {
+     *   “Email” : [
+     *  {
+     *   “Type” : “Primary”,
+     *   “Value” : “abc@mailinator.com”
+     *   }
+     *   ]
+     *   }
+     * @return 
+     */
+    
+    public function updateOrInsertEmailByUid($uid, $data, $fields = '*') {        
+        return $this->apiClientHandler('/' . $uid . '/email', array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -567,6 +650,7 @@ class AccountAPI {
      * This API is used to update security questions configuration using uid.
      * 
      * @param $uid
+     * @param $data
      * {
      * "securityquestionanswer": {
      * "MiddleName": "value1",
@@ -577,43 +661,8 @@ class AccountAPI {
      */
     public function updateSecurityQuestionByUid($uid, $data, $fields = '*') {
         return $this->apiClientHandler("/" . $uid, array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
-    } 
-
-    /**
-     * This API is used to remove email using uid.
-     * 
-     * @param $uid
-     * @param $data
-     * {
-     *   “Email” : “abc@mailinator.com”
-     * }
-     * @return 
-     */
-    
-    public function removeEmailByUidAndEmail($uid, $data, $fields = '*') {
-        return $this->apiClientHandler('/' . $uid . '/email', array('fields' => $fields), array('method' => 'delete', 'post_data' => $data, 'content_type' => 'json'));
     }
-    
-    /**
-     * This API is used to update or insert email using uid.
-     * 
-     * @param $uid
-     * @param $data
-     * {
-     *   “Email” : [
-     *  {
-     *   “Type” : “Primary”,
-     *   “Value” : “abc@mailinator.com”
-     *   }
-     *   ]
-     *   }
-     * @return 
-     */
-    
-    public function updateOrInsertEmailByUid($uid, $data, $fields = '*') {
-        return $this->apiClientHandler('/' . $uid . '/email', array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
-    }
-
+   
     /**
      * handle account APIs
      *
@@ -622,7 +671,8 @@ class AccountAPI {
      * @param type $options
      * @return type
      */
-    private function apiClientHandler($path, $query_array = array(), $options = array()) {
+    private function apiClientHandler($path, $query_array = array(), $customize_options = array()) {
+        $options = array_merge(array('authentication' => 'headsecure'), $customize_options);
         return Functions::apiClient("/identity/v2/manage/account" . $path, $query_array, $options);
     }
 }

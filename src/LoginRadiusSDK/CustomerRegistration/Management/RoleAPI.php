@@ -26,8 +26,7 @@ class RoleAPI {
      * @param type $customize_options
      */
     public function __construct($apikey = '', $apisecret = '', $customize_options = array()) {
-        $options = array_merge(array('authentication' => 'secret'), $customize_options);
-        new Functions($apikey, $apisecret, $options);
+        new Functions($apikey, $apisecret, $customize_options);
     }
 
     /**
@@ -221,7 +220,8 @@ class RoleAPI {
      * @param type $options
      * @return type
      */
-    private function apiClientHandler($path, $query_array = array(), $options = array()) {
+    private function apiClientHandler($path, $query_array = array(), $customize_options = array()) {
+        $options = array_merge(array('authentication' => 'secret'), $customize_options);
         return Functions::apiClient("/identity/v2/manage/" . $path, $query_array, $options);
     }
 

@@ -27,8 +27,7 @@ class UserAPI {
      * @param type $customize_options
      */
     public function __construct($apikey = '', $apisecret = '', $customize_options = array()) {
-        $options = array_merge(array('authentication' => 'key'), $customize_options);
-        new Functions($apikey, $apisecret, $options);
+        new Functions($apikey, $apisecret, $customize_options);
     }
 
     /**
@@ -61,7 +60,7 @@ class UserAPI {
      * @param string $g_recaptcha_response It is only required for locked accounts when logging in
      * @return type userprofile object
      */
-    public function authLoginByEmail($verification_url = '', $login_url = '', $email_template = '', $g_recaptcha_response = '', $data, $fields = '*') {
+    public function authLoginByEmail($data, $verification_url = '', $login_url = '', $email_template = '', $g_recaptcha_response = '', $fields = '*') {
         return $this->apiClientHandler("login", array('verificationUrl' => $verification_url, 'loginUrl' => $login_url, 'emailTemplate' => $email_template, 'g-recaptcha-response' => $g_recaptcha_response, 'fields' => $fields), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
     }
 
@@ -94,7 +93,7 @@ class UserAPI {
      * @param string $email_template email template name
      * @return type userprofile object
      */
-    public function authLoginByUsername($verification_url = '', $login_url = '', $email_template = '', $g_recaptcha_response = '', $data, $fields = '*') {
+    public function authLoginByUsername($data, $verification_url = '', $login_url = '', $email_template = '', $g_recaptcha_response = '', $fields = '*') {
         return $this->apiClientHandler("login", array('verificationUrl' => $verification_url, 'loginUrl' => $login_url, 'emailTemplate' => $email_template, 'g-recaptcha-response' => $g_recaptcha_response, 'fields' => $fields), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
     }
 
@@ -127,7 +126,7 @@ class UserAPI {
      * @param string $email_template email template name
      * @return type userprofile object
      */
-    public function authLoginByPhone($login_url = '', $sms_template = '', $g_recaptcha_response = '', $data, $fields = '*') {
+    public function authLoginByPhone($data, $login_url = '', $sms_template = '', $g_recaptcha_response = '', $fields = '*') {
         return $this->apiClientHandler("login", array('loginUrl' => $login_url, 'smstemplate' => $sms_template, 'g-recaptcha-response' => $g_recaptcha_response, 'fields' => $fields), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
     }
 
@@ -919,7 +918,8 @@ class UserAPI {
      * @param type $options
      * @return type
      */
-    private function apiClientHandler($path, $query_array = array(), $options = array()) {
+    private function apiClientHandler($path, $query_array = array(), $customize_options = array()) {
+        $options = array_merge(array('authentication' => 'key'), $customize_options);
         return Functions::apiClient("/identity/v2/auth/" . $path, $query_array, $options);
     }
 
