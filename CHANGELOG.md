@@ -2,7 +2,7 @@
 
 
 # Version 4.5.1
-Released on **January 05, 2018**
+Released on **January 24, 2018**
 ## Enhancements
   - Change configuration API endpoint url. 
 
