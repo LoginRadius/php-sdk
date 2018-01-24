@@ -504,7 +504,7 @@ class AccountAPI {
      * This API is used to invalidate the account.
      * 
      * @param $uid
-     * @param $data = true (boolean type) if have you no body parameters
+     * @param $data = true(boolean type) if have you no body parameters
      * 
      * @return array
      */
@@ -637,8 +637,10 @@ class AccountAPI {
     }
 
     /**
+     * Note: This function has been deprecated we will remove this in our next release
+     *       Use LoginRadiusSDK->Utility->SOTT->encrypt() to get sott.
      * This API allows you to generate SOTT with a given expiration time.
-     *
+     * 
      * @param $time_difference
      * @return 
      */

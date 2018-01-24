@@ -4,7 +4,7 @@
  * @category : Utility
  * @package : Functions
  * @author : LoginRadius Team
- * @version : 4.5.0
+ * @version : 4.5.1
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -16,7 +16,7 @@ use LoginRadiusSDK\LoginRadiusException;
 
 define('API_DOMAIN', 'https://api.loginradius.com');
 define('LR_CDN_ENDPOINT', 'https://cdn.loginradius.com');
-define('LR_CLOUD_ENDPOINT', 'https://cloud-api.loginradius.com');
+define('LR_CLOUD_ENDPOINT', 'https://config.lrcontent.com');
 
 /**
  * Class For LoginRadius
@@ -26,7 +26,7 @@ define('LR_CLOUD_ENDPOINT', 'https://cloud-api.loginradius.com');
 class Functions
 {
 
-    const version = '4.5.0';
+    const version = '4.5.1';
 
     private static $apikey;
     private static $apisecret;
@@ -178,9 +178,8 @@ class Functions
     {
         $result = array();
         if ($secure == 'key') {
-
+            
             $result = array('apikey' => Functions::getApiKey());
-
         } else if ($secure == 'secret') {
 
             $result = array('apikey' => Functions::getApiKey(), 'apisecret' => Functions::getApiSecret());

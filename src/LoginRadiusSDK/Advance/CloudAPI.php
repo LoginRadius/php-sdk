@@ -49,8 +49,7 @@ class CloudAPI
     public function getConfigurationList()
     {
         $options = array('authentication' => 'key');
-        $url = LR_CLOUD_ENDPOINT . "/configuration/ciam/appInfo";
+        $url = LR_CLOUD_ENDPOINT . "/ciam/appInfo";
         return Functions::apiClient($url, '', $options);        
     }
-   
 }

@@ -1,6 +1,11 @@
 # LoginRadius PHP SDK Change Log
 
 
+# Version 4.5.1
+Released on **January 05, 2018**
+## Enhancements
+  - Change configuration API endpoint url. 
+
 # Version 4.5.0
 Released on **Novemeber 28, 2017**
 ## Enhancements
