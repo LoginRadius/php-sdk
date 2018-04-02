@@ -1,5 +1,13 @@
 # LoginRadius PHP SDK Change Log
 
+# Version 4.5.2
+Released on **April 2, 2018**
+## Enhancements
+	  Add Cloud storage API's:-
+	  -  get User identity
+	  -  get User identity by page
+	  -  get custom object
+	  -  get custom object by page
 
 # Version 4.5.1
 Released on **January 24, 2018**
