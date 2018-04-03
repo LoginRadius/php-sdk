@@ -9,7 +9,7 @@ use \LoginRadiusSDK\Utility\Functions;
 use \LoginRadiusSDK\LoginRadiusException;
 use \LoginRadiusSDK\Clients\IHttpClient;
 use \LoginRadiusSDK\Clients\DefaultHttpClient;
-use \LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI;
+use LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI;
 use LoginRadiusSDK\CustomerRegistration\Social\SocialLoginAPI;
 
 $message = '';

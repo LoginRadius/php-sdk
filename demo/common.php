@@ -26,6 +26,6 @@
 <?php
 
 function lr_raas_get_sott() {  
-    $sott =  new \LoginRadiusSDK\Utility\SOTT(API_KEY, API_SECRET, array('output_format' => 'json'));
-    return urlencode($sott->encrypt('10', false)->Sott);
+    $sott =  new \LoginRadiusSDK\Utility\SOTT(API_KEY, API_SECRET);
+    return urlencode($sott->encrypt('10', true));
 }
