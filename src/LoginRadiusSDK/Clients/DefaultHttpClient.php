@@ -5,7 +5,7 @@
  * @category : Clients
  * @package : DefaultHttpClient
  * @author : LoginRadius Team
- * @version : 4.5.1
+ * @version : 4.5.2
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -54,7 +54,6 @@ class DefaultHttpClient implements IHttpClient {
             }
             $request_url .= Functions::queryBuild($query_array);
         }
-
         if (in_array('curl', get_loaded_extensions())) {
             $response = $this->curlApiMethod($request_url, $options);
         }

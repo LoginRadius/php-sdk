@@ -4,7 +4,7 @@
  * @category : Utility
  * @package : Functions
  * @author : LoginRadius Team
- * @version : 4.5.1
+ * @version : 4.5.2
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -26,7 +26,7 @@ define('LR_CLOUD_ENDPOINT', 'https://config.lrcontent.com');
 class Functions
 {
 
-    const version = '4.5.1';
+    const version = '4.5.2';
 
     private static $apikey;
     private static $apisecret;

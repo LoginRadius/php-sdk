@@ -1,5 +1,9 @@
 # LoginRadius PHP SDK Change Log
 
+# Version 4.5.2
+Released on **April 3, 2018**
+## Bug Fixed
+	  -  SOTT was not generating properly in PHP SDK demo
 
 # Version 4.5.1
 Released on **January 24, 2018**
