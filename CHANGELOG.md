@@ -1,5 +1,10 @@
 # LoginRadius PHP SDK Change Log
 
+# Version 4.5.3
+Released on **August 9, 2018**
+## Bug Fixed
+	  -  HTTP method request bug fixing
+
 # Version 4.5.2
 Released on **April 3, 2018**
 ## Bug Fixed

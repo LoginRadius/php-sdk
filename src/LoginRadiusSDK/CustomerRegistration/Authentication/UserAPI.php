@@ -61,7 +61,7 @@ class UserAPI {
      * @return type userprofile object
      */
     public function authLoginByEmail($data, $verification_url = '', $login_url = '', $email_template = '', $g_recaptcha_response = '', $fields = '*') {
-        return $this->apiClientHandler("login", array('verificationUrl' => $verification_url, 'loginUrl' => $login_url, 'emailTemplate' => $email_template, 'g-recaptcha-response' => $g_recaptcha_response, 'fields' => $fields), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("login", array('verificationUrl' => $verification_url, 'loginUrl' => $login_url, 'emailTemplate' => $email_template, 'g-recaptcha-response' => $g_recaptcha_response, 'fields' => $fields), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -94,7 +94,7 @@ class UserAPI {
      * @return type userprofile object
      */
     public function authLoginByUsername($data, $verification_url = '', $login_url = '', $email_template = '', $g_recaptcha_response = '', $fields = '*') {
-        return $this->apiClientHandler("login", array('verificationUrl' => $verification_url, 'loginUrl' => $login_url, 'emailTemplate' => $email_template, 'g-recaptcha-response' => $g_recaptcha_response, 'fields' => $fields), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("login", array('verificationUrl' => $verification_url, 'loginUrl' => $login_url, 'emailTemplate' => $email_template, 'g-recaptcha-response' => $g_recaptcha_response, 'fields' => $fields), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -127,7 +127,7 @@ class UserAPI {
      * @return type userprofile object
      */
     public function authLoginByPhone($data, $login_url = '', $sms_template = '', $g_recaptcha_response = '', $fields = '*') {
-        return $this->apiClientHandler("login", array('loginUrl' => $login_url, 'smstemplate' => $sms_template, 'g-recaptcha-response' => $g_recaptcha_response, 'fields' => $fields), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("login", array('loginUrl' => $login_url, 'smstemplate' => $sms_template, 'g-recaptcha-response' => $g_recaptcha_response, 'fields' => $fields), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -142,7 +142,7 @@ class UserAPI {
     public function register($userprofile, $verification_url = '', $email_template = '', $sms_template = '', $fields = '*') {
         $sott = new SOTT();
         $encrypt = $sott->encrypt();
-        return $this->apiClientHandler("register", array('sott' => $encrypt, 'verificationUrl' => $verification_url, 'emailTemplate' => $email_template, 'smsTemplate' => $sms_template, 'fields' => $fields), array('method' => 'post', 'post_data' => $userprofile, 'content_type' => 'json'));
+        return $this->apiClientHandler("register", array('sott' => $encrypt, 'verificationUrl' => $verification_url, 'emailTemplate' => $email_template, 'smsTemplate' => $sms_template, 'fields' => $fields), array('method' => 'POST', 'post_data' => $userprofile, 'content_type' => 'json'));
     }
 
     /**
@@ -155,7 +155,7 @@ class UserAPI {
      * @return {"isPosted": "true"}
      */
     public function registerByEmail($userprofile, $sott, $verification_url = '', $email_template = '', $fields = '*') {
-        return $this->apiClientHandler("register", array('verificationurl' => $verification_url, 'emailtemplate' => $email_template, 'fields' => $fields), array('method' => 'post', 'post_data' => $userprofile, 'content_type' => 'json', 'X-LoginRadius-Sott' => $sott));
+        return $this->apiClientHandler("register", array('verificationurl' => $verification_url, 'emailtemplate' => $email_template, 'fields' => $fields), array('method' => 'POST', 'post_data' => $userprofile, 'content_type' => 'json', 'X-LoginRadius-Sott' => $sott));
     }
 
     /**
@@ -167,7 +167,7 @@ class UserAPI {
      * @return {"isPosted": "true"}
      */
     public function resendEmailVerification($email, $verification_url = '', $email_template = '', $fields = '*') {
-        return $this->apiClientHandler("register", array('verificationUrl' => $verification_url, 'emailTemplate' => $email_template, 'fields' => $fields), array('method' => 'put', 'post_data' => json_encode(array('email' => $email)), 'content_type' => 'json'));
+        return $this->apiClientHandler("register", array('verificationUrl' => $verification_url, 'emailTemplate' => $email_template, 'fields' => $fields), array('method' => 'PUT', 'post_data' => json_encode(array('email' => $email)), 'content_type' => 'json'));
     }
 
     /**
@@ -190,7 +190,7 @@ class UserAPI {
      * @return type
      */
     public function updateProfile($access_token, $data, $verification_url = '', $email_template = '', $fields = '*') {
-        return $this->apiClientHandler("account", array('verificationUrl' => $verification_url, 'emailTemplate' => $email_template, 'access_token' => $access_token, 'fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("account", array('verificationUrl' => $verification_url, 'emailTemplate' => $email_template, 'access_token' => $access_token, 'fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -202,7 +202,7 @@ class UserAPI {
      * @return type
      */
     public function deleteAccountByEmailConfirmation($access_token, $delete_url = '', $email_template = '', $fields = '*') {
-        return $this->apiClientHandler('account', array('access_token' => $access_token, 'deleteUrl' => $delete_url, 'emailTemplate' => $email_template, 'fields' => $fields), array('method' => 'delete', 'post_data' => true));
+        return $this->apiClientHandler('account', array('access_token' => $access_token, 'deleteUrl' => $delete_url, 'emailTemplate' => $email_template, 'fields' => $fields), array('method' => 'DELETE', 'post_data' => true));
     }
 
     /**
@@ -214,7 +214,7 @@ class UserAPI {
      * @return type
      */
     public function forgotPassword($email, $reset_password_url, $email_template = '', $fields = '*') {
-        return $this->apiClientHandler("password", array('resetPasswordUrl' => $reset_password_url, 'emailTemplate' => $email_template, 'fields' => $fields), array('method' => 'post', 'post_data' => json_encode(array('email' => $email)), 'content_type' => 'json'));
+        return $this->apiClientHandler("password", array('resetPasswordUrl' => $reset_password_url, 'emailTemplate' => $email_template, 'fields' => $fields), array('method' => 'POST', 'post_data' => json_encode(array('email' => $email)), 'content_type' => 'json'));
     }
 
     /**
@@ -225,7 +225,7 @@ class UserAPI {
      * @return type
      */
     public function forgotPasswordByOtp($phone, $sms_template = '', $fields = '*') {
-        return $this->apiClientHandler("password/otp", array('smsTemplate' => $sms_template, 'fields' => $fields), array('method' => 'post', 'post_data' => json_encode(array('phone' => $phone)), 'content_type' => 'json'));
+        return $this->apiClientHandler("password/otp", array('smsTemplate' => $sms_template, 'fields' => $fields), array('method' => 'POST', 'post_data' => json_encode(array('phone' => $phone)), 'content_type' => 'json'));
     }
 
     /**
@@ -237,7 +237,7 @@ class UserAPI {
      * @return type
      */
     public function resetPassword($vtoken, $password, $welcome_email_template = '', $fields = '*') {
-        return $this->apiClientHandler("password", array('fields' => $fields), array('method' => 'put', 'post_data' => json_encode(array('ResetToken' => $vtoken, 'password' => $password, 'welcomeEmailTemplate' => $welcome_email_template)), 'content_type' => 'json'));
+        return $this->apiClientHandler("password", array('fields' => $fields), array('method' => 'PUT', 'post_data' => json_encode(array('ResetToken' => $vtoken, 'password' => $password, 'welcomeEmailTemplate' => $welcome_email_template)), 'content_type' => 'json'));
     }
 
     /**
@@ -249,7 +249,7 @@ class UserAPI {
      * @return type
      */
     public function resetPasswordByOtp($phone, $otp, $password, $fields = '*') {
-        return $this->apiClientHandler("password/otp", array('fields' => $fields), array('method' => 'put', 'post_data' => json_encode(array('phone' => $phone, 'otp' => $otp, 'password' => $password)), 'content_type' => 'json'));
+        return $this->apiClientHandler("password/otp", array('fields' => $fields), array('method' => 'PUT', 'post_data' => json_encode(array('phone' => $phone, 'otp' => $otp, 'password' => $password)), 'content_type' => 'json'));
     }
 
     /* Change Account Password.
@@ -262,7 +262,7 @@ class UserAPI {
 
     public function changeAccountPassword($access_token, $old_password, $new_password, $fields = '*') {
         $data = array('oldpassword' => $old_password, 'newpassword' => $new_password);
-        return $this->apiClientHandler("password", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'put', 'post_data' => json_encode($data), 'content_type' => 'json'));
+        return $this->apiClientHandler("password", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'PUT', 'post_data' => json_encode($data), 'content_type' => 'json'));
     }
 
     /**
@@ -277,7 +277,7 @@ class UserAPI {
      */
     public function addEmail($access_token, $email, $type, $verification_url = '', $email_template = '', $fields = '*') {
         $data = array('Email' => $email, 'Type' => $type);
-        return $this->apiClientHandler("email", array('access_token' => $access_token, 'verificationUrl' => $verification_url, 'emailTemplate' => $email_template, 'fields' => $fields), array('method' => 'post', 'post_data' => json_encode($data), 'content_type' => 'json'));
+        return $this->apiClientHandler("email", array('access_token' => $access_token, 'verificationUrl' => $verification_url, 'emailTemplate' => $email_template, 'fields' => $fields), array('method' => 'POST', 'post_data' => json_encode($data), 'content_type' => 'json'));
     }
 
     /**
@@ -290,7 +290,7 @@ class UserAPI {
      */
     public function removeEmail($access_token, $email, $fields = '*') {
         $data = array('Email' => $email);
-        return $this->apiClientHandler("email", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'delete', 'post_data' => json_encode($data), 'content_type' => 'json'));
+        return $this->apiClientHandler("email", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'DELETE', 'post_data' => json_encode($data), 'content_type' => 'json'));
     }
 
     /**
@@ -323,7 +323,7 @@ class UserAPI {
      * @return type
      */
     public function changeUsername($access_token, $username, $fields = '*') {
-        return $this->apiClientHandler("username", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'put', 'post_data' => json_encode(array('username' => $username)), 'content_type' => 'json'));
+        return $this->apiClientHandler("username", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'PUT', 'post_data' => json_encode(array('username' => $username)), 'content_type' => 'json'));
     }
 
     /**
@@ -345,7 +345,7 @@ class UserAPI {
      */
     public function accountLink($access_token, $candidate_token, $fields = '*') {
         $data = array('candidateToken' => $candidate_token);
-        return $this->apiClientHandler("socialIdentity", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'put', 'post_data' => json_encode($data), 'content_type' => 'json'));
+        return $this->apiClientHandler("socialIdentity", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'PUT', 'post_data' => json_encode($data), 'content_type' => 'json'));
     }
 
     /**
@@ -358,7 +358,7 @@ class UserAPI {
      */
     public function accountUnlink($access_token, $id, $provider, $fields = '*') {
         $data = array('Provider' => $provider, 'ProviderId' => $id);
-        return $this->apiClientHandler("socialIdentity", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'delete', 'post_data' => json_encode($data), 'content_type' => 'json'));
+        return $this->apiClientHandler("socialIdentity", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'DELETE', 'post_data' => json_encode($data), 'content_type' => 'json'));
     }
 
     /**
@@ -391,7 +391,7 @@ class UserAPI {
      * @return {"isPosted": "true"}
      */
     public function registerByPhone($userprofile, $sott, $verification_url = '', $sms_template = '', $fields = '*') {
-        return $this->apiClientHandler("register", array('verificationurl' => $verification_url, 'smstemplate' => $sms_template, 'fields' => $fields), array('method' => 'post', 'post_data' => $userprofile, 'content_type' => 'json', 'X-LoginRadius-Sott' => $sott));
+        return $this->apiClientHandler("register", array('verificationurl' => $verification_url, 'smstemplate' => $sms_template, 'fields' => $fields), array('method' => 'POST', 'post_data' => $userprofile, 'content_type' => 'json', 'X-LoginRadius-Sott' => $sott));
     }
 
     /**
@@ -402,7 +402,7 @@ class UserAPI {
      * @return type
      */
     public function updatePhone($access_token, $phone, $sms_template = '', $fields = '*') {
-        return $this->apiClientHandler("phone", array('access_token' => $access_token, 'smsTemplate' => $sms_template, 'fields' => $fields), array('method' => 'put', 'post_data' => json_encode(array('phone' => $phone)), 'content_type' => 'json'));
+        return $this->apiClientHandler("phone", array('access_token' => $access_token, 'smsTemplate' => $sms_template, 'fields' => $fields), array('method' => 'PUT', 'post_data' => json_encode(array('phone' => $phone)), 'content_type' => 'json'));
     }
 
     /**
@@ -413,7 +413,7 @@ class UserAPI {
      * @return type
      */
     public function resendOTP($phone, $sms_template = '', $fields = '*') {
-        return $this->apiClientHandler("phone/otp", array('smsTemplate' => $sms_template, 'fields' => $fields), array('method' => 'post', 'post_data' => json_encode(array('phone' => $phone)), 'content_type' => 'json'));
+        return $this->apiClientHandler("phone/otp", array('smsTemplate' => $sms_template, 'fields' => $fields), array('method' => 'POST', 'post_data' => json_encode(array('phone' => $phone)), 'content_type' => 'json'));
     }
 
     /**
@@ -425,7 +425,7 @@ class UserAPI {
      * @return type
      */
     public function resendOTPByToken($access_token, $phone, $sms_template = '', $fields = '*') {
-        return $this->apiClientHandler("phone/otp", array('access_token' => $access_token, 'smsTemplate' => $sms_template, 'fields' => $fields), array('method' => 'post', 'post_data' => json_encode(array('phone' => $phone)), 'content_type' => 'json'));
+        return $this->apiClientHandler("phone/otp", array('access_token' => $access_token, 'smsTemplate' => $sms_template, 'fields' => $fields), array('method' => 'POST', 'post_data' => json_encode(array('phone' => $phone)), 'content_type' => 'json'));
     }
 
     /**
@@ -435,7 +435,7 @@ class UserAPI {
      * @return type
      */
     public function verifyOTP($otp, $phone, $sms_template = '', $fields = '*') {
-        return $this->apiClientHandler("phone/otp", array('Otp' => $otp, 'smsTemplate' => $sms_template, 'fields' => $fields), array('method' => 'put', 'post_data' => json_encode(array('phone' => $phone)), 'content_type' => 'json'));
+        return $this->apiClientHandler("phone/otp", array('Otp' => $otp, 'smsTemplate' => $sms_template, 'fields' => $fields), array('method' => 'PUT', 'post_data' => json_encode(array('phone' => $phone)), 'content_type' => 'json'));
     }
 
     /**
@@ -446,7 +446,7 @@ class UserAPI {
      * @return type
      */
     public function verifyOTPByToken($access_token, $otp, $fields = '*') {
-        return $this->apiClientHandler("phone/otp", array('access_token' => $access_token, 'Otp' => $otp, 'smsTemplate' => $sms_template, 'fields' => $fields), array('method' => 'put', 'post_data' => json_encode(array('phone' => '')), 'content_type' => 'json'));
+        return $this->apiClientHandler("phone/otp", array('access_token' => $access_token, 'Otp' => $otp, 'smsTemplate' => $sms_template, 'fields' => $fields), array('method' => 'PUT', 'post_data' => json_encode(array('phone' => '')), 'content_type' => 'json'));
     }
 
     /**
@@ -560,7 +560,7 @@ class UserAPI {
      * @return type
      */
     public function twoFAUpdatePhoneNoByOtp($second_factor_auth_token, $data, $sms_template2FA = '', $fields = '*') {
-        return $this->apiClientHandler("login/2fa", array('SecondFactorAuthenticationToken' => $second_factor_auth_token, 'smsTemplate2FA' => $sms_template2FA, 'fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("login/2fa", array('SecondFactorAuthenticationToken' => $second_factor_auth_token, 'smsTemplate2FA' => $sms_template2FA, 'fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -572,7 +572,7 @@ class UserAPI {
      * @return type
      */
     public function twoFAUpdatePhoneNoByToken($access_token, $data, $sms_template = '', $fields = '*') {
-        return $this->apiClientHandler("account/2fa", array('access_token' => $access_token, 'smsTemplate' => $sms_template, 'fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("account/2fa", array('access_token' => $access_token, 'smsTemplate' => $sms_template, 'fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -584,7 +584,7 @@ class UserAPI {
     public function removeOrResetGoogleAuthenticatorByToken($access_token, $otpauthenticator = false, $googleauthenticator = false, $fields = '*') {
 
         $data = array('otpauthenticator' => $otpauthenticator, 'googleauthenticator' => $googleauthenticator);
-        return $this->apiClientHandler("account/2fa/authenticator", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'delete', 'post_data' => json_encode($data), 'content_type' => 'json'));
+        return $this->apiClientHandler("account/2fa/authenticator", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'DELETE', 'post_data' => json_encode($data), 'content_type' => 'json'));
     }
 
     /**
@@ -750,7 +750,7 @@ class UserAPI {
      * @return type json object
      */
     public function simplifiedInstantRegistrationOTPVerification($otp, $data, $sms_template = '', $fields = '*') {
-        return $this->apiClientHandler("noregistration/phone/verify", array('otp' => $otp, 'smstemplate' => $sms_template, 'fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("noregistration/phone/verify", array('otp' => $otp, 'smstemplate' => $sms_template, 'fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -760,7 +760,7 @@ class UserAPI {
      * @return type json object
      */
     public function validateRegistrationDataCode($data, $fields = '*') {
-        return $this->apiClientHandler("registrationdata/validatecode", array('fields' => $fields), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("registrationdata/validatecode", array('fields' => $fields), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -835,7 +835,7 @@ class UserAPI {
      * @return type json object
      */
     public function authResetPasswordBySecurityQuestion($data, $fields = '*') {
-        return $this->apiClientHandler("password/securityanswer", array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("password/securityanswer", array('fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
     }
     
     /**
@@ -854,7 +854,7 @@ class UserAPI {
      */    
     
     public function authResetPasswordBySecurityAnswerAndEmail($data, $fields = '*') {
-        return $this->apiClientHandler("password/securityanswer", array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("password/securityanswer", array('fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
     }
     
     /**
@@ -873,7 +873,7 @@ class UserAPI {
      */    
     
     public function authResetPasswordBySecurityAnswerAndPhone($data, $fields = '*') {
-        return $this->apiClientHandler("password/securityanswer", array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("password/securityanswer", array('fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
     }
     
     /**
@@ -892,7 +892,7 @@ class UserAPI {
      */    
     
     public function authResetPasswordBySecurityAnswerAndUserName($data, $fields = '*') {
-        return $this->apiClientHandler("password/securityanswer", array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("password/securityanswer", array('fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -907,7 +907,7 @@ class UserAPI {
      * @return type json object
      */
     public function updateSecurityQuestionByAccessToken($access_token, $data, $fields = '*') {
-        return $this->apiClientHandler("account", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("account", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**

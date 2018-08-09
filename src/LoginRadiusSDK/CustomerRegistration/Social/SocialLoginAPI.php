@@ -447,7 +447,7 @@ class SocialLoginAPI
             'description' => $description,
             'fields' => $fields
         );
-        return $this->apiClientHandler("status", false, $data, array('method' => 'post', 'post_data' => true));
+        return $this->apiClientHandler("status", false, $data, array('method' => 'POST', 'post_data' => true));
     }
 
     /**
@@ -477,7 +477,7 @@ class SocialLoginAPI
             'message' => $message,
             'fields' => $fields
         );
-        return $this->apiClientHandler("message", false, $data, array('method' => 'post', 'post_data' => true));
+        return $this->apiClientHandler("message", false, $data, array('method' => 'POST', 'post_data' => true));
     }
     
     /**

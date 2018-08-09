@@ -41,7 +41,7 @@ class CustomObjectAPI
      */
     public function insert($uid, $object_name, $data, $fields = '*')
     {
-        return $this->apiClientHandler($uid . '/customObject/', array('ObjectName' => $object_name, 'fields' => $fields), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler($uid . '/customObject/', array('ObjectName' => $object_name, 'fields' => $fields), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -71,7 +71,7 @@ class CustomObjectAPI
      */
     public function updateObjectByRecordID($uid, $object_name, $object_record_id, $update_type, $data, $fields = '*')
     {
-        return $this->apiClientHandler($uid . '/customObject/' . $object_record_id, array('ObjectName' => $object_name, 'updatetype'=> $update_type, 'fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler($uid . '/customObject/' . $object_record_id, array('ObjectName' => $object_name, 'updatetype'=> $update_type, 'fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -97,7 +97,7 @@ class CustomObjectAPI
      */
     public function delete($uid, $object_name, $object_record_id, $fields = '*')
     {
-        return $this->apiClientHandler($uid . '/customObject/' . $object_record_id, array('ObjectName' => $object_name, 'fields' => $fields), array('method' => 'delete', 'post_data' => true));
+        return $this->apiClientHandler($uid . '/customObject/' . $object_record_id, array('ObjectName' => $object_name, 'fields' => $fields), array('method' => 'DELETE', 'post_data' => true));
     }
 
     /**

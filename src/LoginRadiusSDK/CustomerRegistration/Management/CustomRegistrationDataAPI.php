@@ -48,7 +48,7 @@ class CustomRegistrationDataAPI {
      * }
      */
     public function addRegistrationData($data, $fields = '*') {
-        return $this->apiClientHandler("registrationdata", array('fields' => $fields), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("registrationdata", array('fields' => $fields), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -79,7 +79,7 @@ class CustomRegistrationDataAPI {
      * return type
      */
     public function updateRegistrationData($recordid, $data, $fields = '*') {
-        return $this->apiClientHandler("registrationdata/" . $recordid, array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("registrationdata/" . $recordid, array('fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -89,7 +89,7 @@ class CustomRegistrationDataAPI {
      * return {"IsDeleted": "true"}
      */
     public function deleteRegistrationData($recordid, $fields = '*') {
-        return $this->apiClientHandler('registrationdata/' . $recordid, array('fields' => $fields), array('method' => 'delete', 'post_data' => true));
+        return $this->apiClientHandler('registrationdata/' . $recordid, array('fields' => $fields), array('method' => 'DELETE', 'post_data' => true));
     }
 
     /**

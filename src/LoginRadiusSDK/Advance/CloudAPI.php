@@ -51,12 +51,6 @@ class CloudAPI
         $options = array('authentication' => 'key');
         $url = LR_CLOUD_ENDPOINT . "/ciam/appInfo";
         return Functions::apiClient($url, '', $options);
-    }
-    
-    private function apiClientHandler($path, $query_array = array(), $customize_options = array()) {
-        $options = array_merge(array('authentication' => 'secret'), $customize_options);
-        $url = LR_CLD_STORAGE_ENDPOINT;
-        return Functions::apiClient($url.$path, $query_array, $options);
-    }
+    }  
     
 }

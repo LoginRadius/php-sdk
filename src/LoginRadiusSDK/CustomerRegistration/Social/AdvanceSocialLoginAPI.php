@@ -188,7 +188,7 @@ class AdvanceSocialLoginAPI
             'caption' => $caption,
             'description' => $description
         );
-        return $this->apiClientHandler("status/trackable", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'post', 'post_data' => json_encode($data), 'content_type' => 'json'));
+        return $this->apiClientHandler("status/trackable", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'POST', 'post_data' => json_encode($data), 'content_type' => 'json'));
   
     }
 

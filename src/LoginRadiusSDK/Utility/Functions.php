@@ -4,7 +4,7 @@
  * @category : Utility
  * @package : Functions
  * @author : LoginRadius Team
- * @version : 4.5.2
+ * @version : 4.5.3
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -26,7 +26,7 @@ define('LR_CLOUD_ENDPOINT', 'https://config.lrcontent.com');
 class Functions
 {
 
-    const version = '4.5.2';
+    const version = '4.5.3';
 
     private static $apikey;
     private static $apisecret;
@@ -153,7 +153,6 @@ class Functions
      */
     public static function apiClient($path, $query_array = array(), $options = array())
     {
-
         global $apiClient_class;
         $merge_options = array_merge($options, self::$options);
         if (isset($apiClient_class) && class_exists($apiClient_class)) {

@@ -215,7 +215,7 @@ class AccountAPI {
      * }
      */
     public function create($data, $fields = '*') {
-        return $this->apiClientHandler("", array('fields' => $fields), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("", array('fields' => $fields), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -407,7 +407,7 @@ class AccountAPI {
      * return {"isPosted": true}
      */
     public function update($uid, $data, $is_null_support = 'false', $fields = '*') {
-        return $this->apiClientHandler('/' . $uid, array('nullsupport' => $is_null_support, 'fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler('/' . $uid, array('nullsupport' => $is_null_support, 'fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -418,7 +418,7 @@ class AccountAPI {
      * return {"IsDeleted": "true"}
      */
     public function delete($uid, $fields = '*') {
-        return $this->apiClientHandler('/' . $uid, array('fields' => $fields), array('method' => 'delete', 'post_data' => true));
+        return $this->apiClientHandler('/' . $uid, array('fields' => $fields), array('method' => 'DELETE', 'post_data' => true));
     }
 
     /**
@@ -431,7 +431,7 @@ class AccountAPI {
      */
     public function setPassword($uid, $password, $fields = '*') {
         $data = array('password' => $password);
-        return $this->apiClientHandler("/" . $uid . "/password", array('fields' => $fields), array('method' => 'put', 'post_data' => json_encode($data), 'content_type' => 'json'));
+        return $this->apiClientHandler("/" . $uid . "/password", array('fields' => $fields), array('method' => 'PUT', 'post_data' => json_encode($data), 'content_type' => 'json'));
     }
 
     /**
@@ -510,7 +510,7 @@ class AccountAPI {
      */
     
     public function invalidateEmail($uid, $data, $fields = '*') {
-        return $this->apiClientHandler("/" . $uid . '/invalidateemail', array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("/" . $uid . '/invalidateemail', array('fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
     }
      
     /**
@@ -534,7 +534,7 @@ class AccountAPI {
     
     public function getEmailVerificationToken($email, $fields = '*') {
         $data = json_encode(['Email' => $email]);        
-        return $this->apiClientHandler('/verify/token', array('fields' => $fields), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler('/verify/token', array('fields' => $fields), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
     }
     
     /**
@@ -547,7 +547,7 @@ class AccountAPI {
     
     public function getForgotPasswordToken($email, $fields = '*') {
         $data = json_encode(['Email' => $email]);  
-        return $this->apiClientHandler('/forgot/token', array('fields' => $fields), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler('/forgot/token', array('fields' => $fields), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -561,7 +561,7 @@ class AccountAPI {
     
     public function removeEmailByUidAndEmail($uid, $email, $fields = '*') {
         $data = json_encode(['Email' => $email]);  
-        return $this->apiClientHandler('/' . $uid . '/email', array('fields' => $fields), array('method' => 'delete', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler('/' . $uid . '/email', array('fields' => $fields), array('method' => 'DELETE', 'post_data' => $data, 'content_type' => 'json'));
     }
     
     /**
@@ -581,7 +581,7 @@ class AccountAPI {
      */
     
     public function updateOrInsertEmailByUid($uid, $data, $fields = '*') {        
-        return $this->apiClientHandler('/' . $uid . '/email', array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler('/' . $uid . '/email', array('fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -592,7 +592,7 @@ class AccountAPI {
      */
     public function removeOrResetGoogleAuthenticator($uid, $otpauthenticator, $googleauthenticator, $fields = '*') {
         $data = array('otpauthenticator' => $otpauthenticator, 'googleauthenticator' => $googleauthenticator);
-        return $this->apiClientHandler("/2FA/authenticator", array('uid' => $uid, 'fields' => $fields), array('method' => 'delete', 'post_data' => json_encode($data), 'content_type' => 'json'));
+        return $this->apiClientHandler("/2FA/authenticator", array('uid' => $uid, 'fields' => $fields), array('method' => 'DELETE', 'post_data' => json_encode($data), 'content_type' => 'json'));
     }
 
     /**
@@ -623,7 +623,7 @@ class AccountAPI {
      * @return 
      */
     public function resetPhoneIdVerification($uid, $data, $fields = '*') {
-        return $this->apiClientHandler('/' . $uid . '/invalidatephone', array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler('/' . $uid . '/invalidatephone', array('fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -662,7 +662,7 @@ class AccountAPI {
      * @return 
      */
     public function updateSecurityQuestionByUid($uid, $data, $fields = '*') {
-        return $this->apiClientHandler("/" . $uid, array('fields' => $fields), array('method' => 'put', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("/" . $uid, array('fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
     }
    
     /**

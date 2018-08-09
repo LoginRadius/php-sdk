@@ -49,7 +49,7 @@ class WebHooksAPI
      */
     public function subscribeWebHooks($target_url, $event = 'Login')
     {
-        return $this->apiClientHandler('webhook', array('apikey' => Functions::getApiKey(), 'apisecret' => Functions::getApiSecret()), array('method' => 'post', 'post_data' => json_encode(array('TargetUrl' => $target_url, 'Event' => $event)), 'content_type' => 'json'));
+        return $this->apiClientHandler('webhook', array('apikey' => Functions::getApiKey(), 'apisecret' => Functions::getApiSecret()), array('method' => 'POST', 'post_data' => json_encode(array('TargetUrl' => $target_url, 'Event' => $event)), 'content_type' => 'json'));
     }
     
 
@@ -73,7 +73,7 @@ class WebHooksAPI
      */
     public function unsubscribeWebHooks($target_url, $event = 'Login')
     {
-        return $this->apiClientHandler('webhook', array('apikey' => Functions::getApiKey(), 'apisecret' => Functions::getApiSecret()), array('method' => 'delete', 'post_data' => json_encode(array('TargetUrl' => $target_url, 'Event' => $event)), 'content_type' => 'json'));
+        return $this->apiClientHandler('webhook', array('apikey' => Functions::getApiKey(), 'apisecret' => Functions::getApiSecret()), array('method' => 'DELETE', 'post_data' => json_encode(array('TargetUrl' => $target_url, 'Event' => $event)), 'content_type' => 'json'));
     }
 
     /**
