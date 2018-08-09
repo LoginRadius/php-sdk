@@ -59,7 +59,7 @@ class UserAPI
      */
     public function create($data = array())
     {
-        return $this->apiClientHandler('', array(), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler('', array(), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -92,7 +92,7 @@ class UserAPI
      */
     public function registration($data = array())
     {
-        return $this->apiClientHandler("register", array(), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("register", array(), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -112,7 +112,7 @@ class UserAPI
      */
     public function edit($user_id, $data)
     {
-        return $this->apiClientHandler('', array('userid' => $user_id), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler('', array('userid' => $user_id), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
     }
 
 

@@ -273,7 +273,7 @@ class CustomObjectAPI
      */
     public function upsert($object_id, $account_id, $data)
     {
-        return $this->apiClientHandler("upsert", array('objectid' => $object_id, 'accountid' => $account_id), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("upsert", array('objectid' => $object_id, 'accountid' => $account_id), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -287,7 +287,7 @@ class CustomObjectAPI
      */
     public function setStatus($object_id, $account_id, $action = true)
     {
-        return $this->apiClientHandler("status", array('objectid' => $object_id, 'accountid' => $account_id), array('method' => 'post', 'post_data' => array('isblock' => $action), 'content_type' => 'json'));
+        return $this->apiClientHandler("status", array('objectid' => $object_id, 'accountid' => $account_id), array('method' => 'POST', 'post_data' => array('isblock' => $action), 'content_type' => 'json'));
     }
 
     /**

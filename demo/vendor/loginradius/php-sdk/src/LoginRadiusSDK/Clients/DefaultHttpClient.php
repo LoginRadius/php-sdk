@@ -5,7 +5,7 @@
  * @category : LoginRadiusSDK
  * @package : LoginRadius
  * @author : LoginRadius Team
- * @version : 3.0.0
+ * @version : 3.0.1
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -68,7 +68,7 @@ class DefaultHttpClient implements IHttpClient
     private function curlApiMethod($request_url, $options = array())
     {
         $ssl_verify = isset($options['ssl_verify']) ? $options['ssl_verify'] : false;
-        $method = isset($options['method']) ? strtolower($options['method']) : 'get';
+        $method = isset($options['method']) ? strtoupper($options['method']) : 'GET';
         $data = isset($options['post_data']) ? $options['post_data'] : array();
         $content_type = isset($options['content_type']) ? trim($options['content_type']) : 'x-www-form-urlencoded';
         $curl_handle = curl_init();
@@ -79,7 +79,7 @@ class DefaultHttpClient implements IHttpClient
 
         if (!empty($data) || $data === true) {
             curl_setopt($curl_handle, CURLOPT_HTTPHEADER, array('Content-type: application/' . $content_type));
-            if ($method == 'post') {
+            if ($method == 'POST') {
                 curl_setopt($curl_handle, CURLOPT_POST, 1);
                 curl_setopt($curl_handle, CURLOPT_POSTFIELDS, (($content_type == 'json') ? json_encode($data) : LoginRadius::queryBuild($data)));
             }
@@ -113,14 +113,14 @@ class DefaultHttpClient implements IHttpClient
     private function fsockopenApiMethod($request_url, $options = array())
     {
         $ssl_verify = isset($options['ssl_verify']) ? $options['ssl_verify'] : false;
-        $method = isset($options['method']) ? strtolower($options['method']) : 'get';
+        $method = isset($options['method']) ? strtoupper($options['method']) : 'GET';
         $data = isset($options['post_data']) ? $options['post_data'] : array();
         $content_type = isset($options['content_type']) ? $options['content_type'] : 'form_params';
 
         if (!empty($data)) {
             $options = array('http' =>
                 array(
-                    'method' => strtoupper($method),
+                    'method' => $method,
                     'timeout' => 50,
                     'header' => 'Content-type :application/' . $content_type,
                     'content' => (($content_type == 'json') ? json_encode($data) : LoginRadius::queryBuild($data))

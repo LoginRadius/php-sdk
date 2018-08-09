@@ -44,7 +44,7 @@ class AccountAPI
     public function accountLink($uid, $id, $provider)
     {
         $data = array('accountid' => $uid, 'provider' => $provider, 'providerid' => $id);
-        return $this->apiClientHandler("link", array(), array('method' => 'post', 'post_data' => $data));
+        return $this->apiClientHandler("link", array(), array('method' => 'POST', 'post_data' => $data));
     }
 
     /**
@@ -59,7 +59,7 @@ class AccountAPI
     public function accountUnlink($uid, $id, $provider)
     {
         $data = array('accountid' => $uid, 'provider' => $provider, 'providerid' => $id);
-        return $this->apiClientHandler("unlink", array(), array('method' => 'post', 'post_data' => $data));
+        return $this->apiClientHandler("unlink", array(), array('method' => 'POST', 'post_data' => $data));
     }
 
     /**
@@ -75,7 +75,7 @@ class AccountAPI
      */
     public function createUserRegistrationProfile($data)
     {
-        return $this->apiClientHandler("profile", array(), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("profile", array(), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -105,7 +105,7 @@ class AccountAPI
      */
     public function userAdditionalEmail($uid, $action, $data)
     {
-        return $this->apiClientHandler("email", array('accountid' => $uid, 'action' => $action), array('method' => 'post', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("email", array('accountid' => $uid, 'action' => $action), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
     }
 
     /**
@@ -144,7 +144,7 @@ class AccountAPI
     public function changeAccountPassword($uid, $old_password, $new_password)
     {
         $data = array('oldpassword' => $old_password, 'newpassword' => $new_password);
-        return $this->apiClientHandler("password", array('accountid' => $uid), array('method' => 'post', 'post_data' => $data));
+        return $this->apiClientHandler("password", array('accountid' => $uid), array('method' => 'POST', 'post_data' => $data));
     }
 
     /**
@@ -170,7 +170,7 @@ class AccountAPI
     public function setPassword($uid, $password)
     {
         $parameter = array('accountid' => $uid, 'action' => 'set');
-        return $this->apiClientHandler("password", $parameter, array('method' => 'post', 'post_data' => array('password' => $password)));
+        return $this->apiClientHandler("password", $parameter, array('method' => 'POST', 'post_data' => array('password' => $password)));
     }
 
     /**
@@ -185,7 +185,7 @@ class AccountAPI
     public function changeUsername($uid, $username, $new_username)
     {
         $data = array('currentusername' => $username, 'newusername' => $new_username);
-        return $this->apiClientHandler("changeusername", array('accountid' => $uid), array('method' => 'post', 'post_data' => $data));
+        return $this->apiClientHandler("changeusername", array('accountid' => $uid), array('method' => 'POST', 'post_data' => $data));
     }
 
     /**
@@ -208,7 +208,7 @@ class AccountAPI
      */
     public function setUsername($uid, $newusername)
     {
-        return $this->apiClientHandler("setusername", array('accountId' => $uid), array('method' => 'post', 'post_data' => array('newusername' => $newusername)));
+        return $this->apiClientHandler("setusername", array('accountId' => $uid), array('method' => 'POST', 'post_data' => array('newusername' => $newusername)));
     }
 
     /**
@@ -235,7 +235,7 @@ class AccountAPI
      */
     public function setStatus($uid, $action = true)
     {
-        return $this->apiClientHandler("status", array('accountid' => $uid), array('method' => 'post', 'post_data' => array('isblock' => $action)));
+        return $this->apiClientHandler("status", array('accountid' => $uid), array('method' => 'POST', 'post_data' => array('isblock' => $action)));
     }
 
     /**

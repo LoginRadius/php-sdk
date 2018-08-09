@@ -5,7 +5,7 @@
  * @category : LoginRadiusSDK
  * @package : LoginRadius
  * @author : LoginRadius Team
- * @version : 3.0.0
+ * @version : 3.0.1
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -25,7 +25,7 @@ define('LR_CDN_ENDPOINT', 'https://cdn.loginradius.com');
 class LoginRadius
 {
 
-    const version = '3.0.0';
+    const version = '3.0.1';
 
     private static $apikey;
     private static $apisecret;
