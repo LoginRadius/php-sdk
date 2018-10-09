@@ -68,7 +68,7 @@ class DefaultHttpClient implements IHttpClient {
         if (!empty($response)) {
             $result = json_decode($response);
             if (isset($result->ErrorCode) && !empty($result->ErrorCode)) {
-                throw new LoginRadiusException($result->Message, $result);
+                throw new LoginRadiusException($result->Message, (array)$result);
             }
         }
         return $response;
