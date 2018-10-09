@@ -1,10 +1,11 @@
 <?php
+
 /**
  * @link : http://www.loginradius.com
  * @category : Utility
  * @package : Functions
  * @author : LoginRadius Team
- * @version : 4.5.3
+ * @version : 5.0.0
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -14,19 +15,21 @@ use LoginRadiusSDK\Clients\IHttpClient;
 use LoginRadiusSDK\Clients\DefaultHttpClient;
 use LoginRadiusSDK\LoginRadiusException;
 
-define('API_DOMAIN', 'https://api.loginradius.com');
-define('LR_CDN_ENDPOINT', 'https://cdn.loginradius.com');
-define('LR_CLOUD_ENDPOINT', 'https://config.lrcontent.com');
+if (!defined('API_DOMAIN')) {
+    define('API_DOMAIN', 'https://api.loginradius.com');
+}
+if (!defined('API_CONFIG_DOMAIN')) {
+    define('API_CONFIG_DOMAIN', 'https://config.lrcontent.com');
+}
 
 /**
  * Class For LoginRadius
  * This is the Loginradius class to handle response of LoginRadius APIs.
  *
  */
-class Functions
-{
+class Functions {
 
-    const version = '4.5.3';
+    const version = '5.0.0';
 
     private static $apikey;
     private static $apisecret;
@@ -39,12 +42,12 @@ class Functions
      * @param string $apisecret
      * @param array $customize_options
      */
-    public function __construct($apikey = '', $apisecret = '', $customize_options = array())
-    {
+    public function __construct($apikey = '', $apisecret = '', $customize_options = array()) {
+
         if (!empty($apikey) && !empty($apisecret)) {
             self::setDefaultApplication($apikey, $apisecret);
-        } elseif (empty($apikey) || empty($apisecret)) {            
-            if (empty(self::$apikey) || empty(self::$apisecret)) {                
+        } elseif (empty($apikey) || empty($apisecret)) {
+            if (empty(self::$apikey) || empty(self::$apisecret)) {
                 if (defined('LR_API_KEY') && defined('LR_API_SECRET')) {
                     self::setDefaultApplication(LR_API_KEY, LR_API_SECRET);
                 } else {
@@ -52,7 +55,7 @@ class Functions
                 }
             }
         }
-        self::$options = array_merge(self::$options, $customize_options);       
+        self::$options = array_merge(self::$options, $customize_options);
     }
 
     /**
@@ -61,8 +64,7 @@ class Functions
      * @param type $apikey
      * @param type $apisecret
      */
-    public static function setDefaultApplication($apikey, $apisecret)
-    {
+    public static function setDefaultApplication($apikey, $apisecret) {
         self::checkAPIValidation($apikey, $apisecret);
         self::$apikey = $apikey;
         self::$apisecret = $apisecret;
@@ -75,8 +77,7 @@ class Functions
      * @param type $apisecret
      * @throws LoginRadiusException
      */
-    private static function checkAPIValidation($apikey, $apisecret)
-    {
+    private static function checkAPIValidation($apikey, $apisecret) {
         if (empty($apikey) || !self::isValidGuid($apikey)) {
             throw new LoginRadiusException('Required "LoginRadius" API key in valid guid format.');
         }
@@ -90,8 +91,7 @@ class Functions
      *
      * @return string
      */
-    public static function getApiKey()
-    {
+    public static function getApiKey() {
         if (empty(self::$apikey) && defined('LR_API_KEY')) {
             self::$apikey = LR_API_KEY;
         }
@@ -103,8 +103,7 @@ class Functions
      *
      * @return string
      */
-    public static function getCustomizeOptions()
-    {
+    public static function getCustomizeOptions() {
         return self::$options;
     }
 
@@ -113,9 +112,8 @@ class Functions
      *
      * @return string
      */
-    public static function setCustomizeOptions($customize_options = array())
-    {
-        self::$options = $customize_options;
+    public static function setCustomizeOptions($options = array()) {
+        self::$options = $options;
     }
 
     /**
@@ -123,8 +121,7 @@ class Functions
      *
      * @return string
      */
-    public static function getApiSecret()
-    {
+    public static function getApiSecret() {
         if (empty(self::$apisecret) && defined('LR_API_SECRET')) {
             self::$apisecret = LR_API_SECRET;
         }
@@ -137,8 +134,7 @@ class Functions
      * @param type $value
      * @return type
      */
-    public static function isValidGuid($value)
-    {
+    public static function isValidGuid($value) {
         return preg_match('/^\{?[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}\}?$/i', $value);
     }
 
@@ -151,8 +147,7 @@ class Functions
      * @param type $options
      * @return type
      */
-    public static function apiClient($path, $query_array = array(), $options = array())
-    {
+    public static function apiClient($path, $query_array = array(), $options = array()) {
         global $apiClient_class;
         $merge_options = array_merge($options, self::$options);
         if (isset($apiClient_class) && class_exists($apiClient_class)) {
@@ -160,10 +155,8 @@ class Functions
         } else {
             $client = new DefaultHttpClient();
         }
-
         $output_format = isset($merge_options['output_format']) && $merge_options['output_format'] == 'json' ? true : false;
         $response = $client->request($path, $query_array, $merge_options);
-
         return $output_format && (is_object(json_decode($response)) || is_array(json_decode($response))) ? json_decode($response) : $response;
     }
 
@@ -173,26 +166,43 @@ class Functions
      * @param type $array
      * @return type
      */
-    public static function authentication($array = array(), $secure = 'key')
-    {
+    public static function authentication($array = array(), $secure = 'key', $request_url = '') {
         $result = array();
         if ($secure == 'key') {
-            
             $result = array('apikey' => Functions::getApiKey());
         } else if ($secure == 'secret') {
+            $result = array('X-LoginRadius-ApiSecret' => Functions::getApiSecret());
+        } else if ($secure == 'hashsecret') {
+            $expiry_time = gmdate("Y-m-d H:i:s", strtotime('1 hour'));
+            $encoded_url = self::urlReplacement(urlencode(urldecode($request_url)));
 
-            $result = array('apikey' => Functions::getApiKey(), 'apisecret' => Functions::getApiSecret());
-       
-        } else if ($secure == 'headsecure') {
-
-            $result = array('X-LoginRadius-ApiKey' => Functions::getApiKey(), 'X-LoginRadius-ApiSecret' => Functions::getApiSecret());
+            if (isset($array['method']) && (($array['method'] == 'POST') || ($array['method'] == 'PUT') || ($array['method'] == 'DELETE')) && $array['post_data'] !== true) {
+                $post_data = $array['post_data'];              
+                if ((is_array($array['post_data']) || is_object($array['post_data']))) {
+                   $post_data = json_encode($array['post_data']);
+                }              
+                $string_to_hash = $expiry_time . ':' . strtolower($encoded_url) . ':' . $post_data;
+            } else {
+                $string_to_hash = $expiry_time . ':' . strtolower($encoded_url);
+            }
+            $sha_hash = hash_hmac('sha256', $string_to_hash, Functions::getApiSecret(), true);
+            $result = array('X-Request-Expires' => $expiry_time, 'digest' => "SHA-256=" . base64_encode($sha_hash));
         }
 
-        if (is_array($array) && sizeof($array) > 0) {
-            $result = array_merge($result, $array);
-        }
+        return (is_array($array) && sizeof($array) > 0) ? array_merge($result, $array) : $result;
+    }
+    
+    
+    /**
+     * Url replacement
+     *
+     * @param type $decoded_url
+     * @return type
+     */
 
-        return $result;
+    public function urlReplacement($decoded_url) {
+        $replacementArray = array('%2A' => '*','%28' => '(','%29' => ')');
+        return str_replace(array_keys($replacementArray), array_values($replacementArray), $decoded_url);
     }
 
     /**
@@ -201,13 +211,10 @@ class Functions
      * @param type $data
      * @return type
      */
-    public static function queryBuild($data = array())
-    {	
+    public static function queryBuild($data = array()) {
         if (is_array($data) && sizeof($data) > 0) {
             return http_build_query($data);
-        } else {
-            return '';
         }
+        return '';
     }
-
 }

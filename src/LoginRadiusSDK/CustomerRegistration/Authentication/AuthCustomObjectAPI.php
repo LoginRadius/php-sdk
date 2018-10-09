@@ -11,12 +11,11 @@
 namespace LoginRadiusSDK\CustomerRegistration\Authentication;
 
 use LoginRadiusSDK\Utility\Functions;
-use LoginRadiusSDK\Utility\SOTT;
 
 /**
  * CustomObjectAPI
  *
- * This is the main class to communicate with LoginRadius Customer Registration Authentication API.
+ * This is the main class to communicate with LoginRadius Auth Custom object API.
  */
 class AuthCustomObjectAPI
 {
@@ -25,11 +24,11 @@ class AuthCustomObjectAPI
      *
      * @param type $apikey
      * @param type $apisecret
-     * @param type $customize_options
+     * @param type $options
      */
-    public function __construct($apikey = '', $apisecret = '', $customize_options = array())
+    public function __construct($apikey = '', $apisecret = '', $options = array())
     {
-        new Functions($apikey, $apisecret, $customize_options);
+        new Functions($apikey, $apisecret, $options);
     }
     
     /**
@@ -40,7 +39,7 @@ class AuthCustomObjectAPI
      */
     public function createCustomObject($access_token, $objectname, $data, $fields = '*')
     {
-        return $this->apiClientHandler("CustomObject", array('access_token' => $access_token,'ObjectName' => $objectname, 'fields' => $fields), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("CustomObject", array('ObjectName' => $objectname, 'fields' => $fields), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json', 'access-token' => "Bearer ".$access_token));
     }
 
     /**
@@ -55,7 +54,7 @@ class AuthCustomObjectAPI
      */
     public function updateCustomObjectData($access_token, $object_name, $object_record_id, $update_type, $data, $fields = '*')
     {
-        return $this->apiClientHandler("CustomObject/" . $object_record_id, array('access_token' => $access_token,'ObjectName' => $object_name,'updatetype' => $update_type, 'fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json'));
+        return $this->apiClientHandler("CustomObject/" . $object_record_id, array('ObjectName' => $object_name, 'updatetype' => $update_type, 'fields' => $fields), array('method' => 'PUT', 'post_data' => $data, 'content_type' => 'json', 'access-token' => "Bearer ".$access_token));
     }
 
     /**
@@ -68,7 +67,7 @@ class AuthCustomObjectAPI
      */
     public function getCustomObjectSetsByToken($access_token, $object_name, $fields = '*')
     {
-        return $this->apiClientHandler("CustomObject", array('access_token' => $access_token, 'ObjectName' => $object_name, 'fields' => $fields));
+        return $this->apiClientHandler("CustomObject", array('ObjectName' => $object_name, 'fields' => $fields), array('access-token' => "Bearer ".$access_token));
     }
 
     /**
@@ -80,7 +79,7 @@ class AuthCustomObjectAPI
      */
     public function getCustomObjectSetByID($access_token, $object_name, $object_record_id, $fields = '*')
     {
-        return $this->apiClientHandler("CustomObject/" . $object_record_id, array('access_token' => $access_token, 'ObjectName' => $object_name, 'fields' => $fields));
+        return $this->apiClientHandler("CustomObject/" . $object_record_id, array('ObjectName' => $object_name, 'fields' => $fields), array('access-token' => "Bearer ".$access_token));
     }
 
     /**
@@ -91,7 +90,7 @@ class AuthCustomObjectAPI
      */
     public function deleteCustomObjectSet($access_token, $object_name, $object_record_id, $fields = '*')
     {
-        return $this->apiClientHandler("CustomObject/" . $object_record_id, array('access_token' => $access_token, 'ObjectName' => $object_name, 'fields' => $fields), array('method' => 'DELETE', 'post_data' => true));
+        return $this->apiClientHandler("CustomObject/" . $object_record_id, array('ObjectName' => $object_name, 'fields' => $fields), array('method' => 'DELETE', 'post_data' => true, 'access-token' => "Bearer ".$access_token));
     }
 
     /**
@@ -102,9 +101,8 @@ class AuthCustomObjectAPI
      * @param type $options
      * @return type
      */
-    private function apiClientHandler($path, $query_array = array(), $customize_options = array())
+    private function apiClientHandler($path, $query_array = array(), $options = array())
     {
-        $options = array_merge(array('authentication' => 'key'), $customize_options);
-        return Functions::apiClient("/identity/v2/auth/" . $path, $query_array, $options);
+        return Functions::apiClient("/identity/v2/auth/" . $path, $query_array, array_merge(array('authentication' => 'key'), $options));
     }
 }

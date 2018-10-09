@@ -25,28 +25,19 @@ class SocialLoginAPI
      *
      * @param type $apikey
      * @param type $apisecret
-     * @param type $customize_options
+     * @param type $options
      */
-    function __construct($apikey = '', $apisecret = '', $customize_options = array())
+    function __construct($apikey = '', $apisecret = '', $options = array())
     {
-        new Functions($apikey, $apisecret, $customize_options);
+        new Functions($apikey, $apisecret, $options);
     }
 
     /**
      *
      * LoginRadius function - Fetch LoginRadius access token after authentication. It will be valid for the specific duration of time specified in the response.
-     * @param string LoginRadius API Secret
-     * @param string LoginRadius API token
+     * @param string $request_token LoginRadius API token
      *
      * @return mixed string|object LoginRadius access token.
-     *
-     * try{
-     *   $accesstoken = $loginradiusObject->exchangeAccessToken($request_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function exchangeAccessToken($request_token, $fields = '*')
     {
@@ -60,14 +51,6 @@ class SocialLoginAPI
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User profile data.
-     *
-     * try{
-     *   $userProfileData = $loginradiusObject->getUserProfiledata($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function getUserProfiledata($access_token, $raw = false, $fields = '*')
     {
@@ -82,17 +65,9 @@ class SocialLoginAPI
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object custom fields of raas.
-     *
-     * try{
-     *   $customFields = $loginradiusObject->getUserCustomFields($apiKey, $secret, $raw = false);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
-    public function getUserCustomFields($apiKey, $secret, $raw = false, $fields = '*') {
-        return $this->apiClientHandler('userprofile/fields', $raw, array('apikey' => $apiKey, 'apisecret' => $secret, 'fields' => $fields));
+    public function getUserCustomFields($apikey, $secret, $raw = false, $fields = '*') {
+        return $this->apiClientHandler('userprofile/fields', $raw, array('apikey' => $apikey, 'apisecret' => $secret, 'fields' => $fields));
     }
 	
     /**
@@ -102,14 +77,6 @@ class SocialLoginAPI
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's albums data.
-     *
-     * try{
-     *   $photoAlbums = $loginradiusObject->getPhotoAlbums($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function getPhotoAlbums($access_token, $raw = false, $fields = '*')
     {
@@ -124,14 +91,6 @@ class SocialLoginAPI
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's photo data.
-     *
-     * try{
-     *   $photos = $loginradiusObject->getPhotos($access_token, $albumId);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function getPhotos($access_token, $album_id, $raw = false, $fields = '*')
     {
@@ -145,14 +104,6 @@ class SocialLoginAPI
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's check-ins.
-     *
-     * try{
-     *   $checkins = $loginradiusObject->getCheckins($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function getCheckins($access_token, $raw = false, $fields = '*')
     {
@@ -166,14 +117,6 @@ class SocialLoginAPI
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's audio files data.
-     *
-     * try{
-     *   $audio = $loginradiusObject->getAudio($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function getAudio($access_token, $raw = false, $fields = '*')
     {
@@ -188,14 +131,6 @@ class SocialLoginAPI
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's contacts/friends/followers.
-     *
-     * try{
-     *   $contacts = $loginradiusObject->getContacts($access_token, $nextCursor);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function getContacts($access_token, $next_cursor = '', $raw = false, $fields = '*')
     {
@@ -209,14 +144,6 @@ class SocialLoginAPI
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's twitter mentions.
-     *
-     * try{
-     *   $mentions = $loginradiusObject->getMentions($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function getMentions($access_token, $raw = false, $fields = '*')
     {
@@ -230,14 +157,6 @@ class SocialLoginAPI
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Information of the people, user is following.
-     *
-     * try{
-     *   $following = $loginradiusObject->getFollowing($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function getFollowing($access_token, $raw = false, $fields = '*')
     {
@@ -251,14 +170,6 @@ class SocialLoginAPI
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object User's event data.
-     *
-     * try{
-     *   $events = $loginradiusObject->getEvents($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function getEvents($access_token, $raw = false, $fields = '*')
     {
@@ -273,13 +184,6 @@ class SocialLoginAPI
      *
      * @return object User's posted messages.
      *
-     * try{
-     *   $posts = $loginradiusObject->getPosts($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function getPosts($access_token, $raw = false, $fields = '*')
     {
@@ -293,14 +197,6 @@ class SocialLoginAPI
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Companies followed by user.
-     *
-     * try{
-     *   $companies = $loginradiusObject->getFollowedCompanies($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function getFollowedCompanies($access_token, $raw = false, $fields = '*')
     {
@@ -314,14 +210,6 @@ class SocialLoginAPI
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Group data.
-     *
-     * try{
-     *   $groups = $loginradiusObject->getGroups($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function getGroups($access_token, $raw = false, $fields = '*')
     {
@@ -335,14 +223,6 @@ class SocialLoginAPI
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Status messages.
-     *
-     * try{
-     *   $status = $loginradiusObject->getStatus($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function getStatus($access_token, $raw = false, $fields = '*')
     {
@@ -356,14 +236,6 @@ class SocialLoginAPI
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Videos data.
-     *
-     * try{
-     *   $videos = $loginradiusObject->getVideos($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function getVideos($access_token, $raw = false, $fields = '*')
     {
@@ -377,14 +249,6 @@ class SocialLoginAPI
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object likes data.
-     *
-     * try{
-     *   $likes = $loginradiusObject->getLikes($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function getLikes($access_token, $raw = false, $fields = '*')
     { 
@@ -399,14 +263,6 @@ class SocialLoginAPI
      * @param boolean $raw If true, raw data is fetched
      *
      * @return object Page data.
-     *
-     * try{
-     *   $pages = $loginradiusObject->getPages($access_token, $page_name);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function getPages($access_token, $page_name, $raw = false, $fields = '*')
     {
@@ -417,22 +273,14 @@ class SocialLoginAPI
      * LoginRadius function - To update the status on the user's wall.
      *
      * @param string $access_token LoginRadius access token
+     * @param string $status The status message text (Required).
      * @param string $title Title for status message (Optional).
      * @param string $url A web link of the status message (Optional).
-     * @param string $imageurl An image URL of the status message (Optional).
-     * @param string $status The status message text (Required).
+     * @param string $imageurl An image URL of the status message (Optional).     
      * @param string $caption Caption of the status message (Optional).
      * @param string $description Description of the status message (Optional).
      *
      * @return boolean Returns true if successful, false otherwise.
-     *
-     * try{
-     *  $result = $loginradiusObject->postStatus($access_token, $title, $url, $imageurl, $status, $caption, $description);
-     * }
-     * catch (LoginRadiusException $e){
-     *    $e->getMessage();
-     *    $e->getErrorResponse();
-     * }
      *
      */
     public function postStatus($access_token, $status, $title = '', $url = '', $imageurl = '', $caption = '', $description = '', $fields = '*')
@@ -459,14 +307,6 @@ class SocialLoginAPI
      * @param string $message Message
      *
      * @return bool True on success, false otherwise
-     *
-     * try{
-     *  $result = $loginradiusObject->sendMessage($access_token, $to, $subject, $message);
-     * }
-     * catch (LoginRadiusException $e){
-     *    $e->getMessage();
-     *    $e->getErrorResponse();
-     * }
      */
     public function sendMessage($access_token, $to, $subject, $message, $fields = '*')
     {
@@ -486,35 +326,18 @@ class SocialLoginAPI
      * @param string $access_token LoginRadius access token
      *
      * @return object User profile data.
-     *
-     * try{
-     *   $userProfileData = $loginradiusObject->tokenValidate
-	 * ($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function tokenValidate($access_token, $fields = '*')
     {
         return $this->apiClientHandler('access_token/Validate', false, array("key" => Functions::getApiKey(),"secret" => Functions::getApiSecret(),"access_token" => $access_token, 'fields' => $fields));
     }
 	
-	    /**
+    /**
      * LoginRadius function - This API is used to invalidate access token, means expiring token. After this API call passed access_token no longer be active and will not accepted by LoginRadius APIs.
      *
      * @param string $access_token LoginRadius access token
      *
      * @return object User profile data.
-     *
-     * try{
-     *   $userProfileData = $loginradiusObject->tokenInvalidate($access_token);
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function tokenInvalidate($access_token, $fields = '*')
     {
@@ -522,18 +345,10 @@ class SocialLoginAPI
     }
 
 
-      /**
+    /**
      * LoginRadius function - This API is used to validate API key and Secret.
      *
      * @return object.
-     *
-     * try{
-     *   $userProfileData = $loginradiusObject->validateKeyandSecret();
-     * }
-     * catch (LoginRadiusException $e){
-     *   $e->getMessage();
-     *   $e->getErrorResponse();
-     * }
      */
     public function validateKeyandSecret($fields = '*')
     {

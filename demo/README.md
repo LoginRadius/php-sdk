@@ -18,22 +18,15 @@ PHP Library
 
 This document contains information and examples regarding the LoginRadius PHP SDK. It provides guidance for working with social authentication, capture user profile data, enable social login, enable social sharing, single sign-on, user profile data and sending messages with a variety of social networks such as Facebook, Google, Twitter, Yahoo, LinkedIn, and more.
 
+# LoginRadius
 
-## Installation
+A demo PHP web application using the PHP SDK.
 
-The recommended way to install is through [Composer](http://getcomposer.org/).
- 
-```bash
-# Install Composer
-curl -sS https://getcomposer.org/installer | php
-```
+## Configuration
 
-Next, run the Composer command to install the latest stable version of library:
-
-```bash
-composer require loginradius/php-sdk:5.0.0
-```
-
-## Documentation
-
-[Getting Started](https://docs.loginradius.com/api/v2/sdk-libraries/php) - Everything you need to begin using this SDK.
+1. Download the demo, src/loginradiusSDK from php sdk repo or clone the whole repo.
+2. Upload these on server and wrapped in one directory.
+3. Set your LoginRadius credentials on the client and server side:
+	* Server side: `demo/ajax_handler/config.php`
+	* Client side: `demo/assets/js/options.js`
+4. Demo will appear on `http://localhost/test/demo`

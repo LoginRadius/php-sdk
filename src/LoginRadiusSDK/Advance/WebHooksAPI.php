@@ -12,21 +12,21 @@ namespace LoginRadiusSDK\Advance;
 use LoginRadiusSDK\Utility\Functions;
 
 /**
- * Class UserAPI
+ * Class WebHooksAPI
  *
- * This is the main class to communicate with User APIs.
+ * This is the main class to communicate with Webhook APIs.
  */
 class WebHooksAPI
 {
     /**
-     *
+     * 
      * @param type $apikey
      * @param type $apisecret
-     * @param type $customize_options
+     * @param type $options
      */
-    public function __construct($apikey = '', $apisecret = '', $customize_options = array())
+    public function __construct($apikey = '', $apisecret = '', $options = array())
     {
-        new Functions($apikey, $apisecret, $customize_options);
+        new Functions($apikey, $apisecret, $options);
     }
 
     
@@ -49,7 +49,7 @@ class WebHooksAPI
      */
     public function subscribeWebHooks($target_url, $event = 'Login')
     {
-        return $this->apiClientHandler('webhook', array('apikey' => Functions::getApiKey(), 'apisecret' => Functions::getApiSecret()), array('method' => 'POST', 'post_data' => json_encode(array('TargetUrl' => $target_url, 'Event' => $event)), 'content_type' => 'json'));
+        return $this->apiClientHandler('webhook', array('apikey' => Functions::getApiKey(), 'apisecret' => Functions::getApiSecret()), array('method' => 'POST', 'post_data' => array('TargetUrl' => $target_url, 'Event' => $event), 'content_type' => 'json'));
     }
     
 
@@ -73,7 +73,7 @@ class WebHooksAPI
      */
     public function unsubscribeWebHooks($target_url, $event = 'Login')
     {
-        return $this->apiClientHandler('webhook', array('apikey' => Functions::getApiKey(), 'apisecret' => Functions::getApiSecret()), array('method' => 'DELETE', 'post_data' => json_encode(array('TargetUrl' => $target_url, 'Event' => $event)), 'content_type' => 'json'));
+        return $this->apiClientHandler('webhook', array('apikey' => Functions::getApiKey(), 'apisecret' => Functions::getApiSecret()), array('method' => 'DELETE', 'post_data' => array('TargetUrl' => $target_url, 'Event' => $event), 'content_type' => 'json'));
     }
 
     /**
@@ -83,9 +83,8 @@ class WebHooksAPI
      * @param type $options
      * @return type
      */
-    private function apiClientHandler($path, $query_array = array(), $customize_options = array())
+    private function apiClientHandler($path, $query_array = array(), $options = array())
     {
-        $options = array_merge(array('authentication' => 'secret'), $customize_options);
-        return Functions::apiClient("/api/v2/" . $path, $query_array, $options);
+        return Functions::apiClient("/api/v2/" . $path, $query_array, array_merge(array('authentication' => 'secret'), $options));
     }
 }

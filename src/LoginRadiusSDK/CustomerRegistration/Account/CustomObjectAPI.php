@@ -8,7 +8,7 @@
  * @license             : https://opensource.org/licenses/MIT
  */
 
-namespace LoginRadiusSDK\CustomerRegistration\Management;
+namespace LoginRadiusSDK\CustomerRegistration\Account;
 
 use LoginRadiusSDK\Utility\Functions;
 
@@ -24,11 +24,11 @@ class CustomObjectAPI
      *
      * @param type $apikey
      * @param type $apisecret
-     * @param type $customize_options
+     * @param type $options
      */
-    public function __construct($apikey = '', $apisecret = '', $customize_options = array())
+    public function __construct($apikey = '', $apisecret = '', $options = array())
     {
-        new Functions($apikey, $apisecret, $customize_options);
+        new Functions($apikey, $apisecret, $options);
     }
 
     /**
@@ -108,9 +108,8 @@ class CustomObjectAPI
      * @param type $options
      * @return type
      */
-    private function apiClientHandler($path, $query_array = array(), $customize_options = array())
+    private function apiClientHandler($path, $query_array = array(), $options = array())
     {
-        $options = array_merge(array('authentication' => 'secret'), $customize_options);
-        return Functions::apiClient("/identity/v2/manage/account/" . $path, $query_array, $options);
+        return Functions::apiClient("/identity/v2/manage/account/" . $path, $query_array, array_merge(array('authentication' => 'secret'), $options));
     }
 }

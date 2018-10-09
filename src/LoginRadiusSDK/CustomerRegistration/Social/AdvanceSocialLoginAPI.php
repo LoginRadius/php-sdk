@@ -25,11 +25,11 @@ class AdvanceSocialLoginAPI
      *
      * @param type $apikey
      * @param type $apisecret
-     * @param type $customize_options
+     * @param type $options
      */
-    function __construct($apikey = '', $apisecret = '', $customize_options = array())
+    function __construct($apikey = '', $apisecret = '', $options = array())
     {
-        new Functions($apikey, $apisecret, $customize_options);
+        new Functions($apikey, $apisecret, $options);
     }
 
     /**
@@ -99,12 +99,12 @@ class AdvanceSocialLoginAPI
     /**
      * This API is used to retrieve a tracked post based on the passed in post ID value. This API requires setting permissions in your LoginRadius Dashboard.
      *
-     * @param $postid
+     * @param $post_id
      * @return type
      */
-    public function trackableStatus($postid, $fields = '*')
+    public function trackableStatus($post_id, $fields = '*')
     {
-        return $this->apiClientHandler('status/trackable', array('postid' => $postid, "secret" => Functions::getApiSecret(), 'fields' => $fields));
+        return $this->apiClientHandler('status/trackable', array('postid' => $post_id, "secret" => Functions::getApiSecret(), 'fields' => $fields));
     }
 
     /**
@@ -188,7 +188,7 @@ class AdvanceSocialLoginAPI
             'caption' => $caption,
             'description' => $description
         );
-        return $this->apiClientHandler("status/trackable", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'POST', 'post_data' => json_encode($data), 'content_type' => 'json'));
+        return $this->apiClientHandler("status/trackable", array('access_token' => $access_token, 'fields' => $fields), array('method' => 'POST', 'post_data' => $data, 'content_type' => 'json'));
   
     }
 

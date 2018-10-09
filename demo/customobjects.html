@@ -1,0 +1,94 @@
+<html lang="en">
+    <head>
+        <title>Login</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="assets/css/style.css" rel="stylesheet" />
+        <script src="assets/js/jquery.min.js"></script> 
+        <script src="assets/js/logout.js"></script>  
+        <script src="assets/js/profile.js"></script>  
+    </head>
+    <body>
+        <div class="section-menu">
+            <div class="menu-header">
+                <a href="">
+                    <img src="assets/images/lr-logo.png"/>
+                </a>
+                <span style="display:block;margin-left:120px">PHP Web Demo</span>
+                <div class="button-group">
+                    <a href="index.html">Minimal</a>
+                    <a href="loginscreen.html">LoginScreen</a>
+                </div>
+            </div>
+            <div class="vertical-menu">
+                <a href="profile.html" id="menu-profile">Profile</a>
+                <a href="changepassword.html" id="menu-changepassword">Change Password</a>
+                <a href="setpassword.html" id="menu-setpassword">Set Password</a>
+                <a href="account.html" id="menu-account">Update Account</a>
+                <a href="accountlinking.html" id="menu-accountlinking">Account Linking</a>
+                <a href="customobjects.html" id="menu-customobjects">Custom Object Management</a>
+                <a href="multifactor.html" id="menu-multifactor">Reset MultiFactor</a>
+                <a href="roles.html" id="menu-roles">Roles Management</a>
+                <a href="" id="menu-user-logout">Logout</a>
+            </div>
+        </div>
+        <div class="overlay" id="lr-loading" style="display: none;">
+            <div class="lr_loading_screen">
+                <div class="lr_loading_screen_center" style="position: fixed;">
+                    <div class="lr_loading_screen_spinner"></div> 
+                    <div class="lr_loading-phrases-container">
+                        <div class="lr_loading-phrases_wrap">
+                            <div class="lr_loading_phrase">Please wait...</div>                      
+                        </div>              
+                    </div>                                   
+                </div>     
+            </div>
+        </div>
+        <div class="section-main section-minimal">
+            <center>
+                <div id="customobj-container">
+                    <center><table>
+                            <tr><th colspan="2">Create</th></tr>
+                            <tr><td>Object Name: </td><td><input name="objectname" type='text' id='user-createcustomobj-objectname'/></td></tr>
+                            <tr><td>Data: </td><td>
+                                    <textarea row="6" cols="25" id="user-createcustomobj-data"></textarea>
+                                </td></tr>
+                        </table></center>
+                    <button id="btn-user-createcustomobj">Create</button><br/>
+                    <span style="color:red" id="user-createcustomobj-errorMsg"></span>
+                    <span style="color:green" id="user-createcustomobj-successMsg"></span>
+                    <br></br>
+
+                    <center><table>
+                            <tr><th colspan="2">Update</th></tr>
+                            <tr><td>Object Name: </td><td><input name="objectname" type='text' id='user-updatecustomobj-objectname'/></td></tr>
+                            <tr><td>Object Record ID: </td><td><input name="objectrecordid" type='text' id='user-updatecustomobj-objectrecordid'/></td></tr>
+                            <tr><td>Data: </td><td><textarea row="6" cols="25" id="user-updatecustomobj-data"></textarea></td></tr>
+                        </table></center>
+                    <button id="btn-user-updatecustomobj">Update</button><br/>
+                    <span style="color:red" id="user-updatecustomobj-errorMsg"></span>
+                    <span style="color:green" id="user-updatecustomobj-successMsg"></span>
+                    <br></br>
+
+                    <center><table>
+                            <tr><th colspan="2">Delete</th></tr>
+                            <tr><td>Object Name: </td><td><input name="objectname" type='text' id='user-deletecustomobj-objectname'/></td></tr>
+                            <tr><td>Object Record ID: </td><td><input name="objectrecordid" type='text' id='user-deletecustomobj-objectrecordid'/></td></tr>
+                        </table></center>
+                    <button id="btn-user-deletecustomobj">Delete</button><br/>
+                    <span style="color:red" id="user-deletecustomobj-errorMsg"></span>
+                    <span style="color:green" id="user-deletecustomobj-successMsg"></span>
+                    <br></br>
+
+                    <b>Read</b><br/>
+                    Object Name: <input name="objectname" type='text' id='user-getcustomobj-objectname'/><br/>
+                    <button id="btn-user-getcustomobj">Fetch Data</button><br/>
+                    <span style="color:red" id="user-getcustomobj-errorMsg"></span>
+                    <br/><br/><br/>
+                    <table id="customobj-table" class="table-style"></table>
+                    <br/>
+                </div>
+            </center>                
+        </div>       
+    </body>
+</html>

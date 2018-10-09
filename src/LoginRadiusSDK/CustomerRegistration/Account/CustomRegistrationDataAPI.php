@@ -3,19 +3,19 @@
 /**
  * @link                : http://www.loginradius.com
  * @category            : CustomerRegistration
- * @package             : AccountAPI
+ * @package             : CustomRegistrationDataAPI
  * @author              : LoginRadius Team
  * @license             : https://opensource.org/licenses/MIT
  */
 
-namespace LoginRadiusSDK\CustomerRegistration\Management;
+namespace LoginRadiusSDK\CustomerRegistration\Account;
 
 use LoginRadiusSDK\Utility\Functions;
 
 /**
- * Account API
+ * Custom Registration Data API
  *
- * This is the main class to communicate with LoginRadius Customer Registration Account API.
+ * This is the main class to communicate with LoginRadius Customer Registration Data API.
  */
 class CustomRegistrationDataAPI {
 
@@ -23,10 +23,10 @@ class CustomRegistrationDataAPI {
      *
      * @param type $apikey
      * @param type $apisecret
-     * @param type $customize_options
+     * @param type $options
      */
-    public function __construct($apikey = '', $apisecret = '', $customize_options = array()) {        
-        new Functions($apikey, $apisecret, $customize_options);
+    public function __construct($apikey = '', $apisecret = '', $options = array()) {
+        new Functions($apikey, $apisecret, $options);
     }
 
     /**
@@ -84,12 +84,12 @@ class CustomRegistrationDataAPI {
 
     /**
      * This API allows you to delete a member from dropDownList.
-     * @param $recordid    
+     * @param $record_id    
      *
      * return {"IsDeleted": "true"}
      */
-    public function deleteRegistrationData($recordid, $fields = '*') {
-        return $this->apiClientHandler('registrationdata/' . $recordid, array('fields' => $fields), array('method' => 'DELETE', 'post_data' => true));
+    public function deleteRegistrationData($record_id, $fields = '*') {
+        return $this->apiClientHandler('registrationdata/' . $record_id, array('fields' => $fields), array('method' => 'DELETE', 'post_data' => true));
     }
 
     /**
@@ -100,9 +100,8 @@ class CustomRegistrationDataAPI {
      * @param type $options
      * @return type
      */
-    private function apiClientHandler($path, $query_array = array(), $customize_options = array()) {
-        $options = array_merge(array('authentication' => 'secret'), $customize_options);
-        return Functions::apiClient("/identity/v2/manage/" . $path, $query_array, $options);
+    private function apiClientHandler($path, $query_array = array(), $options = array()) {
+        return Functions::apiClient("/identity/v2/manage/" . $path, $query_array, array_merge(array('authentication' => 'secret'), $options));
     }
 
 }
