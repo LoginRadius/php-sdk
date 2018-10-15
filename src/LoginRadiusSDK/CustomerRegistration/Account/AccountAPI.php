@@ -311,7 +311,7 @@ class AccountAPI {
      * @return type object
      */
     public function generateSOTT($time_difference = '10', $fields = '*') {
-        return $this->apiClientHandler("/sott", array('timedifference' => $time_difference, 'fields' => $fields));
+        return $this->apiClientHandler("/sott", array('timedifference' => $time_difference, 'fields' => $fields), array('output_format' => 'json'));
     }
 
     /**
