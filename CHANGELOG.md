@@ -1,5 +1,10 @@
 # LoginRadius PHP SDK Change Log
 
+# Version 5.0.1
+Released on **October 15, 2018**
+## Bug Fixed
+  -  Remove dependancy of JSON option.
+  
 # Version 5.0.0
 Released on **October 9, 2018**
 ## Enhancements

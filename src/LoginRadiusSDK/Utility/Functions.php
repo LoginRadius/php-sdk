@@ -5,7 +5,7 @@
  * @category : Utility
  * @package : Functions
  * @author : LoginRadius Team
- * @version : 5.0.0
+ * @version : 5.0.1
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -29,7 +29,7 @@ if (!defined('API_CONFIG_DOMAIN')) {
  */
 class Functions {
 
-    const version = '5.0.0';
+    const version = '5.0.1';
 
     private static $apikey;
     private static $apisecret;

@@ -52,6 +52,9 @@ class UserAPI {
     public function registerByEmail($payload, $verification_url = '', $email_template = '', $options = '', $fields = '*') {
         $accountObj = new AccountAPI();
         $response = $accountObj->generateSOTT();  
+        if(!is_object($response)) {
+            $response = json_decode($response);
+        }
         return $this->apiClientHandler("register", array('verificationurl' => $verification_url, 'emailtemplate' => $email_template, 'options' => $options, 'fields' => $fields), array('method' => 'POST', 'post_data' => $payload, 'content_type' => 'json', 'X-LoginRadius-Sott' => $response->Sott));
     }
      
@@ -753,7 +756,10 @@ class UserAPI {
      */
     public function registerByPhone($payload, $verification_url = '', $sms_template = '', $options = '') {
         $accountObj = new AccountAPI();
-        $response = $accountObj->generateSOTT();       
+        $response = $accountObj->generateSOTT(); 
+        if(!is_object($response)) {
+            $response = json_decode($response);
+        }
         return $this->apiClientHandler("register", array('verificationurl' => $verification_url, 'smstemplate' => $sms_template, 'options' => $options), array('method' => 'POST', 'post_data' => $payload, 'content_type' => 'json', 'X-LoginRadius-Sott' => $response->Sott));
     }
     
