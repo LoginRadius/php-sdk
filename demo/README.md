@@ -20,13 +20,29 @@ This document contains information and examples regarding the LoginRadius PHP SD
 
 # LoginRadius
 
-A demo PHP web application using the PHP SDK.
+A demo PHP web application using the PHP SDK. The following features are included:
+
+* Traditional Email Login
+* Multi-Factor Email Login
+* Passwordless Login
+* Social Login
+* Registration
+* Email Verification
+* Forgot Password
+* Reset Password
+* Change Password
+* Set Password
+* Update Account
+* Multi-Factor Configuration
+* Account Linking
+* Custom Object Management
+* Roles Management
 
 ## Configuration
 
-1. Download the demo, src/loginradiusSDK from php sdk repo or clone the whole repo.
+1. Download the demo, src/LoginRadiusSDK from php sdk repo or clone the whole repo.
 2. Upload these on server and wrapped in one directory.
 3. Set your LoginRadius credentials on the client and server side:
 	* Server side: `demo/ajax_handler/config.php`
-	* Client side: `demo/assets/js/options.js`
-4. Demo will appear on `http://localhost/test/demo`
+	* Client side: `demo/js/options.js`
+4. Demo will appear on `<Webserver URL>/<Project Name>/demo`

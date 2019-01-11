@@ -5,7 +5,7 @@
  * @category : Utility
  * @package : Functions
  * @author : LoginRadius Team
- * @version : 5.0.1
+ * @version : 5.0.2
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -29,7 +29,7 @@ if (!defined('API_CONFIG_DOMAIN')) {
  */
 class Functions {
 
-    const version = '5.0.1';
+    const version = '5.0.2';
 
     private static $apikey;
     private static $apisecret;
@@ -43,7 +43,6 @@ class Functions {
      * @param array $customize_options
      */
     public function __construct($apikey = '', $apisecret = '', $customize_options = array()) {
-
         if (!empty($apikey) && !empty($apisecret)) {
             self::setDefaultApplication($apikey, $apisecret);
         } elseif (empty($apikey) || empty($apisecret)) {
@@ -71,7 +70,7 @@ class Functions {
     }
 
     /**
-     * Check API Key and Secret in valid Guid format.
+     * Check API Key and Secret in valid GUID format.
      *
      * @param type $apikey
      * @param type $apisecret
@@ -87,7 +86,7 @@ class Functions {
     }
 
     /**
-     * Get api key that you set.
+     * Get API Key that you set.
      *
      * @return string
      */
@@ -148,13 +147,14 @@ class Functions {
      * @return type
      */
     public static function apiClient($path, $query_array = array(), $options = array()) {
-        global $apiClient_class;
+        global $apiClient_class;   
         $merge_options = array_merge($options, self::$options);
         if (isset($apiClient_class) && class_exists($apiClient_class)) {
             $client = new $apiClient_class();
         } else {
             $client = new DefaultHttpClient();
         }
+        
         $output_format = isset($merge_options['output_format']) && $merge_options['output_format'] == 'json' ? true : false;
         $response = $client->request($path, $query_array, $merge_options);
         return $output_format && (is_object(json_decode($response)) || is_array(json_decode($response))) ? json_decode($response) : $response;
@@ -194,13 +194,12 @@ class Functions {
     
     
     /**
-     * Url replacement
+     * URL replacement
      *
      * @param type $decoded_url
      * @return type
      */
-
-    public function urlReplacement($decoded_url) {
+    public static function urlReplacement($decoded_url) {
         $replacementArray = array('%2A' => '*','%28' => '(','%29' => ')');
         return str_replace(array_keys($replacementArray), array_values($replacementArray), $decoded_url);
     }

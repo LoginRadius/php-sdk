@@ -557,7 +557,7 @@ class UserAPI {
      * @param $sms_template (Optional)
      * @return type object
      */
-    public function phoneSendOtp($phone, $sms_template) {
+    public function phoneSendOtp($phone, $sms_template = '') {
         return $this->apiClientHandler("login/passwordlesslogin/otp", array('phone' => $phone, 'smstemplate' => $sms_template));
     }  
     
@@ -819,7 +819,7 @@ class UserAPI {
      * @param $sms_template (Optional)
      * @return type {"IsPosted": true}
      */
-    public function verifyOTPByToken($access_token, $otp, $sms_template) {
+    public function verifyOTPByToken($access_token, $otp, $sms_template = '') {
         return $this->apiClientHandler("phone/otp", array('otp' => $otp, 'smstemplate' => $sms_template), array('method' => 'PUT', 'post_data' => array('phone' => ''), 'content_type' => 'json', 'access-token' => "Bearer ".$access_token));
     }
    

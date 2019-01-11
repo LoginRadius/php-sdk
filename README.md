@@ -31,7 +31,7 @@ curl -sS https://getcomposer.org/installer | php
 Next, run the Composer command to install the latest stable version of library:
 
 ```bash
-composer require loginradius/php-sdk:5.0.1
+composer require loginradius/php-sdk:5.0.2
 ```
 
 ## Documentation

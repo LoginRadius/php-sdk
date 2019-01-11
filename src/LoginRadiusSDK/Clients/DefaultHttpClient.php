@@ -5,7 +5,7 @@
  * @category : Clients
  * @package : DefaultHttpClient
  * @author : LoginRadius Team
- * @version : 5.0.1
+ * @version : 5.0.2
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -39,10 +39,15 @@ class DefaultHttpClient implements IHttpClient {
         }
 
         $request_url .= $path;
+        if (isset($options['api_region']) && !empty($options['api_region'])) {
+            $query_array['region'] = $options['api_region'];
+        }
+        if (!isset($options['api_request_signing']) || empty($options['api_request_signing'])) {
+            $options['api_request_signing'] = false;
+        }
         if ($query_array !== false) {
             if (isset($options['authentication']) && $options['authentication'] == 'secret') {
-
-                if (!isset($options['api_request_signing']) || !$options['api_request_signing']) {
+                if (($options['api_request_signing'] === false) || ($options['api_request_signing'] === 'false')) {
                     $options = array_merge($options, Functions::authentication(array(), $options['authentication']));
                 }
                 $query_array = isset($options['authentication']) ? Functions::authentication($query_array) : $query_array;
@@ -52,8 +57,10 @@ class DefaultHttpClient implements IHttpClient {
             $request_url .= (strpos($request_url, "?") === false) ? "?" : "&";
             $request_url .= Functions::queryBuild($query_array);
 
-            if (isset($options['authentication']) && $options['authentication'] == 'secret' && isset($options['api_request_signing']) && $options['api_request_signing']) {
-                $options = array_merge($options, Functions::authentication($options, 'hashsecret', $request_url));
+            if (isset($options['authentication']) && $options['authentication'] == 'secret') {
+                if (($options['api_request_signing'] === true) || ($options['api_request_signing'] === 'true')) {
+                    $options = array_merge($options, Functions::authentication($options, 'hashsecret', $request_url));
+                }
             }
         }
 
@@ -96,6 +103,7 @@ class DefaultHttpClient implements IHttpClient {
         curl_setopt($curl_handle, CURLOPT_URL, $request_url);
         curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 15);
         curl_setopt($curl_handle, CURLOPT_TIMEOUT, 50);
+        curl_setopt($curl_handle, CURLOPT_ENCODING, "gzip");
         curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, $ssl_verify);
         $optionsArray = array('Content-type: application/' . $content_type);
         if ($auth_access_token != '') {
@@ -136,8 +144,7 @@ class DefaultHttpClient implements IHttpClient {
         $json_response = curl_exec($curl_handle);
         if (curl_error($curl_handle)) {
             $json_response = curl_error($curl_handle);
-        }
-
+        }    
         curl_close($curl_handle);
         return $json_response;
     }
@@ -176,6 +183,7 @@ class DefaultHttpClient implements IHttpClient {
                 $data = json_encode($data);
             }
             $optionsArray['http']['header'] .= "\r\n" . 'Content-Length:' . (($data === true) ? '0' : strlen($data));
+            $optionsArray['http']['header'] .= "\r\n" . 'Accept-Encoding: gzip';
             $optionsArray['http']['content'] = (($content_type == 'json') ? $data : Functions::queryBuild($data));
         }
         if ($auth_access_token != '') {
@@ -201,5 +209,4 @@ class DefaultHttpClient implements IHttpClient {
         }
         return $json_response;
     }
-
 }

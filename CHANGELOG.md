@@ -1,9 +1,17 @@
 # LoginRadius PHP SDK Change Log
 
+# Version 5.0.2
+Released on **January 11, 2019**
+## Enhancements
+  -  Added API Region Option in SDK.
+  -  Added gzip encoding in api request.
+## Bug Fixed
+  -  Defined urlReplacement function statically in functions.php file.
+
 # Version 5.0.1
 Released on **October 15, 2018**
 ## Bug Fixed
-  -  Remove dependancy of JSON option.
+  -  Remove dependency of json option.
   
 # Version 5.0.0
 Released on **October 9, 2018**
@@ -16,31 +24,31 @@ Released on **October 9, 2018**
 
 ## Breaking Changes
   For developers migrating from v4.5.3 or older ones, there are following breaking changes in terms of SDK implementation. 
-   -  register()  replaced with registerByEmail()
-   -  loginByEmail() replaced with authLoginByEmail()
-   -  loginByUsername() replaced with authLoginByUsername()
-   -  loginByPhone() replaced with authLoginByPhone
-   -  instantLinkLoginByEmail() replaced with  passwordLessLoginByEmail()
-   -  instantLinkLoginByUserName() replaced with  passwordLessLoginByUserName()
-   -  instantLinkLoginVerification() replaced with  passwordLessLoginVerification()
-   -  emailPromptAutoLoginbyEmail() replaced with  smartLoginByEmail()
-   -  emailPromptAutoLoginbyUserName() replaced with  smartLoginByUserName() 
-   -  emailPromptAutoLoginPing() replaced with  smartLoginPing()
-   -  verifyAutoLoginEmailForLogin() replaced with  smartLoginVerifyToken() 
-   -  simplifiedInstantRegistrationByEmail() replaced with  oneTouchLoginByEmail()
-   -  simplifiedInstantRegistrationByPhone() replaced with   oneTouchLoginByPhone() 
-   - simplifiedInstantRegistrationOTPVerification() replaced with  oneTouchOtpVerification()
-   - twoFALoginByEmail()  replaced with  mfaEmailLogin()
-   - twoFALoginByUsername()  replaced with  mfaUserNameLogin()
-   - twoFALoginByPhone() replaced with  mfaPhoneLogin()
-   - configureTwoFAByToken()  replaced with  mfaValidateAccessToken()
-   - verifyTwoFAByGoogleAuthCodeOrOtp()  replaced with  updateMfaByGoogleAuthCode() and  updateMfaByOtp()
-   - removeOrResetGoogleAuthenticatorByToken()  replaced with  resetGoogleAuthenticatorByToken() and  resetSMSAuthenticatorByToken()  
-   - removeOrResetGoogleAuthenticator()  replaced with  mfaResetGoogleAuthenticatorByUid() and  mfaResetSMSAuthenticatorByUid() 
-   - Removed CloudAPI  replaced with ConfigAPI
-   - Removed ProvidersAPI and SchemaAPI
-   - Removed SOTT from utility.
-   - Directory name \LoginRadiusSDK\CustomerRegistration\Management -> replaced with \LoginRadiusSDK\CustomerRegistration\Account
+  -  register()  replaced with registerByEmail()
+  -  loginByEmail() replaced with authLoginByEmail()
+  -  loginByUsername() replaced with authLoginByUsername()
+  -  loginByPhone() replaced with authLoginByPhone
+  -  instantLinkLoginByEmail() replaced with  passwordLessLoginByEmail()
+  -  instantLinkLoginByUserName() replaced with  passwordLessLoginByUserName()
+  -  instantLinkLoginVerification() replaced with  passwordLessLoginVerification()
+  -  emailPromptAutoLoginbyEmail() replaced with  smartLoginByEmail()
+  -  emailPromptAutoLoginbyUserName() replaced with  smartLoginByUserName() 
+  -  emailPromptAutoLoginPing() replaced with  smartLoginPing()
+  -  verifyAutoLoginEmailForLogin() replaced with  smartLoginVerifyToken() 
+  -  simplifiedInstantRegistrationByEmail() replaced with  oneTouchLoginByEmail()
+  -  simplifiedInstantRegistrationByPhone() replaced with   oneTouchLoginByPhone() 
+  -  simplifiedInstantRegistrationOTPVerification() replaced with  oneTouchOtpVerification()
+  -  twoFALoginByEmail()  replaced with  mfaEmailLogin()
+  -  twoFALoginByUsername()  replaced with  mfaUserNameLogin()
+  -  twoFALoginByPhone() replaced with  mfaPhoneLogin()
+  -  configureTwoFAByToken()  replaced with  mfaValidateAccessToken()
+  -  verifyTwoFAByGoogleAuthCodeOrOtp()  replaced with  updateMfaByGoogleAuthCode() and  updateMfaByOtp()
+  -  removeOrResetGoogleAuthenticatorByToken()  replaced with  resetGoogleAuthenticatorByToken() and  resetSMSAuthenticatorByToken()  
+  -  removeOrResetGoogleAuthenticator()  replaced with  mfaResetGoogleAuthenticatorByUid() and  mfaResetSMSAuthenticatorByUid() 
+  -  Removed CloudAPI  replaced with ConfigAPI
+  -  Removed ProvidersAPI and SchemaAPI
+  -  Removed SOTT from utility.
+  -  Directory name \LoginRadiusSDK\CustomerRegistration\Management -> replaced with \LoginRadiusSDK\CustomerRegistration\Account
 
 # Version 4.5.3
 Released on **August 9, 2018**

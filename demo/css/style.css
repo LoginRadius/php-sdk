@@ -1,0 +1,217 @@
+body {
+    margin: 0;
+    background-color: #f9f9f9;
+    color: #384049;
+    font-family: "-apple-system", "system-ui", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+    font-size: 15px;
+}
+
+table {
+    min-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 15px;
+}
+
+td {
+    text-align: left;
+}
+
+input {
+    width: 170px;
+    height: 22px;
+    margin: 2px;
+}
+
+button {
+    background-color: #35A8FF;
+    color: white;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    padding: 3px 40px;
+    font-size: 14px;
+    border-radius: 2px;
+    margin-top: 5px;
+}
+
+hr {
+    width: 55%;
+}
+
+.table-style td, .table-style th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 4px;
+}
+
+.table-style tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.navbar-ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.section-menu {
+    position: fixed;
+    background-color: white;
+    width: 250px;
+    min-height: 100%;
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-right-color: #EEEEEE;
+    text-align: center;
+    overflow: auto;
+}
+
+.section-menu img {
+    width: 200px;
+    margin: 10px 10px 0px 10px;
+}
+
+.button-group a {
+    float: left;
+    background-color: white;
+    color: #384049;
+    border-top: 1px solid #D3D3D3;
+    border-bottom: 1px solid #D3D3D3;
+    padding: 10px 24px;
+    margin-top: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    width: 77px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.button-group a:hover {
+    background-color: #D3D3D3;
+}
+
+.section-main {
+    padding: 5vh;
+    width: 70vw;
+    min-width: 250px;
+    margin-left: 250px;
+    text-align: center;
+}
+
+.right-elem {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
+
+.container { 
+    background-color: #eee;
+    width: 400px;
+    padding: 20px;
+    margin: auto;
+}
+
+.customobj-container {
+    background-color: #eee;
+    width: 600px;
+    padding: 20px;
+    margin: auto;
+}
+
+.vertical-menu {
+    margin-top: 44px;
+    width: 100%;
+    border: 0px solid lightgray;
+}
+
+.vertical-menu a {
+    background-color: white;
+    color: #384049;
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+}
+
+.vertical-menu a:hover {
+    background-color: #ccc;
+}
+
+.vertical-menu a.active {
+    background-color: #35A8FF;
+    color: white;
+    font-style: italic;
+}
+
+.error-message {
+    color: red;
+}
+
+.success-message {
+    color: green;
+}
+
+#customobj-container {
+    background-color: #eee;
+    height: 650px;
+    width: 400px;
+    padding: 30px 20px 0 20px;
+}
+
+/*==============================================================*/
+
+.lr-ls-icon {
+    display: inline-block;
+    width: 43px;
+    height: 40px;
+    background-image:url("../icons/icon-sprite-32.png");
+    border-radius: 5px;
+    /*default*/
+    background-position: 0px 0px;
+    background-color: lightgray;
+}
+
+.lr-ls-icon-Twitter {
+    background-position: 0px 9.6%;
+    background-color: #35A8FF;
+}
+
+.lr-ls-icon-Facebook {
+    background-position: 0px 2.45%;
+    background-color: #3b5998;
+}
+
+.lr-ls-icon-LinkedIn {
+    background-position: 0px 7.2%;
+    background-color: #007bb6;
+}
+
+.lr-ls-icon-Google {
+    background-position: 0px 4.8%;
+    background-color: #dd4b39;
+}
+
+.lr-ls-icon-Instagram {
+    background-position: 0px 28.65%;
+    background-color: #406e94;
+}
+
+.lr-ls-icon-Vkontakte {
+   background-position: 0px 73.9%;
+   background-color: #5B88BD
+}
+.lr-image-frame {
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    border: 1px solid #eee;
+    border-radius: 50%;
+    background: #fcfcfc;
+    overflow: hidden;
+}
+.lr-image-frame img{
+    width: 100%;
+}
+
