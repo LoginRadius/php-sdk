@@ -1,39 +1,31 @@
-# CakePHP specific files #
-##########################
-/config/.env
-/logs/*
-/tmp/*
-/vendor/*
-
-# OS generated files #
-######################
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-Icon?
-ehthumbs.db
-Thumbs.db
 
-# Tool specific files #
-#######################
-# vim
-*~
-*.swp
-*.swo
-# sublime text & textmate
-*.sublime-*
-*.stTheme.cache
+application/cache/*
+!application/cache/index.html
+
+application/logs/*
+!application/logs/index.html
+
+!application/*/.htaccess
+
+composer.lock
+
+user_guide_src/build/*
+user_guide_src/cilexer/build/*
+user_guide_src/cilexer/dist/*
+user_guide_src/cilexer/pycilexer.egg-info/*
+/vendor/
+
+# IDE Files
+#-------------------------
+/nbproject/
+.idea/*
+
+## Sublime Text cache files
 *.tmlanguage.cache
 *.tmPreferences.cache
-# Eclipse
-.settings/*
-# JetBrains, aka PHPStorm, IntelliJ IDEA
-.idea/*
-# NetBeans
-nbproject/*
-# Visual Studio Code
-.vscode
-# Sass preprocessor
-.sass-cache/
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
+/tests/tests/
+/tests/results/
