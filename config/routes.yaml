@@ -1,0 +1,63 @@
+_site:
+  path: /
+  controller: App\Controller\SiteController::index
+
+# routes for view
+registrationview:
+  path: /registrationview
+  controller: App\Controller\SiteController::registrationview
+
+loginscreenview:
+  path: /loginscreenview
+  controller: App\Controller\SiteController::loginscreenview
+profileview:
+  path: /profileview
+  controller: App\Controller\ProfileController::profileview
+  
+setpasswordview:
+  path: /setpasswordview
+  controller: App\Controller\ProfileController::setpasswordview
+
+accountlinkingview:
+  path: /accountlinkingview
+  controller: App\Controller\ProfileController::accountlinkingview
+  
+changepasswordview:
+  path: /changepasswordview
+  controller: App\Controller\ProfileController::changepasswordview
+
+updateaccountview:
+  path: /updateaccountview
+  controller: App\Controller\ProfileController::updateaccountview
+
+roleview:
+  path: /roleview
+  controller: App\Controller\ProfileController::roleview  
+
+resetmultifactorview:
+  path: /resetmultifactorview
+  controller: App\Controller\ProfileController::resetmultifactorview
+
+customobjectview:
+  path: /customobjectview
+  controller: App\Controller\ProfileController::customobjectview
+
+forgotpasswordview:
+  path: /forgotpasswordview
+  controller: App\Controller\SiteController::forgotpasswordview
+
+# routes for login action
+login:
+  path: /login
+  controller: App\Controller\SiteController::login
+# routes for registration action
+registration:
+  path: /registration
+  controller: App\Controller\SiteController::registration
+# routes for profile action
+profile:
+  path: /profile
+  controller: App\Controller\ProfileController::profile
+
+
+

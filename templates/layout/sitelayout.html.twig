@@ -1,0 +1,57 @@
+<html lang="en">
+    <head>
+        <title>Login</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+         <link rel="stylesheet" type="text/css" href="{{asset('assets/css/app.css')}}">
+         <script type='text/javascript' src='{{asset('assets/js/jquery.min.js')}}'></script>
+         <script type='text/javascript' src='https://auth.lrcontent.com/v2/js/LoginRadiusV2.js'></script>
+         <script type='text/javascript' src='{{asset('assets/js/options.js')}}'></script>
+         <script type='text/javascript' src='{{asset('assets/js/index.js')}}'></script>
+         <script type='text/javascript' src='{{asset('assets/js/sociallogin.js')}}'></script>
+         <script type='text/javascript' src='{{asset('assets/js/emailverification.js')}}'></script>
+         <script type='text/javascript' src='{{asset('assets/js/LoginRadiusLoginScreen.1.0.0.js')}}'></script>
+         
+         
+      
+     
+    <body>
+        <div class="section-menu">
+            <div class="menu-header">
+                <a href="">
+                    <img src="{{asset('assets/images/lr-logo.png')}}"/>
+                </a>
+                <span style="display:block;margin-left:120px">Symfony Web Demo</span>
+                <div class="button-group">
+                    <a href="/">Minimal</a>
+                    <a href="loginscreenview">LoginScreen</a>
+                </div>
+            </div>
+            <div class="vertical-menu">
+                <a href="/" id="menu-login">Login</a>
+                <a href="registrationview" id="menu-signup">Register</a>
+                <a href="forgotpasswordview" id="menu-forgotpassword">Forgot Password</a>
+            </div>
+        </div>
+        <div class="overlay" id="lr-loading" style="display: none;">
+            <div class="lr_loading_screen">
+                <div class="lr_loading_screen_center" style="position: fixed;">
+                    <div class="lr_loading_screen_spinner"></div> 
+                    <div class="lr_loading-phrases-container">
+                        <div class="lr_loading-phrases_wrap">
+                            <div class="lr_loading_phrase">Please wait...</div>                      
+                        </div>              
+                    </div>                                   
+                </div>     
+            </div>
+        </div>
+        
+        {% block body %}{% endblock %}
+
+       
+         
+      
+    
+        </body>
+    </html>

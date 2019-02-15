@@ -1,33 +1,18 @@
-# phpstorm project files
-.idea
 
-# netbeans project files
-nbproject
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
 
-# zend studio for eclipse project files
-.buildpath
-.project
-.settings
-
-# windows thumbnail cache
-Thumbs.db
-
-# composer vendor dir
-/vendor
-
-# composer itself is not needed
-composer.phar
-
-# Mac DS_Store Files
-.DS_Store
-
-# phpunit itself is not needed
-phpunit.phar
-# local phpunit config
+###> symfony/phpunit-bridge ###
+.phpunit
 /phpunit.xml
+###< symfony/phpunit-bridge ###
 
-tests/_output/*
-tests/_support/_generated
-
-#vagrant folder
-/.vagrant
+###> symfony/web-server-bundle ###
+/.web-server-pid
+###< symfony/web-server-bundle ###

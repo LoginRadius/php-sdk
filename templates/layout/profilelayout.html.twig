@@ -1,0 +1,51 @@
+
+
+
+<html lang="en">
+    <head>
+        <title>profile</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+       
+         
+         <link rel="stylesheet" type="text/css" href="{{asset('assets/css/app.css')}}">
+         <script type='text/javascript' src='{{asset('assets/js/jquery.min.js')}}'></script>
+         <script type='text/javascript' src='{{asset('assets/js/logout.js')}}'></script>
+         <script type='text/javascript' src='https://auth.lrcontent.com/v2/js/LoginRadiusV2.js'></script>
+         <script type='text/javascript' src='{{asset('assets/js/options.js')}}'></script>
+         <script type='text/javascript' src='{{asset('assets/js/profile.js')}}'></script>
+         
+         <script type='text/javascript' src='{{asset('assets/js/account.js')}}'></script>
+         <script type='text/javascript' src='{{asset('assets/js/accountlinking.js')}}'></script>
+       
+       
+
+    </head>
+    <body>
+        <div class="section-menu">
+            <div class="menu-header">
+                <a href="">
+                 <img src="{{asset('assets/images/lr-logo.png')}}"/>
+                </a>
+                <span style="display:block;margin-left:70px">Symfony Web Demo</span>
+                <div class="button-group">
+                    <a href="">Minimal</a>
+                    <a href="">LoginScreen</a>
+                </div>
+            </div>
+            <div class="vertical-menu">
+                <a href="profileview" id="menu-profile">Profile</a>
+                <a href="changepasswordview" id="menu-changepassword">Change Password</a>
+                <a href="setpasswordview" id="menu-setpassword">Set Password</a>
+                <a href="updateaccountview" id="menu-account">Update Account</a>
+                <a href="accountlinkingview" id="menu-accountlinking">Account Linking</a>
+                <a href="customobjectview" id="menu-customobjects">Custom Object Management</a>
+                <a href="resetmultifactorview"id="menu-multifactor">Reset MultiFactor</a>
+                <a href="roleview" id="menu-roles">Roles Management</a>
+                <a href="" id="menu-user-logout">Logout</a>
+            </div>
+        </div>
+      {% block body %}{% endblock %}
+
+    </body>
+</html>
