@@ -44,11 +44,6 @@ It presumes you have basic knowledge of PHP.
 
 ```
 
-6. Run following command in your command-line interface.
-```
-    copy config\app.default.php config\app.php
-```
-
 6. Go to your web browser and type in the root directory URL that your server is hosting.
 
 ## Features Implemented in the Demo
