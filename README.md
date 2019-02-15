@@ -1,39 +1,59 @@
+# LoginRadius Laravel Demo
 
-LoginRadius
-==========
+** Disclaimer:
+This guide assumes you have some basic knowledge of PHP and Laravel.
 
-![Home Image](http://docs.lrcontent.com/resources/github/banner-1544x500.png)
+# Setup
 
------------------------------------------------
-LoginRadius PHP wrapper provides access to LoginRadius.
+ 1. Download our Laravel demo project.
 
-LoginRadius is a unified **Customer Identity Management** API platform that combines 30 major social platforms into a single simplified and maintenance-free API. With LoginRadius' API, websites and mobile apps can implement capture user profile data, enable social login, enable social sharing, add single sign-on and many more.
+ 2. After Downloading laravel-demo, you need to update composer to download required library using the following command:
 
-LoginRadius helps businesses boost user engagement on their web/mobile platform, manage online identities, utilize social media for marketing, capture accurate consumer data and get unique social insight into their customer base.
+        composer update
 
-Please visit https://docs.loginradius.com/api/v2/deployment/sdk-libraries/php-library for more information.
+ 3. Open constants.php (File Location: bootstrap\constants.php) and fill your LoginRadius credentials
+       
+        define('API_KEY', ''); // Pass API Key
+        define('API_SECRET', '');  // Pass API Secret Key
+        define('API_REQUEST_SIGNING', false); // Pass boolean true/false for enable/disable
+        define('AUTH_FLOW', '');
 
-PHP Library
---------------
+ 4. Then open the option.js(File Location: public\js\option.js) and fill your LoginRadius credentials
+       
+        var commonOptions = {};
+        commonOptions.apiKey = "";
+        commonOptions.appName = "";
+        commonOptions.hashTemplate = true;
+        commonOptions.sott = "<SOTT>";
+        commonOptions.formValidationMessage = true;
+        commonOptions.verificationUrl = domainName+"/login";
+        commonOptions.resetPasswordUrl = domainName+"/login";
+        var LRObject = new LoginRadiusV2(commonOptions);
 
-This document contains information and examples regarding the LoginRadius PHP SDK. It provides guidance for working with social authentication, capture user profile data, enable social login, enable social sharing, single sign-on, user profile data and sending messages with a variety of social networks such as Facebook, Google, Twitter, Yahoo, LinkedIn, and more.
+ 5. After configuring the options, run following commands:
+
+        cp .env.example .env
+	    php artisan key:generate
+        php artisan serve
+
+ 6. Open the browser and hit the url: http://127.0.0.1:8000/. You would be good to go and start playing with the demo.
 
 
-## Installation
+**Features Implemented in the Demo**
 
-The recommended way to install is through [Composer](http://getcomposer.org/).
- 
-```bash
-# Install Composer
-curl -sS https://getcomposer.org/installer | php
-```
+1. Login
+2. Register
+3. Resend Email Verification
+4. Social Login
+5. Multi-Factor Authentication
+6. Hosted Page
+7. Forgot Password
+8. Custom Object Management
+9. Update Profile
+10. Set Password
+11. Account Linking
+12. Roles Management 
 
-Next, run the Composer command to install the latest stable version of library:
 
-```bash
-composer require loginradius/php-sdk:5.0.2
-```
-
-## Documentation
-
-[Getting Started](https://docs.loginradius.com/api/v2/sdk-libraries/php) - Everything you need to begin using this SDK.
+        
+       
