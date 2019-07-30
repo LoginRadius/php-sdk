@@ -3,22 +3,22 @@
 /**
  * @link : http://www.loginradius.com
  * @category : Clients
- * @package : IHttpClient
+ * @package : IHttpClientInterface
  * @author : LoginRadius Team
- * @version : 5.0.2
+ * @version : 10.0.0-beta
  * @license : https://opensource.org/licenses/MIT
  */
 
 namespace LoginRadiusSDK\Clients;
 
 /**
- * Interface IHttpClient
+ * Interface IHttpClientInterface
  *
  * Used for Custom Client Library.
  *
  * @package LoginRadiusSDK\Clients
  */
-interface IHttpClient
+interface IHttpClientInterface
 {
-    public function request($path, $query_array = array(), $options = array());
+    public function request($path, $queryArray = array(), $options = array());
 }

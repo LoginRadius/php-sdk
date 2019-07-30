@@ -1,5 +1,35 @@
 # LoginRadius PHP SDK Change Log
 
+# Version 10.0.0-beta
+Released on **July 29, 2019**
+##This beta version release includes major changes with several improvements and optimizations :
+ - Enhanced the coding standards of SDK to follow industry programming styles and best practices.
+ - Enhanced security standards of SDK.
+ - Reduced code between to the business layer and persistence layer for optimization of SDK  performance.
+ - Added internal parameter validations in API function
+ - ApiKey and ApiSecret usage redundancy removed
+ - All LoginRadius realted features need to be defined once only and SDK will handle them automatically
+ - Improved the naming conventions of API functions for better readability.
+ - Better Error and Exception Handling for LoginRadius API Response in SDK
+ - Revamped complete SDK and restructured it with latest API function names and parameters
+ - Added detailed description to API functions and parameters for better understanding
+ - Updated the demo according to latest SDK changes
+
+ ##Added new multiple APIs for better user experience
+ - Update Phone ID by UID
+ - Upsert Email
+ - Role Context profile
+ - MFA Resend OTP
+ - User Registration By Captcha
+ - Get Access Token via Linkedin Token
+ - Get Access Token By Foursquare Access Token
+ - Get Active Session By Account Id
+ - Get Active Session By Profile Id
+
+ ##Removed following APIs:
+- GetCompanies API
+- shortenUrl API
+
 # Version 5.0.2
 Released on **January 11, 2019**
 ## Enhancements

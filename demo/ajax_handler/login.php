@@ -1,12 +1,32 @@
 <?php
 
 require_once 'config.php';
-
 use \LoginRadiusSDK\Utility\Functions;
 use \LoginRadiusSDK\LoginRadiusException;
-use \LoginRadiusSDK\Clients\IHttpClient;
+use \LoginRadiusSDK\Clients\IHttpClientInterface;
 use \LoginRadiusSDK\Clients\DefaultHttpClient;
-use \LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI;
+
+use \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI;
+use \LoginRadiusSDK\CustomerRegistration\Account\SottAPI;
+use \LoginRadiusSDK\CustomerRegistration\Account\RoleAPI;
+
+use \LoginRadiusSDK\CustomerRegistration\Advanced\ConfigurationAPI;
+use \LoginRadiusSDK\CustomerRegistration\Advanced\CustomObjectAPI;
+use \LoginRadiusSDK\CustomerRegistration\Advanced\CustomRegistrationDataAPI;
+use \LoginRadiusSDK\CustomerRegistration\Advanced\MultiFactorAuthenticationAPI;
+use \LoginRadiusSDK\CustomerRegistration\Advanced\WebHookAPI;
+
+use \LoginRadiusSDK\CustomerRegistration\Authentication\AuthenticationAPI;
+use \LoginRadiusSDK\CustomerRegistration\Authentication\OneTouchLoginAPI;
+use \LoginRadiusSDK\CustomerRegistration\Authentication\PasswordLessLoginAPI;
+use \LoginRadiusSDK\CustomerRegistration\Authentication\PhoneAuthenticationAPI;
+use \LoginRadiusSDK\CustomerRegistration\Authentication\RiskBasedAuthenticationAPI;
+use \LoginRadiusSDK\CustomerRegistration\Authentication\SmartLoginAPI;
+
+use \LoginRadiusSDK\CustomerRegistration\Social\NativeSocialAPI;
+use \LoginRadiusSDK\CustomerRegistration\Social\SocialAPI;
+
+
 
 function loginByEmail(array $request) {
     $email = isset($request['email']) ? trim($request['email']) : '';
@@ -15,17 +35,17 @@ function loginByEmail(array $request) {
     if (empty($email) || empty($password)) {
         $response['message'] = 'Email Id and Password are required fields.';
     } else {
-        $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $authenticationObj = new AuthenticationAPI();
         try {
-            $payload = array('email' => $email, 'password' => $password);
-            $result = $authenticationObj->authLoginByEmail($payload);
+            $loginByEmailAuthenticationModel = array('email' => $email, 'password' => $password);
+            $result = $authenticationObj->loginByEmail($loginByEmailAuthenticationModel);
             if (isset($result->access_token) && $result->access_token != '') {
                 $response['data'] = $result;
                 $response['message'] = "Logged in successfully";
                 $response['status'] = 'success';
             }
         }
-        catch (LoginRadiusException $e) {
+        catch (LoginRadiusException $e) { 
             $response['message'] = $e->error_response->Description;
         }
     }
@@ -39,9 +59,9 @@ function getProfile(array $request) {
         $response['message'] = 'Access Token is a required field.';
     }
     else {
-        $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $authenticationObj = new AuthenticationAPI();
         try {
-            $result = $authenticationObj->getProfile($token);
+            $result = $authenticationObj->getProfileByAccessToken($token);
             if ((isset($result->EmailVerified) && $result->EmailVerified) || AUTH_FLOW == 'optional' || AUTH_FLOW == 'disabled') {
                 $response['data'] = $result;
                 $response['message'] = "Profile successfully retrieved.";
@@ -67,10 +87,21 @@ function registration(array $request) {
     if (empty($email) || empty($password)) {
         $response['message'] = 'Email Id and Password are required fields.';
     } else {
-        $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $authenticationObj = new AuthenticationAPI();
         try {
-            $payload = array('Email' => array(array('Type' => 'Primary', 'Value' => $email)), 'password' => $password);
-            $result = $authenticationObj->registerByEmail($payload, $request['verificationurl']);
+            $userprofileModel = array('Email' => array(array('Type' => 'Primary', 'Value' => $email)), 'password' => $password);
+            $sottObj = new SottAPI();
+            $sott = $sottObj->generateSott(10);
+
+            if(!is_object($sott)) {
+                $sott = json_decode($sott);
+            }
+            $emailTemplate = '';
+            $fields = "";
+            $verificationUrl = $request['verificationurl'];
+            $welcomeEmailTemplate = '';
+
+            $result = $authenticationObj->userRegistrationByEmail($userprofileModel, $sott->Sott, $emailTemplate, $fields, $verificationUrl, $welcomeEmailTemplate);
             if ((isset($result->EmailVerified) && $result->EmailVerified) || AUTH_FLOW == 'optional' || AUTH_FLOW == 'disabled') {
                 $response['result'] = $result;
                 $response['message'] = "Successfully registered.";
@@ -80,7 +111,7 @@ function registration(array $request) {
                 $response['status'] = 'registered';
             }
         }
-        catch (LoginRadiusException $e) {
+        catch (LoginRadiusException $e) { 
             $response['message'] = $e->error_response->Description;
             $response['status'] = "error";
         }
@@ -95,9 +126,11 @@ function pwLessLogin(array $request) {
         $response['message'] = 'Email Id is a required field.';
     }
     else {
-        $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $authenticationObj = new PasswordLessLoginAPI();
         try {
-            $result = $authenticationObj->passwordLessLoginByEmail($email, $request['verificationurl']);
+            $verificationUrl = $request['verificationurl'];
+            $passwordLessLoginTemplate = '';
+            $result = $authenticationObj->passwordlessLoginByEmail($email, $passwordLessLoginTemplate, $verificationUrl);
             if ((isset($result->IsPosted) && $result->IsPosted)) {
                 $response['message'] = "One time login link has been sent to your provided email id, check email for further instruction.";
                 $response['status'] = 'success';
@@ -118,9 +151,9 @@ function forgotPassword(array $request) {
         $response['message'] = 'Email Id is a required field.';
     }
     else {
-        $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $authenticationObj = new AuthenticationAPI();
         try {
-            $result = $authenticationObj->forgotPassword($email, $request['resetPasswordUrl']);
+            $result = $authenticationObj->forgotPassword($email, $request['resetPasswordUrl'], '');
             if ((isset($result->IsPosted) && $result->IsPosted)) {
                 $response['message'] = "An email has been sent to your address with instructions to reset your password.";
                 $response['status'] = 'success';
@@ -141,9 +174,10 @@ function resetPassword(array $request) {
     if (empty($token) || empty($password)) {
         $response['message'] = 'Password are required fields.';
     } else {
-        $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $authenticationObj = new AuthenticationAPI();
         try {
-            $result = $authenticationObj->resetPassword($token, $password);
+            $formData = ['resettoken' => $token, 'password' => $password, 'welcomeEmailTemplate' => '', 'resetPasswordEmailTemplate' => ''];
+            $result = $authenticationObj->resetPasswordByResetToken($formData);
             if ((isset($result->IsPosted) && $result->IsPosted)) {
                 $response['message'] = "Password has been reset successfully.";
                 $response['status'] = 'success';
@@ -158,15 +192,17 @@ function resetPassword(array $request) {
 }
 
 function pwLessLinkVerify(array $request) {
-    $token = isset($request['token']) ? trim($request['token']) : '';
+    $verificationToken = isset($request['token']) ? trim($request['token']) : '';
     $response = array('status' => 'error', 'message' => 'An error occurred.');
-    if (empty($token)) {
+    if (empty($verificationToken)) {
         $response['message'] = 'Token is a required field.';
     }
     else {
-        $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $authenticationObj = new PasswordLessLoginAPI();
         try {
-            $result = $authenticationObj->passwordLessLoginVerification($token);
+            $fields = '';
+            $welcomeEmailTemplate = '';
+            $result = $authenticationObj->passwordlessLoginVerification($verificationToken, $fields, $welcomeEmailTemplate);
             if ((isset($result->access_token) && $result->access_token != '')) {
                 $response['data'] = $result;
                 $response['message'] = "Link successfully verified.";
@@ -188,7 +224,7 @@ function emailVerify(array $request) {
         $response['message'] = 'Verification Token is a required field.';
     }
     else {
-        $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $authenticationObj = new AuthenticationAPI();
         try {
             $result = $authenticationObj->verifyEmail($vtoken);
             if ((isset($result->IsPosted) && $result->IsPosted)) {
@@ -211,10 +247,16 @@ function mfaLogin(array $request) {
     if (empty($email) || empty($password)) {
         $response['message'] = 'Email Id and Password are required fields.';
     } else {
-        $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $authenticationObj = new MultiFactorAuthenticationAPI();
         try {
             $payload = array('email' => $email, 'password' => $password);
-            $result = $authenticationObj->mfaEmailLogin($payload);
+            $emailTemplate = '';
+            $fields = '';
+            $loginUrl = '';
+            $smsTemplate = '';
+            $smsTemplate2FA = '';
+            $verificationUrl = '';
+            $result = $authenticationObj->mfaLoginByEmail($email, $password, $emailTemplate, $fields, $loginUrl, $smsTemplate, $smsTemplate2FA, $verificationUrl);
             $response['data'] = $result;
             $response['message'] = "Successful MFA Login.";
             $response['status'] = 'success';
@@ -236,9 +278,11 @@ function mfaValidate(array $request) {
     } else if (empty($googleAuthCode)) {
         $response['message'] = 'Google Auth Code is a required field.';
     } else {
-        $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $authenticationObj = new MultiFactorAuthenticationAPI();
         try {
-            $result = $authenticationObj->mfaValidateGoogleAuthCode($secondFactorAuthenticationToken, $googleAuthCode);
+            $fields = '';
+            $smsTemplate2FA = '';
+            $result = $authenticationObj->mFAValidateGoogleAuthCode($googleAuthCode, $secondFactorAuthenticationToken, $fields, $smsTemplate2FA);
             if ((isset($result->access_token) && $result->access_token != '')) {
                 $response['data'] = $result;
                 $response['message'] = "Google Auth Code successfully validated.";
