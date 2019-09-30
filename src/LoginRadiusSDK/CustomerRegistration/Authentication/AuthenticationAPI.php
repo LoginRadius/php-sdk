@@ -922,50 +922,6 @@ class AuthenticationAPI extends Functions
 
 
     /**
-     * This API registers the new users into your Cloud Storage and triggers the phone verification process.
-     * @param authUserRegistrationModel Model Class containing Definition of payload for Auth User Registration API
-     * @param sott LoginRadius Secured One Time Token
-     * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
-     * @param options PreventVerificationEmail (Specifying this value prevents the verification email from being sent. Only applicable if you have the optional email verification flow)
-     * @param smsTemplate SMS Template name
-     * @param verificationUrl Email verification url
-     * @param welcomeEmailTemplate Name of the welcome email template
-     * @return Response containing Definition of Complete Validation, UserProfile data and Access Token
-     * 17.1.2
-    */
-
-    public function userRegistrationByPhone($authUserRegistrationModel, $sott,
-        $fields = "", $options = "", $smsTemplate = null,
-        $verificationUrl = null, $welcomeEmailTemplate = null)
-    {
-        $resourcePath = "/identity/v2/auth/register";
-        $queryParam = [];
-        $queryParam['apiKey'] = Functions::getApiKey();
-        if ($sott === '' || ctype_space($sott)) {
-            throw new LoginRadiusException(Functions::paramValidationMsg('sott'));
-        }
-        if ($fields != '') {
-            $queryParam['fields'] = $fields;
-        }
-        if ($options != '') {
-            $queryParam['options'] = $options;
-        }
-        if ($smsTemplate != '') {
-            $queryParam['smsTemplate'] = $smsTemplate;
-        }
-        if ($verificationUrl != '') {
-            $queryParam['verificationUrl'] = $verificationUrl;
-        }
-        if ($welcomeEmailTemplate != '') {
-            $queryParam['welcomeEmailTemplate'] = $welcomeEmailTemplate;
-        }
-        $queryParam['sott'] = $sott;
-        return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $authUserRegistrationModel);
-    }
-       
-
-
-    /**
      * This API creates a user in the database as well as sends a verification email to the user.
      * @param authUserRegistrationModelWithCaptcha Model Class containing Definition of payload for Auth User Registration by Recaptcha API
      * @param emailTemplate Email template name

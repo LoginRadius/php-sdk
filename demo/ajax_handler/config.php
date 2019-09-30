@@ -1,5 +1,5 @@
 <?php
-define('LR_API_KEY', '<API-KEY>');   // Pass API Key
+define('LR_API_KEY', '<API-KEY>');
 define('LR_API_SECRET', '<SECRET-KEY>');  // Pass API Secret Key
 define('API_REQUEST_SIGNING', ''); // Pass true/false for enable/disable
 define('AUTH_FLOW', '');   // Pass optional/disabled, if email verification flow optional or disabled, no need to mention if required flow

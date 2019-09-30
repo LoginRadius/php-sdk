@@ -5,7 +5,7 @@
  * @category : Utility
  * @package : Functions
  * @author : LoginRadius Team
- * @version : 10.0.0-beta
+ * @version : 10.0.0
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -15,13 +15,6 @@ use LoginRadiusSDK\Clients\IHttpClientInterface;
 use LoginRadiusSDK\Clients\DefaultHttpClient;
 use LoginRadiusSDK\LoginRadiusException;
 
-if (!defined('API_DOMAIN')) {
-    define('API_DOMAIN', 'https://api.loginradius.com');
-}
-if (!defined('API_CONFIG_DOMAIN')) {
-    define('API_CONFIG_DOMAIN', 'https://config.lrcontent.com');
-}
-
 /**
  * Class For LoginRadius
  * This is the Loginradius class to handle response of LoginRadius APIs.
@@ -30,7 +23,7 @@ if (!defined('API_CONFIG_DOMAIN')) {
 class Functions
 {
 
-    const VERSION = '10.0.0-beta';
+    const VERSION = '10.0.0';
 
     private static $_apikey;
     private static $_apisecret;
@@ -47,13 +40,18 @@ class Functions
     {
             if (empty(self::$_apikey) || empty(self::$_apisecret)) {
               
-                if (null !== LR_API_KEY && null !== LR_API_SECRET) {
+                if (defined('LR_API_KEY') && defined('LR_API_SECRET') && null !== LR_API_KEY && null !== LR_API_SECRET) {
                     self::setDefaultApplication(LR_API_KEY, LR_API_SECRET);
                 } else {
                     throw new LoginRadiusException('Required "LoginRadius" API Key and API Secret.');
                 }
             }
-       
+            if (!defined('API_DOMAIN')) {
+                define('API_DOMAIN', 'https://api.loginradius.com');
+            }
+            if (!defined('API_CONFIG_DOMAIN')) {
+                define('API_CONFIG_DOMAIN', 'https://config.lrcontent.com');
+            }
         self::$_options = array_merge(self::$_options, $customizeOptions);
     }
 
@@ -168,7 +166,7 @@ class Functions
      */
     public static function apiClient($path, $queryArray = array(), $options = array())
     {
-        global $apiClientClass;   
+        global $apiClientClass;  
         $mergeOptions = array_merge($options, self::$_options);
         if (isset($apiClientClass) && class_exists($apiClientClass)) {
             $client = new $apiClientClass();

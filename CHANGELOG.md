@@ -1,5 +1,79 @@
 > **LoginRadius PHP SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://www.loginradius.com/docs/api/v2/deployment/sdk-libraries/php-library/)
 
+# Version 10.0.0
+Release on **September 30, 2019**
+
+## Enhancements
+This full version release includes major changes with several improvements and optimizations :
+
+ - Enhanced the coding standards of SDK to follow industry programming styles and best practices.
+ - Enhanced security standards of SDK.
+ - Reduced code between the business layer and persistence layer for optimization of SDK performance.
+ - Added internal parameter validations in the API function.
+ - ApiKey and ApiSecret usage redundancy removed.
+ - All LoginRadius related features need to be defined once only and SDK will handle them automatically.
+ - Improved the naming conventions of API functions for better readability.
+ - Better Exception Handling for LoginRadius API Response in SDK.
+ - Revamped complete SDK and restructured it with latest API function names and parameters.
+ - Added detailed description to API functions and parameters for better understanding.
+ - Updated the demo according to latest SDK changes.
+ - Implemented API Region Feature.
+ - Added PIN Authentication feature APIs.
+ - Added Consent Management feature APIs.
+ - Added Local SOTT generation
+
+## Added new multiple APIs for better user experience
+
+ - Update Phone ID by UID
+ - Upsert Email
+ - Role Context profile
+ - MFA Resend OTP
+ - User Registration By Captcha
+ - Get Access Token via Linkedin Token
+ - Get Access Token By Foursquare Access Token
+ - Get Active Session By Account Id
+ - Get Active Session By Profile Id
+ - Delete User Profiles By Email
+ - Verify Multifactor OTP Authentication
+ - Verify Multifactor Password Authentication
+ - Verify Multifactor PIN Authentication
+ - Update UID
+ - MFA Re-authentication by PIN
+ - PIN Login
+ - Forgot PIN By Email
+ - Forgot PIN By UserName
+ - Reset PIN By ResetToken
+ - Reset PIN By SecurityAnswer And Email
+ - Reset PIN By SecurityAnswer And Username
+ - Reset PIN By SecurityAnswer And Phone
+ - Forgot PIN By Phone
+ - Change PIN By Token
+ - Reset PIN by Phone and OTP
+ - Reset PIN by Email and OTP
+ - Reset PIN by Username and OTP
+ - Set PIN By PinAuthToken
+ - Invalidate PIN Session Token
+ - Submit Consent By ConsentToken
+ - Get Consent Logs
+ - Submit Consent By AccessToken
+ - Verify Consent By AccessToken
+ - Update Consent Profile By AccessToken
+ - Get Consent Logs By Uid
+ - Album With Cursor
+ - Audio With Cursor
+ - Check In With Cursor
+ - Event With Cursor
+ - Following With Cursor
+ - Group With Cursor
+ - Like With Cursor
+
+
+## Removed APIs:
+
+ - GetCompanies API
+ - Getstatus API
+
+
 # Version 10.0.0-beta
 Released on **August 05, 2019**
 

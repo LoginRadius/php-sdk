@@ -23,7 +23,7 @@ class NativeSocialAPI extends Functions
 
 
     /**
-     * The API is used to get LoginRadius access token by sending Facebook’s access token. It will be valid for the specific duration of time specified in the response.
+     * The API is used to get LoginRadius access token by sending Facebook's access token. It will be valid for the specific duration of time specified in the response.
      * @param fbAccessToken Facebook Access Token
      * @return Response containing Definition of Complete Token data
      * 20.3
@@ -44,7 +44,7 @@ class NativeSocialAPI extends Functions
 
 
     /**
-     * The API is used to get LoginRadius access token by sending Twitter’s access token. It will be valid for the specific duration of time specified in the response.
+     * The API is used to get LoginRadius access token by sending Twitter's access token. It will be valid for the specific duration of time specified in the response.
      * @param twAccessToken Twitter Access Token
      * @param twTokenSecret Twitter Token Secret
      * @return Response containing Definition of Complete Token data
@@ -70,7 +70,7 @@ class NativeSocialAPI extends Functions
 
 
     /**
-     * The API is used to get LoginRadius access token by sending Google’s access token. It will be valid for the specific duration of time specified in the response.
+     * The API is used to get LoginRadius access token by sending Google's access token. It will be valid for the specific duration of time specified in the response.
      * @param googleAccessToken Google Access Token
      * @param clientId Google Client ID
      * @param refreshToken LoginRadius refresh_token
@@ -121,7 +121,7 @@ class NativeSocialAPI extends Functions
 
 
     /**
-     * The API is used to get LoginRadius access token by sending Linkedin’s access token. It will be valid for the specific duration of time specified in the response.
+     * The API is used to get LoginRadius access token by sending Linkedin's access token. It will be valid for the specific duration of time specified in the response.
      * @param lnAccessToken Linkedin Access Token
      * @return Response containing Definition of Complete Token data
      * 20.7
@@ -142,7 +142,7 @@ class NativeSocialAPI extends Functions
 
 
     /**
-     * The API is used to get LoginRadius access token by sending Foursquare’s access token. It will be valid for the specific duration of time specified in the response.
+     * The API is used to get LoginRadius access token by sending Foursquare's access token. It will be valid for the specific duration of time specified in the response.
      * @param fsAccessToken Foursquare Access Token
      * @return Response containing Definition of Complete Token data
      * 20.8
@@ -163,7 +163,7 @@ class NativeSocialAPI extends Functions
 
 
     /**
-     * The API is used to get LoginRadius access token by sending Vkontakte’s access token. It will be valid for the specific duration of time specified in the response.
+     * The API is used to get LoginRadius access token by sending Vkontakte's access token. It will be valid for the specific duration of time specified in the response.
      * @param vkAccessToken Vkontakte Access Token
      * @return Response containing Definition of Complete Token data
      * 20.15
@@ -184,7 +184,7 @@ class NativeSocialAPI extends Functions
 
 
     /**
-     * The API is used to get LoginRadius access token by sending Google’s AuthCode. It will be valid for the specific duration of time specified in the response.
+     * The API is used to get LoginRadius access token by sending Google's AuthCode. It will be valid for the specific duration of time specified in the response.
      * @param googleAuthcode Google AuthCode
      * @return Response containing Definition of Complete Token data
      * 20.16

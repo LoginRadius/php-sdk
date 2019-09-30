@@ -127,7 +127,7 @@ class PhoneAuthenticationAPI extends Functions
 
     /**
      * This API is used to consume the verification code sent to verify a user's phone number. Use this call for front-end purposes in cases where the user is already logged in by passing the user's access token.
-     * @param accessToken Access_Token
+     * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @param otp The Verification Code
      * @param smsTemplate SMS Template name
      * @return Response containing Definition of Complete Validation data
@@ -138,9 +138,10 @@ class PhoneAuthenticationAPI extends Functions
         $smsTemplate = null)
     {
         $resourcePath = "/identity/v2/auth/phone/otp";
-        $bodyParam = [];
-        $bodyParam['access_token'] = $accessToken;
         $queryParam = [];
+        if ($accessToken === '' || ctype_space($accessToken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
+        }
         $queryParam['apiKey'] = Functions::getApiKey();
         if ($otp === '' || ctype_space($otp)) {
             throw new LoginRadiusException(Functions::paramValidationMsg('otp'));
@@ -148,8 +149,9 @@ class PhoneAuthenticationAPI extends Functions
         if ($smsTemplate != '') {
             $queryParam['smsTemplate'] = $smsTemplate;
         }
+        $queryParam['access_token'] = $accessToken;
         $queryParam['otp'] = $otp;
-        return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, json_encode($bodyParam));
+        return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam);
     }
        
 
@@ -191,13 +193,16 @@ class PhoneAuthenticationAPI extends Functions
     {
         $resourcePath = "/identity/v2/auth/phone/otp";
         $bodyParam = [];
-        $bodyParam['access_token'] = $accessToken;
         $bodyParam['phone'] = $phone;
         $queryParam = [];
+        if ($accessToken === '' || ctype_space($accessToken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
+        }
         $queryParam['apiKey'] = Functions::getApiKey();
         if ($smsTemplate != '') {
             $queryParam['smsTemplate'] = $smsTemplate;
         }
+        $queryParam['access_token'] = $accessToken;
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, json_encode($bodyParam));
     }
        
@@ -234,7 +239,7 @@ class PhoneAuthenticationAPI extends Functions
 
     /**
      * This API is used to check the Phone Number exists or not on your site.
-     * @param phone LoginRadius API Key
+     * @param phone The Registered Phone Number
      * @return Response containing Definition Complete ExistResponse data
      * 11.6
     */
@@ -270,6 +275,50 @@ class PhoneAuthenticationAPI extends Functions
         $queryParam['apiKey'] = Functions::getApiKey();
         $queryParam['access_token'] = $accessToken;
         return Functions::_apiClientHandler('DELETE', $resourcePath, $queryParam);
+    }
+       
+
+
+    /**
+     * This API registers the new users into your Cloud Storage and triggers the phone verification process.
+     * @param authUserRegistrationModel Model Class containing Definition of payload for Auth User Registration API
+     * @param sott LoginRadius Secured One Time Token
+     * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
+     * @param options PreventVerificationEmail (Specifying this value prevents the verification email from being sent. Only applicable if you have the optional email verification flow)
+     * @param smsTemplate SMS Template name
+     * @param verificationUrl Email verification url
+     * @param welcomeEmailTemplate Name of the welcome email template
+     * @return Response containing Definition of Complete Validation, UserProfile data and Access Token
+     * 17.1.2
+    */
+
+    public function userRegistrationByPhone($authUserRegistrationModel, $sott,
+        $fields = "", $options = "", $smsTemplate = null,
+        $verificationUrl = null, $welcomeEmailTemplate = null)
+    {
+        $resourcePath = "/identity/v2/auth/register";
+        $queryParam = [];
+        $queryParam['apiKey'] = Functions::getApiKey();
+        if ($sott === '' || ctype_space($sott)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('sott'));
+        }
+        if ($fields != '') {
+            $queryParam['fields'] = $fields;
+        }
+        if ($options != '') {
+            $queryParam['options'] = $options;
+        }
+        if ($smsTemplate != '') {
+            $queryParam['smsTemplate'] = $smsTemplate;
+        }
+        if ($verificationUrl != '') {
+            $queryParam['verificationUrl'] = $verificationUrl;
+        }
+        if ($welcomeEmailTemplate != '') {
+            $queryParam['welcomeEmailTemplate'] = $welcomeEmailTemplate;
+        }
+        $queryParam['sott'] = $sott;
+        return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $authUserRegistrationModel);
     }
 
 }

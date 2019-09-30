@@ -514,5 +514,50 @@ class AccountAPI extends Functions
         $queryParam['email'] = $email;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
+       
+
+
+    /**
+     * This API is used to delete all user profiles associated with an Email.
+     * @param email Email of the user
+     * @return Response containing Definition of Delete Request
+     * 18.36
+    */
+
+    public function accountDeleteByEmail($email)
+    {
+        $resourcePath = "/identity/v2/manage/account";
+        $queryParam = [];
+        $queryParam['apiKey'] = Functions::getApiKey();
+        $queryParam['apiSecret'] = Functions::getApiSecret();
+        if ($email === '' || ctype_space($email)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('email'));
+        }
+        $queryParam['email'] = $email;
+        return Functions::_apiClientHandler('DELETE', $resourcePath, $queryParam);
+    }
+       
+
+
+    /**
+     * This API is used to update a user's Uid. It will update all profiles, custom objects and consent management logs associated with the Uid.
+     * @param updateUidModel Payload containing Update UID
+     * @param uid UID, the unified identifier for each user account
+     * @return Response containing Definition of Complete Validation data
+     * 18.41
+    */
+
+    public function accountUpdateUid($updateUidModel, $uid)
+    {
+        $resourcePath = "/identity/v2/manage/account/uid";
+        $queryParam = [];
+        $queryParam['apiKey'] = Functions::getApiKey();
+        $queryParam['apiSecret'] = Functions::getApiSecret();
+        if ($uid === '' || ctype_space($uid)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('uid'));
+        }
+        $queryParam['uid'] = $uid;
+        return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $updateUidModel);
+    }
 
 }
