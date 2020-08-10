@@ -13,28 +13,32 @@ LoginRadius helps businesses boost user engagement on their web/mobile platform,
 
 
 PHP Library
---------------
+=====
 
-This document contains information and examples regarding the LoginRadius PHP SDK. It provides guidance for working with social authentication, capture user profile data, enable social login, enable social sharing, single sign-on, user profile data and sending messages with a variety of social networks such as Facebook, Google, Twitter, Yahoo, LinkedIn, and more.
+
+-------
+
+>Disclaimer<br>
+<br>
+>This library is meant to help you with a quick implementation of the LoginRadius platform and also to serve as a reference point for the LoginRadius API. Keep in mind that it is an open source library, which means you are free to download and customize the library functions based on your specific application needs.
 
 
 ## Installation
 
 The recommended way to install is through [Composer](http://getcomposer.org/).
  
-```bash
+```
 # Install Composer
 curl -sS https://getcomposer.org/installer | php
 ```
 
 Next, run the Composer command to install the latest stable version of library:
 
-```bash
-composer require loginradius/php-sdk:10.0.0
+```
+composer require loginradius/php-sdk:11.0.0
 ```
 
-## Documentation
-
+Include the following files in your Project Directory
 
 ```
 require_once "src/LoginRadiusSDK/Utility/Functions.php";
@@ -89,7 +93,7 @@ define('PASSWORD', 'PROXY_PASSWORD'); // Replace PROXY_PASSWORD with your proxy 
 define('API_DOMAIN', 'DEFINE_CUSTOM_API_DOMAIN');   // Custom API Domain
 ```
 
->Replace 'LOGINRADIUS_SITE_NAME_HERE', 'LOGINRADIUS_API_KEY_HERE' and  'LOGINRADIUS_API_SECRET_HERE' in the above code with your LoginRadius Site Name, LoginRadius API Key, and Secret which you can get [here](/api/v2/admin-console/platform-security/api-key-and-secret).
+>Replace 'LOGINRADIUS_SITE_NAME_HERE', 'LOGINRADIUS_API_KEY_HERE' and  'LOGINRADIUS_API_SECRET_HERE' in the above code with your LoginRadius Site Name, LoginRadius API Key, and Secret which you can get [here](https://www.loginradius.com/docs/api/v2/admin-console/platform-security/api-key-and-secret).
 
 >API Request Signing:- define('API_REQUEST_SIGNING', true); When initializing the SDK, you can optionally specify enabling this feature. Enabling this feature means the customer does not need to pass an API secret in an API request. Instead, they can pass a dynamically generated hash value. This feature will also make sure that the message is not tampered during transit when someone calls our APIs.
 
@@ -125,7 +129,6 @@ use \LoginRadiusSDK\CustomerRegistration\Authentication\SmartLoginAPI;
 use \LoginRadiusSDK\CustomerRegistration\Social\SocialAPI;
 use \LoginRadiusSDK\CustomerRegistration\Social\NativeSocialAPI;
 ```
-
 
 Create a LoginRadius object :
 ```
@@ -179,13 +182,14 @@ List of APIs in this Section:<br>
 [PUT : Auth Reset Password by OTP](#ResetPasswordByEmailOTP-put-)<br>
 [PUT : Auth Reset Password by OTP and UserName](#ResetPasswordByOTPAndUserName-put-)<br>
 [PUT : Auth Change Password](#ChangePassword-put-)<br>
-[PUT : Auth Link Social Identities](#LinkSocialIdentities-put-)<br>
 [PUT : Auth Set or Change UserName](#SetOrChangeUserName-put-)<br>
 [PUT : Auth Resend Email Verification](#AuthResendEmailVerification-put-)<br>
 [POST : Auth Add Email](#AddEmail-post-)<br>
 [POST : Auth Login by Email](#LoginByEmail-post-)<br>
 [POST : Auth Login by Username](#LoginByUserName-post-)<br>
 [POST : Auth Forgot Password](#ForgotPassword-post-)<br>
+[POST : Auth Link Social Identities](#LinkSocialIdentities-post-)<br>
+[POST : Auth Link Social Identities By Ping](#LinkSocialIdentitiesByPing-post-)<br>
 [POST : Auth User Registration by Email](#UserRegistrationByEmail-post-)<br>
 [POST : Auth User Registration By Captcha](#UserRegistrationByCaptcha-post-)<br>
 [GET : Get Security Questions By Email](#GetSecurityQuestionsByEmail-get-)<br>
@@ -200,7 +204,6 @@ List of APIs in this Section:<br>
 [GET : Auth Delete Account](#DeleteAccountByDeleteToken-get-)<br>
 [GET : Auth Check Email Availability](#CheckEmailAvailability-get-)<br>
 [GET : Auth Verify Email](#VerifyEmail-get-)<br>
-[GET : Auth Social Identity](#GetSocialIdentity-get-)<br>
 [GET : Auth Check UserName Availability](#CheckUserNameAvailability-get-)<br>
 [GET : Auth Privacy Policy Accept](#AcceptPrivacyPolicy-get-)<br>
 [GET : Auth Privacy Policy History By Access Token](#GetPrivacyPolicyHistoryByAccessToken-get-)<br>
@@ -215,7 +218,7 @@ $authenticationAPI = new AuthenticationAPI();
 
 
 <h6 id="UpdateProfileByAccessToken-put-">Auth Update Profile by Token (PUT)</h6>
-This API is used to update the user's profile by passing the access_token.
+This API is used to update the user's profile by passing the access token.
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/authentication/auth-update-profile-by-token/)
 
  ```
@@ -236,7 +239,7 @@ $result = $authenticationAPI->updateProfileByAccessToken($access_token,$payload,
 
  
 <h6 id="UnlockAccountByToken-put-">Auth Unlock Account by Access Token (PUT)</h6>
-This API is used to allow a customer with a valid access_token to unlock their account provided that they successfully pass the prompted Bot Protection challenges. The Block or Suspend block types are not applicable for this API. For additional details see our Auth Security Configuration documentation.You are only required to pass the Post Parameters that correspond to the prompted challenges.
+This API is used to allow a customer with a valid access token to unlock their account provided that they successfully pass the prompted Bot Protection challenges. The Block or Suspend block types are not applicable for this API. For additional details see our Auth Security Configuration documentation.You are only required to pass the Post Parameters that correspond to the prompted challenges.
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/authentication/auth-unlock-account-by-access-token/)
 
  ```
@@ -377,19 +380,6 @@ $result = $authenticationAPI->changePassword($access_token,$newPassword,$oldPass
  ```
 
  
-<h6 id="LinkSocialIdentities-put-">Auth Link Social Identities (PUT)</h6>
-This API is used to link up a social provider account with the specified account based on the access token and the social providers user access token.
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/authentication/auth-link-social-identities)
-
- ```
- 
-$access_token = "access_token"; //Required 
-$candidateToken = "candidateToken"; //Required
- 
-$result = $authenticationAPI->linkSocialIdentities($access_token,$candidateToken);
- ```
-
- 
 <h6 id="SetOrChangeUserName-put-">Auth Set or Change UserName (PUT)</h6>
 This API is used to set or change UserName by access token.
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/authentication/auth-set-or-change-user-name/)
@@ -482,6 +472,32 @@ $resetPasswordUrl = "resetPasswordUrl"; //Required
 $emailTemplate = "emailTemplate"; //Optional
  
 $result = $authenticationAPI->forgotPassword($email,$resetPasswordUrl,$emailTemplate);
+ ```
+
+ 
+<h6 id="LinkSocialIdentities-post-">Auth Link Social Identities (POST)</h6>
+This API is used to link up a social provider account with an existing LoginRadius account on the basis of access token and the social providers user access token.
+ [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/authentication/auth-link-social-identities)
+
+ ```
+ 
+$access_token = "access_token"; //Required 
+$candidateToken = "candidateToken"; //Required
+ 
+$result = $authenticationAPI->linkSocialIdentities($access_token,$candidateToken);
+ ```
+
+ 
+<h6 id="LinkSocialIdentitiesByPing-post-">Auth Link Social Identities By Ping (POST)</h6>
+This API is used to link up a social provider account with an existing LoginRadius account on the basis of ping and the social providers user access token.
+ [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/authentication/auth-link-social-identities-by-ping)
+
+ ```
+ 
+$access_token = "access_token"; //Required 
+$clientGuid = "clientGuid"; //Required
+ 
+$result = $authenticationAPI->linkSocialIdentitiesByPing($access_token,$clientGuid);
  ```
 
  
@@ -624,7 +640,7 @@ $result = $authenticationAPI->getAccessTokenInfo($access_token);
 
  
 <h6 id="GetProfileByAccessToken-get-">Auth Read all Profiles by Token (GET)</h6>
-This API retrieves a copy of the user data based on the access_token.
+This API retrieves a copy of the user data based on the access token.
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/authentication/auth-read-profiles-by-token/)
 
  ```
@@ -688,19 +704,6 @@ $result = $authenticationAPI->verifyEmail($verificationToken,$fields,$url,$welco
  ```
 
  
-<h6 id="GetSocialIdentity-get-">Auth Social Identity (GET)</h6>
-This API is called just after account linking API and it prevents the raas profile of the second account from getting created.
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/authentication/auth-social-identity)
-
- ```
- 
-$access_token = "access_token"; //Required 
-$fields = null; //Optional
- 
-$result = $authenticationAPI->getSocialIdentity($access_token,$fields);
- ```
-
- 
 <h6 id="CheckUserNameAvailability-get-">Auth Check UserName Availability (GET)</h6>
 This API is used to check the UserName exists or not on your site.
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/authentication/auth-username-availability/)
@@ -714,7 +717,7 @@ $result = $authenticationAPI->checkUserNameAvailability($username);
 
  
 <h6 id="AcceptPrivacyPolicy-get-">Auth Privacy Policy Accept (GET)</h6>
-This API is used to update the privacy policy stored in the user's profile by providing the access_token of the user accepting the privacy policy
+This API is used to update the privacy policy stored in the user's profile by providing the access token of the user accepting the privacy policy
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/authentication/auth-privacy-policy-accept)
 
  ```
@@ -727,7 +730,7 @@ $result = $authenticationAPI->acceptPrivacyPolicy($access_token,$fields);
 
  
 <h6 id="GetPrivacyPolicyHistoryByAccessToken-get-">Auth Privacy Policy History By Access Token (GET)</h6>
-This API will return all the accepted privacy policies for the user by providing the access_token of that user.
+This API will return all the accepted privacy policies for the user by providing the access token of that user.
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/authentication/privacy-policy-history-by-access-token/)
 
  ```
@@ -791,7 +794,6 @@ List of APIs in this Section:<br>
 [PUT : Account Invalidate Verification Email](#InvalidateAccountEmailVerification-put-)<br>
 [PUT : Reset phone ID verification](#ResetPhoneIDVerificationByUid-put-)<br>
 [PUT : Upsert Email](#UpsertEmail-put-)<br>
-[PUT : Update UID](#AccountUpdateUid-put-)<br>
 [POST : Account Create](#CreateAccount-post-)<br>
 [POST : Forgot Password token](#GetForgotPasswordToken-post-)<br>
 [POST : Email Verification token](#GetEmailVerificationToken-post-)<br>
@@ -903,21 +905,6 @@ $uid = "uid"; //Required
 $fields = null; //Optional
  
 $result = $accountAPI->upsertEmail($payload,$uid,$fields);
- ```
-
- 
-<h6 id="AccountUpdateUid-put-">Update UID (PUT)</h6>
-This API is used to update a user's Uid. It will update all profiles, custom objects and consent management logs associated with the Uid.
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/account/account-update/)
-
- ```
-
- $payload = '{
-"newUid" : "<newUid>"
-}';  //Required 
-$uid = "uid"; //Required
- 
-$result = $accountAPI->accountUpdateUid($payload,$uid);
  ```
 
  
@@ -1058,7 +1045,7 @@ $result = $accountAPI->getAccessTokenByUid($uid);
 
  
 <h6 id="RefreshAccessTokenByRefreshToken-get-">Refresh Access Token by Refresh Token (GET)</h6>
-This API is used to refresh an access_token via it's associated refresh_token.
+This API is used to refresh an access token via it's associated refresh token.
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/refresh-token/refresh-access-token-by-refresh-token)
 
  ```
@@ -1252,9 +1239,10 @@ The Refresh Access Token API is used to refresh the provider access token after 
  ```
  
 $access_Token = "access_Token"; //Required 
-$expiresIn = 0; //Optional
+$expiresIn = 0; //Optional 
+$isWeb = "true"; //Optional
  
-$result = $socialAPI->refreshAccessToken($access_Token,$expiresIn);
+$result = $socialAPI->refreshAccessToken($access_Token,$expiresIn,$isWeb);
  ```
 
  
@@ -1967,7 +1955,7 @@ $result = $phoneAuthenticationAPI->checkPhoneNumberAvailability($phone);
 
  
 <h6 id="RemovePhoneIDByAccessToken-delete-">Remove Phone ID by Access Token (DELETE)</h6>
-This API is used to delete the Phone ID on a user's account via the access_token
+This API is used to delete the Phone ID on a user's account via the access token
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/phone-authentication/remove-phone-id-by-access-token)
 
  ```
@@ -2091,7 +2079,7 @@ $result = $multiFactorAuthenticationAPI->mfaValidateGoogleAuthCode($googleAuthen
 
  
 <h6 id="MFAValidateBackupCode-put-">MFA Validate Backup code (PUT)</h6>
-This API is used to validate the backup code provided by the user and if valid, we return an access_token allowing the user to login incases where Multi-factor authentication (MFA) is enabled and the secondary factor is unavailable. When a user initially downloads the Backup codes, We generate 10 codes, each code can only be consumed once. if any user attempts to go over the number of invalid login attempts configured in the Dashboard then the account gets blocked automatically
+This API is used to validate the backup code provided by the user and if valid, we return an access token allowing the user to login incases where Multi-factor authentication (MFA) is enabled and the secondary factor is unavailable. When a user initially downloads the Backup codes, We generate 10 codes, each code can only be consumed once. if any user attempts to go over the number of invalid login attempts configured in the Dashboard then the account gets blocked automatically
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/backup-codes/mfa-validate-backup-code/)
 
  ```
@@ -2178,7 +2166,7 @@ $result = $multiFactorAuthenticationAPI->mfaLoginByPhone($password,$phone,$email
 
  
 <h6 id="MFAConfigureByAccessToken-get-">MFA Validate Access Token (GET)</h6>
-This API is used to configure the Multi-factor authentication after login by using the access_token when MFA is set as optional on the LoginRadius site.
+This API is used to configure the Multi-factor authentication after login by using the access token when MFA is set as optional on the LoginRadius site.
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/mfa-validate-access-token/)
 
  ```
@@ -2191,7 +2179,7 @@ $result = $multiFactorAuthenticationAPI->mfaConfigureByAccessToken($access_token
 
  
 <h6 id="MFABackupCodeByAccessToken-get-">MFA Backup Code by Access Token (GET)</h6>
-This API is used to get a set of backup codes via access_token to allow the user login on a site that has Multi-factor Authentication enabled in the event that the user does not have a secondary factor available. We generate 10 codes, each code can only be consumed once. If any user attempts to go over the number of invalid login attempts configured in the Dashboard then the account gets blocked automatically
+This API is used to get a set of backup codes via access token to allow the user login on a site that has Multi-factor Authentication enabled in the event that the user does not have a secondary factor available. We generate 10 codes, each code can only be consumed once. If any user attempts to go over the number of invalid login attempts configured in the Dashboard then the account gets blocked automatically
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/backup-codes/mfa-backup-code-by-access-token/)
 
  ```
@@ -2203,7 +2191,7 @@ $result = $multiFactorAuthenticationAPI->mfaBackupCodeByAccessToken($access_toke
 
  
 <h6 id="MFAResetBackupCodeByAccessToken-get-">Reset Backup Code by Access Token (GET)</h6>
-API is used to reset the backup codes on a given account via the access_token. This API call will generate 10 new codes, each code can only be consumed once
+API is used to reset the backup codes on a given account via the access token. This API call will generate 10 new codes, each code can only be consumed once
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/backup-codes/mfa-reset-backup-code-by-access-token/)
 
  ```
@@ -2252,7 +2240,7 @@ $result = $multiFactorAuthenticationAPI->mfaResetBackupCodeByUid($uid);
 
  
 <h6 id="MFAResetGoogleAuthByToken-delete-">MFA Reset Google Authenticator by Token (DELETE)</h6>
-This API Resets the Google Authenticator configurations on a given account via the access_token
+This API Resets the Google Authenticator configurations on a given account via the access token
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/google-authenticator/mfa-reset-google-authenticator-by-token/)
 
  ```
@@ -2265,7 +2253,7 @@ $result = $multiFactorAuthenticationAPI->mfaResetGoogleAuthByToken($access_token
 
  
 <h6 id="MFAResetSMSAuthByToken-delete-">MFA Reset SMS Authenticator by Token (DELETE)</h6>
-This API resets the SMS Authenticator configurations on a given account via the access_token.
+This API resets the SMS Authenticator configurations on a given account via the access token.
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/sms-authenticator/mfa-reset-sms-authenticator-by-token/)
 
  ```
@@ -2458,7 +2446,7 @@ $result = $pinAuthenticationAPI->resetPINByUsernameAndOtp($payload);
 
  
 <h6 id="PINLogin-post-">PIN Login (POST)</h6>
-This API is used to login a user by pin and session_token.
+This API is used to login a user by pin and session token.
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/authentication/pin-authentication/login-by-pin/)
 
  ```
@@ -2584,7 +2572,7 @@ $result = $reAuthenticationAPI->mfaReAuthenticateByOTP($access_token,$payload);
 
  
 <h6 id="MFAReAuthenticateByBackupCode-put-">Validate MFA by Backup Code (PUT)</h6>
-This API is used to re-authenticate by set of backup codes via access_token on the site that has Multi-factor authentication enabled in re-authentication for the user that does not have the device
+This API is used to re-authenticate by set of backup codes via access token on the site that has Multi-factor authentication enabled in re-authentication for the user that does not have the device
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/re-authentication/mfa/re-auth-by-backup-code/)
 
  ```
@@ -2691,7 +2679,7 @@ $result = $reAuthenticationAPI->verifyMultiFactorPINReauthentication($payload,$u
 
  
 <h6 id="MFAReAuthenticate-get-">Multi Factor Re-Authenticate (GET)</h6>
-This API is used to trigger the Multi-Factor Autentication workflow for the provided access_token
+This API is used to trigger the Multi-Factor Autentication workflow for the provided access token
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/re-authentication/re-auth-trigger/)
 
  ```
@@ -3393,7 +3381,7 @@ $result = $customRegistrationDataAPI->validateRegistrationDataCode($code,$record
 
  
 <h6 id="AddRegistrationData-post-">Add Registration Data (POST)</h6>
-This API allows you to fill data into a dropdown list which you have created for user Registeration. For more details on how to use this API please see our Custom Registration Data Overview
+This API allows you to fill data into a dropdown list which you have created for user Registration. For more details on how to use this API please see our Custom Registration Data Overview
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/custom-registration-data/add-registration-data)
 
  ```
@@ -3617,6 +3605,8 @@ List of APIs in this Section:<br>
 [GET : Access Token using google JWT token for Native Mobile Login](#GetAccessTokenByGoogleJWTAccessToken-get-)<br>
 [GET : Access Token via Linkedin Token](#GetAccessTokenByLinkedinAccessToken-get-)<br>
 [GET : Get Access Token By Foursquare Access Token](#GetAccessTokenByFoursquareAccessToken-get-)<br>
+[GET : Access Token via Apple Id Code](#GetAccessTokenByAppleIdCode-get-)<br>
+[GET : Access Token via WeChat Code](#GetAccessTokenByWeChatCode-get-)<br>
 [GET : Access Token via Vkontakte Token](#GetAccessTokenByVkontakteAccessToken-get-)<br>
 [GET : Access Token via Google AuthCode](#GetAccessTokenByGoogleAuthCode-get-)<br>
 
@@ -3632,9 +3622,10 @@ The API is used to get LoginRadius access token by sending Facebook's access tok
 
  ```
  
-$fb_Access_Token = "fb_Access_Token"; //Required
+$fb_Access_Token = "fb_Access_Token"; //Required 
+$socialAppName = "socialAppName"; //Optional
  
-$result = $nativeSocialAPI->getAccessTokenByFacebookAccessToken($fb_Access_Token);
+$result = $nativeSocialAPI->getAccessTokenByFacebookAccessToken($fb_Access_Token,$socialAppName);
  ```
 
  
@@ -3645,9 +3636,10 @@ The API is used to get LoginRadius access token by sending Twitter's access toke
  ```
  
 $tw_Access_Token = "tw_Access_Token"; //Required 
-$tw_Token_Secret = "tw_Token_Secret"; //Required
+$tw_Token_Secret = "tw_Token_Secret"; //Required 
+$socialAppName = "socialAppName"; //Optional
  
-$result = $nativeSocialAPI->getAccessTokenByTwitterAccessToken($tw_Access_Token,$tw_Token_Secret);
+$result = $nativeSocialAPI->getAccessTokenByTwitterAccessToken($tw_Access_Token,$tw_Token_Secret,$socialAppName);
  ```
 
  
@@ -3659,9 +3651,10 @@ The API is used to get LoginRadius access token by sending Google's access token
  
 $google_Access_Token = "google_Access_Token"; //Required 
 $client_id = "client_id"; //Optional 
-$refresh_token = "refresh_token"; //Optional
+$refresh_token = "refresh_token"; //Optional 
+$socialAppName = "socialAppName"; //Optional
  
-$result = $nativeSocialAPI->getAccessTokenByGoogleAccessToken($google_Access_Token,$client_id,$refresh_token);
+$result = $nativeSocialAPI->getAccessTokenByGoogleAccessToken($google_Access_Token,$client_id,$refresh_token,$socialAppName);
  ```
 
  
@@ -3683,9 +3676,10 @@ The API is used to get LoginRadius access token by sending Linkedin's access tok
 
  ```
  
-$ln_Access_Token = "ln_Access_Token"; //Required
+$ln_Access_Token = "ln_Access_Token"; //Required 
+$socialAppName = "socialAppName"; //Optional
  
-$result = $nativeSocialAPI->getAccessTokenByLinkedinAccessToken($ln_Access_Token);
+$result = $nativeSocialAPI->getAccessTokenByLinkedinAccessToken($ln_Access_Token,$socialAppName);
  ```
 
  
@@ -3698,6 +3692,31 @@ The API is used to get LoginRadius access token by sending Foursquare's access t
 $fs_Access_Token = "fs_Access_Token"; //Required
  
 $result = $nativeSocialAPI->getAccessTokenByFoursquareAccessToken($fs_Access_Token);
+ ```
+
+ 
+<h6 id="GetAccessTokenByAppleIdCode-get-">Access Token via Apple Id Code (GET)</h6>
+The API is used to get LoginRadius access token by sending a valid Apple ID OAuth Code. It will be valid for the specific duration of time specified in the response.
+ [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/native-social-login-api/access-token-via-apple-id-code)
+
+ ```
+ 
+$code = "code"; //Required 
+$socialAppName = "socialAppName"; //Optional
+ 
+$result = $nativeSocialAPI->getAccessTokenByAppleIdCode($code,$socialAppName);
+ ```
+
+ 
+<h6 id="GetAccessTokenByWeChatCode-get-">Access Token via WeChat Code (GET)</h6>
+This API is used to retrieve a LoginRadius access token by passing in a valid WeChat OAuth Code.
+ [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/native-social-login-api/access-token-via-wechat-code)
+
+ ```
+ 
+$code = "code"; //Required
+ 
+$result = $nativeSocialAPI->getAccessTokenByWeChatCode($code);
  ```
 
  
@@ -3719,9 +3738,10 @@ The API is used to get LoginRadius access token by sending Google's AuthCode. It
 
  ```
  
-$google_authcode = "google_authcode"; //Required
+$google_authcode = "google_authcode"; //Required 
+$socialAppName = "socialAppName"; //Optional
  
-$result = $nativeSocialAPI->getAccessTokenByGoogleAuthCode($google_authcode);
+$result = $nativeSocialAPI->getAccessTokenByGoogleAuthCode($google_authcode,$socialAppName);
  ```
 
  

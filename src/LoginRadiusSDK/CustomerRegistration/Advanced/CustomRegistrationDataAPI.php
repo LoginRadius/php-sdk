@@ -105,7 +105,7 @@ class CustomRegistrationDataAPI extends Functions
 
 
     /**
-     * This API allows you to fill data into a dropdown list which you have created for user Registeration. For more details on how to use this API please see our Custom Registration Data Overview
+     * This API allows you to fill data into a dropdown list which you have created for user Registration. For more details on how to use this API please see our Custom Registration Data Overview
      * @param registrationDataCreateModelList Model Class containing Definition of List of Registration Data
      * @return Response containing Definition of Complete Validation data
      * 16.2

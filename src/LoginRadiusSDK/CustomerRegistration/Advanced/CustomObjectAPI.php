@@ -62,7 +62,7 @@ class CustomObjectAPI extends Functions
     */
 
     public function updateCustomObjectByToken($accessToken, $objectName,
-        $objectRecordId, $payload, $updateType = "")
+        $objectRecordId, $payload, $updateType = null)
     {
         $resourcePath = "/identity/v2/auth/customobject/$objectRecordId";
         $queryParam = [];
@@ -202,7 +202,7 @@ class CustomObjectAPI extends Functions
     */
 
     public function updateCustomObjectByUid($objectName, $objectRecordId,
-        $payload, $uid, $updateType = "")
+        $payload, $uid, $updateType = null)
     {
         $resourcePath = "/identity/v2/manage/account/$uid/customobject/$objectRecordId";
         $queryParam = [];

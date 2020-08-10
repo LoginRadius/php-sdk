@@ -25,11 +25,12 @@ class NativeSocialAPI extends Functions
     /**
      * The API is used to get LoginRadius access token by sending Facebook's access token. It will be valid for the specific duration of time specified in the response.
      * @param fbAccessToken Facebook Access Token
+     * @param socialAppName Name of Social provider APP
      * @return Response containing Definition of Complete Token data
      * 20.3
     */
 
-    public function getAccessTokenByFacebookAccessToken($fbAccessToken)
+    public function getAccessTokenByFacebookAccessToken($fbAccessToken, $socialAppName = null)
     {
         $resourcePath = "/api/v2/access_token/facebook";
         $queryParam = [];
@@ -37,6 +38,9 @@ class NativeSocialAPI extends Functions
             throw new LoginRadiusException(Functions::paramValidationMsg('fbAccessToken'));
         }
         $queryParam['key'] = Functions::getApiKey();
+        if ($socialAppName != '') {
+            $queryParam['socialAppName'] = $socialAppName;
+        }
         $queryParam['fb_Access_Token'] = $fbAccessToken;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
@@ -47,11 +51,13 @@ class NativeSocialAPI extends Functions
      * The API is used to get LoginRadius access token by sending Twitter's access token. It will be valid for the specific duration of time specified in the response.
      * @param twAccessToken Twitter Access Token
      * @param twTokenSecret Twitter Token Secret
+     * @param socialAppName Name of Social provider APP
      * @return Response containing Definition of Complete Token data
      * 20.4
     */
 
-    public function getAccessTokenByTwitterAccessToken($twAccessToken, $twTokenSecret)
+    public function getAccessTokenByTwitterAccessToken($twAccessToken, $twTokenSecret,
+        $socialAppName = null)
     {
         $resourcePath = "/api/v2/access_token/twitter";
         $queryParam = [];
@@ -61,6 +67,9 @@ class NativeSocialAPI extends Functions
         }
         if ($twTokenSecret === '' || ctype_space($twTokenSecret)) {
             throw new LoginRadiusException(Functions::paramValidationMsg('twTokenSecret'));
+        }
+        if ($socialAppName != '') {
+            $queryParam['socialAppName'] = $socialAppName;
         }
         $queryParam['tw_Access_Token'] = $twAccessToken;
         $queryParam['tw_Token_Secret'] = $twTokenSecret;
@@ -73,13 +82,14 @@ class NativeSocialAPI extends Functions
      * The API is used to get LoginRadius access token by sending Google's access token. It will be valid for the specific duration of time specified in the response.
      * @param googleAccessToken Google Access Token
      * @param clientId Google Client ID
-     * @param refreshToken LoginRadius refresh_token
+     * @param refreshToken LoginRadius refresh token
+     * @param socialAppName Name of Social provider APP
      * @return Response containing Definition of Complete Token data
      * 20.5
     */
 
     public function getAccessTokenByGoogleAccessToken($googleAccessToken, $clientId = null,
-        $refreshToken = null)
+        $refreshToken = null, $socialAppName = null)
     {
         $resourcePath = "/api/v2/access_token/google";
         $queryParam = [];
@@ -92,6 +102,9 @@ class NativeSocialAPI extends Functions
         }
         if ($refreshToken != '') {
             $queryParam['refresh_token'] = $refreshToken;
+        }
+        if ($socialAppName != '') {
+            $queryParam['socialAppName'] = $socialAppName;
         }
         $queryParam['google_Access_Token'] = $googleAccessToken;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
@@ -123,17 +136,21 @@ class NativeSocialAPI extends Functions
     /**
      * The API is used to get LoginRadius access token by sending Linkedin's access token. It will be valid for the specific duration of time specified in the response.
      * @param lnAccessToken Linkedin Access Token
+     * @param socialAppName Name of Social provider APP
      * @return Response containing Definition of Complete Token data
      * 20.7
     */
 
-    public function getAccessTokenByLinkedinAccessToken($lnAccessToken)
+    public function getAccessTokenByLinkedinAccessToken($lnAccessToken, $socialAppName = null)
     {
         $resourcePath = "/api/v2/access_token/linkedin";
         $queryParam = [];
         $queryParam['key'] = Functions::getApiKey();
         if ($lnAccessToken === '' || ctype_space($lnAccessToken)) {
             throw new LoginRadiusException(Functions::paramValidationMsg('lnAccessToken'));
+        }
+        if ($socialAppName != '') {
+            $queryParam['socialAppName'] = $socialAppName;
         }
         $queryParam['ln_Access_Token'] = $lnAccessToken;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
@@ -163,6 +180,52 @@ class NativeSocialAPI extends Functions
 
 
     /**
+     * The API is used to get LoginRadius access token by sending a valid Apple ID OAuth Code. It will be valid for the specific duration of time specified in the response.
+     * @param code Apple Code
+     * @param socialAppName Name of Social provider APP
+     * @return Response containing Definition of Complete Token data
+     * 20.12
+    */
+
+    public function getAccessTokenByAppleIdCode($code, $socialAppName = null)
+    {
+        $resourcePath = "/api/v2/access_token/apple";
+        $queryParam = [];
+        if ($code === '' || ctype_space($code)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('code'));
+        }
+        $queryParam['key'] = Functions::getApiKey();
+        if ($socialAppName != '') {
+            $queryParam['socialAppName'] = $socialAppName;
+        }
+        $queryParam['code'] = $code;
+        return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
+    }
+       
+
+
+    /**
+     * This API is used to retrieve a LoginRadius access token by passing in a valid WeChat OAuth Code.
+     * @param code WeChat Code
+     * @return Response containing Definition of Complete Token data
+     * 20.13
+    */
+
+    public function getAccessTokenByWeChatCode($code)
+    {
+        $resourcePath = "/api/v2/access_token/wechat";
+        $queryParam = [];
+        if ($code === '' || ctype_space($code)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('code'));
+        }
+        $queryParam['key'] = Functions::getApiKey();
+        $queryParam['code'] = $code;
+        return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
+    }
+       
+
+
+    /**
      * The API is used to get LoginRadius access token by sending Vkontakte's access token. It will be valid for the specific duration of time specified in the response.
      * @param vkAccessToken Vkontakte Access Token
      * @return Response containing Definition of Complete Token data
@@ -186,17 +249,21 @@ class NativeSocialAPI extends Functions
     /**
      * The API is used to get LoginRadius access token by sending Google's AuthCode. It will be valid for the specific duration of time specified in the response.
      * @param googleAuthcode Google AuthCode
+     * @param socialAppName Name of Social provider APP
      * @return Response containing Definition of Complete Token data
      * 20.16
     */
 
-    public function getAccessTokenByGoogleAuthCode($googleAuthcode)
+    public function getAccessTokenByGoogleAuthCode($googleAuthcode, $socialAppName = null)
     {
         $resourcePath = "/api/v2/access_token/google";
         $queryParam = [];
         $queryParam['apiKey'] = Functions::getApiKey();
         if ($googleAuthcode === '' || ctype_space($googleAuthcode)) {
             throw new LoginRadiusException(Functions::paramValidationMsg('googleAuthcode'));
+        }
+        if ($socialAppName != '') {
+            $queryParam['socialAppName'] = $socialAppName;
         }
         $queryParam['google_authcode'] = $googleAuthcode;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
