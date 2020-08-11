@@ -1,6 +1,6 @@
 {
     "name": "loginradius/php-sdk",
-    "description": "LoginRadius PHP SDK v10.0.0",
+    "description": "LoginRadius PHP SDK v11.0.0",
     "keywords": ["loginradius", "phpsdk"],
     "type": "library",
     "license": "MIT",

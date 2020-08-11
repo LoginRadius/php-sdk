@@ -23,7 +23,7 @@ class MultiFactorAuthenticationAPI extends Functions
 
 
     /**
-     * This API is used to configure the Multi-factor authentication after login by using the access_token when MFA is set as optional on the LoginRadius site.
+     * This API is used to configure the Multi-factor authentication after login by using the access token when MFA is set as optional on the LoginRadius site.
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @param smsTemplate2FA SMS Template Name
      * @return Response containing Definition of Complete Multi-Factor Authentication Settings data
@@ -135,7 +135,7 @@ class MultiFactorAuthenticationAPI extends Functions
 
 
     /**
-     * This API Resets the Google Authenticator configurations on a given account via the access_token
+     * This API Resets the Google Authenticator configurations on a given account via the access token
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @param googleauthenticator boolean type value,Enable google Authenticator Code.
      * @return Response containing Definition of Delete Request
@@ -159,7 +159,7 @@ class MultiFactorAuthenticationAPI extends Functions
 
 
     /**
-     * This API resets the SMS Authenticator configurations on a given account via the access_token.
+     * This API resets the SMS Authenticator configurations on a given account via the access token.
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @param otpauthenticator Pass 'otpauthenticator' to remove SMS Authenticator
      * @return Response containing Definition of Delete Request
@@ -183,7 +183,7 @@ class MultiFactorAuthenticationAPI extends Functions
 
 
     /**
-     * This API is used to get a set of backup codes via access_token to allow the user login on a site that has Multi-factor Authentication enabled in the event that the user does not have a secondary factor available. We generate 10 codes, each code can only be consumed once. If any user attempts to go over the number of invalid login attempts configured in the Dashboard then the account gets blocked automatically
+     * This API is used to get a set of backup codes via access token to allow the user login on a site that has Multi-factor Authentication enabled in the event that the user does not have a secondary factor available. We generate 10 codes, each code can only be consumed once. If any user attempts to go over the number of invalid login attempts configured in the Dashboard then the account gets blocked automatically
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @return Response containing Definition of Complete Backup Code data
      * 5.13
@@ -204,7 +204,7 @@ class MultiFactorAuthenticationAPI extends Functions
 
 
     /**
-     * API is used to reset the backup codes on a given account via the access_token. This API call will generate 10 new codes, each code can only be consumed once
+     * API is used to reset the backup codes on a given account via the access token. This API call will generate 10 new codes, each code can only be consumed once
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @return Response containing Definition of Complete Backup Code data
      * 5.14
@@ -430,7 +430,7 @@ class MultiFactorAuthenticationAPI extends Functions
 
 
     /**
-     * This API is used to validate the backup code provided by the user and if valid, we return an access_token allowing the user to login incases where Multi-factor authentication (MFA) is enabled and the secondary factor is unavailable. When a user initially downloads the Backup codes, We generate 10 codes, each code can only be consumed once. if any user attempts to go over the number of invalid login attempts configured in the Dashboard then the account gets blocked automatically
+     * This API is used to validate the backup code provided by the user and if valid, we return an access token allowing the user to login incases where Multi-factor authentication (MFA) is enabled and the secondary factor is unavailable. When a user initially downloads the Backup codes, We generate 10 codes, each code can only be consumed once. if any user attempts to go over the number of invalid login attempts configured in the Dashboard then the account gets blocked automatically
      * @param multiFactorAuthModelByBackupCode Model Class containing Definition of payload for MultiFactorAuth By BackupCode API
      * @param secondFactorAuthenticationToken A Uniquely generated MFA identifier token after successful authentication
      * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields

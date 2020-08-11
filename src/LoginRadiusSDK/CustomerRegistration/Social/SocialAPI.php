@@ -46,12 +46,14 @@ class SocialAPI extends Functions
     /**
      * The Refresh Access Token API is used to refresh the provider access token after authentication. It will be valid for up to 60 days on LoginRadius depending on the provider. In order to use the access token in other APIs, always refresh the token using this API.<br><br><b>Supported Providers :</b> Facebook,Yahoo,Google,Twitter, Linkedin.<br><br> Contact LoginRadius support team to enable this API.
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
-     * @param expiresIn Allows you to specify a desired expiration time in minutes for the newly issued access_token.
+     * @param expiresIn Allows you to specify a desired expiration time in minutes for the newly issued access token.
+     * @param isWeb Is web or not.
      * @return Response containing Definition of Complete Token data
      * 20.2
     */
 
-    public function refreshAccessToken($accessToken, $expiresIn = 0)
+    public function refreshAccessToken($accessToken, $expiresIn = 0,
+        $isWeb = false)
     {
         $resourcePath = "/api/v2/access_token/refresh";
         $queryParam = [];
@@ -61,6 +63,9 @@ class SocialAPI extends Functions
         $queryParam['secret'] = Functions::getApiSecret();
         if ($expiresIn != '') {
             $queryParam['expiresIn'] = $expiresIn;
+        }
+        if ($isWeb != '') {
+            $queryParam['isWeb'] = $isWeb;
         }
         $queryParam['access_token'] = $accessToken;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);

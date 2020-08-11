@@ -130,7 +130,7 @@ class AuthenticationAPI extends Functions
     /**
      * This api call invalidates the active access token or expires an access token's validity.
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
-     * @param preventRefresh Boolean value that when set as true, in addition of the access_token being invalidated, it will no longer have the capability of being refreshed.
+     * @param preventRefresh Boolean value that when set as true, in addition of the access token being invalidated, it will no longer have the capability of being refreshed.
      * @return Response containing Definition of Complete Validation data
      * 4.2
     */
@@ -174,7 +174,7 @@ class AuthenticationAPI extends Functions
 
 
     /**
-     * This API retrieves a copy of the user data based on the access_token.
+     * This API retrieves a copy of the user data based on the access token.
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
      * @return Response containing Definition for Complete profile data
@@ -224,7 +224,7 @@ class AuthenticationAPI extends Functions
 
 
     /**
-     * This API is used to update the user's profile by passing the access_token.
+     * This API is used to update the user's profile by passing the access token.
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @param userProfileUpdateModel Model Class containing Definition of payload for User Profile update API
      * @param emailTemplate Email template name
@@ -319,7 +319,7 @@ class AuthenticationAPI extends Functions
 
 
     /**
-     * This API is used to allow a customer with a valid access_token to unlock their account provided that they successfully pass the prompted Bot Protection challenges. The Block or Suspend block types are not applicable for this API. For additional details see our Auth Security Configuration documentation.You are only required to pass the Post Parameters that correspond to the prompted challenges.
+     * This API is used to allow a customer with a valid access token to unlock their account provided that they successfully pass the prompted Bot Protection challenges. The Block or Suspend block types are not applicable for this API. For additional details see our Auth Security Configuration documentation.You are only required to pass the Post Parameters that correspond to the prompted challenges.
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @param unlockProfileModel Payload containing Unlock Profile API
      * @return Response containing Definition of Complete Validation data
@@ -711,30 +711,6 @@ class AuthenticationAPI extends Functions
 
 
     /**
-     * This API is used to link up a social provider account with the specified account based on the access token and the social providers user access token.
-     * @param accessToken Access_Token
-     * @param candidateToken Access token of the account to be linked
-     * @return Response containing Definition of Complete Validation data
-     * 12.1
-    */
-
-    public function linkSocialIdentities($accessToken, $candidateToken)
-    {
-        $resourcePath = "/identity/v2/auth/socialidentity";
-        $bodyParam = [];
-        $bodyParam['candidateToken'] = $candidateToken;
-        $queryParam = [];
-        if ($accessToken === '' || ctype_space($accessToken)) {
-            throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
-        }
-        $queryParam['apiKey'] = Functions::getApiKey();
-        $queryParam['access_token'] = $accessToken;
-        return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, json_encode($bodyParam));
-    }
-       
-
-
-    /**
      * This API is used to unlink up a social provider account with the specified account based on the access token and the social providers user access token. The unlinked account will automatically get removed from your database.
      * @param accessToken Access_Token
      * @param provider Name of the provider
@@ -762,26 +738,49 @@ class AuthenticationAPI extends Functions
 
 
     /**
-     * This API is called just after account linking API and it prevents the raas profile of the second account from getting created.
+     * This API is used to link up a social provider account with an existing LoginRadius account on the basis of access token and the social providers user access token.
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
-     * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
-     * @return Response containing Definition for Complete SocialUserProfile data
-     * 12.3
+     * @param candidateToken Access token of the account to be linked
+     * @return Response containing Definition of Complete Validation data
+     * 12.4
     */
 
-    public function getSocialIdentity($accessToken, $fields = "")
+    public function linkSocialIdentities($accessToken, $candidateToken)
     {
         $resourcePath = "/identity/v2/auth/socialidentity";
+        $bodyParam = [];
+        $bodyParam['candidateToken'] = $candidateToken;
         $queryParam = [];
         if ($accessToken === '' || ctype_space($accessToken)) {
             throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
         }
         $queryParam['apiKey'] = Functions::getApiKey();
-        if ($fields != '') {
-            $queryParam['fields'] = $fields;
-        }
         $queryParam['access_token'] = $accessToken;
-        return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
+        return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, json_encode($bodyParam));
+    }
+       
+
+
+    /**
+     * This API is used to link up a social provider account with an existing LoginRadius account on the basis of ping and the social providers user access token.
+     * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
+     * @param clientGuid Unique ID generated by client
+     * @return Response containing Definition of Complete Validation data
+     * 12.5
+    */
+
+    public function linkSocialIdentitiesByPing($accessToken, $clientGuid)
+    {
+        $resourcePath = "/identity/v2/auth/socialidentity";
+        $bodyParam = [];
+        $bodyParam['clientGuid'] = $clientGuid;
+        $queryParam = [];
+        if ($accessToken === '' || ctype_space($accessToken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
+        }
+        $queryParam['apiKey'] = Functions::getApiKey();
+        $queryParam['access_token'] = $accessToken;
+        return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, json_encode($bodyParam));
     }
        
 
@@ -832,7 +831,7 @@ class AuthenticationAPI extends Functions
 
 
     /**
-     * This API is used to update the privacy policy stored in the user's profile by providing the access_token of the user accepting the privacy policy
+     * This API is used to update the privacy policy stored in the user's profile by providing the access token of the user accepting the privacy policy
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
      * @return Response containing Definition for Complete profile data
@@ -857,7 +856,7 @@ class AuthenticationAPI extends Functions
 
 
     /**
-     * This API will return all the accepted privacy policies for the user by providing the access_token of that user.
+     * This API will return all the accepted privacy policies for the user by providing the access token of that user.
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @return Complete Policy History data
      * 15.2
