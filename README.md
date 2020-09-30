@@ -7,7 +7,7 @@ LoginRadius
 -----------------------------------------------
 LoginRadius PHP wrapper provides access to LoginRadius.
 
-LoginRadius is a unified **Customer Identity Management** API platform that combines 30 major social platforms into a single simplified and maintenance-free API. With LoginRadius' API, websites and mobile apps can implement capture user profile data, enable social login, enable social sharing, add single sign-on and many more.
+LoginRadius is a unified **Customer Identity Management** API platform that combines over 30 major social platforms into a single simplified and maintenance-free API. With LoginRadius' API, websites and mobile apps can implement capture user profile data, enable social login, enable social sharing, add single sign-on and many more.
 
 LoginRadius helps businesses boost user engagement on their web/mobile platform, manage online identities, utilize social media for marketing, capture accurate consumer data and get unique social insight into their customer base.
 
@@ -20,12 +20,12 @@ PHP Library
 
 >Disclaimer<br>
 <br>
->This library is meant to help you with a quick implementation of the LoginRadius platform and also to serve as a reference point for the LoginRadius API. Keep in mind that it is an open source library, which means you are free to download and customize the library functions based on your specific application needs.
+>This library is meant to help you with a quick implementation of the LoginRadius platform and also to serve as a reference point for the LoginRadius API. Keep in mind that it is an open source library, which means you are always free to download and customize the library functions based on your specific application needs.
 
 
 ## Installation
 
-The recommended way to install is through [Composer](http://getcomposer.org/).
+The recommended and the usual way to install is through [Composer](http://getcomposer.org/).
  
 ```
 # Install Composer
@@ -95,7 +95,7 @@ define('API_DOMAIN', 'DEFINE_CUSTOM_API_DOMAIN');   // Custom API Domain
 
 >Replace 'LOGINRADIUS_SITE_NAME_HERE', 'LOGINRADIUS_API_KEY_HERE' and  'LOGINRADIUS_API_SECRET_HERE' in the above code with your LoginRadius Site Name, LoginRadius API Key, and Secret which you can get [here](https://www.loginradius.com/docs/api/v2/admin-console/platform-security/api-key-and-secret).
 
->API Request Signing:- define('API_REQUEST_SIGNING', true); When initializing the SDK, you can optionally specify enabling this feature. Enabling this feature means the customer does not need to pass an API secret in an API request. Instead, they can pass a dynamically generated hash value. This feature will also make sure that the message is not tampered during transit when someone calls our APIs.
+>API Request Signing:- define('API_REQUEST_SIGNING', true); When initializing the SDK, you can optionally specify enabling this feature. Enabling this feature means that the customer does not need to pass an API secret in an API request. Instead, they can pass a dynamically generated hash value. This feature will also make sure that the message is not tampered during transit when someone calls our APIs.
 
 >Pass the **proxy configurations** if you want to **set Http Server Proxy Configuration** through your PHP SDK. Protocol, Host and port are required to set Http Server Proxy configuration (username and password are optional).
 
