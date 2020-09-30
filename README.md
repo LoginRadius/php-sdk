@@ -3850,3 +3850,5 @@ Check out the demo and get the full SDK on our [Github](https://github.com/Login
 
 ## Reference Manual
 Please find the reference manual [here](http://docs.lrcontent.com/apidocs/ref/php/index.html)
+
+Hope you guys like it.
