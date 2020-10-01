@@ -1021,7 +1021,7 @@ $result = $accountAPI->getAccountProfileByUid($uid,$fields);
 
  
 <h6 id="GetAccountPasswordHashByUid-get-">Account Password (GET)</h6>
-This API use to retrive the hashed password of a specified account in Cloud Storage.
+This API use to retrieve the hashed password of a specified account in Cloud Storage.
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/account/account-password)
 
  ```
