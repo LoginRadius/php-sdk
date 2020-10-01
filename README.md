@@ -38,7 +38,7 @@ Next, run the Composer command to install the latest stable version of library:
 composer require loginradius/php-sdk:11.0.0
 ```
 
-Include the following files in your Project Directory
+Include the following files in your Project Directory:
 
 ```
 require_once "src/LoginRadiusSDK/Utility/Functions.php";
@@ -69,7 +69,7 @@ require_once "src/LoginRadiusSDK/CustomerRegistration/Advanced/WebHookAPI.php";
 require_once "src/LoginRadiusSDK/CustomerRegistration/Social/NativeSocialAPI.php";
 require_once "src/LoginRadiusSDK/CustomerRegistration/Social/SocialAPI.php";
 ```
-Modify the config.php file in the SDK to include your LoginRadius Credentials
+Modify the config.php file in the SDK to include your LoginRadius Credentials.
 
 ## Quickstart Guide
 
@@ -211,7 +211,7 @@ List of APIs in this Section:<br>
 [DELETE : Auth Remove Email](#RemoveEmail-delete-)<br>
 [DELETE : Auth Unlink Social Identities](#UnlinkSocialIdentities-delete-)<br>
 
-If you have not already initialized the Authentication object do so now
+If you have not already initialized the Authentication object do so now:
 ```
 $authenticationAPI = new AuthenticationAPI(); 
 ```
