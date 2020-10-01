@@ -653,7 +653,7 @@ $result = $authenticationAPI->getProfileByAccessToken($access_token,$fields);
 
  
 <h6 id="SendWelcomeEmail-get-">Auth Send Welcome Email (GET)</h6>
-This API sends a welcome email
+This API sends a welcome email to the user
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/authentication/auth-send-welcome-email/)
 
  ```
