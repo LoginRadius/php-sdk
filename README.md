@@ -7,7 +7,7 @@ LoginRadius
 -----------------------------------------------
 LoginRadius PHP wrapper provides access to LoginRadius.
 
-LoginRadius is a unified **Customer Identity Management** API platform that combines 30 major social platforms into a single simplified and maintenance-free API. With LoginRadius' API, websites and mobile apps can implement capture user profile data, enable social login, enable social sharing, add single sign-on and many more.
+LoginRadius is a unified **Customer Identity Management** API platform that combines 30 major social platforms into a single simplified and maintenance-free API. With LoginRadius' API, websites and mobile apps you can implement various functionalities such as capture user profile data, enable social login, enable social sharing, add single sign-on and many more.
 
 LoginRadius helps businesses boost user engagement on their web/mobile platform, manage online identities, utilize social media for marketing, capture accurate consumer data and get unique social insight into their customer base.
 
@@ -20,7 +20,7 @@ PHP Library
 
 >Disclaimer<br>
 <br>
->This library is meant to help you with a quick implementation of the LoginRadius platform and also to serve as a reference point for the LoginRadius API. Keep in mind that it is an open source library, which means you are free to download and customize the library functions based on your specific application needs.
+>This library is meant to help you with a quick implementation of the LoginRadius platform and also to serve you as a reference point for the LoginRadius API. Please be aware that it is an open source library, which means you are free to download and customize the library functions based on your specific application needs.
 
 
 ## Installation
