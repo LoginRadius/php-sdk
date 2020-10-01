@@ -2079,7 +2079,7 @@ $result = $multiFactorAuthenticationAPI->mfaValidateGoogleAuthCode($googleAuthen
 
  
 <h6 id="MFAValidateBackupCode-put-">MFA Validate Backup code (PUT)</h6>
-This API is used to validate the backup code provided by the user and if valid, we return an access token allowing the user to login incases where Multi-factor authentication (MFA) is enabled and the secondary factor is unavailable. When a user initially downloads the Backup codes, We generate 10 codes, each code can only be consumed once. if any user attempts to go over the number of invalid login attempts configured in the Dashboard then the account gets blocked automatically
+This API is used to validate the backup code provided by the user and if valid, we return an access token allowing the user to login in case Multi-factor authentication (MFA) is enabled and the secondary factor is unavailable. When a user initially downloads the Backup codes, We generate 10 codes, each code can only be consumed once. if any user attempts to go over the number of invalid login attempts configured in the Dashboard then the account gets blocked automatically
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/backup-codes/mfa-validate-backup-code/)
 
  ```
@@ -2679,7 +2679,7 @@ $result = $reAuthenticationAPI->verifyMultiFactorPINReauthentication($payload,$u
 
  
 <h6 id="MFAReAuthenticate-get-">Multi Factor Re-Authenticate (GET)</h6>
-This API is used to trigger the Multi-Factor Autentication workflow for the provided access token
+This API is used to trigger the Multi-Factor Authentication workflow for the provided access token
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/re-authentication/re-auth-trigger/)
 
  ```
@@ -3778,7 +3778,7 @@ $result = $webHookAPI->webHookSubscribe($payload);
 
  
 <h6 id="GetWebHookSubscribedURLs-get-">Webhook Subscribed URLs (GET)</h6>
-This API is used to fatch all the subscribed URLs, for particular event
+This API is used to fetch all the subscribed URLs, for particular event
  [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/webhook-subscribed-urls)
 
  ```
