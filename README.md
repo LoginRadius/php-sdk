@@ -3847,6 +3847,8 @@ $apiClient_class = 'CustomHttpClient';
 ## Demo
 
 Check out the demo and get the full SDK on our [Github](https://github.com/LoginRadius/php-sdk)
+also you can check https://www.youtube.com/playlist?list=PL3PS687CKFEGgaG8SLSRqqhvvbRjDIesw
+also check out our blog : https://www.loginradius.com/blog/
 
 ## Reference Manual
 Please find the reference manual [here](http://docs.lrcontent.com/apidocs/ref/php/index.html)
