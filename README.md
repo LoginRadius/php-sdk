@@ -7,7 +7,7 @@ LoginRadius
 -----------------------------------------------
 LoginRadius PHP wrapper provides access to LoginRadius.
 
-LoginRadius is a unified **Customer Identity Management** API platform that combines 30 major social platforms into a single simplified and maintenance-free API. With LoginRadius' API, websites and mobile apps can implement capture user profile data, enable social login, enable social sharing, add single sign-on and many more.
+LoginRadius is a unified **Customer Identity Management** API platform that combines 30 major social platforms into a single simplified and maintenance-free API. With LoginRadius' API, websites and mobile apps you can implement various functionalities such as capture user profile data, enable social login, enable social sharing, add single sign-on and many more.
 
 LoginRadius helps businesses boost user engagement on their web/mobile platform, manage online identities, utilize social media for marketing, capture accurate consumer data and get unique social insight into their customer base.
 
@@ -18,9 +18,9 @@ PHP Library
 
 -------
 
->Disclaimer<br>
-<br>
->This library is meant to help you with a quick implementation of the LoginRadius platform and also to serve as a reference point for the LoginRadius API. Keep in mind that it is an open source library, which means you are free to download and customize the library functions based on your specific application needs.
+Disclaimer
+<br><br>
+This library is meant to help you with a quick implementation of the LoginRadius platform and also to serve you as a reference point for the LoginRadius API. Please be aware that it is an open source library, which means you are free to download and customize the library functions based on your specific application needs.
 
 
 ## Installation
@@ -38,7 +38,7 @@ Next, run the Composer command to install the latest stable version of library:
 composer require loginradius/php-sdk:11.0.0
 ```
 
-Include the following files in your Project Directory
+Include the following files in your Project Directory:
 
 ```
 require_once "src/LoginRadiusSDK/Utility/Functions.php";
@@ -69,7 +69,7 @@ require_once "src/LoginRadiusSDK/CustomerRegistration/Advanced/WebHookAPI.php";
 require_once "src/LoginRadiusSDK/CustomerRegistration/Social/NativeSocialAPI.php";
 require_once "src/LoginRadiusSDK/CustomerRegistration/Social/SocialAPI.php";
 ```
-Modify the config.php file in the SDK to include your LoginRadius Credentials
+Modify the config.php file in the SDK to include your LoginRadius Credentials.
 
 ## Quickstart Guide
 
@@ -211,7 +211,7 @@ List of APIs in this Section:<br>
 [DELETE : Auth Remove Email](#RemoveEmail-delete-)<br>
 [DELETE : Auth Unlink Social Identities](#UnlinkSocialIdentities-delete-)<br>
 
-If you have not already initialized the Authentication object do so now
+If you have not already initialized the Authentication object do so now:
 ```
 $authenticationAPI = new AuthenticationAPI(); 
 ```
@@ -653,7 +653,7 @@ $result = $authenticationAPI->getProfileByAccessToken($access_token,$fields);
 
  
 <h6 id="SendWelcomeEmail-get-">Auth Send Welcome Email (GET)</h6>
-This API sends a welcome email
+This API sends a welcome email to the user
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/authentication/auth-send-welcome-email/)
 
  ```
@@ -1021,7 +1021,7 @@ $result = $accountAPI->getAccountProfileByUid($uid,$fields);
 
  
 <h6 id="GetAccountPasswordHashByUid-get-">Account Password (GET)</h6>
-This API use to retrive the hashed password of a specified account in Cloud Storage.
+This API use to retrieve the hashed password of a specified account in Cloud Storage.
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/account/account-password)
 
  ```
@@ -2079,7 +2079,7 @@ $result = $multiFactorAuthenticationAPI->mfaValidateGoogleAuthCode($googleAuthen
 
  
 <h6 id="MFAValidateBackupCode-put-">MFA Validate Backup code (PUT)</h6>
-This API is used to validate the backup code provided by the user and if valid, we return an access token allowing the user to login incases where Multi-factor authentication (MFA) is enabled and the secondary factor is unavailable. When a user initially downloads the Backup codes, We generate 10 codes, each code can only be consumed once. if any user attempts to go over the number of invalid login attempts configured in the Dashboard then the account gets blocked automatically
+This API is used to validate the backup code provided by the user and if valid, we return an access token allowing the user to login in case Multi-factor authentication (MFA) is enabled and the secondary factor is unavailable. When a user initially downloads the Backup codes, We generate 10 codes, each code can only be consumed once. if any user attempts to go over the number of invalid login attempts configured in the Dashboard then the account gets blocked automatically
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/backup-codes/mfa-validate-backup-code/)
 
  ```
