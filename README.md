@@ -2,7 +2,7 @@
 LoginRadius
 ==========
 
-![Home Image](http://docs.lrcontent.com/resources/github/banner-1544x500.png)
+![Home Image](https://docs.lrcontent.com/resources/github/banner-1544x500.png)
 
 -----------------------------------------------
 LoginRadius PHP wrapper provides access to LoginRadius.
@@ -25,7 +25,7 @@ PHP Library
 
 ## Installation
 
-The recommended way to install is through [Composer](http://getcomposer.org).
+The recommended way to install is through [Composer](https://getcomposer.org).
 
 ```
 # Install Composer
@@ -143,12 +143,14 @@ $accountObject = new AccountAPI();
 
 #### Partial API response
 
-We have an option to select fields(partial response) which you require as an API response.<br>
-For this, you need to pass an extra parameter(optional) at the end of each API function.
+We have an option to select fields (partial response) which you require as an API response.
 
-- If any field passed does not exist in response, will be ignored.
-- In case of nested, only root object is selectable.
-- Values should be separated by the comma.
+For this, you need to pass an extra parameter (optional) at the end of each API function
+
+- if any field passed does not exist in response, will be ignored;
+- in case of nested, only root object is selectable;
+
+**Note:** Pass values as comma-separated string!
 
 **Example:**
 
@@ -1510,7 +1512,9 @@ $result = $socialAPI->getPosts($access_Token);
 ```
 
 <h6 id="GetTrackableStatusStats-get">Get Trackable Status Stats (GET)</h6>
-The Trackable status API works very similar to the Status API but it returns a Post id that you can use to track the stats(shares, likes, comments) for a specific share/post/status update. This API requires setting permissions in your LoginRadius Dashboard.<br><br> The Trackable Status API is used to update the status on the user's wall and return an Post ID value. It is commonly referred to as Permission based sharing or Push notifications.
+The Trackable status API works very similar to the Status API but it returns a Post id that you can use to track the stats(shares, likes, comments) for a specific share/post/status update. This API requires setting permissions in your LoginRadius Dashboard.
+
+The Trackable Status API is used to update the status on the user's wall and return an Post ID value. It is commonly referred to as Permission based sharing or Push notifications.
 
 [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/get-trackable-status-stats)
 
@@ -1527,7 +1531,9 @@ $result = $socialAPI->getTrackableStatusStats($access_Token, $caption, $descript
 ```
 
 <h6 id="TrackableStatusFetching-get">Trackable Status Fetching (GET)</h6>
-The Trackable status API works very similar to the Status API but it returns a Post id that you can use to track the stats(shares, likes, comments) for a specific share/post/status update. This API requires setting permissions in your LoginRadius Dashboard.<br><br> This API is used to retrieve a tracked post based on the passed in post ID value. This API requires setting permissions in your LoginRadius Dashboard.
+The Trackable status API works very similar to the Status API but it returns a Post id that you can use to track the stats(shares, likes, comments) for a specific share/post/status update. This API requires setting permissions in your LoginRadius Dashboard.
+
+This API is used to retrieve a tracked post based on the passed in post ID value. This API requires setting permissions in your LoginRadius Dashboard.
 
 **Note:** To utilize this API you need to find the ID for the post you want to track, which might require using Trackable Status Posting API first.
 
@@ -3640,7 +3646,7 @@ class CustomHttpClient implements IHttpClient {
 }
 ```
 
-After that, pass the class name of your custom http client in global variable** $apiClient_class** in your project.
+After that, pass the class name of your custom http client in global variable `$apiClient_class` in your project.
 
 > Note
 >
@@ -3658,4 +3664,4 @@ $apiClient_class = 'CustomHttpClient';
 Check out the demo and get the full SDK on our [Github](https://github.com/LoginRadius/php-sdk)
 
 ## Reference Manual
-Please find the reference manual [here](http://docs.lrcontent.com/apidocs/ref/php/index.html)
+Please find the reference manual [here](https://docs.lrcontent.com/apidocs/ref/php/index.html)
