@@ -3850,3 +3850,63 @@ Check out the demo and get the full SDK on our [Github](https://github.com/Login
 
 ## Reference Manual
 Please find the reference manual [here](http://docs.lrcontent.com/apidocs/ref/php/index.html)
+
+The DateTime class
+## Introduction
+
+This class behaves the same as [DateTimeImmutable](https://www.php.net/manual/en/class.datetimeimmutable.php) except objects are modified itself when modification methods such as [DateTime::modify()]('https://www.php.net/manual/en/datetime.modify.php) are called.
+
+## Class synopsis
+```
+DateTime implements DateTimeInterface {
+/* Inherited constants */
+const string DateTimeInterface::ATOM = "Y-m-d\TH:i:sP" ;
+const string DateTimeInterface::COOKIE = "l, d-M-Y H:i:s T" ;
+const string DateTimeInterface::ISO8601 = "Y-m-d\TH:i:sO" ;
+const string DateTimeInterface::RFC822 = "D, d M y H:i:s O" ;
+const string DateTimeInterface::RFC850 = "l, d-M-y H:i:s T" ;
+const string DateTimeInterface::RFC1036 = "D, d M y H:i:s O" ;
+const string DateTimeInterface::RFC1123 = "D, d M Y H:i:s O" ;
+const string DateTimeInterface::RFC7231 = "D, d M Y H:i:s \G\M\T" ;
+const string DateTimeInterface::RFC2822 = "D, d M Y H:i:s O" ;
+const string DateTimeInterface::RFC3339 = "Y-m-d\TH:i:sP" ;
+const string DateTimeInterface::RFC3339_EXTENDED = "Y-m-d\TH:i:s.vP" ;
+const string DateTimeInterface::RSS = "D, d M Y H:i:s O" ;
+const string DateTimeInterface::W3C = "Y-m-d\TH:i:sP" ;
+/* Methods */
+public __construct ([ string $datetime = "now" [, DateTimeZone $timezone = NULL ]] )
+public add ( DateInterval $interval ) : DateTime
+public static createFromFormat ( string $format , string $datetime [, DateTimeZone $timezone ] ) : DateTime
+public static createFromImmutable ( DateTimeImmutable $object ) : DateTime
+public static getLastErrors ( void ) : array
+public modify ( string $modifier ) : DateTime
+public static __set_state ( array $array ) : DateTime
+public setDate ( int $year , int $month , int $day ) : DateTime
+public setISODate ( int $year , int $week [, int $dayOfWeek = 1 ] ) : DateTime
+public setTime ( int $hour , int $minute [, int $second = 0 [, int $microsecond = 0 ]] ) : DateTime
+public setTimestamp ( int $timestamp ) : DateTime
+public setTimezone ( DateTimeZone $timezone ) : DateTime
+public sub ( DateInterval $interval ) : DateTime
+public diff ( DateTimeInterface $targetObject [, bool $absolute = FALSE ] ) : DateInterval
+public format ( string $format ) : string
+public getOffset ( void ) : int
+public getTimestamp ( void ) : int
+public getTimezone ( void ) : DateTimeZone
+public __wakeup ( void )
+}
+```
+
+## Table of Contents
+[DateTime::add](https://www.php.net/manual/en/datetime.add.php) - Adds an amount of days, months, years, hours, minutes and seconds to a DateTime object
+[DateTime::__construct](https://www.php.net/manual/en/datetime.construct.php) - Returns new DateTime object
+[DateTime::createFromFormat](https://www.php.net/manual/en/datetime.createfromformat.php) - Parses a time string according to a specified format
+[DateTime::createFromImmutable](https://www.php.net/manual/en/datetime.createfromimmutable.php) - Returns new DateTime object encapsulating the given DateTimeImmutable object
+[DateTime::getLastErrors](https://www.php.net/manual/en/datetime.getlasterrors.php) - Returns the warnings and errors
+[DateTime::modify](https://www.php.net/manual/en/datetime.modify.php) - Alters the timestamp
+[DateTime::__set_state](https://www.php.net/manual/en/datetime.set-state.php) - The __set_state handler
+[DateTime::setDate](https://www.php.net/manual/en/datetime.setdate.php) - Sets the date
+[DateTime::setISODate](https://www.php.net/manual/en/datetime.setisodate.php) - Sets the ISO date
+[DateTime::setTime](https://www.php.net/manual/en/datetime.settime.php) - Sets the time
+[DateTime::setTimezone](https://www.php.net/manual/en/datetime.settimezone.php) - Sets the time zone for the DateTime object
+[DateTime::sub](https://www.php.net/manual/en/datetime.sub.php) - Subtracts an amount of days, months, years, hours, minutes and seconds from a DateTime object
+
