@@ -1271,7 +1271,7 @@ $result = $socialAPI->inValidateAccessToken($access_token);
 
  
 <h6 id="GetActiveSession-get-">Get Active Session Details (GET)</h6>
-This api is use to get all active session by Access Token.
+This api is used to get all active session by Access Token.
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/get-active-session-details)
 
  ```
