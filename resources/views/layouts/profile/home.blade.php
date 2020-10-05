@@ -21,10 +21,7 @@
                     <img src="{{asset('images/lr-logo.png')}}"/>
                 </a>
                 <span style="display:block;margin-left:70px">Laravel Web Demo</span>
-                <div class="button-group">
-                    <a href="">Minimal</a>
-                    <a href="">LoginScreen</a>
-                </div>
+     
             </div>
             <div class="vertical-menu">
                 <a href="{{ route('profileview') }}" id="menu-profile">Profile</a>
