@@ -11,7 +11,6 @@
 
 namespace LoginRadiusSDK\Utility;
 
-use LoginRadiusSDK\Clients\IHttpClientInterface;
 use LoginRadiusSDK\Clients\DefaultHttpClient;
 use LoginRadiusSDK\LoginRadiusException;
 
@@ -32,48 +31,49 @@ class Functions
     /**
      * Validate and set API credentials and set options.
      *
-     * @param string $apikey
-     * @param string $apisecret
-     * @param array $customizeOptions
+     * @param array  $customizeOptions
+     *
+     * @throws \LoginRadiusSDK\LoginRadiusException
      */
     public function __construct($customizeOptions = array())
     {
-            if (empty(self::$_apikey) || empty(self::$_apisecret)) {
-              
-                if (defined('LR_API_KEY') && defined('LR_API_SECRET') && null !== LR_API_KEY && null !== LR_API_SECRET) {
-                    self::setDefaultApplication(LR_API_KEY, LR_API_SECRET);
-                } else {
-                    throw new LoginRadiusException('Required "LoginRadius" API Key and API Secret.');
-                }
+        if (empty(self::$_apikey) || empty(self::$_apisecret)) {
+            if (defined('LR_API_KEY') && defined('LR_API_SECRET') && null !== LR_API_KEY && null !== LR_API_SECRET) {
+                self::setDefaultApplication(LR_API_KEY, LR_API_SECRET);
+            } else {
+                throw new LoginRadiusException('Required "LoginRadius" API Key and API Secret.');
             }
-            if (!defined('API_DOMAIN')) {
-                define('API_DOMAIN', 'https://api.loginradius.com');
-            }
-            if (!defined('API_CONFIG_DOMAIN')) {
-                define('API_CONFIG_DOMAIN', 'https://config.lrcontent.com');
-            }
+        }
+        if (!defined('API_DOMAIN')) {
+            define('API_DOMAIN', 'https://api.loginradius.com');
+        }
+        if (!defined('API_CONFIG_DOMAIN')) {
+            define('API_CONFIG_DOMAIN', 'https://config.lrcontent.com');
+        }
         self::$_options = array_merge(self::$_options, $customizeOptions);
     }
 
     /**
      * Set API key and API secret.
      *
-     * @param type $apikey
-     * @param type $apisecret
+     * @param string $apikey
+     * @param string $apisecret
+     *
+     * @throws \LoginRadiusSDK\LoginRadiusException
      */
     public static function setDefaultApplication($apikey, $apisecret)
     {
         self::_checkAPIValidation($apikey, $apisecret);
         self::$_apikey = $apikey;
-        self::$_apisecret = $apisecret;       
-
+        self::$_apisecret = $apisecret;
     }
 
     /**
      * Check API Key and Secret in valid GUID format.
      *
-     * @param type $apikey
-     * @param type $apisecret
+     * @param string $apikey
+     * @param string $apisecret
+     *
      * @throws LoginRadiusException
      */
     private static function _checkAPIValidation($apikey, $apisecret)
@@ -102,7 +102,7 @@ class Functions
     /**
      * Get options that you set.
      *
-     * @return string
+     * @return array
      */
     public static function getCustomizeOptions()
     {
@@ -112,7 +112,7 @@ class Functions
     /**
      * Set options that you set.
      *
-     * @return string
+     * @param array $options
      */
     public static function setCustomizeOptions($options = array())
     {
@@ -133,10 +133,11 @@ class Functions
     }
 
     /**
-     *  Check valid Guid format.
+     * Check valid Guid format
      *
-     * @param type $value
-     * @return type
+     * @param string $value
+     *
+     * @return false|int
      */
     public static function isValidGuid($value)
     {
@@ -145,6 +146,13 @@ class Functions
 
     /**
      * _apiClientHandler
+     *
+     * @param string $type
+     * @param string $path
+     * @param array  $queryParameters
+     * @param string $payload
+     *
+     * @return \Exception|\LoginRadiusSDK\LoginRadiusException|mixed
      */
     public static function _apiClientHandler($type, $path, $queryParameters= array(), $payload = "")
     {
@@ -158,15 +166,15 @@ class Functions
     /**
      * Access LoginRadius API server by External library
      *
-     * @global type $apiClientClass
-     * @param type $path
-     * @param type $queryArray
-     * @param type $options
-     * @return type
+     * @param string $path
+     * @param array  $queryArray
+     * @param array  $options
+     *
+     * @return \Exception|\LoginRadiusSDK\LoginRadiusException|mixed
      */
     public static function apiClient($path, $queryArray = array(), $options = array())
     {
-        global $apiClientClass;  
+        global $apiClientClass;
         $mergeOptions = array_merge($options, self::$_options);
         if (isset($apiClientClass) && class_exists($apiClientClass)) {
             $client = new $apiClientClass();
@@ -174,69 +182,71 @@ class Functions
             $client = new DefaultHttpClient();
         }
         if (strpos($path, '/identity/v2/manage') !== false) {
-            if (isset($queryArray['apiSecret']) && $queryArray['apiSecret'] != "") {
-                unset($queryArray['apiSecret']);
-                unset($queryArray['apiKey']);
+            if (!empty($queryArray['apiSecret'])) {
+                unset($queryArray['apiSecret'], $queryArray['apiKey']);
             }
             $mergeOptions = array_merge(array('authentication' => 'secret'), $mergeOptions);
-        } elseif ((strpos($path, '/identity/v2/auth/') !== false) && (isset($queryArray['access_token']) && $queryArray['access_token'] != "")) {
-                $mergeOptions = array_merge(array('access-token' => "Bearer " . $queryArray['access_token']), $mergeOptions);
-                unset($queryArray['access_token']);
-        } elseif ((strpos($path, '/identity/v2/auth/register') !== false) && isset($queryArray['sott']) && $queryArray['sott'] != "") {
+        } elseif (strpos($path, '/identity/v2/auth/') !== false && !empty($queryArray['access_token'])) {
+            $mergeOptions = array_merge(array('access-token' => "Bearer " . $queryArray['access_token']), $mergeOptions);
+            unset($queryArray['access_token']);
+        } elseif (strpos($path, '/identity/v2/auth/register') !== false && !empty($queryArray['sott'])) {
             $mergeOptions = array_merge(array('X-LoginRadius-Sott' => $queryArray['sott']), $mergeOptions);
-                unset($queryArray['sott']);
+            unset($queryArray['sott']);
         } elseif (strpos($path, '/ciam/appinfo') !== false) {
             $path = API_CONFIG_DOMAIN . $path;
         }
-        try{
+        try {
             $response = $client->request($path, $queryArray, $mergeOptions);
         }
         catch(LoginRadiusException $e){
-           return $e;
+            return $e;
         }
-        
+
         return json_decode($response);
     }
 
     /**
      * Manage LoginRadius Authentication
      *
-     * @param type $array
-     * @return type
+     * @param array  $array
+     * @param string $secure
+     * @param string $requestUrl
+     *
+     * @return array
      */
     public static function authentication($array = array(), $secure = 'key', $requestUrl = '')
     {
         $result = array();
-        if ($secure == 'key') {
-            $result = array('apikey' => Functions::getApiKey());
-        } else if ($secure == 'secret') {
-            $result = array('X-LoginRadius-ApiSecret' => Functions::getApiSecret());
-        } else if ($secure == 'hashsecret') {
+        if ($secure === 'key') {
+            $result = array('apikey' => self::getApiKey());
+        } else if ($secure === 'secret') {
+            $result = array('X-LoginRadius-ApiSecret' => self::getApiSecret());
+        } else if ($secure === 'hashsecret') {
             $expiryTime = gmdate("Y-m-d H:i:s", strtotime('1 hour'));
             $encodedUrl = self::urlReplacement(urlencode(urldecode($requestUrl)));
 
-            if (isset($array['method']) && (($array['method'] == 'POST') || ($array['method'] == 'PUT') || ($array['method'] == 'DELETE')) && $array['post_data'] !== true) {
-                $postData = $array['post_data'];              
+            if (isset($array['method']) && \in_array($array['method'], ['POST', 'PUT', 'DELETE']) && $array['post_data'] !== true) {
+                $postData = $array['post_data'];
                 if (is_array($array['post_data']) || is_object($array['post_data'])) {
-                   $postData = json_encode($array['post_data']);
-                }              
+                    $postData = json_encode($array['post_data']);
+                }
                 $stringToHash = $expiryTime . ':' . strtolower($encodedUrl) . ':' . $postData;
             } else {
                 $stringToHash = $expiryTime . ':' . strtolower($encodedUrl);
             }
-            $shaHash = hash_hmac('sha256', $stringToHash, Functions::getApiSecret(), true);
+            $shaHash = hash_hmac('sha256', $stringToHash, self::getApiSecret(), true);
             $result = array('X-Request-Expires' => $expiryTime, 'digest' => "SHA-256=" . base64_encode($shaHash));
         }
 
         return (is_array($array) && count($array) > 0) ? array_merge($result, $array) : $result;
     }
-    
-    
+
     /**
      * URL replacement
      *
-     * @param type $decodedUrl
-     * @return type
+     * @param string $decodedUrl
+     *
+     * @return string
      */
     public static function urlReplacement($decodedUrl)
     {
@@ -247,12 +257,13 @@ class Functions
     /**
      * Build Query string
      *
-     * @param type $data
-     * @return type
+     * @param array $data
+     *
+     * @return string
      */
     public static function queryBuild($data = array())
     {
-        if (is_array($data) && sizeof($data) > 0) {
+        if (is_array($data) && count($data) > 0) {
             return http_build_query($data);
         }
         return '';
@@ -260,9 +271,13 @@ class Functions
 
     /**
      * API validation message
+     *
+     * @param string $parameter
+     *
+     * @return string
      */
     public static function paramValidationMsg($parameter)
     {
-        return "The $parameter method parameter is not formatted or null"; 
+        return "The $parameter method parameter is not formatted or null";
     }
 }
