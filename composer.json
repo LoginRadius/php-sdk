@@ -12,7 +12,7 @@
 	},
 	"require": {
 		"php": ">=5.3.7",
-		"loginradius/php-sdk": "^5.0.2"
+		"loginradius/php-sdk": "11.0.0"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
