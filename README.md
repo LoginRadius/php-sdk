@@ -11,7 +11,6 @@ LoginRadius is a unified **Customer Identity Management** API platform that comb
 
 LoginRadius helps businesses boost user engagement on their web/mobile platform, manage online identities, utilize social media for marketing, capture accurate consumer data and get unique social insight into their customer base.
 
-
 PHP Library
 =====
 
@@ -102,7 +101,6 @@ define('API_DOMAIN', 'DEFINE_CUSTOM_API_DOMAIN');   // Custom API Domain
 >If you have Custom API Domain then define 'API_DOMAIN' then replaced it with your custom API domain, Otherwise no need to define this option in configuration.
 
 ### Implementation
-
 Importing/aliasing with the use operator.
 ```
 use \LoginRadiusSDK\Utility\Functions;
