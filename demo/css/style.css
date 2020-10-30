@@ -25,7 +25,7 @@ input {
 
 button {
     background-color: #35A8FF;
-    color: white;
+    color: gray;
     border: none;
     text-align: center;
     text-decoration: none;
@@ -108,7 +108,7 @@ hr {
 }
 
 .container { 
-    background-color: #eee;
+    background-color: #fff;
     width: 400px;
     padding: 20px;
     margin: auto;
