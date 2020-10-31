@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class WebHookAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -94,5 +93,4 @@ class WebHookAPI extends Functions
         $queryParam['apisecret'] = Functions::getApiSecret();
         return Functions::_apiClientHandler('DELETE', $resourcePath, $queryParam, $webHookSubscribeModel);
     }
-
 }

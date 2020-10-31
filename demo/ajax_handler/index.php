@@ -7,8 +7,7 @@ if (file_exists($page . '.php')) {
     require_once $page . '.php';
     if (function_exists($action)) {
         echo $action($_REQUEST);
-    }
-    else {
+    } else {
         echo 'Action not Exist.';
     }
 }

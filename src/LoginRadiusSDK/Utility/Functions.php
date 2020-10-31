@@ -22,7 +22,6 @@ use LoginRadiusSDK\LoginRadiusException;
  */
 class Functions
 {
-
     const VERSION = '11.0.0';
 
     private static $_apikey;
@@ -38,20 +37,19 @@ class Functions
      */
     public function __construct($customizeOptions = array())
     {
-            if (empty(self::$_apikey) || empty(self::$_apisecret)) {
-              
-                if (defined('LR_API_KEY') && defined('LR_API_SECRET') && null !== LR_API_KEY && null !== LR_API_SECRET) {
-                    self::setDefaultApplication(LR_API_KEY, LR_API_SECRET);
-                } else {
-                    throw new LoginRadiusException('Required "LoginRadius" API Key and API Secret.');
-                }
+        if (empty(self::$_apikey) || empty(self::$_apisecret)) {
+            if (defined('LR_API_KEY') && defined('LR_API_SECRET') && null !== LR_API_KEY && null !== LR_API_SECRET) {
+                self::setDefaultApplication(LR_API_KEY, LR_API_SECRET);
+            } else {
+                throw new LoginRadiusException('Required "LoginRadius" API Key and API Secret.');
             }
-            if (!defined('API_DOMAIN')) {
-                define('API_DOMAIN', 'https://api.loginradius.com');
-            }
-            if (!defined('API_CONFIG_DOMAIN')) {
-                define('API_CONFIG_DOMAIN', 'https://config.lrcontent.com');
-            }
+        }
+        if (!defined('API_DOMAIN')) {
+            define('API_DOMAIN', 'https://api.loginradius.com');
+        }
+        if (!defined('API_CONFIG_DOMAIN')) {
+            define('API_CONFIG_DOMAIN', 'https://config.lrcontent.com');
+        }
         self::$_options = array_merge(self::$_options, $customizeOptions);
     }
 
@@ -65,8 +63,7 @@ class Functions
     {
         self::_checkAPIValidation($apikey, $apisecret);
         self::$_apikey = $apikey;
-        self::$_apisecret = $apisecret;       
-
+        self::$_apisecret = $apisecret;
     }
 
     /**
@@ -166,7 +163,7 @@ class Functions
      */
     public static function apiClient($path, $queryArray = array(), $options = array())
     {
-        global $apiClientClass;  
+        global $apiClientClass;
         $mergeOptions = array_merge($options, self::$_options);
         if (isset($apiClientClass) && class_exists($apiClientClass)) {
             $client = new $apiClientClass();
@@ -180,19 +177,18 @@ class Functions
             }
             $mergeOptions = array_merge(array('authentication' => 'secret'), $mergeOptions);
         } elseif ((strpos($path, '/identity/v2/auth/') !== false) && (isset($queryArray['access_token']) && $queryArray['access_token'] != "")) {
-                $mergeOptions = array_merge(array('access-token' => "Bearer " . $queryArray['access_token']), $mergeOptions);
-                unset($queryArray['access_token']);
+            $mergeOptions = array_merge(array('access-token' => "Bearer " . $queryArray['access_token']), $mergeOptions);
+            unset($queryArray['access_token']);
         } elseif ((strpos($path, '/identity/v2/auth/register') !== false) && isset($queryArray['sott']) && $queryArray['sott'] != "") {
             $mergeOptions = array_merge(array('X-LoginRadius-Sott' => $queryArray['sott']), $mergeOptions);
-                unset($queryArray['sott']);
+            unset($queryArray['sott']);
         } elseif (strpos($path, '/ciam/appinfo') !== false) {
             $path = API_CONFIG_DOMAIN . $path;
         }
-        try{
+        try {
             $response = $client->request($path, $queryArray, $mergeOptions);
-        }
-        catch(LoginRadiusException $e){
-           return $e;
+        } catch (LoginRadiusException $e) {
+            return $e;
         }
         
         return json_decode($response);
@@ -209,17 +205,17 @@ class Functions
         $result = array();
         if ($secure == 'key') {
             $result = array('apikey' => Functions::getApiKey());
-        } else if ($secure == 'secret') {
+        } elseif ($secure == 'secret') {
             $result = array('X-LoginRadius-ApiSecret' => Functions::getApiSecret());
-        } else if ($secure == 'hashsecret') {
+        } elseif ($secure == 'hashsecret') {
             $expiryTime = gmdate("Y-m-d H:i:s", strtotime('1 hour'));
             $encodedUrl = self::urlReplacement(urlencode(urldecode($requestUrl)));
 
             if (isset($array['method']) && (($array['method'] == 'POST') || ($array['method'] == 'PUT') || ($array['method'] == 'DELETE')) && $array['post_data'] !== true) {
-                $postData = $array['post_data'];              
+                $postData = $array['post_data'];
                 if (is_array($array['post_data']) || is_object($array['post_data'])) {
-                   $postData = json_encode($array['post_data']);
-                }              
+                    $postData = json_encode($array['post_data']);
+                }
                 $stringToHash = $expiryTime . ':' . strtolower($encodedUrl) . ':' . $postData;
             } else {
                 $stringToHash = $expiryTime . ':' . strtolower($encodedUrl);
@@ -263,6 +259,6 @@ class Functions
      */
     public static function paramValidationMsg($parameter)
     {
-        return "The $parameter method parameter is not formatted or null"; 
+        return "The $parameter method parameter is not formatted or null";
     }
 }

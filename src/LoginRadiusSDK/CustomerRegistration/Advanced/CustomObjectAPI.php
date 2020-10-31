@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class CustomObjectAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -31,8 +30,11 @@ class CustomObjectAPI extends Functions
      * 6.1
     */
 
-    public function createCustomObjectByToken($accessToken, $objectName,
-        $payload)
+    public function createCustomObjectByToken(
+        $accessToken,
+        $objectName,
+        $payload
+    )
     {
         $resourcePath = "/identity/v2/auth/customobject";
         $queryParam = [];
@@ -61,8 +63,13 @@ class CustomObjectAPI extends Functions
      * 6.2
     */
 
-    public function updateCustomObjectByToken($accessToken, $objectName,
-        $objectRecordId, $payload, $updateType = null)
+    public function updateCustomObjectByToken(
+        $accessToken,
+        $objectName,
+        $objectRecordId,
+        $payload,
+        $updateType = null
+    )
     {
         $resourcePath = "/identity/v2/auth/customobject/$objectRecordId";
         $queryParam = [];
@@ -118,8 +125,11 @@ class CustomObjectAPI extends Functions
      * 6.4
     */
 
-    public function getCustomObjectByRecordIDAndToken($accessToken, $objectName,
-        $objectRecordId)
+    public function getCustomObjectByRecordIDAndToken(
+        $accessToken,
+        $objectName,
+        $objectRecordId
+    )
     {
         $resourcePath = "/identity/v2/auth/customobject/$objectRecordId";
         $queryParam = [];
@@ -146,8 +156,11 @@ class CustomObjectAPI extends Functions
      * 6.5
     */
 
-    public function deleteCustomObjectByToken($accessToken, $objectName,
-        $objectRecordId)
+    public function deleteCustomObjectByToken(
+        $accessToken,
+        $objectName,
+        $objectRecordId
+    )
     {
         $resourcePath = "/identity/v2/auth/customobject/$objectRecordId";
         $queryParam = [];
@@ -174,8 +187,11 @@ class CustomObjectAPI extends Functions
      * 19.1
     */
 
-    public function createCustomObjectByUid($objectName, $payload,
-        $uid)
+    public function createCustomObjectByUid(
+        $objectName,
+        $payload,
+        $uid
+    )
     {
         $resourcePath = "/identity/v2/manage/account/$uid/customobject";
         $queryParam = [];
@@ -201,8 +217,13 @@ class CustomObjectAPI extends Functions
      * 19.2
     */
 
-    public function updateCustomObjectByUid($objectName, $objectRecordId,
-        $payload, $uid, $updateType = null)
+    public function updateCustomObjectByUid(
+        $objectName,
+        $objectRecordId,
+        $payload,
+        $uid,
+        $updateType = null
+    )
     {
         $resourcePath = "/identity/v2/manage/account/$uid/customobject/$objectRecordId";
         $queryParam = [];
@@ -252,8 +273,11 @@ class CustomObjectAPI extends Functions
      * 19.4
     */
 
-    public function getCustomObjectByRecordID($objectName, $objectRecordId,
-        $uid)
+    public function getCustomObjectByRecordID(
+        $objectName,
+        $objectRecordId,
+        $uid
+    )
     {
         $resourcePath = "/identity/v2/manage/account/$uid/customobject/$objectRecordId";
         $queryParam = [];
@@ -277,8 +301,11 @@ class CustomObjectAPI extends Functions
      * 19.5
     */
 
-    public function deleteCustomObjectByRecordID($objectName, $objectRecordId,
-        $uid)
+    public function deleteCustomObjectByRecordID(
+        $objectName,
+        $objectRecordId,
+        $uid
+    )
     {
         $resourcePath = "/identity/v2/manage/account/$uid/customobject/$objectRecordId";
         $queryParam = [];
@@ -290,5 +317,4 @@ class CustomObjectAPI extends Functions
         $queryParam['objectName'] = $objectName;
         return Functions::_apiClientHandler('DELETE', $resourcePath, $queryParam);
     }
-
 }

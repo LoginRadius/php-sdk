@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class AccountAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -172,8 +171,12 @@ class AccountAPI extends Functions
      * 18.15
     */
 
-    public function updateAccountByUid($accountUserProfileUpdateModel, $uid,
-        $fields = "", $nullSupport = false)
+    public function updateAccountByUid(
+        $accountUserProfileUpdateModel,
+        $uid,
+        $fields = "",
+        $nullSupport = false
+    )
     {
         $resourcePath = "/identity/v2/manage/account/$uid";
         $queryParam = [];
@@ -199,8 +202,11 @@ class AccountAPI extends Functions
      * 18.16
     */
 
-    public function updatePhoneIDByUid($phone, $uid,
-        $fields = "")
+    public function updatePhoneIDByUid(
+        $phone,
+        $uid,
+        $fields = ""
+    )
     {
         $resourcePath = "/identity/v2/manage/account/$uid/phoneid";
         $bodyParam = [];
@@ -282,8 +288,11 @@ class AccountAPI extends Functions
      * 18.20
     */
 
-    public function invalidateAccountEmailVerification($uid, $emailTemplate = "",
-        $verificationUrl = "")
+    public function invalidateAccountEmailVerification(
+        $uid,
+        $emailTemplate = "",
+        $verificationUrl = ""
+    )
     {
         $resourcePath = "/identity/v2/manage/account/$uid/invalidateemail";
         $queryParam = [];
@@ -310,8 +319,12 @@ class AccountAPI extends Functions
      * 18.22
     */
 
-    public function getForgotPasswordToken($email, $emailTemplate = null,
-        $resetPasswordUrl = null, $sendEmail = false)
+    public function getForgotPasswordToken(
+        $email,
+        $emailTemplate = null,
+        $resetPasswordUrl = null,
+        $sendEmail = false
+    )
     {
         $resourcePath = "/identity/v2/manage/account/forgot/token";
         $bodyParam = [];
@@ -406,8 +419,11 @@ class AccountAPI extends Functions
      * 18.29
     */
 
-    public function upsertEmail($upsertEmailModel, $uid,
-        $fields = "")
+    public function upsertEmail(
+        $upsertEmailModel,
+        $uid,
+        $fields = ""
+    )
     {
         $resourcePath = "/identity/v2/manage/account/$uid/email";
         $queryParam = [];
@@ -430,8 +446,11 @@ class AccountAPI extends Functions
      * 18.30
     */
 
-    public function removeEmail($email, $uid,
-        $fields = "")
+    public function removeEmail(
+        $email,
+        $uid,
+        $fields = ""
+    )
     {
         $resourcePath = "/identity/v2/manage/account/$uid/email";
         $bodyParam = [];
@@ -536,5 +555,4 @@ class AccountAPI extends Functions
         $queryParam['email'] = $email;
         return Functions::_apiClientHandler('DELETE', $resourcePath, $queryParam);
     }
-
 }

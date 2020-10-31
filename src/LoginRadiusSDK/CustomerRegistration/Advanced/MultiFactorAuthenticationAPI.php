@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class MultiFactorAuthenticationAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -56,8 +55,11 @@ class MultiFactorAuthenticationAPI extends Functions
      * 5.9
     */
 
-    public function mfaUpdateSetting($accessToken, $multiFactorAuthModelWithLockout,
-        $fields = "")
+    public function mfaUpdateSetting(
+        $accessToken,
+        $multiFactorAuthModelWithLockout,
+        $fields = ""
+    )
     {
         $resourcePath = "/identity/v2/auth/account/2fa/verification/otp";
         $queryParam = [];
@@ -84,8 +86,12 @@ class MultiFactorAuthenticationAPI extends Functions
      * 5.10
     */
 
-    public function mfaUpdateByAccessToken($accessToken, $multiFactorAuthModelByGoogleAuthenticatorCode,
-        $fields = "", $smsTemplate = null)
+    public function mfaUpdateByAccessToken(
+        $accessToken,
+        $multiFactorAuthModelByGoogleAuthenticatorCode,
+        $fields = "",
+        $smsTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/account/2fa/verification/googleauthenticatorcode";
         $queryParam = [];
@@ -114,8 +120,11 @@ class MultiFactorAuthenticationAPI extends Functions
      * 5.11
     */
 
-    public function mfaUpdatePhoneNumberByToken($accessToken, $phoneNo2FA,
-        $smsTemplate2FA = null)
+    public function mfaUpdatePhoneNumberByToken(
+        $accessToken,
+        $phoneNo2FA,
+        $smsTemplate2FA = null
+    )
     {
         $resourcePath = "/identity/v2/auth/account/2fa";
         $bodyParam = [];
@@ -238,9 +247,16 @@ class MultiFactorAuthenticationAPI extends Functions
      * 9.8.1
     */
 
-    public function mfaLoginByEmail($email, $password,
-        $emailTemplate = null, $fields = "", $loginUrl = null,
-        $smsTemplate = null, $smsTemplate2FA = null, $verificationUrl = null)
+    public function mfaLoginByEmail(
+        $email,
+        $password,
+        $emailTemplate = null,
+        $fields = "",
+        $loginUrl = null,
+        $smsTemplate = null,
+        $smsTemplate2FA = null,
+        $verificationUrl = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login/2fa";
         $bodyParam = [];
@@ -285,9 +301,16 @@ class MultiFactorAuthenticationAPI extends Functions
      * 9.8.2
     */
 
-    public function mfaLoginByUserName($password, $username,
-        $emailTemplate = null, $fields = "", $loginUrl = null,
-        $smsTemplate = null, $smsTemplate2FA = null, $verificationUrl = null)
+    public function mfaLoginByUserName(
+        $password,
+        $username,
+        $emailTemplate = null,
+        $fields = "",
+        $loginUrl = null,
+        $smsTemplate = null,
+        $smsTemplate2FA = null,
+        $verificationUrl = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login/2fa";
         $bodyParam = [];
@@ -332,9 +355,16 @@ class MultiFactorAuthenticationAPI extends Functions
      * 9.8.3
     */
 
-    public function mfaLoginByPhone($password, $phone,
-        $emailTemplate = null, $fields = "", $loginUrl = null,
-        $smsTemplate = null, $smsTemplate2FA = null, $verificationUrl = null)
+    public function mfaLoginByPhone(
+        $password,
+        $phone,
+        $emailTemplate = null,
+        $fields = "",
+        $loginUrl = null,
+        $smsTemplate = null,
+        $smsTemplate2FA = null,
+        $verificationUrl = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login/2fa";
         $bodyParam = [];
@@ -375,8 +405,12 @@ class MultiFactorAuthenticationAPI extends Functions
      * 9.12
     */
 
-    public function mfaValidateOTPByPhone($multiFactorAuthModelWithLockout, $secondFactorAuthenticationToken,
-        $fields = "", $smsTemplate2FA = null)
+    public function mfaValidateOTPByPhone(
+        $multiFactorAuthModelWithLockout,
+        $secondFactorAuthenticationToken,
+        $fields = "",
+        $smsTemplate2FA = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login/2fa/verification/otp";
         $queryParam = [];
@@ -406,8 +440,12 @@ class MultiFactorAuthenticationAPI extends Functions
      * 9.13
     */
 
-    public function mfaValidateGoogleAuthCode($googleAuthenticatorCode, $secondFactorAuthenticationToken,
-        $fields = "", $smsTemplate2FA = null)
+    public function mfaValidateGoogleAuthCode(
+        $googleAuthenticatorCode,
+        $secondFactorAuthenticationToken,
+        $fields = "",
+        $smsTemplate2FA = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login/2fa/verification/googleauthenticatorcode";
         $bodyParam = [];
@@ -438,8 +476,11 @@ class MultiFactorAuthenticationAPI extends Functions
      * 9.14
     */
 
-    public function mfaValidateBackupCode($multiFactorAuthModelByBackupCode, $secondFactorAuthenticationToken,
-        $fields = "")
+    public function mfaValidateBackupCode(
+        $multiFactorAuthModelByBackupCode,
+        $secondFactorAuthenticationToken,
+        $fields = ""
+    )
     {
         $resourcePath = "/identity/v2/auth/login/2fa/verification/backupcode";
         $queryParam = [];
@@ -465,8 +506,11 @@ class MultiFactorAuthenticationAPI extends Functions
      * 9.16
     */
 
-    public function mfaUpdatePhoneNumber($phoneNo2FA, $secondFactorAuthenticationToken,
-        $smsTemplate2FA = null)
+    public function mfaUpdatePhoneNumber(
+        $phoneNo2FA,
+        $secondFactorAuthenticationToken,
+        $smsTemplate2FA = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login/2fa";
         $bodyParam = [];
@@ -601,5 +645,4 @@ class MultiFactorAuthenticationAPI extends Functions
         $queryParam['uid'] = $uid;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
-
 }

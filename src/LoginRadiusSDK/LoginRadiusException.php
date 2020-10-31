@@ -17,7 +17,6 @@ namespace LoginRadiusSDK;
  */
 class LoginRadiusException extends \Exception
 {
-
     public $error_response;
 
     /**

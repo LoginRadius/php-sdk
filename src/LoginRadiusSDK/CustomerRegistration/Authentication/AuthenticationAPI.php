@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class AuthenticationAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -236,9 +235,15 @@ class AuthenticationAPI extends Functions
      * 5.4
     */
 
-    public function updateProfileByAccessToken($accessToken, $userProfileUpdateModel,
-        $emailTemplate = null, $fields = "", $nullSupport = false,
-        $smsTemplate = null, $verificationUrl = null)
+    public function updateProfileByAccessToken(
+        $accessToken,
+        $userProfileUpdateModel,
+        $emailTemplate = null,
+        $fields = "",
+        $nullSupport = false,
+        $smsTemplate = null,
+        $verificationUrl = null
+    )
     {
         $resourcePath = "/identity/v2/auth/account";
         $queryParam = [];
@@ -276,8 +281,11 @@ class AuthenticationAPI extends Functions
      * 5.5
     */
 
-    public function deleteAccountWithEmailConfirmation($accessToken, $deleteUrl = null,
-        $emailTemplate = null)
+    public function deleteAccountWithEmailConfirmation(
+        $accessToken,
+        $deleteUrl = null,
+        $emailTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/account";
         $queryParam = [];
@@ -371,8 +379,12 @@ class AuthenticationAPI extends Functions
      * 8.2
     */
 
-    public function verifyEmail($verificationToken, $fields = "",
-        $url = null, $welcomeEmailTemplate = null)
+    public function verifyEmail(
+        $verificationToken,
+        $fields = "",
+        $url = null,
+        $welcomeEmailTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/email";
         $queryParam = [];
@@ -405,8 +417,12 @@ class AuthenticationAPI extends Functions
      * 8.3
     */
 
-    public function verifyEmailByOTP($emailVerificationByOtpModel, $fields = "",
-        $url = null, $welcomeEmailTemplate = null)
+    public function verifyEmailByOTP(
+        $emailVerificationByOtpModel,
+        $fields = "",
+        $url = null,
+        $welcomeEmailTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/email";
         $queryParam = [];
@@ -436,8 +452,13 @@ class AuthenticationAPI extends Functions
      * 8.5
     */
 
-    public function addEmail($accessToken, $email,
-        $type, $emailTemplate = null, $verificationUrl = null)
+    public function addEmail(
+        $accessToken,
+        $email,
+        $type,
+        $emailTemplate = null,
+        $verificationUrl = null
+    )
     {
         $resourcePath = "/identity/v2/auth/email";
         $bodyParam = [];
@@ -495,8 +516,13 @@ class AuthenticationAPI extends Functions
      * 9.2.1
     */
 
-    public function loginByEmail($emailAuthenticationModel, $emailTemplate = null,
-        $fields = "", $loginUrl = null, $verificationUrl = null)
+    public function loginByEmail(
+        $emailAuthenticationModel,
+        $emailTemplate = null,
+        $fields = "",
+        $loginUrl = null,
+        $verificationUrl = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login";
         $queryParam = [];
@@ -529,8 +555,13 @@ class AuthenticationAPI extends Functions
      * 9.2.2
     */
 
-    public function loginByUserName($userNameAuthenticationModel, $emailTemplate = null,
-        $fields = "", $loginUrl = null, $verificationUrl = null)
+    public function loginByUserName(
+        $userNameAuthenticationModel,
+        $emailTemplate = null,
+        $fields = "",
+        $loginUrl = null,
+        $verificationUrl = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login";
         $queryParam = [];
@@ -561,8 +592,11 @@ class AuthenticationAPI extends Functions
      * 10.1
     */
 
-    public function forgotPassword($email, $resetPasswordUrl,
-        $emailTemplate = null)
+    public function forgotPassword(
+        $email,
+        $resetPasswordUrl,
+        $emailTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/password";
         $bodyParam = [];
@@ -692,8 +726,11 @@ class AuthenticationAPI extends Functions
      * 10.8
     */
 
-    public function changePassword($accessToken, $newPassword,
-        $oldPassword)
+    public function changePassword(
+        $accessToken,
+        $newPassword,
+        $oldPassword
+    )
     {
         $resourcePath = "/identity/v2/auth/password/change";
         $bodyParam = [];
@@ -719,8 +756,11 @@ class AuthenticationAPI extends Functions
      * 12.2
     */
 
-    public function unlinkSocialIdentities($accessToken, $provider,
-        $providerId)
+    public function unlinkSocialIdentities(
+        $accessToken,
+        $provider,
+        $providerId
+    )
     {
         $resourcePath = "/identity/v2/auth/socialidentity";
         $bodyParam = [];
@@ -889,9 +929,15 @@ class AuthenticationAPI extends Functions
      * 17.1.1
     */
 
-    public function userRegistrationByEmail($authUserRegistrationModel, $sott,
-        $emailTemplate = null, $fields = "", $options = "",
-        $verificationUrl = null, $welcomeEmailTemplate = null)
+    public function userRegistrationByEmail(
+        $authUserRegistrationModel,
+        $sott,
+        $emailTemplate = null,
+        $fields = "",
+        $options = "",
+        $verificationUrl = null,
+        $welcomeEmailTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/register";
         $queryParam = [];
@@ -933,9 +979,15 @@ class AuthenticationAPI extends Functions
      * 17.2
     */
 
-    public function userRegistrationByCaptcha($authUserRegistrationModelWithCaptcha, $emailTemplate = null,
-        $fields = "", $options = "", $smsTemplate = null,
-        $verificationUrl = null, $welcomeEmailTemplate = null)
+    public function userRegistrationByCaptcha(
+        $authUserRegistrationModelWithCaptcha,
+        $emailTemplate = null,
+        $fields = "",
+        $options = "",
+        $smsTemplate = null,
+        $verificationUrl = null,
+        $welcomeEmailTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/register/captcha";
         $queryParam = [];
@@ -972,8 +1024,11 @@ class AuthenticationAPI extends Functions
      * 17.3
     */
 
-    public function authResendEmailVerification($email, $emailTemplate = null,
-        $verificationUrl = null)
+    public function authResendEmailVerification(
+        $email,
+        $emailTemplate = null,
+        $verificationUrl = null
+    )
     {
         $resourcePath = "/identity/v2/auth/register";
         $bodyParam = [];
@@ -988,5 +1043,4 @@ class AuthenticationAPI extends Functions
         }
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, json_encode($bodyParam));
     }
-
 }

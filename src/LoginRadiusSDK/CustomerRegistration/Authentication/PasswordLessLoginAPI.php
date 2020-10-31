@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class PasswordLessLoginAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -31,8 +30,11 @@ class PasswordLessLoginAPI extends Functions
      * 9.6
     */
 
-    public function passwordlessLoginPhoneVerification($passwordLessLoginOtpModel, $fields = "",
-        $smsTemplate = null)
+    public function passwordlessLoginPhoneVerification(
+        $passwordLessLoginOtpModel,
+        $fields = "",
+        $smsTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login/passwordlesslogin/otp/verify";
         $queryParam = [];
@@ -82,8 +84,11 @@ class PasswordLessLoginAPI extends Functions
      * 9.18.1
     */
 
-    public function passwordlessLoginByEmail($email, $passwordLessLoginTemplate = null,
-        $verificationUrl = null)
+    public function passwordlessLoginByEmail(
+        $email,
+        $passwordLessLoginTemplate = null,
+        $verificationUrl = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login/passwordlesslogin/email";
         $queryParam = [];
@@ -112,8 +117,11 @@ class PasswordLessLoginAPI extends Functions
      * 9.18.2
     */
 
-    public function passwordlessLoginByUserName($username, $passwordLessLoginTemplate = null,
-        $verificationUrl = null)
+    public function passwordlessLoginByUserName(
+        $username,
+        $passwordLessLoginTemplate = null,
+        $verificationUrl = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login/passwordlesslogin/email";
         $queryParam = [];
@@ -142,8 +150,11 @@ class PasswordLessLoginAPI extends Functions
      * 9.19
     */
 
-    public function passwordlessLoginVerification($verificationToken, $fields = "",
-        $welcomeEmailTemplate = null)
+    public function passwordlessLoginVerification(
+        $verificationToken,
+        $fields = "",
+        $welcomeEmailTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login/passwordlesslogin/email/verify";
         $queryParam = [];
@@ -160,5 +171,4 @@ class PasswordLessLoginAPI extends Functions
         $queryParam['verificationToken'] = $verificationToken;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
-
 }

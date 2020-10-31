@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class PINAuthenticationAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -53,8 +52,11 @@ class PINAuthenticationAPI extends Functions
      * 42.1
     */
 
-    public function sendForgotPINEmailByEmail($forgotPINLinkByEmailModel, $emailTemplate = null,
-        $resetPINUrl = null)
+    public function sendForgotPINEmailByEmail(
+        $forgotPINLinkByEmailModel,
+        $emailTemplate = null,
+        $resetPINUrl = null
+    )
     {
         $resourcePath = "/identity/v2/auth/pin/forgot/email";
         $queryParam = [];
@@ -79,8 +81,11 @@ class PINAuthenticationAPI extends Functions
      * 42.2
     */
 
-    public function sendForgotPINEmailByUsername($forgotPINLinkByUserNameModel, $emailTemplate = null,
-        $resetPINUrl = null)
+    public function sendForgotPINEmailByUsername(
+        $forgotPINLinkByUserNameModel,
+        $emailTemplate = null,
+        $resetPINUrl = null
+    )
     {
         $resourcePath = "/identity/v2/auth/pin/forgot/username";
         $queryParam = [];
@@ -167,7 +172,7 @@ class PINAuthenticationAPI extends Functions
     /**
      * This API sends the OTP to specified phone number
      * @param forgotPINOtpByPhoneModel Model Class containing Definition for Forgot Pin Otp By Phone API
-     * @param smsTemplate 
+     * @param smsTemplate
      * @return Response Containing Validation Data and SMS Data
      * 42.7
     */
@@ -298,5 +303,4 @@ class PINAuthenticationAPI extends Functions
         $queryParam['session_token'] = $sessionToken;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
-
 }

@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class RiskBasedAuthenticationAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -46,13 +45,26 @@ class RiskBasedAuthenticationAPI extends Functions
      * 9.2.4
     */
 
-    public function rbaLoginByEmail($emailAuthenticationModel, $emailTemplate = null,
-        $fields = "", $loginUrl = null, $passwordDelegation = false,
-        $passwordDelegationApp = null, $rbaBrowserEmailTemplate = null, $rbaBrowserSmsTemplate = null,
-        $rbaCityEmailTemplate = null, $rbaCitySmsTemplate = null, $rbaCountryEmailTemplate = null,
-        $rbaCountrySmsTemplate = null, $rbaIpEmailTemplate = null, $rbaIpSmsTemplate = null,
-        $rbaOneclickEmailTemplate = null, $rbaOTPSmsTemplate = null, $smsTemplate = null,
-        $verificationUrl = null)
+    public function rbaLoginByEmail(
+        $emailAuthenticationModel,
+        $emailTemplate = null,
+        $fields = "",
+        $loginUrl = null,
+        $passwordDelegation = false,
+        $passwordDelegationApp = null,
+        $rbaBrowserEmailTemplate = null,
+        $rbaBrowserSmsTemplate = null,
+        $rbaCityEmailTemplate = null,
+        $rbaCitySmsTemplate = null,
+        $rbaCountryEmailTemplate = null,
+        $rbaCountrySmsTemplate = null,
+        $rbaIpEmailTemplate = null,
+        $rbaIpSmsTemplate = null,
+        $rbaOneclickEmailTemplate = null,
+        $rbaOTPSmsTemplate = null,
+        $smsTemplate = null,
+        $verificationUrl = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login";
         $queryParam = [];
@@ -137,13 +149,26 @@ class RiskBasedAuthenticationAPI extends Functions
      * 9.2.5
     */
 
-    public function rbaLoginByUserName($userNameAuthenticationModel, $emailTemplate = null,
-        $fields = "", $loginUrl = null, $passwordDelegation = false,
-        $passwordDelegationApp = null, $rbaBrowserEmailTemplate = null, $rbaBrowserSmsTemplate = null,
-        $rbaCityEmailTemplate = null, $rbaCitySmsTemplate = null, $rbaCountryEmailTemplate = null,
-        $rbaCountrySmsTemplate = null, $rbaIpEmailTemplate = null, $rbaIpSmsTemplate = null,
-        $rbaOneclickEmailTemplate = null, $rbaOTPSmsTemplate = null, $smsTemplate = null,
-        $verificationUrl = null)
+    public function rbaLoginByUserName(
+        $userNameAuthenticationModel,
+        $emailTemplate = null,
+        $fields = "",
+        $loginUrl = null,
+        $passwordDelegation = false,
+        $passwordDelegationApp = null,
+        $rbaBrowserEmailTemplate = null,
+        $rbaBrowserSmsTemplate = null,
+        $rbaCityEmailTemplate = null,
+        $rbaCitySmsTemplate = null,
+        $rbaCountryEmailTemplate = null,
+        $rbaCountrySmsTemplate = null,
+        $rbaIpEmailTemplate = null,
+        $rbaIpSmsTemplate = null,
+        $rbaOneclickEmailTemplate = null,
+        $rbaOTPSmsTemplate = null,
+        $smsTemplate = null,
+        $verificationUrl = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login";
         $queryParam = [];
@@ -228,13 +253,26 @@ class RiskBasedAuthenticationAPI extends Functions
      * 9.2.6
     */
 
-    public function rbaLoginByPhone($phoneAuthenticationModel, $emailTemplate = null,
-        $fields = "", $loginUrl = null, $passwordDelegation = false,
-        $passwordDelegationApp = null, $rbaBrowserEmailTemplate = null, $rbaBrowserSmsTemplate = null,
-        $rbaCityEmailTemplate = null, $rbaCitySmsTemplate = null, $rbaCountryEmailTemplate = null,
-        $rbaCountrySmsTemplate = null, $rbaIpEmailTemplate = null, $rbaIpSmsTemplate = null,
-        $rbaOneclickEmailTemplate = null, $rbaOTPSmsTemplate = null, $smsTemplate = null,
-        $verificationUrl = null)
+    public function rbaLoginByPhone(
+        $phoneAuthenticationModel,
+        $emailTemplate = null,
+        $fields = "",
+        $loginUrl = null,
+        $passwordDelegation = false,
+        $passwordDelegationApp = null,
+        $rbaBrowserEmailTemplate = null,
+        $rbaBrowserSmsTemplate = null,
+        $rbaCityEmailTemplate = null,
+        $rbaCitySmsTemplate = null,
+        $rbaCountryEmailTemplate = null,
+        $rbaCountrySmsTemplate = null,
+        $rbaIpEmailTemplate = null,
+        $rbaIpSmsTemplate = null,
+        $rbaOneclickEmailTemplate = null,
+        $rbaOTPSmsTemplate = null,
+        $smsTemplate = null,
+        $verificationUrl = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login";
         $queryParam = [];
@@ -292,5 +330,4 @@ class RiskBasedAuthenticationAPI extends Functions
         }
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $phoneAuthenticationModel);
     }
-
 }

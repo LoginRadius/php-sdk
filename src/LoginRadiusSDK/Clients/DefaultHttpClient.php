@@ -79,14 +79,13 @@ class DefaultHttpClient implements IHttpClientInterface
         if (!empty($response)) {
             $result = $response['response'] != "" ? json_decode($response['response']) : "";
             if ((isset($result->ErrorCode) && !empty($result->ErrorCode)) || (isset($result->errorCode) && !empty($result->errorCode)) || (isset($response['statuscode']) && $response['statuscode'] != 200)) {
-                if(isset($result->description)){
+                if (isset($result->description)) {
                     throw new LoginRadiusException($result->description, $result);
                 } elseif (isset($result->Description)) {
                     throw new LoginRadiusException($result->Description, $result);
                 } else {
                     throw new LoginRadiusException("The request responded with ". $response['statuscode'] . " status code", $response['response']);
                 }
-                
             }
         }
         return $response['response'];
@@ -134,7 +133,7 @@ class DefaultHttpClient implements IHttpClientInterface
             $optionsArray[] = 'digest:' . $digest;
         }
         curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $optionsArray);
-        if(defined('PROTOCOL') && PROTOCOL != "" && defined('HOST') && HOST != "" && defined('PORT') && PORT != "" && defined('USER') && USER != "" && defined('PASSWORD') && PASSWORD != "") {
+        if (defined('PROTOCOL') && PROTOCOL != "" && defined('HOST') && HOST != "" && defined('PORT') && PORT != "" && defined('USER') && USER != "" && defined('PASSWORD') && PASSWORD != "") {
             curl_setopt($curlHandle, CURLOPT_PROXY, PROTOCOL . '://' . USER . ':' . PASSWORD . '@' . HOST . ':' . PORT);
         }
 
@@ -143,10 +142,10 @@ class DefaultHttpClient implements IHttpClientInterface
                 $data = json_encode($data);
             }
         }
-            if (in_array($method, array('POST', 'PUT', 'DELETE'))) {
-                curl_setopt($curlHandle, CURLOPT_POSTFIELDS, (($contentType == 'json') ? $data : Functions::queryBuild($data)));
-                curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, $method);
-            }
+        if (in_array($method, array('POST', 'PUT', 'DELETE'))) {
+            curl_setopt($curlHandle, CURLOPT_POSTFIELDS, (($contentType == 'json') ? $data : Functions::queryBuild($data)));
+            curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, $method);
+        }
         curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
         $output = array();

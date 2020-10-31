@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class ConfigurationAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -53,5 +52,4 @@ class ConfigurationAPI extends Functions
         }
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
-
 }

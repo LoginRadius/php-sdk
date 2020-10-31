@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class ConsentManagementAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -42,7 +41,7 @@ class ConsentManagementAPI extends Functions
 
     /**
      * This API is to submit consent form using consent token.
-     * @param consentToken The consent token received after login error 1226 
+     * @param consentToken The consent token received after login error 1226
      * @param consentSubmitModel Model class containing list of multiple consent
      * @return Response containing User Profile Data and access token
      * 43.1
@@ -114,8 +113,11 @@ class ConsentManagementAPI extends Functions
      * 43.4
     */
 
-    public function verifyConsentByAccessToken($accessToken, $event,
-        $isCustom)
+    public function verifyConsentByAccessToken(
+        $accessToken,
+        $event,
+        $isCustom
+    )
     {
         $resourcePath = "/identity/v2/auth/consent/verify";
         $queryParam = [];
@@ -156,5 +158,4 @@ class ConsentManagementAPI extends Functions
         $queryParam['access_token'] = $accessToken;
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $consentUpdateModel);
     }
-
 }

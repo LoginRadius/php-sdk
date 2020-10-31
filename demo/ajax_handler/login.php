@@ -26,9 +26,8 @@ use \LoginRadiusSDK\CustomerRegistration\Authentication\SmartLoginAPI;
 use \LoginRadiusSDK\CustomerRegistration\Social\NativeSocialAPI;
 use \LoginRadiusSDK\CustomerRegistration\Social\SocialAPI;
 
-
-
-function loginByEmail(array $request) {
+function loginByEmail(array $request)
+{
     $email = isset($request['email']) ? trim($request['email']) : '';
     $password = isset($request['password']) ? trim($request['password']) : '';
     $response = array('status' => 'error', 'message' => 'An error occurred.');
@@ -44,21 +43,20 @@ function loginByEmail(array $request) {
                 $response['message'] = "Logged in successfully";
                 $response['status'] = 'success';
             }
-        }
-        catch (LoginRadiusException $e) { 
+        } catch (LoginRadiusException $e) {
             $response['message'] = $e->error_response->Description;
         }
     }
     return json_encode($response);
 }
 
-function getProfile(array $request) {
+function getProfile(array $request)
+{
     $token = isset($request['token']) ? trim($request['token']) : '';
     $response = array('status' => 'error', 'message' => 'An error occurred.');
     if (empty($token)) {
         $response['message'] = 'Access Token is a required field.';
-    }
-    else {
+    } else {
         $authenticationObj = new AuthenticationAPI();
         try {
             $result = $authenticationObj->getProfileByAccessToken($token);
@@ -66,13 +64,11 @@ function getProfile(array $request) {
                 $response['data'] = $result;
                 $response['message'] = "Profile successfully retrieved.";
                 $response['status'] = 'success';
-            }
-            else {
+            } else {
                 $response['message'] = "Email is not verified.";
                 $response['status'] = 'error';
             }
-        }
-        catch (LoginRadiusException $e) {
+        } catch (LoginRadiusException $e) {
             $response['message'] = $e->error_response->Description;
             $response['status'] = "error";
         }
@@ -80,7 +76,8 @@ function getProfile(array $request) {
     return json_encode($response);
 }
 
-function registration(array $request) {
+function registration(array $request)
+{
     $email = isset($request['email']) ? trim($request['email']) : '';
     $password = isset($request['password']) ? trim($request['password']) : '';
     $response = array('status' => 'error', 'message' => 'An error occurred.');
@@ -93,7 +90,7 @@ function registration(array $request) {
             $sottObj = new SottAPI();
             $sott = $sottObj->generateSott(10);
 
-            if(!is_object($sott)) {
+            if (!is_object($sott)) {
                 $sott = json_decode($sott);
             }
             $emailTemplate = '';
@@ -110,8 +107,7 @@ function registration(array $request) {
                 $response['message'] = "Successfully registered, please check your email to verify your account.";
                 $response['status'] = 'registered';
             }
-        }
-        catch (LoginRadiusException $e) { 
+        } catch (LoginRadiusException $e) {
             $response['message'] = $e->error_response->Description;
             $response['status'] = "error";
         }
@@ -119,13 +115,13 @@ function registration(array $request) {
     return json_encode($response);
 }
 
-function pwLessLogin(array $request) {
+function pwLessLogin(array $request)
+{
     $email = isset($request['email']) ? trim($request['email']) : '';
     $response = array('status' => 'error', 'message' => 'An error occurred.');
     if (empty($email)) {
         $response['message'] = 'Email Id is a required field.';
-    }
-    else {
+    } else {
         $authenticationObj = new PasswordLessLoginAPI();
         try {
             $verificationUrl = $request['verificationurl'];
@@ -135,8 +131,7 @@ function pwLessLogin(array $request) {
                 $response['message'] = "One time login link has been sent to your provided email id, check email for further instruction.";
                 $response['status'] = 'success';
             }
-        }
-        catch (LoginRadiusException $e) {
+        } catch (LoginRadiusException $e) {
             $response['message'] = $e->error_response->Description;
             $response['status'] = "error";
         }
@@ -144,13 +139,13 @@ function pwLessLogin(array $request) {
     return json_encode($response);
 }
 
-function forgotPassword(array $request) {
+function forgotPassword(array $request)
+{
     $email = isset($request['email']) ? trim($request['email']) : '';
     $response = array('status' => 'error', 'message' => 'An error occurred.');
     if (empty($email)) {
         $response['message'] = 'Email Id is a required field.';
-    }
-    else {
+    } else {
         $authenticationObj = new AuthenticationAPI();
         try {
             $result = $authenticationObj->forgotPassword($email, $request['resetPasswordUrl'], '');
@@ -158,8 +153,7 @@ function forgotPassword(array $request) {
                 $response['message'] = "An email has been sent to your address with instructions to reset your password.";
                 $response['status'] = 'success';
             }
-        }
-        catch (LoginRadiusException $e) {
+        } catch (LoginRadiusException $e) {
             $response['message'] = $e->error_response->Description;
             $response['status'] = "error";
         }
@@ -167,7 +161,8 @@ function forgotPassword(array $request) {
     return json_encode($response);
 }
 
-function resetPassword(array $request) {
+function resetPassword(array $request)
+{
     $token = isset($request['resettoken']) ? trim($request['resettoken']) : '';
     $password = isset($request['password']) ? trim($request['password']) : '';
     $response = array('status' => 'error', 'message' => 'An error occurred.');
@@ -182,8 +177,7 @@ function resetPassword(array $request) {
                 $response['message'] = "Password has been reset successfully.";
                 $response['status'] = 'success';
             }
-        }
-        catch (LoginRadiusException $e) {
+        } catch (LoginRadiusException $e) {
             $response['message'] = $e->error_response->Description;
             $response['status'] = "error";
         }
@@ -191,13 +185,13 @@ function resetPassword(array $request) {
     return json_encode($response);
 }
 
-function pwLessLinkVerify(array $request) {
+function pwLessLinkVerify(array $request)
+{
     $verificationToken = isset($request['token']) ? trim($request['token']) : '';
     $response = array('status' => 'error', 'message' => 'An error occurred.');
     if (empty($verificationToken)) {
         $response['message'] = 'Token is a required field.';
-    }
-    else {
+    } else {
         $authenticationObj = new PasswordLessLoginAPI();
         try {
             $fields = '';
@@ -208,8 +202,7 @@ function pwLessLinkVerify(array $request) {
                 $response['message'] = "Link successfully verified.";
                 $response['status'] = 'success';
             }
-        }
-        catch (LoginRadiusException $e) {
+        } catch (LoginRadiusException $e) {
             $response['message'] = $e->error_response->Description;
             $response['status'] = "error";
         }
@@ -217,13 +210,13 @@ function pwLessLinkVerify(array $request) {
     return json_encode($response);
 }
 
-function emailVerify(array $request) {
+function emailVerify(array $request)
+{
     $vtoken = isset($request['vtoken']) ? trim($request['vtoken']) : '';
     $response = array('status' => 'error', 'message' => 'An error occurred.');
     if (empty($vtoken)) {
         $response['message'] = 'Verification Token is a required field.';
-    }
-    else {
+    } else {
         $authenticationObj = new AuthenticationAPI();
         try {
             $result = $authenticationObj->verifyEmail($vtoken);
@@ -231,8 +224,7 @@ function emailVerify(array $request) {
                 $response['message'] = "Your email has been verified successfully.";
                 $response['status'] = 'success';
             }
-        }
-        catch (LoginRadiusException $e) {
+        } catch (LoginRadiusException $e) {
             $response['message'] = $e->error_response->Description;
             $response['status'] = "error";
         }
@@ -240,7 +232,8 @@ function emailVerify(array $request) {
     return json_encode($response);
 }
 
-function mfaLogin(array $request) {
+function mfaLogin(array $request)
+{
     $email = isset($request['email']) ? trim($request['email']) : '';
     $password = isset($request['password']) ? trim($request['password']) : '';
     $response = array('status' => 'error', 'message' => 'An error occurred.');
@@ -260,8 +253,7 @@ function mfaLogin(array $request) {
             $response['data'] = $result;
             $response['message'] = "Successful MFA Login.";
             $response['status'] = 'success';
-        }
-        catch (LoginRadiusException $e) {
+        } catch (LoginRadiusException $e) {
             $response['message'] = $e->error_response->Description;
             $response['status'] = "error";
         }
@@ -269,13 +261,14 @@ function mfaLogin(array $request) {
     return json_encode($response);
 }
 
-function mfaValidate(array $request) {
+function mfaValidate(array $request)
+{
     $secondFactorAuthenticationToken = isset($request['secondFactorAuthenticationToken']) ? trim($request['secondFactorAuthenticationToken']) : '';
     $googleAuthCode = isset($request['googleAuthCode']) ? trim($request['googleAuthCode']) : '';
     $response = array('status' => 'error', 'message' => 'An error occurred.');
     if (empty($secondFactorAuthenticationToken)) {
         $response['message'] = 'Second Factor Auth Token is a required field.';
-    } else if (empty($googleAuthCode)) {
+    } elseif (empty($googleAuthCode)) {
         $response['message'] = 'Google Auth Code is a required field.';
     } else {
         $authenticationObj = new MultiFactorAuthenticationAPI();
@@ -288,8 +281,7 @@ function mfaValidate(array $request) {
                 $response['message'] = "Google Auth Code successfully validated.";
                 $response['status'] = 'success';
             }
-        }
-        catch (LoginRadiusException $e) {
+        } catch (LoginRadiusException $e) {
             $response['message'] = $e->error_response->Description;
             $response['status'] = "error";
         }

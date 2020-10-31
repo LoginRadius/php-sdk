@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class ReAuthenticationAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -122,8 +121,11 @@ class ReAuthenticationAPI extends Functions
      * 14.7
     */
 
-    public function mfaReAuthenticateByPassword($accessToken, $passwordEventBasedAuthModelWithLockout,
-        $smsTemplate2FA = null)
+    public function mfaReAuthenticateByPassword(
+        $accessToken,
+        $passwordEventBasedAuthModelWithLockout,
+        $smsTemplate2FA = null
+    )
     {
         $resourcePath = "/identity/v2/auth/account/reauth/password";
         $queryParam = [];
@@ -206,8 +208,11 @@ class ReAuthenticationAPI extends Functions
      * 42.13
     */
 
-    public function verifyPINAuthentication($accessToken, $pinAuthEventBasedAuthModelWithLockout,
-        $smsTemplate2FA = null)
+    public function verifyPINAuthentication(
+        $accessToken,
+        $pinAuthEventBasedAuthModelWithLockout,
+        $smsTemplate2FA = null
+    )
     {
         $resourcePath = "/identity/v2/auth/account/reauth/pin";
         $queryParam = [];
@@ -221,5 +226,4 @@ class ReAuthenticationAPI extends Functions
         $queryParam['access_token'] = $accessToken;
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $pinAuthEventBasedAuthModelWithLockout);
     }
-
 }

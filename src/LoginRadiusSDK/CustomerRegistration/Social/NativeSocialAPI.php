@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class NativeSocialAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -56,8 +55,11 @@ class NativeSocialAPI extends Functions
      * 20.4
     */
 
-    public function getAccessTokenByTwitterAccessToken($twAccessToken, $twTokenSecret,
-        $socialAppName = null)
+    public function getAccessTokenByTwitterAccessToken(
+        $twAccessToken,
+        $twTokenSecret,
+        $socialAppName = null
+    )
     {
         $resourcePath = "/api/v2/access_token/twitter";
         $queryParam = [];
@@ -88,8 +90,12 @@ class NativeSocialAPI extends Functions
      * 20.5
     */
 
-    public function getAccessTokenByGoogleAccessToken($googleAccessToken, $clientId = null,
-        $refreshToken = null, $socialAppName = null)
+    public function getAccessTokenByGoogleAccessToken(
+        $googleAccessToken,
+        $clientId = null,
+        $refreshToken = null,
+        $socialAppName = null
+    )
     {
         $resourcePath = "/api/v2/access_token/google";
         $queryParam = [];
@@ -268,5 +274,4 @@ class NativeSocialAPI extends Functions
         $queryParam['google_authcode'] = $googleAuthcode;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
-
 }

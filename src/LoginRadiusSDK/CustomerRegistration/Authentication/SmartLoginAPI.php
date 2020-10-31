@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class SmartLoginAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -58,8 +57,13 @@ class SmartLoginAPI extends Functions
      * 9.17.1
     */
 
-    public function smartLoginByEmail($clientGuid, $email,
-        $redirectUrl = null, $smartLoginEmailTemplate = null, $welcomeEmailTemplate = null)
+    public function smartLoginByEmail(
+        $clientGuid,
+        $email,
+        $redirectUrl = null,
+        $smartLoginEmailTemplate = null,
+        $welcomeEmailTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login/smartlogin";
         $queryParam = [];
@@ -97,8 +101,13 @@ class SmartLoginAPI extends Functions
      * 9.17.2
     */
 
-    public function smartLoginByUserName($clientGuid, $username,
-        $redirectUrl = null, $smartLoginEmailTemplate = null, $welcomeEmailTemplate = null)
+    public function smartLoginByUserName(
+        $clientGuid,
+        $username,
+        $redirectUrl = null,
+        $smartLoginEmailTemplate = null,
+        $welcomeEmailTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login/smartlogin";
         $queryParam = [];
@@ -147,5 +156,4 @@ class SmartLoginAPI extends Functions
         $queryParam['clientGuid'] = $clientGuid;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
-
 }

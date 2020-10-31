@@ -16,7 +16,6 @@ date_default_timezone_set('UTC');
 
 class SOTT
 {
-
     private $_secret;
     private $_key;
 
@@ -40,8 +39,9 @@ class SOTT
      * @param $time
      * @return string
      */
-    public function encrypt($time = '10', $getLRserverTime = false) {
-        if ($getLRserverTime) {     
+    public function encrypt($time = '10', $getLRserverTime = false)
+    {
+        if ($getLRserverTime) {
             $result = Functions::apiClient("/identity/v2/serverinfo", array("TimeDifference" => $time), array('output_format' => 'json'));
             $startTime = isset($result->Sott) ? $result->Sott->StartTime : '';
             $startTime = str_replace("-", "/", $startTime);
@@ -73,7 +73,4 @@ class SOTT
         hash_update($ctx, $token);
         return $token . '*' . hash_final($ctx);
     }
-
 }
-
-

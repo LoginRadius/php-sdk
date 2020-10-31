@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class OneTouchLoginAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -32,8 +31,12 @@ class OneTouchLoginAPI extends Functions
      * 1.2
     */
 
-    public function oneTouchLoginByEmail($oneTouchLoginByEmailModel, $oneTouchLoginEmailTemplate = null,
-        $redirecturl = null, $welcomeemailtemplate = null)
+    public function oneTouchLoginByEmail(
+        $oneTouchLoginByEmailModel,
+        $oneTouchLoginEmailTemplate = null,
+        $redirecturl = null,
+        $welcomeemailtemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/onetouchlogin/email";
         $queryParam = [];
@@ -83,8 +86,12 @@ class OneTouchLoginAPI extends Functions
      * 1.5
     */
 
-    public function oneTouchLoginOTPVerification($otp, $phone,
-        $fields = "", $smsTemplate = null)
+    public function oneTouchLoginOTPVerification(
+        $otp,
+        $phone,
+        $fields = "",
+        $smsTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/onetouchlogin/phone/verify";
         $bodyParam = [];
@@ -153,5 +160,4 @@ class OneTouchLoginAPI extends Functions
         $queryParam['clientGuid'] = $clientGuid;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
-
 }

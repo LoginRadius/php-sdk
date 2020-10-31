@@ -6,7 +6,7 @@ define('AUTH_FLOW', '');   // Pass optional/disabled, if email verification flow
 
 //If you have Custom API Domain then define 'API_DOMAIN' then replaced it with your custom API domain,
 //otherwise no need to define these option in configuration.
-// define('API_DOMAIN', 'https://api.loginradius.com'); 
+// define('API_DOMAIN', 'https://api.loginradius.com');
 
 require_once "../../src/LoginRadiusSDK/Utility/Functions.php";
 require_once "../../src/LoginRadiusSDK/LoginRadiusException.php";
@@ -33,5 +33,3 @@ require_once "../../src/LoginRadiusSDK/CustomerRegistration/Advanced/MultiFactor
 require_once "../../src/LoginRadiusSDK/CustomerRegistration/Advanced/CustomRegistrationDataAPI.php";
 require_once "../../src/LoginRadiusSDK/CustomerRegistration/Social/NativeSocialAPI.php";
 require_once "../../src/LoginRadiusSDK/CustomerRegistration/Social/SocialAPI.php";
-
-

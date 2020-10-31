@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class SottAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -40,5 +39,4 @@ class SottAPI extends Functions
         }
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
-
 }

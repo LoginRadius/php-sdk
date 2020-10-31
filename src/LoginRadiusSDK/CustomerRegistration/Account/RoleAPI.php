@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class RoleAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -161,8 +160,11 @@ class RoleAPI extends Functions
      * 18.13
     */
 
-    public function deleteRolesFromRoleContextByUid($contextName, $roleContextRemoveRoleModel,
-        $uid)
+    public function deleteRolesFromRoleContextByUid(
+        $contextName,
+        $roleContextRemoveRoleModel,
+        $uid
+    )
     {
         $resourcePath = "/identity/v2/manage/account/$uid/rolecontext/$contextName/role";
         $queryParam = [];
@@ -182,8 +184,11 @@ class RoleAPI extends Functions
      * 18.14
     */
 
-    public function deleteAdditionalPermissionFromRoleContextByUid($contextName, $roleContextAdditionalPermissionRemoveRoleModel,
-        $uid)
+    public function deleteAdditionalPermissionFromRoleContextByUid(
+        $contextName,
+        $roleContextAdditionalPermissionRemoveRoleModel,
+        $uid
+    )
     {
         $resourcePath = "/identity/v2/manage/account/$uid/rolecontext/$contextName/additionalpermission";
         $queryParam = [];
@@ -282,5 +287,4 @@ class RoleAPI extends Functions
         $queryParam['apiSecret'] = Functions::getApiSecret();
         return Functions::_apiClientHandler('DELETE', $resourcePath, $queryParam, $permissionsModel);
     }
-
 }

@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class SocialAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -52,8 +51,11 @@ class SocialAPI extends Functions
      * 20.2
     */
 
-    public function refreshAccessToken($accessToken, $expiresIn = 0,
-        $isWeb = false)
+    public function refreshAccessToken(
+        $accessToken,
+        $expiresIn = 0,
+        $isWeb = false
+    )
     {
         $resourcePath = "/api/v2/access_token/refresh";
         $queryParam = [];
@@ -552,8 +554,12 @@ class SocialAPI extends Functions
      * 33.1
     */
 
-    public function postMessage($accessToken, $message,
-        $subject, $to)
+    public function postMessage(
+        $accessToken,
+        $message,
+        $subject,
+        $to
+    )
     {
         $resourcePath = "/api/v2/message";
         $queryParam = [];
@@ -662,9 +668,16 @@ class SocialAPI extends Functions
      * 37.2
     */
 
-    public function statusPosting($accessToken, $caption,
-        $description, $imageurl, $status,
-        $title, $url, $shorturl = "0")
+    public function statusPosting(
+        $accessToken,
+        $caption,
+        $description,
+        $imageurl,
+        $status,
+        $title,
+        $url,
+        $shorturl = "0"
+    )
     {
         $resourcePath = "/api/v2/status";
         $queryParam = [];
@@ -738,9 +751,15 @@ class SocialAPI extends Functions
      * 37.7
     */
 
-    public function getTrackableStatusStats($accessToken, $caption,
-        $description, $imageurl, $status,
-        $title, $url)
+    public function getTrackableStatusStats(
+        $accessToken,
+        $caption,
+        $description,
+        $imageurl,
+        $status,
+        $title,
+        $url
+    )
     {
         $resourcePath = "/api/v2/status/trackable/js";
         $queryParam = [];
@@ -868,5 +887,4 @@ class SocialAPI extends Functions
         $queryParam['nextCursor'] = $nextCursor;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
-
 }

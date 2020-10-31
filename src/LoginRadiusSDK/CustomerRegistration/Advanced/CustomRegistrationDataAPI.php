@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class CustomRegistrationDataAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -32,8 +31,12 @@ class CustomRegistrationDataAPI extends Functions
      * 7.1
     */
 
-    public function authGetRegistrationData($type, $limit = null,
-        $parentId = null, $skip = null)
+    public function authGetRegistrationData(
+        $type,
+        $limit = null,
+        $parentId = null,
+        $skip = null
+    )
     {
         $resourcePath = "/identity/v2/auth/registrationdata/$type";
         $queryParam = [];
@@ -83,8 +86,12 @@ class CustomRegistrationDataAPI extends Functions
      * 16.1
     */
 
-    public function getRegistrationData($type, $limit = null,
-        $parentId = null, $skip = null)
+    public function getRegistrationData(
+        $type,
+        $limit = null,
+        $parentId = null,
+        $skip = null
+    )
     {
         $resourcePath = "/identity/v2/manage/registrationdata/$type";
         $queryParam = [];
@@ -174,5 +181,4 @@ class CustomRegistrationDataAPI extends Functions
         $queryParam['apiSecret'] = Functions::getApiSecret();
         return Functions::_apiClientHandler('DELETE', $resourcePath, $queryParam);
     }
-
 }

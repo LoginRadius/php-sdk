@@ -14,7 +14,6 @@ use LoginRadiusSDK\LoginRadiusException;
 
 class PhoneAuthenticationAPI extends Functions
 {
-
     public function __construct($options = [])
     {
         parent::__construct($options);
@@ -32,8 +31,12 @@ class PhoneAuthenticationAPI extends Functions
      * 9.2.3
     */
 
-    public function loginByPhone($phoneAuthenticationModel, $fields = "",
-        $loginUrl = null, $smsTemplate = null)
+    public function loginByPhone(
+        $phoneAuthenticationModel,
+        $fields = "",
+        $loginUrl = null,
+        $smsTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/login";
         $queryParam = [];
@@ -102,8 +105,12 @@ class PhoneAuthenticationAPI extends Functions
      * 11.1.1
     */
 
-    public function phoneVerificationByOTP($otp, $phone,
-        $fields = "", $smsTemplate = null)
+    public function phoneVerificationByOTP(
+        $otp,
+        $phone,
+        $fields = "",
+        $smsTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/phone/otp";
         $bodyParam = [];
@@ -134,8 +141,11 @@ class PhoneAuthenticationAPI extends Functions
      * 11.1.2
     */
 
-    public function phoneVerificationOTPByAccessToken($accessToken, $otp,
-        $smsTemplate = null)
+    public function phoneVerificationOTPByAccessToken(
+        $accessToken,
+        $otp,
+        $smsTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/phone/otp";
         $queryParam = [];
@@ -188,8 +198,11 @@ class PhoneAuthenticationAPI extends Functions
      * 11.2.2
     */
 
-    public function phoneResendVerificationOTPByToken($accessToken, $phone,
-        $smsTemplate = null)
+    public function phoneResendVerificationOTPByToken(
+        $accessToken,
+        $phone,
+        $smsTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/phone/otp";
         $bodyParam = [];
@@ -217,8 +230,11 @@ class PhoneAuthenticationAPI extends Functions
      * 11.5
     */
 
-    public function updatePhoneNumber($accessToken, $phone,
-        $smsTemplate = null)
+    public function updatePhoneNumber(
+        $accessToken,
+        $phone,
+        $smsTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/phone";
         $bodyParam = [];
@@ -292,9 +308,15 @@ class PhoneAuthenticationAPI extends Functions
      * 17.1.2
     */
 
-    public function userRegistrationByPhone($authUserRegistrationModel, $sott,
-        $fields = "", $options = "", $smsTemplate = null,
-        $verificationUrl = null, $welcomeEmailTemplate = null)
+    public function userRegistrationByPhone(
+        $authUserRegistrationModel,
+        $sott,
+        $fields = "",
+        $options = "",
+        $smsTemplate = null,
+        $verificationUrl = null,
+        $welcomeEmailTemplate = null
+    )
     {
         $resourcePath = "/identity/v2/auth/register";
         $queryParam = [];
@@ -320,5 +342,4 @@ class PhoneAuthenticationAPI extends Functions
         $queryParam['sott'] = $sott;
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $authUserRegistrationModel);
     }
-
 }
