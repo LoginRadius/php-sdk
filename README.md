@@ -11,7 +11,39 @@ LoginRadius is a unified **Customer Identity Management** API platform that comb
 
 LoginRadius helps businesses boost user engagement on their web/mobile platform, manage online identities, utilize social media for marketing, capture accurate consumer data and get unique social insight into their customer base.
 
-
+Table of content
+================
+-[PHP Library](#php-library)
+ -[Installation](#installation)
+ -[Quickstart Guide](#quickestart-guide)
+  -[Configuration](#configuration)
+  -[Implementation](#implementation)
+  -[API Examples](#api-examples)
+   -[Partial API response](#partial-api-response)
+  -[Authentication API](#authentication-api)
+  -[Account API](#account-api)
+  -[Social API](#social-api)
+  -[CustomObject API](#customobject-api)
+  -[PhoneAuthentication API](#phoneauthentication-api)
+  -[MultiFactorAuthentication API](#multifactorauthentication-api)
+  -[PINAuthentication API](#pinauthentication-api)
+  -[ReAuthentication API](#reauthentication-api)
+  -[ConsentManagement API](#consentmanagement-api)
+  -[SmartLogin API](#smartlogin-api)
+  -[OneTouchLogin API](#onetouch-api)
+  -[PasswordLessLogin API](#passwordlesslogin-api)
+  -[Configuration API](#configuration-api)
+  -[Role API](#role-api)
+  -[CustomRegistrationData API](#customregistrationdata-api)
+  -[RiskBasedAuthentication API](#riskbasedauthentication-api)
+  -[Sott API](#sott-api)
+  -[NativeSocial API](#nativesocial-api)
+  -[WebHook API](#webhook-api)
+   -[Implement Custom HTTP Client](#implement-custom-http-client)
+ -[Demo](#demo)
+ -[Reference Manual](#refernce-manual)
+ 
+ 
 PHP Library
 =====
 
