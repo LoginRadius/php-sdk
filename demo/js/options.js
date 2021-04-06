@@ -1,6 +1,7 @@
+
 var commonOptions = {};
-commonOptions.apiKey = "<API-KEY>";
-commonOptions.appName = "<APP-NAME>";
+commonOptions.apiKey = "<LR-API-KEY>";
+commonOptions.appName = "<LR-APP-NAME>";
 commonOptions.hashTemplate = true;
 commonOptions.sott = "<SOTT>";
 commonOptions.formValidationMessage = true;

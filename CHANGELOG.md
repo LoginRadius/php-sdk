@@ -1,5 +1,18 @@
 > **LoginRadius PHP SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://www.loginradius.com/docs/api/v2/deployment/sdk-libraries/php-library/)
 
+# Version 11.1.0
+Release on **March 25, 2021**
+
+## Enhancements
+- Added X-Origin-IP header support.
+- Added 429 error code handling for "Too Many Request in a particular time frame".
+
+
+## Added new multiple APIs for better user experience
+- Get Profile By Ping.
+- Passwordless Login Verification By Email And OTP.
+- Passwordless Login Verification By User Name And OTP.
+
 
 # Version 11.0.0
 Release on **Aug 10, 2020**
@@ -252,7 +265,3 @@ Released on **February 28, 2017**
   - Added role api's
   - Added add or remove email api's
   - Added Custom object api's
- 
-
-
- 

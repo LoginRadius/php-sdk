@@ -35,7 +35,7 @@ curl -sS https://getcomposer.org/installer | php
 Next, run the Composer command to install the latest stable version of library:
 
 ```
-composer require loginradius/php-sdk:11.0.0
+composer require loginradius/php-sdk:11.1.0
 ```
 
 Include the following files in your Project Directory
@@ -83,6 +83,7 @@ define('LR_API_SECRET', 'LOGINRADIUS_API_SECRET_HERE'); // Replace LOGINRADIUS_A
 
 define('API_REQUEST_SIGNING', ''); // Pass boolean true if this option is enabled on you app.
 define('API_REGION', ''); // Pass APi Region for your app
+define('ORIGIN_IP', 'CLIENT_IP_ADDRESS');   // Replace CLIENT_IP_ADDRESS with the Client Ip Address,LoginRadius allows you add X-Origin-IP in your headers and it determines the IP address of the client's request,this can also be useful to overcome analytics discrepancies where the analytics depend on header data.
 
 define('PROTOCOL', 'PROXY_PROTOCOL'); // Replace PROXY_PROTOCOL with your proxy server protocoal ie http or https.
 define('HOST', 'PROXY_HOST'); // Replace PROXY_HOST with your proxy server host.
@@ -202,6 +203,7 @@ List of APIs in this Section:<br>
 [GET : Auth Read all Profiles by Token](#GetProfileByAccessToken-get-)<br>
 [GET : Auth Send Welcome Email](#SendWelcomeEmail-get-)<br>
 [GET : Auth Delete Account](#DeleteAccountByDeleteToken-get-)<br>
+[GET : Get Profile By Ping](#GetProfileByPing-get-)<br>
 [GET : Auth Check Email Availability](#CheckEmailAvailability-get-)<br>
 [GET : Auth Verify Email](#VerifyEmail-get-)<br>
 [GET : Auth Check UserName Availability](#CheckUserNameAvailability-get-)<br>
@@ -676,7 +678,21 @@ $deletetoken = "deletetoken"; //Required
 $result = $authenticationAPI->deleteAccountByDeleteToken($deletetoken);
  ```
 
+<h6 id="GetProfileByPing-get-">Get Profile By Ping (GET)</h6>
+
+ This API is used to get a user's profile using the clientGuid parameter if no callback feature enabled.[More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/social-login-by-ping/)
+
+ ```
  
+$clientGuid = "clientGuid"; //Required 
+$emailTemplate = "emailTemplate"; //Optional 
+$fields = null; //Optional 
+$verificationUrl = "verificationUrl"; //Optional 
+$welcomeEmailTemplate = "welcomeEmailTemplate"; //Optional
+ 
+$result = $authenticationAPI->getProfileByPing($clientGuid,$emailTemplate,$fields,$verificationUrl,$welcomeEmailTemplate);
+ ```
+
 <h6 id="CheckEmailAvailability-get-">Auth Check Email Availability (GET)</h6>
 This API is used to check the email exists or not on your site.
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/authentication/auth-email-availability/)
@@ -794,6 +810,7 @@ List of APIs in this Section:<br>
 [PUT : Account Invalidate Verification Email](#InvalidateAccountEmailVerification-put-)<br>
 [PUT : Reset phone ID verification](#ResetPhoneIDVerificationByUid-put-)<br>
 [PUT : Upsert Email](#UpsertEmail-put-)<br>
+[PUT : Update UID](#AccountUpdateUid-put-)<br>
 [POST : Account Create](#CreateAccount-post-)<br>
 [POST : Forgot Password token](#GetForgotPasswordToken-post-)<br>
 [POST : Email Verification token](#GetEmailVerificationToken-post-)<br>
@@ -905,6 +922,21 @@ $uid = "uid"; //Required
 $fields = null; //Optional
  
 $result = $accountAPI->upsertEmail($payload,$uid,$fields);
+ ```
+
+ 
+<h6 id="AccountUpdateUid-put-">Update UID (PUT)</h6>
+This API is used to update a user's Uid. It will update all profiles, custom objects and consent management logs associated with the Uid.
+ [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/account/account-update/)
+
+ ```
+
+ $payload = '{
+"newUid" : "<newUid>"
+}';  //Required 
+$uid = "uid"; //Required
+ 
+$result = $accountAPI->accountUpdateUid($payload,$uid);
  ```
 
  
@@ -2986,6 +3018,8 @@ $result = $oneTouchLoginAPI->oneTouchLoginPing($clientGuid,$fields);
 
 List of APIs in this Section:<br>
 [PUT : Passwordless Login Phone Verification](#PasswordlessLoginPhoneVerification-put-)<br>
+[POST : Passwordless Login Verification By Email And OTP](#PasswordlessLoginVerificationByEmailAndOTP-post-)<br>
+[POST : Passwordless Login Verification By User Name And OTP](#PasswordlessLoginVerificationByUserNameAndOTP-post-)<br>
 [GET : Passwordless Login by Phone](#PasswordlessLoginByPhone-get-)<br>
 [GET : Passwordless Login By Email](#PasswordlessLoginByEmail-get-)<br>
 [GET : Passwordless Login By UserName](#PasswordlessLoginByUserName-get-)<br>
@@ -3014,6 +3048,42 @@ $result = $passwordLessLoginAPI->passwordlessLoginPhoneVerification($payload,$fi
  ```
 
  
+<h6 id="PasswordlessLoginVerificationByEmailAndOTP-post-">Passwordless Login Verification By Email And OTP (POST)</h6>
+
+This API is used to verify the otp sent to the email when doing a passwordless login.   [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/passwordless-login/passwordless-login-verify-by-email-and-otp/)
+
+ ```
+
+ $payload = '{ 
+ "email": "<email>",
+ "otp": "<otp>",
+ "welcomeemailtemplate": "<welcome_email_template>"
+
+  }';  //Required 
+$fields = null; //Optional
+ 
+$result = $passwordLessLoginAPI->passwordlessLoginVerificationByEmailAndOTP($payload,$fields);
+ ```
+
+ 
+<h6 id="PasswordlessLoginVerificationByUserNameAndOTP-post-">Passwordless Login Verification By User Name And OTP (POST)</h6>
+
+This API is used to verify the otp sent to the email when doing a passwordless login.  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/passwordless-login/passwordless-login-verify-by-username-and-otp/)
+
+ ```
+
+ $payload = '{ 
+ "username": "<User name>",
+ "otp": "<otp>",
+ "welcomeemailtemplate": "<welcome_email_template>"
+
+  }';  //Required 
+$fields = null; //Optional
+ 
+$result = $passwordLessLoginAPI->passwordlessLoginVerificationByUserNameAndOTP($payload,$fields);
+ ```
+
+
 <h6 id="PasswordlessLoginByPhone-get-">Passwordless Login by Phone (GET)</h6>
 API can be used to send a One-time Passcode (OTP) provided that the account has a verified PhoneID
  [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/passwordless-login/passwordless-login-by-phone)

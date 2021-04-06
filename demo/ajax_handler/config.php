@@ -1,8 +1,9 @@
 <?php
-define('LR_API_KEY', '<API-KEY>');
-define('LR_API_SECRET', '<SECRET-KEY>');  // Pass API Secret Key
+define('LR_API_KEY', 'LOGINRADIUS_API_KEY_HERE');
+define('LR_API_SECRET', 'LOGINRADIUS_API_SECRET_HERE'); // Pass API Secret Key
 define('API_REQUEST_SIGNING', ''); // Pass true/false for enable/disable
-define('AUTH_FLOW', '');   // Pass optional/disabled, if email verification flow optional or disabled, no need to mention if required flow
+
+
 
 //If you have Custom API Domain then define 'API_DOMAIN' then replaced it with your custom API domain,
 //otherwise no need to define these option in configuration.

@@ -5,7 +5,7 @@
  * @category : Utility
  * @package : Functions
  * @author : LoginRadius Team
- * @version : 11.0.0
+ * @version : 11.1.0
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -23,7 +23,7 @@ use LoginRadiusSDK\LoginRadiusException;
 class Functions
 {
 
-    const VERSION = '11.0.0';
+    const VERSION = '11.1.0';
 
     private static $_apikey;
     private static $_apisecret;
@@ -264,5 +264,27 @@ class Functions
     public static function paramValidationMsg($parameter)
     {
         return "The $parameter method parameter is not formatted or null"; 
+    }
+    
+    /**
+     * parser function to get formatted headers (with response code) while using fsockopenApiMethod
+     */
+
+    public static function parseHeaders($headers)
+    {
+        $head = array();
+        foreach( $headers as $k=>$v )
+        {
+            $t = explode( ':', $v, 2 );
+            if( isset( $t[1] ) )
+                $head[ trim($t[0]) ] = trim( $t[1] );
+            else
+            {
+                $head[] = $v;
+                if( preg_match( "#HTTP/[0-9\.]+\s+([0-9]+)#",$v, $out ) )
+                    $head['reponse_code'] = intval($out[1]);
+            }
+        }
+        return $head;
     }
 }

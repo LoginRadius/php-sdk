@@ -5,7 +5,7 @@
  * @category : Clients
  * @package : DefaultHttpClient
  * @author : LoginRadius Team
- * @version : 11.0.0
+ * @version : 11.1.0
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -45,6 +45,9 @@ class DefaultHttpClient implements IHttpClientInterface
         if (defined('API_REGION') && API_REGION != "") {
             $queryArray['region'] = API_REGION;
         }
+        if (defined('ORIGIN_IP') && ORIGIN_IP != "") {
+            $options['ORIGIN_IP'] = ORIGIN_IP;
+        }
         if (defined('API_REQUEST_SIGNING') && API_REQUEST_SIGNING != "") {
             $options['api_request_signing'] = API_REQUEST_SIGNING;
         } else {
@@ -77,18 +80,29 @@ class DefaultHttpClient implements IHttpClientInterface
             throw new LoginRadiusException('cURL or FSOCKOPEN is not enabled, enable cURL or FSOCKOPEN to get response from LoginRadius API.');
         }
         if (!empty($response)) {
-            $result = $response['response'] != "" ? json_decode($response['response']) : "";
-            if ((isset($result->ErrorCode) && !empty($result->ErrorCode)) || (isset($result->errorCode) && !empty($result->errorCode)) || (isset($response['statuscode']) && $response['statuscode'] != 200)) {
-                if(isset($result->description)){
-                    throw new LoginRadiusException($result->description, $result);
-                } elseif (isset($result->Description)) {
-                    throw new LoginRadiusException($result->Description, $result);
-                } else {
-                    throw new LoginRadiusException("The request responded with ". $response['statuscode'] . " status code", $response['response']);
+            
+            if(isset($response['statuscode'])  && $response['statuscode']==429) {    
+                $response["response"]=(object) array(
+                    "Description"=>"Too Many Request in a particular time frame"
+                );
+
+                throw new LoginRadiusException("Too Many Request in a particular time frame",$response["response"]);
+          
+            } else{
+
+                $result = $response['response'] != "" ? json_decode($response['response']) : "";
+                if ((isset($result->ErrorCode) && !empty($result->ErrorCode)) || (isset($result->errorCode) && !empty($result->errorCode)) || (isset($response['statuscode']) && $response['statuscode'] != 200)) {
+                    if(isset($result->description)){
+                        throw new LoginRadiusException($result->description, $result);
+                    } elseif (isset($result->Description)) {
+                        throw new LoginRadiusException($result->Description, $result);
+                    } else {
+                        throw new LoginRadiusException("The request responded with ". $response['statuscode'] . " status code", $response['response']);
+                    }
+                    
                 }
-                
             }
-        }
+       }
         return $response['response'];
     }
 
@@ -110,7 +124,8 @@ class DefaultHttpClient implements IHttpClientInterface
         $secretHeaderContent = isset($options['X-LoginRadius-ApiSecret']) ? trim($options['X-LoginRadius-ApiSecret']) : '';
         $expiryTime = isset($options['X-Request-Expires']) ? trim($options['X-Request-Expires']) : '';
         $digest = isset($options['digest']) ? trim($options['digest']) : '';
-        
+        $originIp = isset($options['ORIGIN_IP']) ? trim($options['ORIGIN_IP']) : '';
+
         $curlHandle = curl_init();
         curl_setopt($curlHandle, CURLOPT_URL, $requestUrl);
         curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, 15);
@@ -132,6 +147,9 @@ class DefaultHttpClient implements IHttpClientInterface
         }
         if ($digest != '') {
             $optionsArray[] = 'digest:' . $digest;
+        }
+        if($originIp!=''){
+            $optionsArray[]='X-Origin-IP: '. $originIp;
         }
         curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $optionsArray);
         if(defined('PROTOCOL') && PROTOCOL != "" && defined('HOST') && HOST != "" && defined('PORT') && PORT != "" && defined('USER') && USER != "" && defined('PASSWORD') && PASSWORD != "") {
@@ -179,7 +197,8 @@ class DefaultHttpClient implements IHttpClientInterface
         $secretHeaderContent = isset($options['X-LoginRadius-ApiSecret']) ? trim($options['X-LoginRadius-ApiSecret']) : '';
         $expiryTime = isset($options['X-Request-Expires']) ? trim($options['X-Request-Expires']) : '';
         $digest = isset($options['digest']) ? trim($options['digest']) : '';
-
+        $originIp = isset($options['ORIGIN_IP']) ? trim($options['ORIGIN_IP']) : '';
+        
         $optionsArray = array('http' =>
             array(
                 'method' => strtoupper($method),
@@ -214,10 +233,18 @@ class DefaultHttpClient implements IHttpClientInterface
         if ($digest != '') {
             $optionsArray['http']['header'] .= "\r\n" . 'digest: ' . $digest;
         }
+        if($originIp != ''){
+            $optionsArray['http']['header'] .= "\r\n" . 'X-Origin-IP: ' . $originIp;
+        }
 
         $context = stream_context_create($optionsArray);
         $jsonResponse['response'] = file_get_contents($requestUrl, false, $context);
-        $jsonResponse['statuscode'] = $http_response_header[0];
+        $parseHeaders = Functions::parseHeaders($http_response_header);
+        if (isset($parseHeaders['Content-Encoding']) && $parseHeaders['Content-Encoding'] == 'gzip') {
+            $jsonResponse['response'] = gzdecode($jsonResponse['response']);
+        }
+        $jsonResponse['statuscode'] = $parseHeaders['reponse_code'];
+        
         if (!$jsonResponse) {
             throw new LoginRadiusException('file_get_contents error');
         }
