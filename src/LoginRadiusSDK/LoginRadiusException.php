@@ -5,7 +5,7 @@
  * @category : LoginRadiusSDK
  * @package : LoginRadiusException
  * @author : LoginRadius Team
- * @version : 11.1.0
+ * @version : 11.1.1
  * @license : https://opensource.org/licenses/MIT
  */
 namespace LoginRadiusSDK;

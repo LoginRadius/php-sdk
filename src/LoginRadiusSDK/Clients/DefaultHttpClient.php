@@ -5,7 +5,7 @@
  * @category : Clients
  * @package : DefaultHttpClient
  * @author : LoginRadius Team
- * @version : 11.1.0
+ * @version : 11.1.1
  * @license : https://opensource.org/licenses/MIT
  */
 

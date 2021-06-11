@@ -5,7 +5,7 @@
  * @category : Utility
  * @package : Functions
  * @author : LoginRadius Team
- * @version : 11.1.0
+ * @version : 11.1.1
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -23,7 +23,7 @@ use LoginRadiusSDK\LoginRadiusException;
 class Functions
 {
 
-    const VERSION = '11.1.0';
+    const VERSION = '11.1.1';
 
     private static $_apikey;
     private static $_apisecret;
@@ -63,7 +63,6 @@ class Functions
      */
     public static function setDefaultApplication($apikey, $apisecret)
     {
-        self::_checkAPIValidation($apikey, $apisecret);
         self::$_apikey = $apikey;
         self::$_apisecret = $apisecret;       
 

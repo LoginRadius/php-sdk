@@ -1,5 +1,12 @@
 > **LoginRadius PHP SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://www.loginradius.com/docs/api/v2/deployment/sdk-libraries/php-library/)
 
+
+# Version 11.1.1
+Release on **June 11, 2021**
+
+## Bug Fixed
+- Fixed API Key Validation issue
+
 # Version 11.1.0
 Release on **April 06, 2021**
 
