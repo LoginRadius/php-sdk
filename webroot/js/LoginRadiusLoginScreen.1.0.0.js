@@ -1624,7 +1624,7 @@
                   if (document.getElementsByClassName("loginradius-otpsignin")[0])
                         {
                         document.getElementsByClassName("loginradius-otpsignin")[0].style.display = "none";
-                        document.getElementById("loginradius-otpsignin-send-an-otp-to-sign-in").style.display = "none";
+                        //document.getElementById("loginradius-otpsignin-send-an-otp-to-sign-in").style.display = "none";  //diabled because causing error in login screen
                   }
                   if(document.getElementById('lr-forgotpw-btn')){
                         var passwordNode = document.getElementsByClassName('content-loginradius-password')[0];
