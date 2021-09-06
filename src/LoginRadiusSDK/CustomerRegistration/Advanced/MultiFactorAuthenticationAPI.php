@@ -225,6 +225,123 @@ class MultiFactorAuthenticationAPI extends Functions
 
 
     /**
+     * This API is created to send the OTP to the email if email OTP authenticator is enabled in app's MFA configuration.
+     * @param accessToken access_token
+     * @param emailId EmailId
+     * @param emailTemplate2FA EmailTemplate2FA
+     * @return Response containing Definition of Complete Validation data
+     * 5.17
+    */
+
+    public function mfaEmailOtpByAccessToken($accessToken, $emailId,
+        $emailTemplate2FA = null)
+    {
+        $resourcePath = "/identity/v2/auth/account/2fa/otp/email";
+        $queryParam = [];
+        if ($accessToken === '' || ctype_space($accessToken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
+        }
+        $queryParam['apiKey'] = Functions::getApiKey();
+        if ($emailId === '' || ctype_space($emailId)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('emailId'));
+        }
+        if ($emailTemplate2FA != '') {
+            $queryParam['emailTemplate2FA'] = $emailTemplate2FA;
+        }
+        $queryParam['access_token'] = $accessToken;
+        $queryParam['emailId'] = $emailId;
+        return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
+    }
+       
+
+
+    /**
+     * This API is used to set up MFA Email OTP authenticator on profile after login.
+     * @param accessToken access_token
+     * @param multiFactorAuthModelByEmailOtpWithLockout payload
+     * @return Response containing Definition for Complete profile data
+     * 5.18
+    */
+
+    public function mfaValidateEmailOtpByAccessToken($accessToken, $multiFactorAuthModelByEmailOtpWithLockout)
+    {
+        $resourcePath = "/identity/v2/auth/account/2fa/verification/otp/email";
+        $queryParam = [];
+        if ($accessToken === '' || ctype_space($accessToken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
+        }
+        $queryParam['apiKey'] = Functions::getApiKey();
+        $queryParam['access_token'] = $accessToken;
+        return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $multiFactorAuthModelByEmailOtpWithLockout);
+    }
+       
+
+
+    /**
+     * This API is used to reset the Email OTP Authenticator settings for an MFA-enabled user
+     * @param accessToken access_token
+     * @return Response containing Definition of Delete Request
+     * 5.19
+    */
+
+    public function mfaResetEmailOtpAuthenticatorByAccessToken($accessToken)
+    {
+        $resourcePath = "/identity/v2/auth/account/2fa/authenticator/otp/email";
+        $queryParam = [];
+        if ($accessToken === '' || ctype_space($accessToken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
+        }
+        $queryParam['apiKey'] = Functions::getApiKey();
+        $queryParam['access_token'] = $accessToken;
+        return Functions::_apiClientHandler('DELETE', $resourcePath, $queryParam);
+    }
+       
+
+
+    /**
+     * This API is used to set up MFA Security Question authenticator on profile after login.
+     * @param accessToken access_token
+     * @param securityQuestionAnswerModelByAccessToken payload
+     * @return Response containing Definition of Complete Validation data
+     * 5.20
+    */
+
+    public function mfaSecurityQuestionAnswerByAccessToken($accessToken, $securityQuestionAnswerModelByAccessToken)
+    {
+        $resourcePath = "/identity/v2/auth/account/2fa/securityquestionanswer";
+        $queryParam = [];
+        if ($accessToken === '' || ctype_space($accessToken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
+        }
+        $queryParam['apiKey'] = Functions::getApiKey();
+        $queryParam['access_token'] = $accessToken;
+        return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $securityQuestionAnswerModelByAccessToken);
+    }
+       
+
+
+    /**
+     * This API is used to Reset MFA Security Question Authenticator By Access Token
+     * @param accessToken access_token
+     * @return Response containing Definition of Delete Request
+     * 5.21
+    */
+
+    public function mfaResetSecurityQuestionAuthenticatorByAccessToken($accessToken)
+    {
+        $resourcePath = "/identity/v2/auth/account/2fa/authenticator/securityquestionanswer";
+        $queryParam = [];
+        if ($accessToken === '' || ctype_space($accessToken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
+        }
+        $queryParam['apiKey'] = Functions::getApiKey();
+        $queryParam['access_token'] = $accessToken;
+        return Functions::_apiClientHandler('DELETE', $resourcePath, $queryParam);
+    }
+       
+
+
+    /**
      * This API can be used to login by emailid on a Multi-factor authentication enabled LoginRadius site.
      * @param email user's email
      * @param password Password for the email
@@ -234,13 +351,15 @@ class MultiFactorAuthenticationAPI extends Functions
      * @param smsTemplate SMS Template name
      * @param smsTemplate2FA SMS Template Name
      * @param verificationUrl Email verification url
+     * @param emailTemplate2FA 2FA Email Template name
      * @return Complete user UserProfile data
      * 9.8.1
     */
 
     public function mfaLoginByEmail($email, $password,
-        $emailTemplate = null, $fields = "", $loginUrl = null,
-        $smsTemplate = null, $smsTemplate2FA = null, $verificationUrl = null)
+        $emailTemplate = null, $fields = "",
+        $loginUrl = null, $smsTemplate = null, $smsTemplate2FA = null,
+        $verificationUrl = null, $emailTemplate2FA = null)
     {
         $resourcePath = "/identity/v2/auth/login/2fa";
         $bodyParam = [];
@@ -266,6 +385,9 @@ class MultiFactorAuthenticationAPI extends Functions
         if ($verificationUrl != '') {
             $queryParam['verificationUrl'] = $verificationUrl;
         }
+        if ($emailTemplate2FA != '') {
+            $queryParam['emailTemplate2FA'] = $emailTemplate2FA;
+        }
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, json_encode($bodyParam));
     }
        
@@ -281,13 +403,15 @@ class MultiFactorAuthenticationAPI extends Functions
      * @param smsTemplate SMS Template name
      * @param smsTemplate2FA SMS Template Name
      * @param verificationUrl Email verification url
+     * @param emailTemplate2FA 2FA Email Template name
      * @return Complete user UserProfile data
      * 9.8.2
     */
 
     public function mfaLoginByUserName($password, $username,
-        $emailTemplate = null, $fields = "", $loginUrl = null,
-        $smsTemplate = null, $smsTemplate2FA = null, $verificationUrl = null)
+        $emailTemplate = null, $fields = "",$loginUrl = null,
+        $smsTemplate = null, $smsTemplate2FA = null,
+        $verificationUrl = null, $emailTemplate2FA = null)
     {
         $resourcePath = "/identity/v2/auth/login/2fa";
         $bodyParam = [];
@@ -313,6 +437,9 @@ class MultiFactorAuthenticationAPI extends Functions
         if ($verificationUrl != '') {
             $queryParam['verificationUrl'] = $verificationUrl;
         }
+        if ($emailTemplate2FA != '') {
+            $queryParam['emailTemplate2FA'] = $emailTemplate2FA;
+        }
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, json_encode($bodyParam));
     }
        
@@ -328,13 +455,15 @@ class MultiFactorAuthenticationAPI extends Functions
      * @param smsTemplate SMS Template name
      * @param smsTemplate2FA SMS Template Name
      * @param verificationUrl Email verification url
+     * @param emailTemplate2FA 2FA Email Template name
      * @return Complete user UserProfile data
      * 9.8.3
     */
 
     public function mfaLoginByPhone($password, $phone,
-        $emailTemplate = null, $fields = "", $loginUrl = null,
-        $smsTemplate = null, $smsTemplate2FA = null, $verificationUrl = null)
+        $emailTemplate = null, $fields = "",
+        $loginUrl = null, $smsTemplate = null, $smsTemplate2FA = null,
+        $verificationUrl = null, $emailTemplate2FA = null)
     {
         $resourcePath = "/identity/v2/auth/login/2fa";
         $bodyParam = [];
@@ -360,6 +489,9 @@ class MultiFactorAuthenticationAPI extends Functions
         if ($verificationUrl != '') {
             $queryParam['verificationUrl'] = $verificationUrl;
         }
+        if ($emailTemplate2FA != '') {
+            $queryParam['emailTemplate2FA'] = $emailTemplate2FA;
+        }
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, json_encode($bodyParam));
     }
        
@@ -371,12 +503,17 @@ class MultiFactorAuthenticationAPI extends Functions
      * @param secondFactorAuthenticationToken A Uniquely generated MFA identifier token after successful authentication
      * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
      * @param smsTemplate2FA SMS Template Name
+     * @param rbaBrowserEmailTemplate 
+     * @param rbaCityEmailTemplate 
+     * @param rbaCountryEmailTemplate 
+     * @param rbaIpEmailTemplate 
      * @return Complete user UserProfile data
      * 9.12
     */
 
     public function mfaValidateOTPByPhone($multiFactorAuthModelWithLockout, $secondFactorAuthenticationToken,
-        $fields = "", $smsTemplate2FA = null)
+        $fields = "", $smsTemplate2FA = null, $rbaBrowserEmailTemplate = null, $rbaCityEmailTemplate = null,
+        $rbaCountryEmailTemplate = null, $rbaIpEmailTemplate = null)
     {
         $resourcePath = "/identity/v2/auth/login/2fa/verification/otp";
         $queryParam = [];
@@ -390,6 +527,18 @@ class MultiFactorAuthenticationAPI extends Functions
         if ($smsTemplate2FA != '') {
             $queryParam['smsTemplate2FA'] = $smsTemplate2FA;
         }
+        if ($rbaBrowserEmailTemplate != '') {
+            $queryParam['rbaBrowserEmailTemplate'] = $rbaBrowserEmailTemplate;
+        }
+        if ($rbaCityEmailTemplate != '') {
+            $queryParam['rbaCityEmailTemplate'] = $rbaCityEmailTemplate;
+        }
+        if ($rbaCountryEmailTemplate != '') {
+            $queryParam['rbaCountryEmailTemplate'] = $rbaCountryEmailTemplate;
+        }
+        if ($rbaIpEmailTemplate != '') {
+            $queryParam['rbaIpEmailTemplate'] = $rbaIpEmailTemplate;
+        }
         $queryParam['secondFactorAuthenticationToken'] = $secondFactorAuthenticationToken;
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $multiFactorAuthModelWithLockout);
     }
@@ -399,15 +548,19 @@ class MultiFactorAuthenticationAPI extends Functions
     /**
      * This API is used to login via Multi-factor-authentication by passing the google authenticator code.
      * @param googleAuthenticatorCode The code generated by google authenticator app after scanning QR code
-     * @param secondFactorAuthenticationToken A Uniquely generated MFA identifier token after successful authentication
+     * @param secondFactorAuthenticationToken SecondFactorAuthenticationToken
      * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
-     * @param smsTemplate2FA SMS Template Name
+     * @param rbaBrowserEmailTemplate RbaBrowserEmailTemplate
+     * @param rbaCityEmailTemplate RbaCityEmailTemplate
+     * @param rbaCountryEmailTemplate RbaCountryEmailTemplate
+     * @param rbaIpEmailTemplate RbaIpEmailTemplate
      * @return Complete user UserProfile data
      * 9.13
     */
 
     public function mfaValidateGoogleAuthCode($googleAuthenticatorCode, $secondFactorAuthenticationToken,
-        $fields = "", $smsTemplate2FA = null)
+        $fields = "", $rbaBrowserEmailTemplate = null, $rbaCityEmailTemplate = null,
+        $rbaCountryEmailTemplate = null, $rbaIpEmailTemplate = null)
     {
         $resourcePath = "/identity/v2/auth/login/2fa/verification/googleauthenticatorcode";
         $bodyParam = [];
@@ -420,8 +573,17 @@ class MultiFactorAuthenticationAPI extends Functions
         if ($fields != '') {
             $queryParam['fields'] = $fields;
         }
-        if ($smsTemplate2FA != '') {
-            $queryParam['smsTemplate2FA'] = $smsTemplate2FA;
+        if ($rbaBrowserEmailTemplate != '') {
+            $queryParam['rbaBrowserEmailTemplate'] = $rbaBrowserEmailTemplate;
+        }
+        if ($rbaCityEmailTemplate != '') {
+            $queryParam['rbaCityEmailTemplate'] = $rbaCityEmailTemplate;
+        }
+        if ($rbaCountryEmailTemplate != '') {
+            $queryParam['rbaCountryEmailTemplate'] = $rbaCountryEmailTemplate;
+        }
+        if ($rbaIpEmailTemplate != '') {
+            $queryParam['rbaIpEmailTemplate'] = $rbaIpEmailTemplate;
         }
         $queryParam['secondFactorAuthenticationToken'] = $secondFactorAuthenticationToken;
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, json_encode($bodyParam));
@@ -434,12 +596,17 @@ class MultiFactorAuthenticationAPI extends Functions
      * @param multiFactorAuthModelByBackupCode Model Class containing Definition of payload for MultiFactorAuth By BackupCode API
      * @param secondFactorAuthenticationToken A Uniquely generated MFA identifier token after successful authentication
      * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
+     * @param rbaBrowserEmailTemplate 
+     * @param rbaCityEmailTemplate 
+     * @param rbaCountryEmailTemplate 
+     * @param rbaIpEmailTemplate 
      * @return Complete user UserProfile data
      * 9.14
     */
 
     public function mfaValidateBackupCode($multiFactorAuthModelByBackupCode, $secondFactorAuthenticationToken,
-        $fields = "")
+        $fields = "", $rbaBrowserEmailTemplate = null, $rbaCityEmailTemplate = null,
+        $rbaCountryEmailTemplate = null, $rbaIpEmailTemplate = null)
     {
         $resourcePath = "/identity/v2/auth/login/2fa/verification/backupcode";
         $queryParam = [];
@@ -449,6 +616,18 @@ class MultiFactorAuthenticationAPI extends Functions
         }
         if ($fields != '') {
             $queryParam['fields'] = $fields;
+        }
+        if ($rbaBrowserEmailTemplate != '') {
+            $queryParam['rbaBrowserEmailTemplate'] = $rbaBrowserEmailTemplate;
+        }
+        if ($rbaCityEmailTemplate != '') {
+            $queryParam['rbaCityEmailTemplate'] = $rbaCityEmailTemplate;
+        }
+        if ($rbaCountryEmailTemplate != '') {
+            $queryParam['rbaCountryEmailTemplate'] = $rbaCountryEmailTemplate;
+        }
+        if ($rbaIpEmailTemplate != '') {
+            $queryParam['rbaIpEmailTemplate'] = $rbaIpEmailTemplate;
         }
         $queryParam['secondFactorAuthenticationToken'] = $secondFactorAuthenticationToken;
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $multiFactorAuthModelByBackupCode);
@@ -506,6 +685,135 @@ class MultiFactorAuthenticationAPI extends Functions
         }
         $queryParam['secondFactorAuthenticationToken'] = $secondFactorAuthenticationToken;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
+    }
+       
+
+
+    /**
+     * An API designed to send the MFA Email OTP to the email.
+     * @param emailIdModel payload
+     * @param secondFactorAuthenticationToken SecondFactorAuthenticationToken
+     * @param emailTemplate2FA EmailTemplate2FA
+     * @return Response containing Definition of Complete Validation data
+     * 9.18
+    */
+
+    public function mfaEmailOTP($emailIdModel, $secondFactorAuthenticationToken,
+        $emailTemplate2FA = null)
+    {
+        $resourcePath = "/identity/v2/auth/login/2fa/otp/email";
+        $queryParam = [];
+        $queryParam['apiKey'] = Functions::getApiKey();
+        if ($secondFactorAuthenticationToken === '' || ctype_space($secondFactorAuthenticationToken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('secondFactorAuthenticationToken'));
+        }
+        if ($emailTemplate2FA != '') {
+            $queryParam['emailTemplate2FA'] = $emailTemplate2FA;
+        }
+        $queryParam['secondFactorAuthenticationToken'] = $secondFactorAuthenticationToken;
+        return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $emailIdModel);
+    }
+       
+
+
+    /**
+     * This API is used to Verify MFA Email OTP by MFA Token
+     * @param multiFactorAuthModelByEmailOtp payload
+     * @param secondFactorAuthenticationToken SecondFactorAuthenticationToken
+     * @param rbaBrowserEmailTemplate RbaBrowserEmailTemplate
+     * @param rbaCityEmailTemplate RbaCityEmailTemplate
+     * @param rbaCountryEmailTemplate RbaCountryEmailTemplate
+     * @param rbaIpEmailTemplate RbaIpEmailTemplate
+     * @return Response Containing Access Token and Complete Profile Data
+     * 9.25
+    */
+
+    public function mfaValidateEmailOtp($multiFactorAuthModelByEmailOtp, $secondFactorAuthenticationToken,
+        $rbaBrowserEmailTemplate = null, $rbaCityEmailTemplate = null, $rbaCountryEmailTemplate = null,
+        $rbaIpEmailTemplate = null)
+    {
+        $resourcePath = "/identity/v2/auth/login/2fa/verification/otp/email";
+        $queryParam = [];
+        $queryParam['apiKey'] = Functions::getApiKey();
+        if ($secondFactorAuthenticationToken === '' || ctype_space($secondFactorAuthenticationToken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('secondFactorAuthenticationToken'));
+        }
+        if ($rbaBrowserEmailTemplate != '') {
+            $queryParam['rbaBrowserEmailTemplate'] = $rbaBrowserEmailTemplate;
+        }
+        if ($rbaCityEmailTemplate != '') {
+            $queryParam['rbaCityEmailTemplate'] = $rbaCityEmailTemplate;
+        }
+        if ($rbaCountryEmailTemplate != '') {
+            $queryParam['rbaCountryEmailTemplate'] = $rbaCountryEmailTemplate;
+        }
+        if ($rbaIpEmailTemplate != '') {
+            $queryParam['rbaIpEmailTemplate'] = $rbaIpEmailTemplate;
+        }
+        $queryParam['secondFactorAuthenticationToken'] = $secondFactorAuthenticationToken;
+        return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $multiFactorAuthModelByEmailOtp);
+    }
+       
+
+
+    /**
+     * This API is used to set the security questions on the profile with the MFA token when MFA flow is required.
+     * @param securityQuestionAnswerUpdateModel payload
+     * @param secondFactorAuthenticationToken SecondFactorAuthenticationToken
+     * @return Response Containing Access Token and Complete Profile Data
+     * 9.26
+    */
+
+    public function mfaSecurityQuestionAnswer($securityQuestionAnswerUpdateModel, $secondFactorAuthenticationToken)
+    {
+        $resourcePath = "/identity/v2/auth/login/2fa/securityquestionanswer";
+        $queryParam = [];
+        $queryParam['apiKey'] = Functions::getApiKey();
+        if ($secondFactorAuthenticationToken === '' || ctype_space($secondFactorAuthenticationToken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('secondFactorAuthenticationToken'));
+        }
+        $queryParam['secondFactorAuthenticationToken'] = $secondFactorAuthenticationToken;
+        return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $securityQuestionAnswerUpdateModel);
+    }
+       
+
+
+    /**
+     * This API is used to resending the verification OTP to the provided phone number
+     * @param securityQuestionAnswerUpdateModel payload
+     * @param secondFactorAuthenticationToken SecondFactorAuthenticationToken
+     * @param rbaBrowserEmailTemplate RbaBrowserEmailTemplate
+     * @param rbaCityEmailTemplate RbaCityEmailTemplate
+     * @param rbaCountryEmailTemplate RbaCountryEmailTemplate
+     * @param rbaIpEmailTemplate RbaIpEmailTemplate
+     * @return Response Containing Access Token and Complete Profile Data
+     * 9.27
+    */
+
+    public function mfaSecurityQuestionAnswerVerification($securityQuestionAnswerUpdateModel, $secondFactorAuthenticationToken,
+        $rbaBrowserEmailTemplate = null, $rbaCityEmailTemplate = null, $rbaCountryEmailTemplate = null,
+        $rbaIpEmailTemplate = null)
+    {
+        $resourcePath = "/identity/v2/auth/login/2fa/verification/securityquestionanswer";
+        $queryParam = [];
+        $queryParam['apiKey'] = Functions::getApiKey();
+        if ($secondFactorAuthenticationToken === '' || ctype_space($secondFactorAuthenticationToken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('secondFactorAuthenticationToken'));
+        }
+        if ($rbaBrowserEmailTemplate != '') {
+            $queryParam['rbaBrowserEmailTemplate'] = $rbaBrowserEmailTemplate;
+        }
+        if ($rbaCityEmailTemplate != '') {
+            $queryParam['rbaCityEmailTemplate'] = $rbaCityEmailTemplate;
+        }
+        if ($rbaCountryEmailTemplate != '') {
+            $queryParam['rbaCountryEmailTemplate'] = $rbaCountryEmailTemplate;
+        }
+        if ($rbaIpEmailTemplate != '') {
+            $queryParam['rbaIpEmailTemplate'] = $rbaIpEmailTemplate;
+        }
+        $queryParam['secondFactorAuthenticationToken'] = $secondFactorAuthenticationToken;
+        return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $securityQuestionAnswerUpdateModel);
     }
        
 
@@ -600,6 +908,50 @@ class MultiFactorAuthenticationAPI extends Functions
         }
         $queryParam['uid'] = $uid;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
+    }
+       
+
+
+    /**
+     * This API is used to reset the Email OTP Authenticator settings for an MFA-enabled user.
+     * @param uid UID, the unified identifier for each user account
+     * @return Response containing Definition of Delete Request
+     * 18.42
+    */
+
+    public function mfaResetEmailOtpAuthenticatorByUid($uid)
+    {
+        $resourcePath = "/identity/v2/manage/account/2fa/authenticator/otp/email";
+        $queryParam = [];
+        $queryParam['apiKey'] = Functions::getApiKey();
+        $queryParam['apiSecret'] = Functions::getApiSecret();
+        if ($uid === '' || ctype_space($uid)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('uid'));
+        }
+        $queryParam['uid'] = $uid;
+        return Functions::_apiClientHandler('DELETE', $resourcePath, $queryParam);
+    }
+       
+
+
+    /**
+     * This API is used to reset the Security Question Authenticator settings for an MFA-enabled user.
+     * @param uid UID, the unified identifier for each user account
+     * @return Response containing Definition of Delete Request
+     * 18.43
+    */
+
+    public function mfaResetSecurityQuestionAuthenticatorByUid($uid)
+    {
+        $resourcePath = "/identity/v2/manage/account/2fa/authenticator/securityquestionanswer";
+        $queryParam = [];
+        $queryParam['apiKey'] = Functions::getApiKey();
+        $queryParam['apiSecret'] = Functions::getApiSecret();
+        if ($uid === '' || ctype_space($uid)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('uid'));
+        }
+        $queryParam['uid'] = $uid;
+        return Functions::_apiClientHandler('DELETE', $resourcePath, $queryParam);
     }
 
 }

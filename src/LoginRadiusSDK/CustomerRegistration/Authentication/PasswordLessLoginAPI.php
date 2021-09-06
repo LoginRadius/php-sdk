@@ -160,5 +160,47 @@ class PasswordLessLoginAPI extends Functions
         $queryParam['verificationToken'] = $verificationToken;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
+       
+
+
+    /**
+     * This API is used to verify the otp sent to the email when doing a passwordless login. 
+     * @param passwordLessLoginByEmailAndOtpModel payload
+     * @param fields Fields
+     * @return Response containing User Profile Data and access token
+     * 9.23
+    */
+
+    public function passwordlessLoginVerificationByEmailAndOTP($passwordLessLoginByEmailAndOtpModel, $fields = "")
+    {
+        $resourcePath = "/identity/v2/auth/login/passwordlesslogin/email/verifyotp";
+        $queryParam = [];
+        $queryParam['apiKey'] = Functions::getApiKey();
+        if ($fields != '') {
+            $queryParam['fields'] = $fields;
+        }
+        return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $passwordLessLoginByEmailAndOtpModel);
+    }
+       
+
+
+    /**
+     * This API is used to verify the otp sent to the email when doing a passwordless login.
+     * @param passwordLessLoginByUserNameAndOtpModel payload
+     * @param fields Fields
+     * @return Response containing User Profile Data and access token
+     * 9.24
+    */
+
+    public function passwordlessLoginVerificationByUserNameAndOTP($passwordLessLoginByUserNameAndOtpModel, $fields = "")
+    {
+        $resourcePath = "/identity/v2/auth/login/passwordlesslogin/username/verifyotp";
+        $queryParam = [];
+        $queryParam['apiKey'] = Functions::getApiKey();
+        if ($fields != '') {
+            $queryParam['fields'] = $fields;
+        }
+        return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $passwordLessLoginByUserNameAndOtpModel);
+    }
 
 }

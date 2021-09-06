@@ -1,14 +1,65 @@
 > **LoginRadius PHP SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://www.loginradius.com/docs/api/v2/deployment/sdk-libraries/php-library/)
 
+# Version 11.2.0
+
+Release on **September 6, 2021**
+
+## Enhancements
+
+- Updated Jquery with latest version(3.6.0) in SDK Demo
+
+
+## Added new multiple APIs for better user experience
+
+
+- MFAEmailOtpByAccessToken
+- MFAValidateEmailOtpByAccessToken
+- MFAResetEmailOtpAuthenticatorByAccessToken
+- MFASecurityQuestionAnswerByAccessToken
+- MFAResetSecurityQuestionAuthenticatorByAccessToken
+- MFAEmailOTP
+- MFAValidateEmailOtp
+- MFASecurityQuestionAnswer
+- MFASecurityQuestionAnswerVerification
+- MFAResetEmailOtpAuthenticatorByUid
+- MFAResetSecurityQuestionAuthenticatorByUid
+- ReAuthValidateEmailOtp
+- ReAuthSendEmailOtp
+- ReAuthBySecurityQuestion
+
+## Removed APIs:
+
+- GetSocialUserProfile
+
+#### Added `EmailTemplate2FA` parameter in the following API 
+- MFALoginByEmail
+- MFALoginByUserName
+- MFALoginByPhone
+
+#### Added 	`RbaBrowserEmailTemplate`, `RbaCityEmailTemplate` ,`RbaCountryEmailTemplate` , `RbaIpEmailTemplate` parameter in the following API 
+- MFAValidateOTPByPhone
+- MFAValidateGoogleAuthCode
+- MFAValidateBackupCode
+
+#### Added 	`emailTemplate`, `verificationUrl` ,`welcomeEmailTemplate`  parameter in the following API 
+
+- GetProfileByAccessToken
+
+#### Removed `smsTemplate2FA ` parameter from the following API 
+- mfaValidateGoogleAuthCode
+
 
 # Version 11.1.1
 Release on **June 11, 2021**
 
+
+
 ## Bug Fixed
-- Fixed API Key Validation issue
+- fixed API Key Validation issue
+
 
 # Version 11.1.0
-Release on **April 06, 2021**
+Release on **March 25, 2021**
 
 ## Enhancements
 - Added X-Origin-IP header support.
@@ -21,31 +72,30 @@ Release on **April 06, 2021**
 - Passwordless Login Verification By User Name And OTP.
 
 
+
+
 # Version 11.0.0
-Release on **Aug 10, 2020**
+Release on **July 28, 2020**
 
 ## Enhancements
-
- - Added a parameter isWeb in "RefreshAccessToken" API.
- - Added a parameter SocialAppName in "getAccessTokenByFacebookAccessToken,  getAccessTokenByTwitterAccessToken,
-   getAccessTokenByGoogleAccessToken, getAccessTokenByLinkedinAccessToken, getAccessTokenByAppleIdCode, getAccessTokenByGoogleAuthCode"  native Social login APIs.
-
+- Added a parameter isWeb in "RefreshAccessToken" API.
+- Added a parameter SocialAppName in "getAccessTokenByFacebookAccessToken,  getAccessTokenByTwitterAccessToken,
+  getAccessTokenByGoogleAccessToken, getAccessTokenByLinkedinAccessToken, getAccessTokenByAppleIdCode, 
+  getAccessTokenByGoogleAuthCode" Native Social login APIs.
 
 ## Added new multiple APIs for better user experience
-
  - Added linkSocialIdentities(POST) API.
  - Added linkSocialIdentitiesByPing(POST) API.
  - Added getAccessTokenByAppleIdCode API.
  - Added getAccessTokenByWeChatCode API.
 
-
 ## Removed APIs:
-
  - linkSocialIdentity API(PUT)
  - getSocialIdentity API(GET)
 
+
 # Version 10.0.0
-Release on **September 30, 2019**
+Release on **September 26, 2019**
 
 ## Enhancements
 This full version release includes major changes with several improvements and optimizations :
@@ -57,14 +107,13 @@ This full version release includes major changes with several improvements and o
  - ApiKey and ApiSecret usage redundancy removed.
  - All LoginRadius related features need to be defined once only and SDK will handle them automatically.
  - Improved the naming conventions of API functions for better readability.
- - Better Exception Handling for LoginRadius API Response in SDK.
+ - Better Error and Exception Handling for LoginRadius API Response in SDK.
  - Revamped complete SDK and restructured it with latest API function names and parameters.
  - Added detailed description to API functions and parameters for better understanding.
  - Updated the demo according to latest SDK changes.
  - Implemented API Region Feature.
- - Added PIN Authentication feature APIs.
- - Added Consent Management feature APIs.
- - Added Local SOTT generation
+ - Added Functionality to generate SOTT locally in Utility folder, compatible with latest version of PHP.
+
 
 ## Added new multiple APIs for better user experience
 
@@ -83,20 +132,20 @@ This full version release includes major changes with several improvements and o
  - Verify Multifactor PIN Authentication
  - Update UID
  - MFA Re-authentication by PIN
- - PIN Login
- - Forgot PIN By Email
- - Forgot PIN By UserName
+ - Pin Login
+ - Forgot Pin By Email
+ - Forgot Pin By UserName
  - Reset PIN By ResetToken
  - Reset PIN By SecurityAnswer And Email
  - Reset PIN By SecurityAnswer And Username
  - Reset PIN By SecurityAnswer And Phone
- - Forgot PIN By Phone
- - Change PIN By Token
+ - Forgot Pin By Phone
+ - Change Pin By Token
  - Reset PIN by Phone and OTP
  - Reset PIN by Email and OTP
  - Reset PIN by Username and OTP
- - Set PIN By PinAuthToken
- - Invalidate PIN Session Token
+ - Set Pin By PinAuthToken
+ - Invalidate Pin Session Token
  - Submit Consent By ConsentToken
  - Get Consent Logs
  - Submit Consent By AccessToken
@@ -272,3 +321,7 @@ Released on **February 28, 2017**
   - Added role api's
   - Added add or remove email api's
   - Added Custom object api's
+ 
+
+
+ 

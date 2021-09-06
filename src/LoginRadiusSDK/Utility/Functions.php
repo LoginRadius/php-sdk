@@ -5,7 +5,7 @@
  * @category : Utility
  * @package : Functions
  * @author : LoginRadius Team
- * @version : 11.1.1
+ * @version : 11.2.0
  * @license : https://opensource.org/licenses/MIT
  */
 
@@ -23,7 +23,7 @@ use LoginRadiusSDK\LoginRadiusException;
 class Functions
 {
 
-    const VERSION = '11.1.1';
+    const VERSION = '11.2.0';
 
     private static $_apikey;
     private static $_apisecret;

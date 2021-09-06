@@ -799,30 +799,6 @@ class SocialAPI extends Functions
 
 
     /**
-     * The User Profile API is used to get social profile data from the user's social account after authentication.<br><br><b>Supported Providers:</b>  All
-     * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
-     * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
-     * @return Response containing Definition for Complete UserProfile data
-     * 38.1
-    */
-
-    public function getSocialUserProfile($accessToken, $fields = "")
-    {
-        $resourcePath = "/api/v2/userprofile";
-        $queryParam = [];
-        if ($accessToken === '' || ctype_space($accessToken)) {
-            throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
-        }
-        if ($fields != '') {
-            $queryParam['fields'] = $fields;
-        }
-        $queryParam['access_token'] = $accessToken;
-        return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
-    }
-       
-
-
-    /**
      * The User Profile API is used to get the latest updated social profile data from the user's social account after authentication. The social profile will be retrieved via oAuth and OpenID protocols. The data is normalized into LoginRadius' standard data format. This API should be called using the access token retrieved from the refresh access token API.
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields

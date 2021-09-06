@@ -177,11 +177,15 @@ class AuthenticationAPI extends Functions
      * This API retrieves a copy of the user data based on the access token.
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
+     * @param emailTemplate 
+     * @param verificationUrl 
+     * @param welcomeEmailTemplate 
      * @return Response containing Definition for Complete profile data
      * 5.2
     */
 
-    public function getProfileByAccessToken($accessToken, $fields = "")
+    public function getProfileByAccessToken($accessToken, $fields = "",
+    $emailTemplate = null, $verificationUrl = null, $welcomeEmailTemplate = null)
     {
         $resourcePath = "/identity/v2/auth/account";
         $queryParam = [];
@@ -191,6 +195,15 @@ class AuthenticationAPI extends Functions
         $queryParam['apiKey'] = Functions::getApiKey();
         if ($fields != '') {
             $queryParam['fields'] = $fields;
+        }
+        if ($emailTemplate != '') {
+            $queryParam['emailTemplate'] = $emailTemplate;
+        }
+        if ($verificationUrl != '') {
+            $queryParam['verificationUrl'] = $verificationUrl;
+        }
+        if ($welcomeEmailTemplate != '') {
+            $queryParam['welcomeEmailTemplate'] = $welcomeEmailTemplate;
         }
         $queryParam['access_token'] = $accessToken;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
@@ -336,6 +349,44 @@ class AuthenticationAPI extends Functions
         $queryParam['apiKey'] = Functions::getApiKey();
         $queryParam['access_token'] = $accessToken;
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $unlockProfileModel);
+    }
+       
+
+
+    /**
+     * This API is used to get a user's profile using the clientGuid parameter if no callback feature enabled
+     * @param clientGuid ClientGuid
+     * @param emailTemplate EmailTemplate
+     * @param fields Fields
+     * @param verificationUrl VerificationUrl
+     * @param welcomeEmailTemplate WelcomeEmailTemplate
+     * @return Response containing User Profile Data and access token
+     * 5.16
+    */
+
+    public function getProfileByPing($clientGuid, $emailTemplate = null,
+        $fields = "", $verificationUrl = null, $welcomeEmailTemplate = null)
+    {
+        $resourcePath = "/identity/v2/auth/account/ping";
+        $queryParam = [];
+        $queryParam['apiKey'] = Functions::getApiKey();
+        if ($clientGuid === '' || ctype_space($clientGuid)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('clientGuid'));
+        }
+        if ($emailTemplate != '') {
+            $queryParam['emailTemplate'] = $emailTemplate;
+        }
+        if ($fields != '') {
+            $queryParam['fields'] = $fields;
+        }
+        if ($verificationUrl != '') {
+            $queryParam['verificationUrl'] = $verificationUrl;
+        }
+        if ($welcomeEmailTemplate != '') {
+            $queryParam['welcomeEmailTemplate'] = $welcomeEmailTemplate;
+        }
+        $queryParam['clientGuid'] = $clientGuid;
+        return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
        
 
