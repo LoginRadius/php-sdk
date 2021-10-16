@@ -32,7 +32,7 @@ The recommended way to install is through [Composer](http://getcomposer.org/).
 curl -sS https://getcomposer.org/installer | php
 ```
 
-Next, run the Composer command to install the latest stable version of library:
+Next, run the Composer command to install the latest and stable version of library:
 
 ```
 composer require loginradius/php-sdk:11.2.0
