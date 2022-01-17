@@ -2,6 +2,7 @@
 define('LR_API_KEY', 'LOGINRADIUS_API_KEY_HERE');
 define('LR_API_SECRET', 'LOGINRADIUS_API_SECRET_HERE'); // Pass API Secret Key
 define('API_REQUEST_SIGNING', ''); // Pass true/false for enable/disable
+define('AUTH_FLOW', '');   // Pass optional/disabled, if email verification flow optional or disabled, no need to mention if required flow
 
 
 
