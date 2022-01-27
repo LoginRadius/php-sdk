@@ -16,7 +16,6 @@ date_default_timezone_set('UTC');
 
 class SOTT
 {
-
     private $_secret;
     private $_key;
 
@@ -35,30 +34,41 @@ class SOTT
     }
 
     /**
-     * Encrpyt data.
-     *
-     * @param $time
+     * Generate SOTT Manually.
+     * @param $timeDifference (optional) The time difference you would like to pass, If you not pass difference then the default value is 10 minutes.
+     * @param $getLRserverTime (optional) If true it will call LoginRadius Get Server Time Api and fetch basic server information and server time information which is useful when generating an SOTT token.
+     * @param $apiKey (optional) LoginRadius Api Key.
+     * @param $apiSecret (optional) LoginRadius Api Secret.
      * @return string
      */
-    public function encrypt($time = '10', $getLRserverTime = false) {
-        if ($getLRserverTime) {     
+
+    public function encrypt($timeDifference = '', $getLRserverTime = false, $apiKey = "",$apiSecret = "")
+    {
+        $time=!empty($timeDifference)?$timeDifference:'10';
+       
+        $apiKey=!empty($apiKey)?$apiKey:$this->_key;
+        
+        $apiSecret=!empty($apiSecret)?$apiSecret:$this->_secret;
+
+        if ($getLRserverTime) {
             $result = Functions::apiClient("/identity/v2/serverinfo", array("TimeDifference" => $time), array('output_format' => 'json'));
             $startTime = isset($result->Sott) ? $result->Sott->StartTime : '';
             $startTime = str_replace("-", "/", $startTime);
             $endTime = isset($result->Sott) ? $result->Sott->EndTime : '';
             $endTime = str_replace("-", "/", $endTime);
-            $plain_text = $startTime . '#' . $this->_key . "#" . $endTime;
+            $plain_text = $startTime . '#' . $apiKey . "#" . $endTime;
         }
+
         if (!$getLRserverTime || empty($startTime) || empty($endTime)) {
             $startTime = 0;
             $di = new \DateInterval('PT' . $startTime . 'M');
             $di->invert = 1;
             $start = new \DateTimeImmutable(gmdate(self::DateFormat));
-            $plain_text = $start->add($di)->format(self::DateFormat) . '#' . $this->_key . "#" . $start->add(new \DateInterval('PT' . $time . 'M'))->format(self::DateFormat);
+            $plain_text = $start->add($di)->format(self::DateFormat) . '#' . $apiKey . "#" . $start->add(new \DateInterval('PT' . $time . 'M'))->format(self::DateFormat);
         }
-
+        
         $plain_text = mb_convert_encoding($plain_text, 'UTF-8');
-        $pass_phrase = mb_convert_encoding($this->_secret, 'UTF-8');
+        $pass_phrase = mb_convert_encoding($apiSecret, 'UTF-8');
         $salt = str_pad("", 8, "\0");
         $key = hash_pbkdf2('sha1', $pass_phrase, $salt, 10000, self::KEYSIZE / 8, true);
 
@@ -73,7 +83,4 @@ class SOTT
         hash_update($ctx, $token);
         return $token . '*' . hash_final($ctx);
     }
-
 }
-
-

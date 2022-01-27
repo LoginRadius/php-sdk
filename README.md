@@ -35,13 +35,14 @@ curl -sS https://getcomposer.org/installer | php
 Next, run the Composer command to install the latest stable version of library:
 
 ```
-composer require loginradius/php-sdk:11.2.0
+composer require loginradius/php-sdk:11.3.0
 ```
 
 Include the following files in your Project Directory
 
 ```
 require_once "src/LoginRadiusSDK/Utility/Functions.php";
+require_once "src/LoginRadiusSDK/Utility/SOTT.php";
 require_once "src/LoginRadiusSDK/LoginRadiusException.php";
 require_once "src/LoginRadiusSDK/Clients/IHttpClientInterface.php";
 require_once "src/LoginRadiusSDK/Clients/DefaultHttpClient.php";
@@ -107,6 +108,7 @@ define('API_DOMAIN', 'DEFINE_CUSTOM_API_DOMAIN');   // Custom API Domain
 Importing/aliasing with the use operator.
 ```
 use \LoginRadiusSDK\Utility\Functions;
+use \LoginRadiusSDK\Utility\SOTT;
 use \LoginRadiusSDK\LoginRadiusException;
 use \LoginRadiusSDK\Clients\IHttpClientInterface;
 use \LoginRadiusSDK\Clients\DefaultHttpClient;
@@ -129,6 +131,7 @@ use \LoginRadiusSDK\CustomerRegistration\Authentication\RiskBasedAuthenticationA
 use \LoginRadiusSDK\CustomerRegistration\Authentication\SmartLoginAPI;
 use \LoginRadiusSDK\CustomerRegistration\Social\SocialAPI;
 use \LoginRadiusSDK\CustomerRegistration\Social\NativeSocialAPI;
+
 ```
 
 Create a LoginRadius object :
@@ -4126,7 +4129,25 @@ API can be used to unsubscribe a WebHook configured on your LoginRadius site.
 $result = $webHookAPI->webHookUnsubscribe($payload);
  ```
 
+### Generate SOTT Manually
+
+SOTT is a secure one-time token that can be created using the API key, API secret, and a timestamp ( start time and end time ). You can manually create a SOTT using the following utility function.
+
+```
+$timeDifference =''; // (Optional) The time difference will be used to set the expiration time of SOTT, If you do not pass time difference then the default expiration time of SOTT is 10 minutes.
+        
+$getLRserverTime=false; //(Optional) If true it will call LoginRadius Get Server Time Api and fetch basic server information and server time information which is useful when generating an SOTT token.
+
+//The LoginRadius API key and primary API secret can be passed additionally, If the credentials will not be passed then this SOTT function will pick the API credentials from the SDK configuration.  
  
+$apiKey=""; //(Optional) LoginRadius Api Key
+
+$apiSecret=""; //(Optional) LoginRadius Api Secret (Only Primary Api Secret is used to generate the SOTT manually)
+
+$sottObj = new SOTT();
+$sott = $sottObj->encrypt($timeDifference,$getLRserverTime,$apiKey,$apiSecret);
+```
+
 
 
 #### Implement Custom HTTP Client
@@ -4146,15 +4167,20 @@ class CustomHttpClient implements IHttpClient {
 }
 ```
 - After that, pass the class name of your custom http client in global variable** $apiClient_class** in your project.
->Note
 <br>
->If you manually added LoginRadius SDK then please make sure that customhttpclient.php file included in your project.
+
+>Note: If you manually added LoginRadius SDK then please make sure that customhttpclient.php file included in your project.
 ```
 global $apiClient_class;
 $apiClient_class = 'CustomHttpClient';
 ```
 
 >Now your Custom HTTP client library will be used to handle LoginRadius APIs.
+
+
+
+
+
 
 ## Demo
 
