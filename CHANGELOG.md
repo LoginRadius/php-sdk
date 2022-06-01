@@ -3,7 +3,7 @@
 
 # Version 11.4.0
 
-Release on **June 02, 2022**
+Release on **June 01, 2022**
 
 ## Enhancements
 
