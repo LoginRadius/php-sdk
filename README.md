@@ -2126,7 +2126,7 @@ $options = "options"; //Optional
 $smsTemplate = "smsTemplate"; //Optional 
 $verificationUrl = "verificationUrl"; //Optional 
 $welcomeEmailTemplate = "welcomeEmailTemplate"; //Optional
-$emailTemplate = 'emailTemplate'; //Optional
+$emailTemplate = "emailTemplate"; //Optional
 $result = $phoneAuthenticationAPI->userRegistrationByPhone($payload,$sott,$fields,$options,$smsTemplate,$verificationUrl,$welcomeEmailTemplate,$emailTemplate);
  ```
 
