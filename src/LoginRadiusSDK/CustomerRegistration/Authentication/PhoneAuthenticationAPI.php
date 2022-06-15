@@ -294,7 +294,7 @@ class PhoneAuthenticationAPI extends Functions
 
     public function userRegistrationByPhone($authUserRegistrationModel, $sott,
         $fields = "", $options = "", $smsTemplate = null,
-        $verificationUrl = null, $welcomeEmailTemplate = null)
+        $verificationUrl = null, $welcomeEmailTemplate = null,$emailTemplate = null)
     {
         $resourcePath = "/identity/v2/auth/register";
         $queryParam = [];
@@ -310,6 +310,9 @@ class PhoneAuthenticationAPI extends Functions
         }
         if ($smsTemplate != '') {
             $queryParam['smsTemplate'] = $smsTemplate;
+        }
+        if ($emailTemplate != '') {
+            $queryParam['emailTemplate'] = $emailTemplate;
         }
         if ($verificationUrl != '') {
             $queryParam['verificationUrl'] = $verificationUrl;
