@@ -37,7 +37,7 @@ curl -sS https://getcomposer.org/installer | php
 Next, run the Composer command to install the latest stable version of library:
 
 ```
-composer require loginradius/php-sdk:11.4.1
+composer require loginradius/php-sdk:11.4.0-beta
 ```
 
 Include the following files in your Project Directory
@@ -2111,6 +2111,10 @@ This API registers the new users into your Cloud Storage and triggers the phone 
  ```php
 
  $payload = '{
+"email" : [   { 
+ "type" : "<type>"  ,
+ "value" : "<value>"   
+}] ,
 "firstName" : "<firstName>",
 "lastName" : "<lastName>",
 "password" : "<password>",
