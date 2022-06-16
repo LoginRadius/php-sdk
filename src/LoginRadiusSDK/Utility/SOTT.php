@@ -95,9 +95,9 @@ class SOTT  extends Functions
     {
         $time=!empty($timeDifference)?$timeDifference:'10';
        
-        $apiKey=!empty($apiKey)?$apiKey:$this->_key;
+        $apiKey=!empty($apiKey)?$apiKey:Functions::getApiKey();
         
-        $apiSecret=!empty($apiSecret)?$apiSecret:$this->_secret;
+        $apiSecret=!empty($apiSecret)?$apiSecret:Functions::getApiSecret();
 
         if ($getLRserverTime) {
             $result = Functions::apiClient("/identity/v2/serverinfo", array("TimeDifference" => $time), array('output_format' => 'json'));
