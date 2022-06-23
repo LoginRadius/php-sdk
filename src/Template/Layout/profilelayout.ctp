@@ -24,10 +24,7 @@
                 <?=$this->Html->image('lr-logo.png')?>
                 </a>
                 <span style="display:block;margin-left:70px">CakePhp Web Demo</span>
-                <div class="button-group">
-                    <a href="">Minimal</a>
-                    <a href="">LoginScreen</a>
-                </div>
+                
             </div>
             <div class="vertical-menu">
                 <a href="profileview" id="menu-profile">Profile</a>

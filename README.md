@@ -24,8 +24,8 @@ It presumes you have basic knowledge of PHP.
 4. Configure your LoginRadius Credentials in \ "\src\Controller\AppController.php\" 
 
 ```
-    define('API_KEY', ''); // Pass API Key
-    define('API_SECRET', '');  // Pass API Secret Key
+    define('LR_API_KEY', ''); // Pass API Key
+    define('LR_API_SECRET', '');  // Pass API Secret Key
     define('API_REQUEST_SIGNING', false); // Pass boolean true/false for enable/disable
     define('AUTH_FLOW', '');
 ```

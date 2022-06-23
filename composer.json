@@ -9,7 +9,7 @@
         "cakephp/cakephp": "3.7.4",
         "cakephp/migrations": "^2.0.0",
         "cakephp/plugin-installer": "^1.0",
-        "loginradius/php-sdk": "^5.0.2",
+        "loginradius/php-sdk": "11.4.0",
         "mobiledetect/mobiledetectlib": "2.*"
     },
     "require-dev": {
@@ -38,7 +38,6 @@
     "scripts": {
         "post-install-cmd": "App\\Console\\Installer::postInstall",
         "post-create-project-cmd": "App\\Console\\Installer::postInstall",
-        "post-autoload-dump": "Cake\\Composer\\Installer\\PluginInstaller::postAutoloadDump",
         "check": [
             "@test",
             "@cs-check"
@@ -49,6 +48,9 @@
     },
     "prefer-stable": true,
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "cakephp/plugin-installer": true
+        }
     }
 }

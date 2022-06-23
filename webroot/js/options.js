@@ -7,5 +7,5 @@ commonOptions.hashTemplate = true;
 commonOptions.sott = "<SOTT>";
 commonOptions.formValidationMessage = true;
 commonOptions.verificationUrl = domainName+"";
-commonOptions.resetPasswordUrl =domainName+"/forgot";
+commonOptions.resetPasswordUrl =domainName+"";
 var LRObject = new LoginRadiusV2(commonOptions);
