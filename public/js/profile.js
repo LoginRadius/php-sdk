@@ -294,7 +294,7 @@ function resetMultifactor() {
             url:'/profile',
             dataType: "json",
             data: $.param({
-                uid: localStorage.getItem("LRUserID"),
+                token: localStorage.getItem("LRTokenKey"),
                 action: "resetMultifactor",
                 _token: currentToken
             }),

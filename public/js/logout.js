@@ -17,7 +17,7 @@ $(function () {
         jQuery('.useruid').text(lruseruid);
         jQuery('.lastlogin').text(lastlogintime);
     } else {
-        window.location.href = domainName + "/login";
+        window.location.href = "minimal";
     }
 });
 
