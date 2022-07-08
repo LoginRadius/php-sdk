@@ -65,7 +65,7 @@ function getProfileByUid() {
     else {
 
         $accountAPI = new AccountAPI(); 
-        try {
+        
             $result = $accountAPI->getAccountProfileByUid($uid,$fields);
             if ((isset($result->Uid) && $result->Uid != '')) {
                 $response['data'] = $result;
@@ -73,11 +73,11 @@ function getProfileByUid() {
                 $response['message'] = "fetched profile";
                 $response['status'] = 'success';
             }
-        }
-        catch (LoginRadiusException $e) {
-            $response['message'] = $e->getMessage();
-            $response['status'] = "error";
-        }
+            else if (isset($result->error_response)) {
+                $response['message'] = $result->error_response->Description;
+
+                $response['status'] = "error";
+            }
     }
     echo json_encode($response);
 }
@@ -92,7 +92,7 @@ function updateAccount() {
     $about = $this->input->post('about'); 
     $response = array('status' => 'error', 'message' => 'an error occoured');
     $authenticationObj = new AuthenticationAPI();
-    try {
+   
         $userProfileUpdateModel = array('FirstName' => $firstname, 'LastName' => $lastname, 'About' => $about);
         $accessToken =$this->input->post('token');
         $emailTemplate = '';
@@ -107,11 +107,10 @@ function updateAccount() {
             $response['message'] = "Profile has been updated successfully.";
             $response['status'] = 'success';
         }
-    }
-    catch (LoginRadiusException $e) {
-        $response['message'] = $e->error_response->Description;
-        $response['status'] = 'error';
-    }
+        else if (isset($result->error_response)) {
+            $response['message'] = $result->error_response->Description;
+            $response['status'] = "error";
+        }
     echo json_encode($response);
 }
 
@@ -133,22 +132,18 @@ function getProfile() {
         $emailTemplate = ''; //Optional 
         $verificationUrl = ''; //Optional 
         $welcomeEmailTemplate = ''; //Optional
-        try {
+        
             $result = $authObj->getProfileByAccessToken($token, $fields, $emailTemplate, $verificationUrl, $welcomeEmailTemplate);
             if ((isset($result->EmailVerified) && $result->EmailVerified) || AUTH_FLOW == 'optional' || AUTH_FLOW == 'disabled') {
                 $response['data'] = $result;
                 $response['message'] = "Profile fetched";
                 $response['status'] = 'success';
             }
-            else {
-                $response['message'] = "Email is not verified.";
-                $response['status'] = 'error';
+            else if (isset($result->error_response)) {
+                $response['message'] = $result->error_response->Description;
+                $response['status'] = "error";
             }
-        }
-        catch (LoginRadiusException $e) {
-            $response['message'] = $e->error_response->Description;
-            $response['status'] = "error";
-        }
+        
     }
    echo json_encode($response);
 }
@@ -170,18 +165,17 @@ function changePassword() {
     }
     else {
         $authenticationObj = new AuthenticationAPI();
-        try {
+       
             $result = $authenticationObj->changePassword($token,$newpassword, $oldpassword);
 
             if (isset($result->IsPosted) && $result->IsPosted) {
                 $response['message'] = "Password has been changed successfully.";
                 $response['status'] = 'success';
             }
-        }
-        catch (LoginRadiusException $e) {
-            $response['message'] = $e->error_response->Description;
-            $response['status'] = 'error';
-        }
+            else if (isset($result->error_response)) {
+                $response['message'] = $result->error_response->Description;
+                $response['status'] = "error";
+            }
     }
   echo json_encode($response);
 }
@@ -195,16 +189,16 @@ public function forgotPassword()
         $response['message'] = 'The Email Id field is required.';
     } else {
         $authenticationObj = new AuthenticationAPI();
-        try {
+        
             $result = $authenticationObj->forgotPassword($email, $this->input->post('resetPasswordUrl'), '');
             if ((isset($result->IsPosted) && $result->IsPosted)) {
                 $response['message'] = "We'll email you an instruction on how to reset your password";
                 $response['status'] = 'success';
             }
-        } catch (LoginRadiusException $e) {
-            $response['message'] = $e->error_response->Description;
-            $response['status'] = "error";
-        }
+            else if (isset($result->error_response)) {
+                $response['message'] = $result->error_response->Description;
+                $response['status'] = "error";
+            }
     }
     echo json_encode($response);
 }
@@ -223,17 +217,17 @@ function setPassword() {
     }
     else {
         $accountObj = new AccountAPI();
-        try {
+        
             $result = $accountObj->setAccountPasswordByUid($newpassword, $uid);
             if (isset($result->PasswordHash) && $result->PasswordHash != '') {
                 $response['message'] = "The password has been set successfully.";
                 $response['status'] = 'success';
             }
-        }
-        catch (LoginRadiusException $e) {
-            $response['message'] = $e->error_response->Description;
-            $response['status'] = 'error';
-        }
+            else if (isset($result->error_response)) {
+                $response['message'] = $result->error_response->Description;
+
+                $response['status'] = "error";
+            }
     }
     echo json_encode($response);
 }
@@ -263,18 +257,17 @@ function resetPassword(){
     }
     else {
         $authenticationObj = new AuthenticationAPI();
-        try {
+      
             $formData = ['resettoken' => $token, 'password' => $password, 'welcomeEmailTemplate' => '', 'resetPasswordEmailTemplate' => ''];
             $result = $authenticationObj->resetPasswordByResetToken($formData);
             if ((isset($result->IsPosted) && $result->IsPosted)) {
                 $response['message'] = "Password has been reset successfully.";
                 $response['status'] = 'success';
             }
-        }
-        catch (LoginRadiusException $e) {
-            $response['message'] = $e->error_response->Description;
-            $response['status'] = "error";
-        }
+            else if (isset($result->error_response)) {
+                $response['message'] = $result->error_response->Description;
+                $response['status'] = "error";
+            }
     }
    echo json_encode($response);
 }
@@ -293,20 +286,16 @@ function createCustomObjects() {
     else {
         $authCustomObj = new CustomObjectAPI();
        
-        try {
-            
-            $result = $authCustomObj->createCustomObjectByToken($token, $objectName,$this->input->post('payload'));
-      
-           
-            if (isset($result->Uid) && $result->Uid != '') {
+        $result = $authCustomObj->createCustomObjectByToken($token, $objectName,$this->input->post('payload'));   
+        if (isset($result->Uid) && $result->Uid != '') {
                 
-                $response['message'] = "Custom object created successfully.";
-                $response['status'] = 'success';
-            }
+            $response['message'] = "Custom object created successfully.";
+            $response['status'] = 'success';
         }
-        catch (LoginRadiusException $e) {
-            $response['message'] = $e->error_response->Description;
-            $response['status'] = 'error';
+        else if (isset($result->error_response)) {
+            $response['message'] = $result->error_response->Description;
+
+            $response['status'] = "error";
         }
     }
     echo json_encode($response);
@@ -325,20 +314,20 @@ function getCustomObjects() {
     }
     else {
         $authCustomObj = new CustomObjectAPI();
-        try {
+        
             $result = $authCustomObj->getCustomObjectByToken($token, $objectName);
             if (isset($result->Count) && $result->Count != '0') {
                 $response['result'] = $result;
                 $response['status'] = 'success';
             }
+            else if (isset($result->error_response)) {
+                $response['message'] = $result->error_response->Description;
+                $response['status'] = 'error';
+            }
             else {
                 $response['status'] = 'empty';
             }
-        }
-        catch (LoginRadiusException $e) {
-            $response['message'] = $e->error_response->Description;
-            $response['status'] = 'error';
-        }
+        
     }
     echo json_encode($response);
 }
@@ -360,18 +349,17 @@ function updateCustomObjects() {
     }
     else {
         $authCustomObj = new CustomObjectAPI();
-        try {
+        
             $result = $authCustomObj->updateCustomObjectByToken($token, $objectName, $objectRecordId,  $this->input->post('payload'));
             
             if (isset($result->Uid) && $result->Uid != '') {
                 $response['message'] = "Custom object updated successfully.";
                 $response['status'] = 'success';
             }
-        }
-        catch (LoginRadiusException $e) {
-            $response['message'] = $e->error_response->Description;
-            $response['status'] = 'error';
-        }
+            else if (isset($result->error_response)) {
+                $response['message'] = $result->error_response->Description;
+                $response['status'] = 'error';
+            }
     }
    echo json_encode($response);
 }
@@ -392,17 +380,16 @@ function deleteCustomObjects() {
     }
     else {
         $authCustomObj = new CustomObjectAPI();
-        try {
+       
             $result = $authCustomObj->deleteCustomObjectByToken($token, $objectName, $objectRecordId);
             if (isset($result->IsDeleted) && $result->IsDeleted) {
                 $response['message'] = "Custom object deleted successfully.";
                 $response['status'] = 'success';
             }
-        }
-        catch (LoginRadiusException $e) {
-            $response['message'] = $e->error_response->Description;
-            $response['status'] = 'error';
-        }
+            else if (isset($result->error_response)){
+                $response['message'] = $result->error_response->Description;
+                $response['status'] = 'error';
+            }
     }
     echo json_encode($response);
 }
@@ -413,21 +400,21 @@ function deleteCustomObjects() {
   */
 function resetMultifactor() {
     $authObj = new MultiFactorAuthenticationAPI();
-    try {
+   
         $result = $authObj->mfaResetGoogleAuthByToken($this->input->post('uid'), true);
         if (isset($result->IsDeleted) && $result->IsDeleted) {
             $response['message'] = "Reset successfully.";
             $response['status'] = 'success';
         }
+        else if (isset($result->error_response)) {
+            $response['message'] = $result->error_response->Description;
+            $response['status'] = 'error';
+        }
          else {
             $response['message'] = "Reset Failed.";
             $response['status'] = 'error';
         }
-    }
-    catch (LoginRadiusException $e) {
-        $response['message'] = $e->error_response->Description;
-        $response['status'] = 'error';
-    }
+    
     echo json_encode($response);
 }
 
@@ -443,17 +430,16 @@ function handleCreateRole() {
     }
     else {
         $roleObj = new RoleAPI();
-        try {
+        
             $result = $roleObj->createRoles($roles);
             if (isset($result->Count) && $result->Count != '') {
                 $response['message'] = "Roles has been created.";
                 $response['status'] = 'success';
             }
-        }
-        catch (LoginRadiusException $e) {
-            $response['message'] = $e->error_response->Description;
-            $response['status'] = 'error';
-        }
+            else if (isset($result->error_response)) {
+                $response['message'] = $result->error_response->Description;
+                $response['status'] = "error";
+            }
     }
     echo json_encode($response);
 }
@@ -470,17 +456,16 @@ function handleDeleteRole() {
     }
     else {
         $roleObj = new RoleAPI();
-        try {
+        
             $result = $roleObj->deleteRole($roles);
             if (isset($result->IsDeleted) && $result->IsDeleted) {
                 $response['message'] = "Role has been deleted.";
                 $response['status'] = 'success';
             }
-        }
-        catch (LoginRadiusException $e) {
-            $response['message'] = $e->error_response->Description;
-            $response['status'] = 'error';
-        }
+            else if (isset($result->error_response)) {
+                $response['message'] = $result->error_response->Description;
+                $response['status'] = 'error';
+            }
     }
     echo json_encode($response);
 }
@@ -498,17 +483,16 @@ function handleAssignUserRole() {
     }
     else {
         $roleObj = new RoleAPI();
-        try {
+        
             $result = $roleObj->assignRolesByUid($roles, $uid);
             if (isset($result->Roles) && $result->Roles != '') {
                 $response['message'] = "Role assigned successfully.";
                 $response['status'] = 'success';
             }
-        }
-        catch (LoginRadiusException $e) {
-            $response['message'] = $e->error_response->Description;
-            $response['status'] = 'error';
-        }
+            else if (isset($result->error_response)){
+                $response['message'] = $result->error_response->Description;
+                $response['status'] = 'error';
+            }
     }
     echo json_encode($response);
 }
@@ -519,21 +503,21 @@ function handleAssignUserRole() {
 
 function getAllRoles() {
     $roleObj = new RoleAPI();
-    try {
+    
         $result = $roleObj->getRolesList();
         if (isset($result->Count) && $result->Count != '0') {
             $response['result'] = $result;
             $response['status'] = 'success';
         }
+        else if (isset($result->error_response)) {
+            $response['message'] = $result->error_response->Description;
+            $response['status'] = "error";
+        }
         else {
             $response['message'] = 'Roles is empty';
             $response['status'] = 'rolesempty';
         }
-    }
-    catch (LoginRadiusException $e) {
-        $response['message'] = $e->getMessage();
-        $response['status'] = 'error';
-    }
+    
     echo json_encode($response);
 }
 /**
@@ -543,21 +527,21 @@ function getAllRoles() {
 
 function getUserRoles() {
     $roleObj = new RoleAPI();
-    try {
+    
         $result = $roleObj->getRolesByUid($this->input->post('uid'));
         if (isset($result->Roles) && $result->Roles != '') {
             $response['data'] = $result;
             $response['status'] = 'success';
         }
+        else if (isset($result->error_response)) {
+            $response['message'] = $result->error_response->Description;
+            $response['status'] = "error";
+        }
         else {
             $response['message'] = 'user roles is empty';
             $response['status'] = 'userrolesempty';
         }
-    }
-    catch (LoginRadiusException $e) {
-        $response['message'] = $e->getMessage();
-        $response['status'] = 'error';
-    }
+    
     echo json_encode($response);
 }
 

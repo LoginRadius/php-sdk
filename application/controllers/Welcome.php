@@ -179,22 +179,15 @@ class Welcome extends CI_Controller
             $response['message'] = 'The Password field is required.';
         } else {
             $authenticationObj = new AuthenticationAPI();
-
-            try {
-                $loginByEmailAuthenticationModel = array('email' => $email, 'password' => $password);
-
-                $result = $authenticationObj->loginByEmail($loginByEmailAuthenticationModel);
-                if (isset($result->access_token) && $result->access_token != '') {
-                    $response['data'] = $result;
-                    $response['message'] = "Logged in successfully";
-                    $response['status'] = 'success';
-                } elseif (isset($result->error_response)) {
-                    $response['message'] = $result->error_response->Description;
-                    $response['status'] = "error";
-                }
-
-            } catch (LoginRadiusException $e) {
-                $response['message'] = $e->error_response->Description;
+            $loginByEmailAuthenticationModel = array('email' => $email, 'password' => $password);
+            $result = $authenticationObj->loginByEmail($loginByEmailAuthenticationModel);
+            if (isset($result->access_token) && $result->access_token != '') {
+                $response['data'] = $result;
+                $response['message'] = "Logged in successfully";
+                $response['status'] = 'success';
+            } elseif (isset($result->error_response)) {
+                $response['message'] = $result->error_response->Description;
+                $response['status'] = "error";
             }
         }
         echo json_encode($response);
@@ -211,7 +204,7 @@ class Welcome extends CI_Controller
             $response['message'] = 'The Password field is required.';
         } else {
             $authenticationObj = new MultiFactorAuthenticationAPI(); 
-            try {
+            
                 $emailTemplate = ""; //Optional 
                 $fields = null; //Optional 
                 $loginUrl = ""; //Optional 
@@ -227,10 +220,7 @@ class Welcome extends CI_Controller
                     $response['message'] = $result->error_response->Description;
                     $response['status'] = "error";
                 }
-            } catch (LoginRadiusException $e) {
-                $response['message'] = $e->error_response->Description;
-                $response['status'] = "error";
-            }
+            
         }
         echo json_encode($response);
     }
@@ -246,7 +236,7 @@ class Welcome extends CI_Controller
             $response['message'] = 'google auth code is required';
         } else {
             $authenticationObj = new MultiFactorAuthenticationAPI();
-            try {
+            
                 $fields = ''; //Optional
                 $rbaBrowserEmailTemplate = ''; //Optional 
                 $rbaCityEmailTemplate = ''; //Optional 
@@ -258,10 +248,10 @@ class Welcome extends CI_Controller
                     $response['message'] = "Mfa validate google auth code.";
                     $response['status'] = 'success';
                 }
-            } catch (LoginRadiusException $e) {
-                $response['message'] = $e->error_response->Description;
-                $response['status'] = "error";
-            }
+                else if (isset($result->error_response)) {
+                    $response['message'] = $result->error_response->Description;
+                    $response['status'] = "error";
+                }
         }
         echo json_encode($response);
     }
@@ -274,7 +264,7 @@ class Welcome extends CI_Controller
             $response['message'] = 'The Email Id field is required.';
         } else {
             $authenticationObj = new PasswordLessLoginAPI();
-            try {
+           
                 $verificationUrl = $this->input->post('verificationurl');
                 $passwordLessLoginTemplate = '';
                 $result = $authenticationObj->passwordlessLoginByEmail($email, $passwordLessLoginTemplate, $verificationUrl);
@@ -282,10 +272,10 @@ class Welcome extends CI_Controller
                     $response['message'] = "One time login link has been sent to your provided email id, check email for further instruction.";
                     $response['status'] = 'success';
                 }
-            } catch (LoginRadiusException $e) {
-                $response['message'] = $e->error_response->Description;
-                $response['status'] = "error";
-            }
+                else if (isset($result->error_response)) {
+                    $response['message'] = $result->error_response->Description;
+                    $response['status'] = "error";
+                }
         }
         echo json_encode($response);
     }
@@ -297,7 +287,7 @@ class Welcome extends CI_Controller
             $response['message'] = 'Token is required';
         } else {
             $authenticationObj = new PasswordLessLoginAPI();
-            try {
+            
                 $fields = '';
                 $welcomeEmailTemplate = '';
                 $result = $authenticationObj->passwordlessLoginVerification($verificationToken, $fields, $welcomeEmailTemplate);
@@ -306,10 +296,10 @@ class Welcome extends CI_Controller
                     $response['message'] = "Link has been verified.";
                     $response['status'] = 'success';
                 }
-            } catch (LoginRadiusException $e) {
-                $response['message'] = $e->error_response->Description;
-                $response['status'] = "error";
-            }
+                else if (isset($result->error_response)) {
+                    $response['message'] = $result->error_response->Description;
+                    $response['status'] = "error";
+                }
         }
         echo json_encode($response);
     }
@@ -321,41 +311,21 @@ class Welcome extends CI_Controller
             $response['message'] = 'Verification token is required';
         } else {
             $authenticationObj = new AuthenticationAPI();
-            try {
+           
                 $result = $authenticationObj->verifyEmail($vtoken);
                 if ((isset($result->IsPosted) && $result->IsPosted)) {
                     $response['message'] = "Your email has been verified successfully.";
                     $response['status'] = 'success';
                 }
-            } catch (LoginRadiusException $e) {
-                $response['message'] = $e->error_response->Description;
-                $response['status'] = "error";
-            }
+                else if (isset($result->error_response)) {
+                    $response['message'] = $result->error_response->Description;
+                    $response['status'] = "error";
+                }
         }
         echo json_encode($response);
     }
 
-    public function forgotPassword()
-    {
-        $email = $this->input->post('email');
-        $response = array('status' => 'error', 'message' => 'an error occoured');
-        if (empty($email)) {
-            $response['message'] = 'The Email Id field is required.';
-        } else {
-            $authenticationObj = new AuthenticationAPI();
-            try {
-                $result = $authenticationObj->forgotPassword($email, $request['resetPasswordUrl'], '');
-                if ((isset($result->IsPosted) && $result->IsPosted)) {
-                    $response['message'] = "We'll email you an instruction on how to reset your password";
-                    $response['status'] = 'success';
-                }
-            } catch (LoginRadiusException $e) {
-                $response['message'] = $e->error_response->Description;
-                $response['status'] = "error";
-            }
-        }
-        echo json_encode($response);
-    }
+    
 /**
  *handle registration process
  */
@@ -374,7 +344,7 @@ class Welcome extends CI_Controller
         } else {
 
             $authenticationObj = new AuthenticationAPI();
-            try {
+           
                 $userprofileModel = array('Email' => array(array('Type' => 'Primary', 'Value' => $email)), 'password' => $password);
                 $sottObj = new SottAPI();
                 $sott = $sottObj->generateSott(10);
@@ -392,15 +362,17 @@ class Welcome extends CI_Controller
                     $response['result'] = $result;
                     $response['message'] = "You have successfully registered.";
                     $response['status'] = 'success';
-                } else {
+                }
+                else if (isset($result->error_response)) {
+                    $response['message'] = $result->error_response->Description;
+                    $response['status'] = "error";
+                } 
+                else {
                     $response['message'] = "You have successfully registered, Please check your email.";
 
                     $response['status'] = 'registered';
                 }
-            } catch (LoginRadiusException $e) {
-                $response['message'] = $e->error_response->Description;
-                $response['status'] = "error";
-            }
+           
         }
         echo json_encode($response);
     }
