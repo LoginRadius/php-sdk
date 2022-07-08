@@ -1,6 +1,6 @@
+# see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
     secret: '%env(APP_SECRET)%'
-    #default_locale: en
     #csrf_protection: true
     #http_method_override: true
 
@@ -15,5 +15,3 @@ framework:
     #fragments: true
     php_errors:
         log: true
-
-    

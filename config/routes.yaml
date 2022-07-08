@@ -1,3 +1,6 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
 _site:
   path: /
   controller: App\Controller\SiteController::index
@@ -58,6 +61,4 @@ registration:
 profile:
   path: /profile
   controller: App\Controller\ProfileController::profile
-
-
 
