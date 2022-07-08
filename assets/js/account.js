@@ -5,19 +5,18 @@ $(function () {
     handleUpdateAccount();   
 });
 
-function getProfileByUid(getProfileByUid) {
+function getProfileByUid() {
 
-    var uid = localStorage.getItem("LRUserID");
+    var token = localStorage.getItem("LRTokenKey");
     $.ajax({
         url: "profile",
         type: 'POST',
         dataType: "json",
         data: $.param({
-            uid: uid,   
-            action: "getProfileByUid"
+            token: token,   
+            action: "getProfile"
         }),
         success: function (response) {
-            
             if (response.status == "success") {
                 if (typeof (response.data.FirstName) != "undefined" && response.data.FirstName !== null) {
                    $("#user-updateaccount-firstname").val(response.data.FirstName);  
@@ -31,6 +30,15 @@ function getProfileByUid(getProfileByUid) {
                    $("#user-updateaccount-about").val(response.data.About);                
                 }
             } 
+            else if(response.status == "error"){
+                window.location.href = domainName + "/login";
+                localStorage.setItem("LRTokenKey", "");
+                localStorage.setItem("LRUserID", "");
+                localStorage.setItem("EmailId", "");
+                localStorage.setItem("UserName", "");
+                localStorage.setItem("ImageUrl", "");
+                localStorage.setItem("LastLoginTime", "");
+            }
         }
     });
 }

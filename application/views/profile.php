@@ -6,6 +6,7 @@
         <link href="<?php echo base_url()?>assets/css/style.css" rel="stylesheet" />
         <script src="<?php echo base_url()?>assets/js/jquery.min.js"></script> 
         <script src="<?php echo base_url()?>assets/js/logout.js"></script> 
+        <script src="<?php echo base_url();?>assets/js/account.js"></script>
         <script src="<?php echo base_url()?>assets/js/profile.js"></script>  
     </head>
     <body>
@@ -15,10 +16,6 @@
                     <img src="<?php echo base_url()?>assets/images/lr-logo.png"/>
                 </a>
                 <span style="display:block;margin-left:70px">CodeIgniter Web Demo</span>
-                <div class="button-group">
-                    <a href="<?php echo base_url();?>minimal">Minimal</a>
-                    <a href="<?php echo base_url();?>login">LoginScreen</a>
-                </div>
             </div>
             <div class="vertical-menu">
                 <a href="<?php echo base_url();?>profile" id="menu-profile">Profile</a>

@@ -3,13 +3,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 use \LoginRadiusSDK\Utility\Functions;
 use \LoginRadiusSDK\LoginRadiusException;
-use \LoginRadiusSDK\Clients\IHttpClient;
+use \LoginRadiusSDK\Clients\IHttpClientInterface;
 use \LoginRadiusSDK\Clients\DefaultHttpClient;
-use \LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI;
+
 use \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI;
-use \LoginRadiusSDK\CustomerRegistration\Account\CustomObjectAPI;
-use \LoginRadiusSDK\CustomerRegistration\Authentication\AuthCustomObjectAPI;
+use \LoginRadiusSDK\CustomerRegistration\Account\SottAPI;
 use \LoginRadiusSDK\CustomerRegistration\Account\RoleAPI;
+
+use \LoginRadiusSDK\CustomerRegistration\Advanced\ConfigurationAPI;
+use \LoginRadiusSDK\CustomerRegistration\Advanced\CustomObjectAPI;
+use \LoginRadiusSDK\CustomerRegistration\Advanced\CustomRegistrationDataAPI;
+use \LoginRadiusSDK\CustomerRegistration\Advanced\MultiFactorAuthenticationAPI;
+use \LoginRadiusSDK\CustomerRegistration\Advanced\WebHookAPI;
+
+use \LoginRadiusSDK\CustomerRegistration\Authentication\AuthenticationAPI;
+use \LoginRadiusSDK\CustomerRegistration\Authentication\OneTouchLoginAPI;
+use \LoginRadiusSDK\CustomerRegistration\Authentication\PasswordLessLoginAPI;
+use \LoginRadiusSDK\CustomerRegistration\Authentication\PhoneAuthenticationAPI;
+use \LoginRadiusSDK\CustomerRegistration\Authentication\RiskBasedAuthenticationAPI;
+use \LoginRadiusSDK\CustomerRegistration\Authentication\SmartLoginAPI;
+
+use \LoginRadiusSDK\CustomerRegistration\Social\NativeSocialAPI;
+use \LoginRadiusSDK\CustomerRegistration\Social\SocialAPI;
 
 class Profile extends CI_Controller {
  
@@ -42,15 +57,16 @@ public function profile()
 function getProfileByUid() {
 
     $uid = $this->input->post('uid');
+    $fields=null;
     $response = array('status' => 'error', 'message' => 'an error occoured');
     if (empty($uid)) {
         $response['message'] = 'uid is required field';
     }
     else {
 
-        $accountObj = new AccountAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $accountAPI = new AccountAPI(); 
         try {
-            $result = $accountObj->getProfileByUid($uid);
+            $result = $accountAPI->getAccountProfileByUid($uid,$fields);
             if ((isset($result->Uid) && $result->Uid != '')) {
                 $response['data'] = $result;
                 
@@ -75,11 +91,17 @@ function updateAccount() {
     $lastname =$this->input->post('lastname'); 
     $about = $this->input->post('about'); 
     $response = array('status' => 'error', 'message' => 'an error occoured');
-    $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json'));
+    $authenticationObj = new AuthenticationAPI();
     try {
-        $payload = array('FirstName' => $firstname, 'LastName' => $lastname, 'About' => $about);
+        $userProfileUpdateModel = array('FirstName' => $firstname, 'LastName' => $lastname, 'About' => $about);
+        $accessToken =$this->input->post('token');
+        $emailTemplate = '';
+        $fields = '';
+        $nullSupport = '';
+        $smsTemplate = '';
+        $verificationUrl = '';
 
-        $result = $authenticationObj->updateProfile($this->input->post('token'), $payload);
+        $result = $authenticationObj->updateProfileByAccessToken($accessToken, $userProfileUpdateModel, $emailTemplate, $fields, $nullSupport, $smsTemplate, $verificationUrl);
         if (isset($result->IsPosted) && $result->IsPosted) {
             
             $response['message'] = "Profile has been updated successfully.";
@@ -106,9 +128,13 @@ function getProfile() {
         $response['message'] = 'Token is required';
     }
     else {
-        $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $authObj = new AuthenticationAPI();
+        $fields = null; //Optional 
+        $emailTemplate = ''; //Optional 
+        $verificationUrl = ''; //Optional 
+        $welcomeEmailTemplate = ''; //Optional
         try {
-            $result = $authenticationObj->getProfile($token);
+            $result = $authObj->getProfileByAccessToken($token, $fields, $emailTemplate, $verificationUrl, $welcomeEmailTemplate);
             if ((isset($result->EmailVerified) && $result->EmailVerified) || AUTH_FLOW == 'optional' || AUTH_FLOW == 'disabled') {
                 $response['data'] = $result;
                 $response['message'] = "Profile fetched";
@@ -143,9 +169,10 @@ function changePassword() {
         $response['message'] = 'New password is required';
     }
     else {
-        $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json'));
+        $authenticationObj = new AuthenticationAPI();
         try {
-            $result = $authenticationObj->changeAccountPassword($token, $oldpassword, $newpassword);
+            $result = $authenticationObj->changePassword($token,$newpassword, $oldpassword);
+
             if (isset($result->IsPosted) && $result->IsPosted) {
                 $response['message'] = "Password has been changed successfully.";
                 $response['status'] = 'success';
@@ -160,7 +187,27 @@ function changePassword() {
 }
 
 
-
+public function forgotPassword()
+{
+    $email = $this->input->post('email');
+    $response = array('status' => 'error', 'message' => 'an error occoured');
+    if (empty($email)) {
+        $response['message'] = 'The Email Id field is required.';
+    } else {
+        $authenticationObj = new AuthenticationAPI();
+        try {
+            $result = $authenticationObj->forgotPassword($email, $this->input->post('resetPasswordUrl'), '');
+            if ((isset($result->IsPosted) && $result->IsPosted)) {
+                $response['message'] = "We'll email you an instruction on how to reset your password";
+                $response['status'] = 'success';
+            }
+        } catch (LoginRadiusException $e) {
+            $response['message'] = $e->error_response->Description;
+            $response['status'] = "error";
+        }
+    }
+    echo json_encode($response);
+}
 
 /**
    *set user account password
@@ -175,9 +222,9 @@ function setPassword() {
         $response['message'] = 'New password field is required';
     }
     else {
-        $accountObj = new AccountAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $accountObj = new AccountAPI();
         try {
-            $result = $accountObj->setPassword($uid, $newpassword);
+            $result = $accountObj->setAccountPasswordByUid($newpassword, $uid);
             if (isset($result->PasswordHash) && $result->PasswordHash != '') {
                 $response['message'] = "The password has been set successfully.";
                 $response['status'] = 'success';
@@ -186,32 +233,6 @@ function setPassword() {
         catch (LoginRadiusException $e) {
             $response['message'] = $e->error_response->Description;
             $response['status'] = 'error';
-        }
-    }
-    echo json_encode($response);
-}
-
-/**
-   *used to manage forgot password
-  
-  */
-function forgotPassword() {
-    $email =$this->input->post('email');
-    if (empty($email)) {
-        $response['message'] = 'The Email Id field is required.';
-    }
-    else {
-        $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
-        try {
-            $result = $authenticationObj->forgotPassword($email, $this->input->post('resetPasswordUrl'));
-            if ((isset($result->IsPosted) && $result->IsPosted)) {
-                $response['message'] = "We'll email you an instruction on how to reset your password";
-                $response['status'] = 'success';
-            }
-        }
-        catch (LoginRadiusException $e) {
-            $response['message'] = $e->error_response->Description;
-            $response['status'] = "error";
         }
     }
     echo json_encode($response);
@@ -241,9 +262,10 @@ function resetPassword(){
         $response['message'] = 'The Password field is required.';
     }
     else {
-        $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $authenticationObj = new AuthenticationAPI();
         try {
-            $result = $authenticationObj->resetPassword($token, $password);
+            $formData = ['resettoken' => $token, 'password' => $password, 'welcomeEmailTemplate' => '', 'resetPasswordEmailTemplate' => ''];
+            $result = $authenticationObj->resetPasswordByResetToken($formData);
             if ((isset($result->IsPosted) && $result->IsPosted)) {
                 $response['message'] = "Password has been reset successfully.";
                 $response['status'] = 'success';
@@ -269,12 +291,12 @@ function createCustomObjects() {
         $response['message'] = 'Object name is required.';
     }
     else {
-        $customObj = new AuthCustomObjectAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $authCustomObj = new CustomObjectAPI();
        
         try {
             
-            $result = $customObj->createCustomObject($token, $objectName, $this->input->post('payload'));
-            
+            $result = $authCustomObj->createCustomObjectByToken($token, $objectName,$this->input->post('payload'));
+      
            
             if (isset($result->Uid) && $result->Uid != '') {
                 
@@ -302,9 +324,9 @@ function getCustomObjects() {
         $response['message'] = 'Object name is required.';
     }
     else {
-        $customObj = new AuthCustomObjectAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $authCustomObj = new CustomObjectAPI();
         try {
-            $result = $customObj->getCustomObjectSetsByToken($token, $objectName);
+            $result = $authCustomObj->getCustomObjectByToken($token, $objectName);
             if (isset($result->Count) && $result->Count != '0') {
                 $response['result'] = $result;
                 $response['status'] = 'success';
@@ -337,9 +359,9 @@ function updateCustomObjects() {
         $response['message'] = 'Object Id is required';
     }
     else {
-        $customObj = new AuthCustomObjectAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $authCustomObj = new CustomObjectAPI();
         try {
-            $result = $customObj->updateCustomObjectData($token, $objectName, $objectRecordId, 'replace', $this->input->post('payload'));
+            $result = $authCustomObj->updateCustomObjectByToken($token, $objectName, $objectRecordId,  $this->input->post('payload'));
             
             if (isset($result->Uid) && $result->Uid != '') {
                 $response['message'] = "Custom object updated successfully.";
@@ -369,9 +391,9 @@ function deleteCustomObjects() {
         $response['message'] = 'Object Id is required';
     }
     else {
-        $customObj = new AuthCustomObjectAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $authCustomObj = new CustomObjectAPI();
         try {
-            $result = $customObj->deleteCustomObjectSet($token, $objectName, $objectRecordId);
+            $result = $authCustomObj->deleteCustomObjectByToken($token, $objectName, $objectRecordId);
             if (isset($result->IsDeleted) && $result->IsDeleted) {
                 $response['message'] = "Custom object deleted successfully.";
                 $response['status'] = 'success';
@@ -390,9 +412,9 @@ function deleteCustomObjects() {
   
   */
 function resetMultifactor() {
-    $accountObj = new AccountAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+    $authObj = new MultiFactorAuthenticationAPI();
     try {
-        $result = $accountObj->mfaResetGoogleAuthenticatorByUid($this->input->post('uid'), true);
+        $result = $authObj->mfaResetGoogleAuthByToken($this->input->post('uid'), true);
         if (isset($result->IsDeleted) && $result->IsDeleted) {
             $response['message'] = "Reset successfully.";
             $response['status'] = 'success';
@@ -420,9 +442,9 @@ function handleCreateRole() {
         $response['message'] = 'Roles field is required';
     }
     else {
-        $roleObj = new RoleAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $roleObj = new RoleAPI();
         try {
-            $result = $roleObj->create($roles);
+            $result = $roleObj->createRoles($roles);
             if (isset($result->Count) && $result->Count != '') {
                 $response['message'] = "Roles has been created.";
                 $response['status'] = 'success';
@@ -447,9 +469,9 @@ function handleDeleteRole() {
         $response['message'] = 'Roles field is required';
     }
     else {
-        $roleObj = new RoleAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $roleObj = new RoleAPI();
         try {
-            $result = $roleObj->delete($roles);
+            $result = $roleObj->deleteRole($roles);
             if (isset($result->IsDeleted) && $result->IsDeleted) {
                 $response['message'] = "Role has been deleted.";
                 $response['status'] = 'success';
@@ -475,9 +497,9 @@ function handleAssignUserRole() {
         $response['message'] = 'Roles field is required';
     }
     else {
-        $roleObj = new RoleAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+        $roleObj = new RoleAPI();
         try {
-            $result = $roleObj->assignRolesByUid($uid, $roles);
+            $result = $roleObj->assignRolesByUid($roles, $uid);
             if (isset($result->Roles) && $result->Roles != '') {
                 $response['message'] = "Role assigned successfully.";
                 $response['status'] = 'success';
@@ -496,9 +518,9 @@ function handleAssignUserRole() {
   */
 
 function getAllRoles() {
-    $roleObj = new RoleAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+    $roleObj = new RoleAPI();
     try {
-        $result = $roleObj->get();
+        $result = $roleObj->getRolesList();
         if (isset($result->Count) && $result->Count != '0') {
             $response['result'] = $result;
             $response['status'] = 'success';
@@ -520,9 +542,9 @@ function getAllRoles() {
   */
 
 function getUserRoles() {
-    $roleObj = new RoleAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
+    $roleObj = new RoleAPI();
     try {
-        $result = $roleObj->getAccountRolesByUid($this->input->post('uid'));
+        $result = $roleObj->getRolesByUid($this->input->post('uid'));
         if (isset($result->Roles) && $result->Roles != '') {
             $response['data'] = $result;
             $response['status'] = 'success';
