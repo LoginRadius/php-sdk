@@ -18,7 +18,7 @@
         "yiisoft/yii2": "~2.0.14",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
-        "loginradius/php-sdk": "^5.0.2"
+        "loginradius/php-sdk": "11.4.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
@@ -33,6 +33,9 @@
         "process-timeout": 1800,
         "fxp-asset": {
             "enabled": false
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
         }
     },
     "scripts": {

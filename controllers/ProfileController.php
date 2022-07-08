@@ -2,19 +2,16 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\filters\AccessControl;
 use yii\web\Controller;
-use yii\web\Response;
-use yii\filters\VerbFilter;
-use \LoginRadiusSDK\Utility\Functions;
 use \LoginRadiusSDK\LoginRadiusException;
-use \LoginRadiusSDK\Clients\IHttpClient;
-use \LoginRadiusSDK\Clients\DefaultHttpClient;
-use \LoginRadiusSDK\CustomerRegistration\Authentication\UserAPI;
 use \LoginRadiusSDK\CustomerRegistration\Account\AccountAPI;
-use \LoginRadiusSDK\CustomerRegistration\Authentication\AuthCustomObjectAPI;
 use \LoginRadiusSDK\CustomerRegistration\Account\RoleAPI;
+use \LoginRadiusSDK\CustomerRegistration\Authentication\AuthenticationAPI;
+use \LoginRadiusSDK\CustomerRegistration\Advanced\CustomObjectAPI;
+use \LoginRadiusSDK\CustomerRegistration\Advanced\MultiFactorAuthenticationAPI;
+
+
+
 class ProfileController extends Controller
 {
     public $enableCsrfValidation = false;
@@ -104,24 +101,25 @@ class ProfileController extends Controller
         public function actionGetProfile() { 
    
             $token= $_POST['token'];
-            
+            $fields = null; //Optional 
+            $emailTemplate = ''; //Optional 
+            $verificationUrl = ''; //Optional 
+            $welcomeEmailTemplate = ''; //Optional
         
             $response = array('status' => 'error', 'message' => 'an error occoured');
             if (empty($token)) {
                 $response['message'] = 'Token is required';
             }
             else {
-                $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
-                try {
-                    $result = $authenticationObj->getProfile($token);               
-                                    
+                $authenticationObj = new AuthenticationAPI();
+                
+                $result = $authenticationObj->getProfileByAccessToken($token,$fields,$emailTemplate,$verificationUrl,$welcomeEmailTemplate);               
+                if ((isset($result->EmailVerified) && $result->EmailVerified) || AUTH_FLOW == 'optional' || AUTH_FLOW == 'disabled') {                
                         $response['data'] = $result;
                         $response['message'] = "Profile fetched";
                         $response['status'] = 'success';
-                  
-                }
-                catch (LoginRadiusException $e) {         
-                    $response['message'] = $e->error_response->Description;
+                }else if (isset($result->error_response)) {
+                    $response['message'] = $result->error_response->Description;
                     $response['status'] = "error";
                 }
             }
@@ -138,19 +136,17 @@ class ProfileController extends Controller
             }
             else {
         
-                $accountObj = new AccountAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
-                try {
-                    $result = $accountObj->getProfileByUid($uid);
-                   
+                $accountObj = new AccountAPI();
+                    $result = $accountObj->getAccountProfileByUid($uid);
                     if ((isset($result->Uid) && $result->Uid != '')) {
                         $response['data'] = $result;
                         
                         $response['message'] = "fetched profile";
                         $response['status'] = 'success';
                     }
-                }
-                catch (LoginRadiusException $e) {
-                    $response['message'] = $e->getMessage();
+                else if (isset($result->error_response)) {
+                    $response['message'] = $result->error_response->Description;
+
                     $response['status'] = "error";
                 }
             }
@@ -165,21 +161,21 @@ class ProfileController extends Controller
             $about = $_POST['about'];
             $response = array('status' => 'error', 'message' => 'an error occoured');
         
-            $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json'));
-            try {
+            $authenticationObj = new AuthenticationAPI();
+            
                 $payload = array('FirstName' => $firstname, 'LastName' => $lastname, 'About' => $about);
         
-                $result = $authenticationObj->updateProfile($_POST['token'], $payload);
+                $result = $authenticationObj->updateProfileByAccessToken($_POST['token'], $payload);
                 if (isset($result->IsPosted) && $result->IsPosted) {
                     
                     $response['message'] = "Profile has been updated successfully.";
                     $response['status'] = 'success';
                 }
-            }
-            catch (LoginRadiusException $e) {
-                $response['message'] = $e->error_response->Description;
-                $response['status'] = 'error';
-            }
+        
+                else if (isset($result->error_response)) {
+                    $response['message'] = $result->error_response->Description;
+                    $response['status'] = "error";
+                }
             echo json_encode($response);
         }
          
@@ -197,21 +193,18 @@ class ProfileController extends Controller
                 $response['message'] = 'New password is required';
             }
             else {
-                $authenticationObj = new UserAPI(API_KEY, API_SECRET, array('output_format' => 'json'));
-                try {
-                    $result = $authenticationObj->changeAccountPassword($token, $oldpassword, $newpassword);
+                $authenticationObj = new AuthenticationAPI();
+                
+                    $result = $authenticationObj->changePassword($token,$newpassword, $oldpassword);
                     if (isset($result->IsPosted) && $result->IsPosted) {
                         $response['message'] = "Password has been changed successfully.";
                         $response['status'] = 'success';
+                    }   
+                    else if (isset($result->error_response)) {
+                        $response['message'] = $result->error_response->Description;
+                        $response['status'] = "error";
                     }
-                }
-                catch (LoginRadiusException $e) {
-                    $response['message'] = $e->error_response->Description;
-                    $response['status'] = 'error';
-                }
             }
-
-            
           echo json_encode($response);
         }
     
@@ -228,18 +221,19 @@ class ProfileController extends Controller
                 $response['message'] = 'New password field is required';
             }
             else {
-                $accountObj = new AccountAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
-                try {
-                    $result = $accountObj->setPassword($uid, $newpassword);
+                $accountObj = new AccountAPI();
+               
+                    $result = $accountObj->setAccountPasswordByUid($newpassword,$uid);
                     if (isset($result->PasswordHash) && $result->PasswordHash != '') {
                         $response['message'] = "The password has been set successfully.";
                         $response['status'] = 'success';
                     }
-                }
-                catch (LoginRadiusException $e) {
-                    $response['message'] = $e->error_response->Description;
-                    $response['status'] = 'error';
-                }
+          
+                    else if (isset($result->error_response)) {
+                        $response['message'] = $result->error_response->Description;
+    
+                        $response['status'] = "error";
+                    }
             }
             echo json_encode($response);
         }
@@ -255,11 +249,9 @@ class ProfileController extends Controller
                 $response['message'] = 'Object name is required.';
             }
             else {
-                $customObj = new AuthCustomObjectAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
-               
-                try {
+                $customObj = new CustomObjectAPI();
                     
-                    $result = $customObj->createCustomObject($token, $objectName, $_POST['payload']);
+                    $result = $customObj->createCustomObjectByToken($token, $objectName, $_POST['payload']);
                     
                    
                     if (isset($result->Uid) && $result->Uid != '') {
@@ -267,11 +259,11 @@ class ProfileController extends Controller
                         $response['message'] = "Custom object created successfully.";
                         $response['status'] = 'success';
                     }
-                }
-                catch (LoginRadiusException $e) {
-                    $response['message'] = $e->error_response->Description;
-                    $response['status'] = 'error';
-                }
+                    else if (isset($result->error_response)) {
+                        $response['message'] = $result->error_response->Description;
+    
+                        $response['status'] = "error";
+                    }
             }
             echo json_encode($response);
         }
@@ -288,21 +280,20 @@ class ProfileController extends Controller
                 $response['message'] = 'Object name is required.';
             }
             else {
-                $customObj = new AuthCustomObjectAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
-                try {
-                    $result = $customObj->getCustomObjectSetsByToken($token, $objectName);
+                $customObj = new CustomObjectAPI();
+                    $result = $customObj->getCustomObjectByToken($token, $objectName);
                     if (isset($result->Count) && $result->Count != '0') {
                         $response['result'] = $result;
                         $response['status'] = 'success';
                     }
+                    else if (isset($result->error_response)) {
+                        $response['message'] = $result->error_response->Description;
+                        $response['status'] = 'error';
+                    }
                     else {
                         $response['status'] = 'empty';
                     }
-                }
-                catch (LoginRadiusException $e) {
-                    $response['message'] = $e->error_response->Description;
-                    $response['status'] = 'error';
-                }
+                    
             }
           echo json_encode($response);
 
@@ -324,17 +315,17 @@ class ProfileController extends Controller
                 $response['message'] = 'Object Id is required';
             }
             else {
-                $customObj = new AuthCustomObjectAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
-                try {
-                    $result = $customObj->updateCustomObjectData($token, $objectName, $objectRecordId, 'replace', $_POST['payload']);
+                $customObj = new CustomObjectAPI();
+                
+                    $result = $customObj->updateCustomObjectByToken($token, $objectName, $objectRecordId, $_POST['payload']);
                     
                     if (isset($result->Uid) && $result->Uid != '') {
                         $response['message'] = "Custom object updated successfully.";
                         $response['status'] = 'success';
                     }
-                }
-                catch (LoginRadiusException $e) {
-                    $response['message'] = $e->error_response->Description;
+                
+                    else if (isset($result->error_response)) {
+                    $response['message'] = $result->error_response->Description;
                     $response['status'] = 'error';
                 }
             }
@@ -356,16 +347,15 @@ class ProfileController extends Controller
                 $response['message'] = 'Object Id is required';
             }
             else {
-                $customObj = new AuthCustomObjectAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
-                try {
-                    $result = $customObj->deleteCustomObjectSet($token, $objectName, $objectRecordId);
+                $customObj = new CustomObjectAPI();
+               
+                    $result = $customObj->deleteCustomObjectByToken($token, $objectName, $objectRecordId);
                     if (isset($result->IsDeleted) && $result->IsDeleted) {
                         $response['message'] = "Custom object deleted successfully.";
                         $response['status'] = 'success';
                     }
-                }
-                catch (LoginRadiusException $e) {
-                    $response['message'] = $e->error_response->Description;
+                    else if (isset($result->error_response)){
+                    $response['message'] = $result->error_response->Description;
                     $response['status'] = 'error';
                 }
             }
@@ -375,22 +365,22 @@ class ProfileController extends Controller
          * function to reset multi factor authentication
          */
         public function actionResetMultifactor() {
-            $accountObj = new AccountAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
-            try {
-                $result = $accountObj->mfaResetGoogleAuthenticatorByUid($_POST['uid'], true);
+            $accountObj = new MultiFactorAuthenticationAPI;
+            
+                $result = $accountObj->mfaResetGoogleAuthenticatorByUid(true,$_POST['uid']);
                 if (isset($result->IsDeleted) && $result->IsDeleted) {
                     $response['message'] = "Reset successfully.";
                     $response['status'] = 'success';
+                }
+                else if (isset($result->error_response)) {
+                    $response['message'] = $result->error_response->Description;
+                    $response['status'] = 'error';
                 }
                  else {
                     $response['message'] = "Reset Failed.";
                     $response['status'] = 'error';
                 }
-            }
-            catch (LoginRadiusException $e) {
-                $response['message'] = $e->error_response->Description;
-                $response['status'] = 'error';
-            }
+            
             echo json_encode($response);
         }
     
@@ -405,17 +395,17 @@ class ProfileController extends Controller
                 $response['message'] = 'Roles field is required';
             }
             else {
-                $roleObj = new RoleAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
-                try {
-                    $result = $roleObj->create($roles);
+                $roleObj = new RoleAPI();
+               
+                    $result = $roleObj->createRoles($roles);
                     if (isset($result->Count) && $result->Count != '') {
                         $response['message'] = "Roles has been created.";
                         $response['status'] = 'success';
                     }
-                }
-                catch (LoginRadiusException $e) {
-                    $response['message'] = $e->error_response->Description;
-                    $response['status'] = 'error';
+                
+                else if (isset($result->error_response)) {
+                    $response['message'] = $result->error_response->Description;
+                    $response['status'] = "error";
                 }
             }
             echo json_encode($response);
@@ -425,25 +415,23 @@ class ProfileController extends Controller
           
           */
         
-        function actionHandleDeleteRole() {
+        public function actionHandleDeleteRole() {
             $roles = $_POST['roles'];
             $response = array('status' => 'error', 'message' => 'an error occoured');
             if (empty($roles)) {
                 $response['message'] = 'Roles field is required';
             }
             else {
-                $roleObj = new RoleAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
-                try {
-                    $result = $roleObj->delete($roles);
+                $roleObj = new RoleAPI();
+                
+                    $result = $roleObj->deleteRole($roles);
                     if (isset($result->IsDeleted) && $result->IsDeleted) {
                         $response['message'] = "Role has been deleted.";
                         $response['status'] = 'success';
+                    }else if (isset($result->error_response)) {
+                        $response['message'] = $result->error_response->Description;
+                        $response['status'] = 'error';
                     }
-                }
-                catch (LoginRadiusException $e) {
-                    $response['message'] = $e->error_response->Description;
-                    $response['status'] = 'error';
-                }
             }
             echo json_encode($response);
         }
@@ -460,16 +448,15 @@ class ProfileController extends Controller
                 $response['message'] = 'Roles field is required';
             }
             else {
-                $roleObj = new RoleAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
-                try {
-                    $result = $roleObj->assignRolesByUid($uid, $roles);
+                $roleObj = new RoleAPI();
+               
+                    $result = $roleObj->assignRolesByUid($roles,$uid);
                     if (isset($result->Roles) && $result->Roles != '') {
                         $response['message'] = "Role assigned successfully.";
                         $response['status'] = 'success';
                     }
-                }
-                catch (LoginRadiusException $e) {
-                    $response['message'] = $e->error_response->Description;
+                    else if (isset($result->error_response)){
+                    $response['message'] = $result->error_response->Description;
                     $response['status'] = 'error';
                 }
             }
@@ -488,43 +475,43 @@ class ProfileController extends Controller
 
 
          public function actionGetAllRoles() {
-             $roleObj = new RoleAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
-             try {
-                 $result = $roleObj->get();
+             $roleObj = new RoleAPI();
+             
+                 $result = $roleObj->getRolesList();
                  if (isset($result->Count) && $result->Count != '0') {
                      $response['result'] = $result;
                      $response['status'] = 'success';
                  }
+                 else if (isset($result->error_response)) {
+                    $response['message'] = $result->error_response->Description;
+                    $response['status'] = "error";
+                }
                  else {
                      $response['message'] = 'Roles is empty';
                      $response['status'] = 'rolesempty';
                  }
-             }
-             catch (LoginRadiusException $e) {
-                 $response['message'] = $e->getMessage();
-                 $response['status'] = 'error';
-             }
+           
              echo json_encode($response);
          }
      
      
          public function actionGetUserRoles() {
-             $roleObj = new RoleAPI(API_KEY, API_SECRET, array('output_format' => 'json', 'api_request_signing' => API_REQUEST_SIGNING));
-             try {
-                 $result = $roleObj->getAccountRolesByUid($_POST['uid']);
+             $roleObj = new RoleAPI();
+           
+                 $result = $roleObj->getRolesByUid($_POST['uid']);
                  if (isset($result->Roles) && $result->Roles != '') {
                      $response['data'] = $result;
                      $response['status'] = 'success';
                  }
+                 else if (isset($result->error_response)) {
+                    $response['message'] = $result->error_response->Description;
+                    $response['status'] = "error";
+                }
                  else {
                      $response['message'] = 'user roles is empty';
                      $response['status'] = 'userrolesempty';
                  }
-             }
-             catch (LoginRadiusException $e) {
-                 $response['message'] = $e->getMessage();
-                 $response['status'] = 'error';
-             }
+            
              echo json_encode($response);
          }
 

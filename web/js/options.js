@@ -1,8 +1,8 @@
 var stringVariable = window.location.href;
 domainName = stringVariable.substring(0, stringVariable.lastIndexOf('/'));
 var commonOptions = {};
-commonOptions.apiKey = "";
-commonOptions.appName = "";
+commonOptions.apiKey = "<API KEY>";
+commonOptions.appName = "<APP NAME>";
 commonOptions.hashTemplate = true;
 commonOptions.sott = "<SOTT>";
 commonOptions.formValidationMessage = true;
