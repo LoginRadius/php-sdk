@@ -37,7 +37,7 @@ curl -sS https://getcomposer.org/installer | php
 Next, run the Composer command to install the latest stable version of library:
 
 ```
-composer require loginradius/php-sdk:11.4.1
+composer require loginradius/php-sdk:11.4.2
 ```
 
 Include the following files in your Project Directory
@@ -95,6 +95,9 @@ define('USER', 'PROXY_USER'); // Replace PROXY_USER with your proxy server usern
 define('PASSWORD', 'PROXY_PASSWORD'); // Replace PROXY_PASSWORD with your proxy server password.
 
 define('API_DOMAIN', 'DEFINE_CUSTOM_API_DOMAIN');   // Custom API Domain
+define('REFERER', 'DEFINE_REFERER');   // The referer header is used to determine the registration source from which the user has created the account and is synced in the RegistrationSource field for the user profile. When initializing the SDK, you can optionally specify Referer Header.
+
+
 ```
 
 >Replace 'LOGINRADIUS_SITE_NAME_HERE', 'LOGINRADIUS_API_KEY_HERE' and  'LOGINRADIUS_API_SECRET_HERE' in the above code with your LoginRadius Site Name, LoginRadius API Key, and Secret.This information can be found in your LoginRadius account as described [here](https://www.loginradius.com/docs/api/v2/admin-console/platform-security/api-key-and-secret).

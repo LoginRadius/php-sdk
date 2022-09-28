@@ -47,6 +47,11 @@ class DefaultHttpClient implements IHttpClientInterface
         if (defined('ORIGIN_IP') && ORIGIN_IP != "") {
             $options['ORIGIN_IP'] = ORIGIN_IP;
         }
+        if (defined('REFERER') && REFERER != "") {
+            if ($path == "/identity/v2/auth/register" || $path == "/identity/v2/auth/register/captcha") {
+                $options['Referer'] = REFERER;
+            }
+        }
         if (defined('API_REQUEST_SIGNING') && API_REQUEST_SIGNING != "") {
             $options['api_request_signing'] = API_REQUEST_SIGNING;
         } else {
@@ -124,6 +129,7 @@ class DefaultHttpClient implements IHttpClientInterface
         $expiryTime = isset($options['X-Request-Expires']) ? trim($options['X-Request-Expires']) : '';
         $digest = isset($options['digest']) ? trim($options['digest']) : '';
         $originIp = isset($options['ORIGIN_IP']) ? trim($options['ORIGIN_IP']) : '';
+        $referer = isset($options['Referer']) ? trim($options['Referer']) : '';
 
         $curlHandle = curl_init();
         curl_setopt($curlHandle, CURLOPT_URL, $requestUrl);
@@ -149,6 +155,9 @@ class DefaultHttpClient implements IHttpClientInterface
         }
         if($originIp!=''){
             $optionsArray[]='X-Origin-IP: '. $originIp;
+        } 
+        if ($referer != '') {
+            $optionsArray[] = 'Referer: ' . $referer;
         }
         curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $optionsArray);
         if(defined('PROTOCOL') && PROTOCOL != "" && defined('HOST') && HOST != "" && defined('PORT') && PORT != "" && defined('USER') && USER != "" && defined('PASSWORD') && PASSWORD != "") {
@@ -197,7 +206,8 @@ class DefaultHttpClient implements IHttpClientInterface
         $expiryTime = isset($options['X-Request-Expires']) ? trim($options['X-Request-Expires']) : '';
         $digest = isset($options['digest']) ? trim($options['digest']) : '';
         $originIp = isset($options['ORIGIN_IP']) ? trim($options['ORIGIN_IP']) : '';
-        
+        $referer = isset($options['Referer']) ? trim($options['Referer']) : '';
+
         $optionsArray = array('http' =>
             array(
                 'method' => strtoupper($method),
@@ -235,7 +245,10 @@ class DefaultHttpClient implements IHttpClientInterface
         if($originIp != ''){
             $optionsArray['http']['header'] .= "\r\n" . 'X-Origin-IP: ' . $originIp;
         }
-
+        if ($referer != '') {
+            $optionsArray['http']['header'] .= "\r\n" . 'Referer: ' . $referer;
+        }
+        
         $context = stream_context_create($optionsArray);
         $jsonResponse['response'] = file_get_contents($requestUrl, false, $context);
         $parseHeaders = Functions::parseHeaders($http_response_header);

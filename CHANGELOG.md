@@ -2,6 +2,14 @@
 
 
 
+# Version 11.4.2
+
+Release on **September 28, 2022**
+
+## Enhancements
+
+- Added Referer Header Feature
+
 
 # Version 11.4.1
 

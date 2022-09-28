@@ -10,6 +10,12 @@ define('AUTH_FLOW', '');   // Pass optional/disabled, if email verification flow
 //otherwise no need to define these option in configuration.
 // define('API_DOMAIN', 'https://api.loginradius.com'); 
 
+
+
+
+// The referer header is used to determine the registration source from which the user has created the account and is synced in the RegistrationSource field for the user profile. When initializing the SDK, you can optionally specify Referer Header.
+//define('REFERER', 'DEFINE_REFERER');   
+
 require_once "../../src/LoginRadiusSDK/Utility/Functions.php";
 require_once "../../src/LoginRadiusSDK/LoginRadiusException.php";
 require_once "../../src/LoginRadiusSDK/Clients/IHttpClientInterface.php";
