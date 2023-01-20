@@ -288,6 +288,7 @@ class PhoneAuthenticationAPI extends Functions
      * @param smsTemplate SMS Template name
      * @param verificationUrl Email verification url
      * @param welcomeEmailTemplate Name of the welcome email template
+     * @param emailTemplate Name of the email template
      * @return Response containing Definition of Complete Validation, UserProfile data and Access Token
      * 17.1.2
     */

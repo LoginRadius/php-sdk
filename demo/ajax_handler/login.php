@@ -39,7 +39,11 @@ function getProfile(array $request)
         $response['message'] = 'Access Token is a required field.';
     } else {
         $authenticationObj = new AuthenticationAPI();
-        $result = $authenticationObj->getProfileByAccessToken($token);
+        $fields = ''; 
+        $emailTemplate = ''; 
+        $verificationUrl = '';  
+        $welcomeEmailTemplate = ''; 
+        $result = $authenticationObj->getProfileByAccessToken($token, $fields, $emailTemplate, $verificationUrl, $welcomeEmailTemplate);
         if ((isset($result->EmailVerified) && $result->EmailVerified) || AUTH_FLOW == 'optional' || AUTH_FLOW == 'disabled') {
             $response['data'] = $result;
             $response['message'] = "Profile successfully retrieved.";
@@ -224,7 +228,8 @@ function mfaLogin(array $request)
         $smsTemplate = '';
         $smsTemplate2FA = '';
         $verificationUrl = '';
-        $result = $authenticationObj->mfaLoginByEmail($email, $password, $emailTemplate, $fields, $loginUrl, $smsTemplate, $smsTemplate2FA, $verificationUrl);
+        $emailTemplate2FA = '';
+        $result = $authenticationObj->mfaLoginByEmail($email, $password, $emailTemplate, $fields, $loginUrl, $smsTemplate, $smsTemplate2FA, $verificationUrl, $emailTemplate2FA);
      
         if (isset($result->Profile) || isset($result->SecondFactorAuthentication)) {
             $response['data'] = $result;
@@ -250,8 +255,11 @@ function mfaValidate(array $request)
     } else {
         $authenticationObj = new MultiFactorAuthenticationAPI();
             $fields = '';
-            $smsTemplate2FA = '';
-            $result = $authenticationObj->mFAValidateGoogleAuthCode($googleAuthCode, $secondFactorAuthenticationToken, $fields, $smsTemplate2FA);
+            $rbaBrowserEmailTemplate = '';  
+            $rbaCityEmailTemplate = ''; 
+            $rbaCountryEmailTemplate = '';  
+            $rbaIpEmailTemplate = ''; 
+            $result = $authenticationObj->mFAValidateGoogleAuthCode($googleAuthCode, $secondFactorAuthenticationToken, $fields, $rbaBrowserEmailTemplate, $rbaCityEmailTemplate, $rbaCountryEmailTemplate, $rbaIpEmailTemplate);
             if ((isset($result->access_token) && $result->access_token != '')) {
                 $response['data'] = $result;
                 $response['message'] = "Google Auth Code successfully validated.";

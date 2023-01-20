@@ -226,27 +226,6 @@ class NativeSocialAPI extends Functions
 
 
     /**
-     * The API is used to get LoginRadius access token by sending Vkontakte's access token. It will be valid for the specific duration of time specified in the response.
-     * @param vkAccessToken Vkontakte Access Token
-     * @return Response containing Definition of Complete Token data
-     * 20.15
-    */
-
-    public function getAccessTokenByVkontakteAccessToken($vkAccessToken)
-    {
-        $resourcePath = "/api/v2/access_token/vkontakte";
-        $queryParam = [];
-        $queryParam['key'] = Functions::getApiKey();
-        if ($vkAccessToken === '' || ctype_space($vkAccessToken)) {
-            throw new LoginRadiusException(Functions::paramValidationMsg('vkAccessToken'));
-        }
-        $queryParam['vk_access_token'] = $vkAccessToken;
-        return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
-    }
-       
-
-
-    /**
      * The API is used to get LoginRadius access token by sending Google's AuthCode. It will be valid for the specific duration of time specified in the response.
      * @param googleAuthcode Google AuthCode
      * @param socialAppName Name of Social provider APP

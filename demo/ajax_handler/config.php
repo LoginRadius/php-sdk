@@ -36,9 +36,7 @@ require_once "../../src/LoginRadiusSDK/CustomerRegistration/Account/SottAPI.php"
 
 require_once "../../src/LoginRadiusSDK/CustomerRegistration/Advanced/ConfigurationAPI.php";
 require_once "../../src/LoginRadiusSDK/CustomerRegistration/Advanced/CustomObjectAPI.php";
-require_once "../../src/LoginRadiusSDK/CustomerRegistration/Advanced/CustomRegistrationDataAPI.php";
 require_once "../../src/LoginRadiusSDK/CustomerRegistration/Advanced/MultiFactorAuthenticationAPI.php";
-require_once "../../src/LoginRadiusSDK/CustomerRegistration/Advanced/CustomRegistrationDataAPI.php";
 require_once "../../src/LoginRadiusSDK/CustomerRegistration/Social/NativeSocialAPI.php";
 require_once "../../src/LoginRadiusSDK/CustomerRegistration/Social/SocialAPI.php";
 

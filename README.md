@@ -37,7 +37,7 @@ curl -sS https://getcomposer.org/installer | php
 Next, run the Composer command to install the latest stable version of library:
 
 ```
-composer require loginradius/php-sdk:11.4.2
+composer require loginradius/php-sdk:11.5.0
 ```
 
 Include the following files in your Project Directory
@@ -64,7 +64,6 @@ require_once "src/LoginRadiusSDK/CustomerRegistration/Account/SottAPI.php";
 require_once "src/LoginRadiusSDK/CustomerRegistration/Advanced/ConfigurationAPI.php";
 require_once "src/LoginRadiusSDK/CustomerRegistration/Advanced/ConsentManagementAPI.php";
 require_once "src/LoginRadiusSDK/CustomerRegistration/Advanced/CustomObjectAPI.php";
-require_once "src/LoginRadiusSDK/CustomerRegistration/Advanced/CustomRegistrationDataAPI.php";
 require_once "src/LoginRadiusSDK/CustomerRegistration/Advanced/MultiFactorAuthenticationAPI.php";
 require_once "src/LoginRadiusSDK/CustomerRegistration/Advanced/ReAuthenticationAPI.php";
 require_once "src/LoginRadiusSDK/CustomerRegistration/Advanced/WebHookAPI.php";
@@ -124,7 +123,6 @@ use \LoginRadiusSDK\CustomerRegistration\Account\SottAPI;
 use \LoginRadiusSDK\CustomerRegistration\Advanced\ConfigurationAPI;
 use \LoginRadiusSDK\CustomerRegistration\Advanced\ConsentManagementAPI;
 use \LoginRadiusSDK\CustomerRegistration\Advanced\CustomObjectAPI;
-use \LoginRadiusSDK\CustomerRegistration\Advanced\CustomRegistrationDataAPI;
 use \LoginRadiusSDK\CustomerRegistration\Advanced\MultiFactorAuthenticationAPI;
 use \LoginRadiusSDK\CustomerRegistration\Advanced\ReAuthenticationAPI;
 use \LoginRadiusSDK\CustomerRegistration\Advanced\WebHookAPI;
@@ -1276,9 +1274,6 @@ $result = $accountAPI->accountDeleteByEmail($email);
 ### Social API
 
 List of APIs in this Section:<br>
-[POST : Post Message API](#PostMessage-post-)<br>
-[POST : Status Posting ](#StatusPosting-post-)<br>
-[POST : Trackable Status Posting](#TrackableStatusPosting-post-)<br>
 [GET : Access Token](#ExchangeAccessToken-get-)<br>
 [GET : Refresh Token](#RefreshAccessToken-get-)<br>
 [GET : Token Validate](#ValidateAccessToken-get-)<br>
@@ -1286,91 +1281,11 @@ List of APIs in this Section:<br>
 [GET : Get Active Session Details](#GetActiveSession-get-)<br>
 [GET : Get Active Session By Account Id](#GetActiveSessionByAccountID-get-)<br>
 [GET : Get Active Session By Profile Id](#GetActiveSessionByProfileID-get-)<br>
-[GET : Album](#GetAlbums-get-)<br>
-[GET : Get Albums with cursor](#GetAlbumsWithCursor-get-)<br>
-[GET : Audio](#GetAudios-get-)<br>
-[GET : Get Audio With Cursor](#GetAudiosWithCursor-get-)<br>
-[GET : Check In](#GetCheckIns-get-)<br>
-[GET : Get CheckIns With Cursor](#GetCheckInsWithCursor-get-)<br>
-[GET : Contact](#GetContacts-get-)<br>
-[GET : Event](#GetEvents-get-)<br>
-[GET : Get Events With Cursor](#GetEventsWithCursor-get-)<br>
-[GET : Following](#GetFollowings-get-)<br>
-[GET : Get Followings With Cursor](#GetFollowingsWithCursor-get-)<br>
-[GET : Group](#GetGroups-get-)<br>
-[GET : Get Groups With Cursor](#GetGroupsWithCursor-get-)<br>
-[GET : Like](#GetLikes-get-)<br>
-[GET : Get Likes With Cursor](#GetLikesWithCursor-get-)<br>
-[GET : Mention](#GetMentions-get-)<br>
-[GET : Page](#GetPage-get-)<br>
-[GET : Photo](#GetPhotos-get-)<br>
-[GET : Get Post](#GetPosts-get-)<br>
-[GET : Get Trackable Status Stats](#GetTrackableStatusStats-get-)<br>
-[GET : Trackable Status Fetching](#TrackableStatusFetching-get-)<br>
-[GET : Refresh User Profile](#GetRefreshedSocialUserProfile-get-)<br>
-[GET : Video](#GetVideos-get-)<br>
 
 If you have not already initialized the Social object do so now
 ```php
 $socialAPI = new SocialAPI(); 
 ```
-
-
-<h6 id="PostMessage-post-">Post Message API (POST)</h6> 
-
-Post Message API is used to post messages to the user's contacts.<br><br><b>Supported Providers:</b> Twitter, LinkedIn <br><br>The Message API is used to post messages to the user?s contacts. This is one of the APIs that makes up the LoginRadius Friend Invite System. After using the Contact API, you can send messages to the retrieved contacts. This API requires setting permissions in your LoginRadius Dashboard.<br><br>GET & POST Message API work the same way except the API method is different
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/post-message-api)
-
- ```php
- 
-$access_Token = "access_Token"; //Required 
-$message = "message"; //Required 
-$subject = "subject"; //Required 
-$to = "to"; //Required
- 
-$result = $socialAPI->postMessage($access_Token,$message,$subject,$to);
- ```
-
- 
-<h6 id="StatusPosting-post-">Status Posting  (POST)</h6> 
-
-The Status API is used to update the status on the user's wall.<br><br><b>Supported Providers:</b>  Facebook, Twitter, LinkedIn
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/status-posting/)
-
- ```php
- 
-$access_Token = "access_Token"; //Required 
-$caption = "caption"; //Required 
-$description = "description"; //Required 
-$imageurl = "imageurl"; //Required 
-$status = "status"; //Required 
-$title = "title"; //Required 
-$url = "url"; //Required 
-$shorturl = "shorturl"; //Optional
- 
-$result = $socialAPI->statusPosting($access_Token,$caption,$description,$imageurl,$status,$title,$url,$shorturl);
- ```
-
- 
-<h6 id="TrackableStatusPosting-post-">Trackable Status Posting (POST)</h6> 
-
-The Trackable status API works very similar to the Status API but it returns a Post id that you can use to track the stats(shares, likes, comments) for a specific share/post/status update. This API requires setting permissions in your LoginRadius Dashboard.<br><br> The Trackable Status API is used to update the status on the user's wall and return an Post ID value. It is commonly referred to as Permission based sharing or Push notifications.<br><br> POST Input Parameter Format: application/x-www-form-urlencoded
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/trackable-status-posting/)
-
- ```php
- 
-$access_Token = "access_Token"; //Required
- $payload = '{
-"caption" : "<caption>",
-"description" : "<description>",
-"imageurl" : "<imageurl>",
-"status" : "<status>",
-"title" : "<title>",
-"url" : "<url>"
-}';  //Required
- 
-$result = $socialAPI->trackableStatusPosting($access_Token,$payload);
- ```
 
  
 <h6 id="ExchangeAccessToken-get-">Access Token (GET)</h6> 
@@ -1464,325 +1379,6 @@ $profileId = "profileId"; //Required
  
 $result = $socialAPI->getActiveSessionByProfileID($profileId);
  ```
-
- 
-<h6 id="GetAlbums-get-">Album (GET)</h6> 
-
-<b>Supported Providers:</b> Facebook, Google, Live, Vkontakte.<br><br> This API returns the photo albums associated with the passed in access tokens Social Profile.
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/album/)
-
- ```php
- 
-$access_Token = "access_Token"; //Required
- 
-$result = $socialAPI->getAlbums($access_Token);
- ```
-
- 
-<h6 id="GetAlbumsWithCursor-get-">Get Albums with cursor (GET)</h6> 
-
-<b>Supported Providers:</b> Facebook, Google, Live, Vkontakte.<br><br> This API returns the photo albums associated with the passed in access tokens Social Profile.
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/album/)
-
- ```php
- 
-$access_Token = "access_Token"; //Required 
-$nextCursor = "nextCursor"; //Required
- 
-$result = $socialAPI->getAlbumsWithCursor($access_Token,$nextCursor);
- ```
-
- 
-<h6 id="GetAudios-get-">Audio (GET)</h6> 
-
-The Audio API is used to get audio files data from the user's social account.<br><br><b>Supported Providers:</b> Live, Vkontakte
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/audio)
-
- ```php
- 
-$access_Token = "access_Token"; //Required
- 
-$result = $socialAPI->getAudios($access_Token);
- ```
-
- 
-<h6 id="GetAudiosWithCursor-get-">Get Audio With Cursor (GET)</h6> 
-
-The Audio API is used to get audio files data from the user's social account.<br><br><b>Supported Providers:</b> Live, Vkontakte
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/audio)
-
- ```php
- 
-$access_Token = "access_Token"; //Required 
-$nextCursor = "nextCursor"; //Required
- 
-$result = $socialAPI->getAudiosWithCursor($access_Token,$nextCursor);
- ```
-
- 
-<h6 id="GetCheckIns-get-">Check In (GET)</h6> 
-
-The Check In API is used to get check Ins data from the user's social account.<br><br><b>Supported Providers:</b> Facebook, Foursquare, Vkontakte
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/check-in)
-
- ```php
- 
-$access_Token = "access_Token"; //Required
- 
-$result = $socialAPI->getCheckIns($access_Token);
- ```
-
- 
-<h6 id="GetCheckInsWithCursor-get-">Get CheckIns With Cursor (GET)</h6> 
-
-The Check In API is used to get check Ins data from the user's social account.<br><br><b>Supported Providers:</b> Facebook, Foursquare, Vkontakte
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/check-in)
-
- ```php
- 
-$access_Token = "access_Token"; //Required 
-$nextCursor = "nextCursor"; //Required
- 
-$result = $socialAPI->getCheckInsWithCursor($access_Token,$nextCursor);
- ```
-
- 
-<h6 id="GetContacts-get-">Contact (GET)</h6> 
-
-The Contact API is used to get contacts/friends/connections data from the user's social account.This is one of the APIs that makes up the LoginRadius Friend Invite System. The data will normalized into LoginRadius' standard data format. This API requires setting permissions in your LoginRadius Dashboard. <br><br><b>Note:</b> Facebook restricts access to the list of friends that is returned. When using the Contacts API with Facebook you will only receive friends that have accepted some permissions with your app. <br><br><b>Supported Providers:</b> Facebook, Foursquare, Google, LinkedIn, Live, Twitter, Vkontakte, Yahoo
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/contact)
-
- ```php
- 
-$access_Token = "access_Token"; //Required 
-$nextCursor = "nextCursor"; //Optional
- 
-$result = $socialAPI->getContacts($access_Token,$nextCursor);
- ```
-
- 
-<h6 id="GetEvents-get-">Event (GET)</h6> 
-
-The Event API is used to get the event data from the user's social account.<br><br><b>Supported Providers:</b> Facebook, Live
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/event)
-
- ```php
- 
-$access_Token = "access_Token"; //Required
- 
-$result = $socialAPI->getEvents($access_Token);
- ```
-
- 
-<h6 id="GetEventsWithCursor-get-">Get Events With Cursor (GET)</h6> 
-
-The Event API is used to get the event data from the user's social account.<br><br><b>Supported Providers:</b> Facebook, Live
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/event)
-
- ```php
- 
-$access_Token = "access_Token"; //Required 
-$nextCursor = "nextCursor"; //Required
- 
-$result = $socialAPI->getEventsWithCursor($access_Token,$nextCursor);
- ```
-
- 
-<h6 id="GetFollowings-get-">Following (GET)</h6> 
-
-Get the following user list from the user's social account.<br><br><b>Supported Providers:</b> Twitter
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/following)
-
- ```php
- 
-$access_Token = "access_Token"; //Required
- 
-$result = $socialAPI->getFollowings($access_Token);
- ```
-
- 
-<h6 id="GetFollowingsWithCursor-get-">Get Followings With Cursor (GET)</h6> 
-
-Get the following user list from the user's social account.<br><br><b>Supported Providers:</b> Twitter
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/following)
-
- ```php
- 
-$access_Token = "access_Token"; //Required 
-$nextCursor = "nextCursor"; //Required
- 
-$result = $socialAPI->getFollowingsWithCursor($access_Token,$nextCursor);
- ```
-
- 
-<h6 id="GetGroups-get-">Group (GET)</h6> 
-
-The Group API is used to get group data from the user's social account.<br><br><b>Supported Providers:</b> Facebook, Vkontakte
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/group)
-
- ```php
- 
-$access_Token = "access_Token"; //Required
- 
-$result = $socialAPI->getGroups($access_Token);
- ```
-
- 
-<h6 id="GetGroupsWithCursor-get-">Get Groups With Cursor (GET)</h6> 
-
-The Group API is used to get group data from the user's social account.<br><br><b>Supported Providers:</b> Facebook, Vkontakte
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/group)
-
- ```php
- 
-$access_Token = "access_Token"; //Required 
-$nextCursor = "nextCursor"; //Required
- 
-$result = $socialAPI->getGroupsWithCursor($access_Token,$nextCursor);
- ```
-
- 
-<h6 id="GetLikes-get-">Like (GET)</h6> 
-
-The Like API is used to get likes data from the user's social account.<br><br><b>Supported Providers:</b> Facebook
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/like)
-
- ```php
- 
-$access_Token = "access_Token"; //Required
- 
-$result = $socialAPI->getLikes($access_Token);
- ```
-
- 
-<h6 id="GetLikesWithCursor-get-">Get Likes With Cursor (GET)</h6> 
-
-The Like API is used to get likes data from the user's social account.<br><br><b>Supported Providers:</b> Facebook
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/like)
-
- ```php
- 
-$access_Token = "access_Token"; //Required 
-$nextCursor = "nextCursor"; //Required
- 
-$result = $socialAPI->getLikesWithCursor($access_Token,$nextCursor);
- ```
-
- 
-<h6 id="GetMentions-get-">Mention (GET)</h6> 
-
-The Mention API is used to get mentions data from the user's social account.<br><br><b>Supported Providers:</b> Twitter
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/mention)
-
- ```php
- 
-$access_Token = "access_Token"; //Required
- 
-$result = $socialAPI->getMentions($access_Token);
- ```
-
- 
-<h6 id="GetPage-get-">Page (GET)</h6> 
-
-The Page API is used to get the page data from the user's social account.<br><br><b>Supported Providers:</b>  Facebook, LinkedIn
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/page)
-
- ```php
- 
-$access_Token = "access_Token"; //Required 
-$pageName = "pageName"; //Required
- 
-$result = $socialAPI->getPage($access_Token,$pageName);
- ```
-
- 
-<h6 id="GetPhotos-get-">Photo (GET)</h6> 
-
-The Photo API is used to get photo data from the user's social account.<br><br><b>Supported Providers:</b>  Facebook, Foursquare, Google, Live, Vkontakte
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/photo)
-
- ```php
- 
-$access_Token = "access_Token"; //Required 
-$albumId = "albumId"; //Required
- 
-$result = $socialAPI->getPhotos($access_Token,$albumId);
- ```
-
- 
-<h6 id="GetPosts-get-">Get Post (GET)</h6> 
-
-The Post API is used to get post message data from the user's social account.<br><br><b>Supported Providers:</b>  Facebook
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/post)
-
- ```php
- 
-$access_Token = "access_Token"; //Required
- 
-$result = $socialAPI->getPosts($access_Token);
- ```
-
- 
-<h6 id="GetTrackableStatusStats-get-">Get Trackable Status Stats (GET)</h6> 
-
-The Trackable status API works very similar to the Status API but it returns a Post id that you can use to track the stats(shares, likes, comments) for a specific share/post/status update. This API requires setting permissions in your LoginRadius Dashboard.<br><br> The Trackable Status API is used to update the status on the user's wall and return an Post ID value. It is commonly referred to as Permission based sharing or Push notifications.
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/get-trackable-status-stats/)
-
- ```php
- 
-$access_Token = "access_Token"; //Required 
-$caption = "caption"; //Required 
-$description = "description"; //Required 
-$imageurl = "imageurl"; //Required 
-$status = "status"; //Required 
-$title = "title"; //Required 
-$url = "url"; //Required
- 
-$result = $socialAPI->getTrackableStatusStats($access_Token,$caption,$description,$imageurl,$status,$title,$url);
- ```
-
- 
-<h6 id="TrackableStatusFetching-get-">Trackable Status Fetching (GET)</h6> 
-
-The Trackable status API works very similar to the Status API but it returns a Post id that you can use to track the stats(shares, likes, comments) for a specific share/post/status update. This API requires setting permissions in your LoginRadius Dashboard.<br><br> This API is used to retrieve a tracked post based on the passed in post ID value. This API requires setting permissions in your LoginRadius Dashboard.<br><br> <b>Note:</b> To utilize this API you need to find the ID for the post you want to track, which might require using Trackable Status Posting API first.
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/trackable-status-fetching/)
-
- ```php
- 
-$postId = "postId"; //Required
- 
-$result = $socialAPI->trackableStatusFetching($postId);
- ```
-
-<h6 id="GetRefreshedSocialUserProfile-get-">Refresh User Profile (GET)</h6> 
-
-The User Profile API is used to get the latest updated social profile data from the user's social account after authentication. The social profile will be retrieved via oAuth and OpenID protocols. The data is normalized into LoginRadius' standard data format. This API should be called using the access token retrieved from the refresh access token API.
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/refresh-token/refresh-user-profile)
-
- ```php
- 
-$access_Token = "access_Token"; //Required 
-$fields = null; //Optional
- 
-$result = $socialAPI->getRefreshedSocialUserProfile($access_Token,$fields);
- ```
-
- 
-<h6 id="GetVideos-get-">Video (GET)</h6> 
-
-The Video API is used to get video files data from the user's social account.<br><br><b>Supported Providers:</b>   Facebook, Google, Live, Vkontakte
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/advanced-social-api/video)
-
- ```php
- 
-$access_Token = "access_Token"; //Required 
-$nextCursor = "nextCursor"; //Required
- 
-$result = $socialAPI->getVideos($access_Token,$nextCursor);
- ```
-
- 
-
 
 
 ### CustomObject API
@@ -3453,7 +3049,7 @@ $welcomeemailtemplate = "welcomeemailtemplate"; //Optional
 $result = $oneTouchLoginAPI->oneTouchLoginByEmail($payload,$oneTouchLoginEmailTemplate,$redirecturl,$welcomeemailtemplate);
  ```
 
- 
+
 <h6 id="OneTouchLoginByPhone-post-">One Touch Login by Phone (POST)</h6> 
 
 This API is used to send one time password to a given phone number for a frictionless login/registration.
@@ -3909,142 +3505,6 @@ $role = "role"; //Required
 $result = $roleAPI->removeRolePermissions($payload,$role);
  ```
 
- 
-
-
-
-### CustomRegistrationData API
-
-List of APIs in this Section:<br>
-[PUT : Update Registration Data](#UpdateRegistrationData-put-)<br>
-[POST : Validate secret code](#ValidateRegistrationDataCode-post-)<br>
-[POST : Add Registration Data](#AddRegistrationData-post-)<br>
-[GET : Auth Get Registration Data Server](#AuthGetRegistrationData-get-)<br>
-[GET : Get Registration Data](#GetRegistrationData-get-)<br>
-[DELETE : Delete Registration Data](#DeleteRegistrationData-delete-)<br>
-[DELETE : Delete All Records by Datasource](#DeleteAllRecordsByDataSource-delete-)<br>
-
-If you have not already initialized the CustomRegistrationData object do so now
-```php
-$customRegistrationDataAPI = new CustomRegistrationDataAPI(); 
-```
-
-
-<h6 id="UpdateRegistrationData-put-">Update Registration Data (PUT)</h6> 
-
-This API allows you to update a dropdown item
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/custom-registration-data/update-registration-data)
-
- ```php
-
- $payload = '{
-"isActive" : true,
-"key" : "<key>",
-"type" : "<type>",
-"value" : "<value>"
-}';  //Required 
-$recordId = "recordId"; //Required
- 
-$result = $customRegistrationDataAPI->updateRegistrationData($payload,$recordId);
- ```
-
- 
-<h6 id="ValidateRegistrationDataCode-post-">Validate secret code (POST)</h6> 
-
-This API allows you to validate code for a particular dropdown member.
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/custom-registration-data/validate-code)
-
- ```php
- 
-$code = "code"; //Required 
-$recordId = "recordId"; //Required
- 
-$result = $customRegistrationDataAPI->validateRegistrationDataCode($code,$recordId);
- ```
-
- 
-<h6 id="AddRegistrationData-post-">Add Registration Data (POST)</h6> 
-
-This API allows you to fill data into a dropdown list which you have created for user Registration. For more details on how to use this API please see our Custom Registration Data Overview
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/custom-registration-data/add-registration-data)
-
- ```php
-
- $payload = '{
-"data" : [   { 
- "code" : "<code>"  ,
-"isActive" : true ,
- "key" : "<key>"  ,
- "parentId" : "<parentId>"  ,
- "type" : "<type>"  ,
- "value" : "<value>"   
-}  ] 
-}';  //Required
- 
-$result = $customRegistrationDataAPI->addRegistrationData($payload);
- ```
-
- 
-<h6 id="AuthGetRegistrationData-get-">Auth Get Registration Data Server (GET)</h6> 
-
-This API is used to retrieve dropdown data.
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/custom-registration-data/auth-get-registration-data)
-
- ```php
- 
-$type = "type"; //Required 
-$limit = 0; //Optional 
-$parentId = "parentId"; //Optional 
-$skip = 0; //Optional
- 
-$result = $customRegistrationDataAPI->authGetRegistrationData($type,$limit,$parentId,$skip);
- ```
-
- 
-<h6 id="GetRegistrationData-get-">Get Registration Data (GET)</h6> 
-
-This API is used to retrieve dropdown data.
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/custom-registration-data/get-registration-data)
-
- ```php
- 
-$type = "type"; //Required 
-$limit = 0; //Optional 
-$parentId = "parentId"; //Optional 
-$skip = 0; //Optional
- 
-$result = $customRegistrationDataAPI->getRegistrationData($type,$limit,$parentId,$skip);
- ```
-
- 
-<h6 id="DeleteRegistrationData-delete-">Delete Registration Data (DELETE)</h6> 
-
-This API allows you to delete an item from a dropdown list.
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/custom-registration-data/delete-registration-data)
-
- ```php
- 
-$recordId = "recordId"; //Required
- 
-$result = $customRegistrationDataAPI->deleteRegistrationData($recordId);
- ```
-
- 
-<h6 id="DeleteAllRecordsByDataSource-delete-">Delete All Records by Datasource (DELETE)</h6> 
-
-This API allows you to delete all records contained in a datasource.
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/custom-registration-data/delete-all-records-by-datasource)
-
- ```php
- 
-$type = "type"; //Required
- 
-$result = $customRegistrationDataAPI->deleteAllRecordsByDataSource($type);
- ```
-
- 
-
-
 
 ### RiskBasedAuthentication API
 
@@ -4199,7 +3659,6 @@ List of APIs in this Section:<br>
 [GET : Get Access Token By Foursquare Access Token](#GetAccessTokenByFoursquareAccessToken-get-)<br>
 [GET : Access Token via Apple Id Code](#GetAccessTokenByAppleIdCode-get-)<br>
 [GET : Access Token via WeChat Code](#GetAccessTokenByWeChatCode-get-)<br>
-[GET : Access Token via Vkontakte Token](#GetAccessTokenByVkontakteAccessToken-get-)<br>
 [GET : Access Token via Google AuthCode](#GetAccessTokenByGoogleAuthCode-get-)<br>
 
 If you have not already initialized the NativeSocial object do so now
@@ -4317,19 +3776,6 @@ This API is used to retrieve a LoginRadius access token by passing in a valid We
 $code = "code"; //Required
  
 $result = $nativeSocialAPI->getAccessTokenByWeChatCode($code);
- ```
-
- 
-<h6 id="GetAccessTokenByVkontakteAccessToken-get-">Access Token via Vkontakte Token (GET)</h6> 
-
-The API is used to get LoginRadius access token by sending Vkontakte's access token. It will be valid for the specific duration of time specified in the response.
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/native-social-login-api/access-token-via-vkontakte-token)
-
- ```php
- 
-$vk_access_token = "vk_access_token"; //Required
- 
-$result = $nativeSocialAPI->getAccessTokenByVkontakteAccessToken($vk_access_token);
  ```
 
  
