@@ -5,7 +5,7 @@
 
 Release on **January 20, 2023**
 
-## Removed (Depricated) APIs:
+## Removed (Deprecated) APIs:
 - `AuthGetRegistrationData`
 - `ValidateRegistrationDataCode`
 - `GetRegistrationData`
