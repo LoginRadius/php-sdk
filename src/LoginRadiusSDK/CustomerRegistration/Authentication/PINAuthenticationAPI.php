@@ -168,17 +168,22 @@ class PINAuthenticationAPI extends Functions
      * This API sends the OTP to specified phone number
      * @param forgotPINOtpByPhoneModel Model Class containing Definition for Forgot Pin Otp By Phone API
      * @param smsTemplate 
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response Containing Validation Data and SMS Data
      * 42.7
     */
 
-    public function sendForgotPINSMSByPhone($forgotPINOtpByPhoneModel, $smsTemplate = null)
+    public function sendForgotPINSMSByPhone($forgotPINOtpByPhoneModel, $smsTemplate = null,
+        $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/pin/forgot/otp";
         $queryParam = [];
         $queryParam['apiKey'] = Functions::getApiKey();
         if ($smsTemplate != '') {
             $queryParam['smsTemplate'] = $smsTemplate;
+        }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
         }
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $forgotPINOtpByPhoneModel);
     }

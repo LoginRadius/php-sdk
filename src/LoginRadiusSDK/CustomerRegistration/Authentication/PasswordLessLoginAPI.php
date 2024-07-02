@@ -27,12 +27,13 @@ class PasswordLessLoginAPI extends Functions
      * @param passwordLessLoginOtpModel Model Class containing Definition of payload for PasswordLessLoginOtpModel API
      * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
      * @param smsTemplate SMS Template name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response containing User Profile Data and access token
      * 9.6
     */
 
     public function passwordlessLoginPhoneVerification($passwordLessLoginOtpModel, $fields = "",
-        $smsTemplate = null)
+        $smsTemplate = null, $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/login/passwordlesslogin/otp/verify";
         $queryParam = [];
@@ -43,6 +44,9 @@ class PasswordLessLoginAPI extends Functions
         if ($smsTemplate != '') {
             $queryParam['smsTemplate'] = $smsTemplate;
         }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
+        }
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $passwordLessLoginOtpModel);
     }
        
@@ -52,11 +56,13 @@ class PasswordLessLoginAPI extends Functions
      * API can be used to send a One-time Passcode (OTP) provided that the account has a verified PhoneID
      * @param phone The Registered Phone Number
      * @param smsTemplate SMS Template name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response Containing Definition of SMS Data
      * 9.15
     */
 
-    public function passwordlessLoginByPhone($phone, $smsTemplate = null)
+    public function passwordlessLoginByPhone($phone, $smsTemplate = null,
+        $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/login/passwordlesslogin/otp";
         $queryParam = [];
@@ -66,6 +72,9 @@ class PasswordLessLoginAPI extends Functions
         }
         if ($smsTemplate != '') {
             $queryParam['smsTemplate'] = $smsTemplate;
+        }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
         }
         $queryParam['phone'] = $phone;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);

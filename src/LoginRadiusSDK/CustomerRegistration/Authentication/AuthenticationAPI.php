@@ -245,13 +245,16 @@ class AuthenticationAPI extends Functions
      * @param nullSupport Boolean, pass true if you wish to update any user profile field with a NULL value, You can get the details
      * @param smsTemplate SMS Template name
      * @param verificationUrl Email verification url
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
+     * @param options PreventVerificationEmail (Specifying this value prevents the verification email from being sent. Only applicable if you have the optional email verification flow)
      * @return Response containing Definition of Complete Validation and UserProfile data
      * 5.4
     */
 
     public function updateProfileByAccessToken($accessToken, $userProfileUpdateModel,
         $emailTemplate = null, $fields = "", $nullSupport = false,
-        $smsTemplate = null, $verificationUrl = null)
+        $smsTemplate = null, $verificationUrl = null,
+        $isVoiceOtp = false, $options = "")
     {
         $resourcePath = "/identity/v2/auth/account";
         $queryParam = [];
@@ -273,6 +276,12 @@ class AuthenticationAPI extends Functions
         }
         if ($verificationUrl != '') {
             $queryParam['verificationUrl'] = $verificationUrl;
+        }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
+        }
+        if ($options != '') {
+            $queryParam['options'] = $options;
         }
         $queryParam['access_token'] = $accessToken;
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $userProfileUpdateModel);
@@ -418,12 +427,13 @@ class AuthenticationAPI extends Functions
      * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
      * @param url Mention URL to log the main URL(Domain name) in Database.
      * @param welcomeEmailTemplate Name of the welcome email template
+     * @param uuid The uuid received in the response
      * @return Response containing Definition of Complete Validation, UserProfile data and Access Token
      * 8.2
     */
 
     public function verifyEmail($verificationToken, $fields = "",
-        $url = null, $welcomeEmailTemplate = null)
+        $url = null, $welcomeEmailTemplate = null, $uuid = null)
     {
         $resourcePath = "/identity/v2/auth/email";
         $queryParam = [];
@@ -439,6 +449,9 @@ class AuthenticationAPI extends Functions
         }
         if ($welcomeEmailTemplate != '') {
             $queryParam['welcomeEmailTemplate'] = $welcomeEmailTemplate;
+        }
+        if ($uuid != '') {
+            $queryParam['uuid'] = $uuid;
         }
         $queryParam['verificationToken'] = $verificationToken;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
@@ -936,13 +949,14 @@ class AuthenticationAPI extends Functions
      * @param options PreventVerificationEmail (Specifying this value prevents the verification email from being sent. Only applicable if you have the optional email verification flow)
      * @param verificationUrl Email verification url
      * @param welcomeEmailTemplate Name of the welcome email template
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response containing Definition of Complete Validation, UserProfile data and Access Token
      * 17.1.1
     */
 
     public function userRegistrationByEmail($authUserRegistrationModel, $sott,
         $emailTemplate = null, $fields = "", $options = "",
-        $verificationUrl = null, $welcomeEmailTemplate = null)
+        $verificationUrl = null, $welcomeEmailTemplate = null, $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/register";
         $queryParam = [];
@@ -965,6 +979,9 @@ class AuthenticationAPI extends Functions
         if ($welcomeEmailTemplate != '') {
             $queryParam['welcomeEmailTemplate'] = $welcomeEmailTemplate;
         }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
+        }
         $queryParam['sott'] = $sott;
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $authUserRegistrationModel);
     }
@@ -980,13 +997,14 @@ class AuthenticationAPI extends Functions
      * @param smsTemplate SMS Template name
      * @param verificationUrl Email verification url
      * @param welcomeEmailTemplate Name of the welcome email template
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response containing Definition of Complete Validation, UserProfile data and Access Token
      * 17.2
     */
 
     public function userRegistrationByCaptcha($authUserRegistrationModelWithCaptcha, $emailTemplate = null,
         $fields = "", $options = "", $smsTemplate = null,
-        $verificationUrl = null, $welcomeEmailTemplate = null)
+        $verificationUrl = null, $welcomeEmailTemplate = null, $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/register/captcha";
         $queryParam = [];
@@ -1008,6 +1026,9 @@ class AuthenticationAPI extends Functions
         }
         if ($welcomeEmailTemplate != '') {
             $queryParam['welcomeEmailTemplate'] = $welcomeEmailTemplate;
+        }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
         }
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $authUserRegistrationModelWithCaptcha);
     }
@@ -1038,6 +1059,32 @@ class AuthenticationAPI extends Functions
             $queryParam['verificationUrl'] = $verificationUrl;
         }
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, json_encode($bodyParam));
+    }
+       
+
+
+    /**
+     * This API is used to Send verification email to the unverified email of the social profile. This API can be used only incase of optional verification workflow.
+     * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
+     * @param clientguid Unique string used in the Smart Login request
+     * @return Response containing Definition for Complete AuthSendVerificationEmailForLinkingSocialProfiles API Response
+     * 44.9
+    */
+
+    public function authSendVerificationEmailForLinkingSocialProfiles($accessToken, $clientguid)
+    {
+        $resourcePath = "/identity/v2/auth/email/sendverificationemail";
+        $queryParam = [];
+        if ($accessToken === '' || ctype_space($accessToken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
+        }
+        $queryParam['apiKey'] = Functions::getApiKey();
+        if ($clientguid === '' || ctype_space($clientguid)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('clientguid'));
+        }
+        $queryParam['access_token'] = $accessToken;
+        $queryParam['clientguid'] = $clientguid;
+        return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
 
 }

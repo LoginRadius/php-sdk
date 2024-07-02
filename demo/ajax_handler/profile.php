@@ -318,7 +318,7 @@ function resetMultifactor(array $request)
     $authObj = new MultiFactorAuthenticationAPI();
     $response = array('status' => 'error', 'message' => 'An error occurred.');
 
-    $result = $authObj->mFAResetGoogleAuthByToken($request['token'], true);
+    $result = $authObj->mfaResetAuthenticatorByToken($request['token'], true);
     if (isset($result->IsDeleted) && $result->IsDeleted) {
         $response['message'] = "Reset successfully.";
         $response['status'] = 'success';
