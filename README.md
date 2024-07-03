@@ -37,7 +37,7 @@ curl -sS https://getcomposer.org/installer | php
 Next, run the Composer command to install the latest stable version of library:
 
 ```
-composer require loginradius/php-sdk:11.5.0
+composer require loginradius/php-sdk:11.6.0
 ```
 
 Include the following files in your Project Directory
@@ -70,6 +70,8 @@ require_once "src/LoginRadiusSDK/CustomerRegistration/Advanced/WebHookAPI.php";
 
 require_once "src/LoginRadiusSDK/CustomerRegistration/Social/NativeSocialAPI.php";
 require_once "src/LoginRadiusSDK/CustomerRegistration/Social/SocialAPI.php";
+require_once "../../src/LoginRadiusSDK/CustomerRegistration/Authentication/SlidingTokenAPI.php";
+
 ```
 Modify the config.php file in the SDK to include your LoginRadius Credentials
 
@@ -135,6 +137,7 @@ use \LoginRadiusSDK\CustomerRegistration\Authentication\RiskBasedAuthenticationA
 use \LoginRadiusSDK\CustomerRegistration\Authentication\SmartLoginAPI;
 use \LoginRadiusSDK\CustomerRegistration\Social\SocialAPI;
 use \LoginRadiusSDK\CustomerRegistration\Social\NativeSocialAPI;
+use \LoginRadiusSDK\CustomerRegistration\Authentication\SlidingTokenAPI; 
 
 ```
 
@@ -216,6 +219,7 @@ List of APIs in this Section:<br>
 [GET : Auth Check UserName Availability](#CheckUserNameAvailability-get-)<br>
 [GET : Auth Privacy Policy Accept](#AcceptPrivacyPolicy-get-)<br>
 [GET : Auth Privacy Policy History By Access Token](#GetPrivacyPolicyHistoryByAccessToken-get-)<br>
+[GET : Auth send verification Email for linking social profiles](#AuthSendVerificationEmailForLinkingSocialProfiles-get-)<br>
 [DELETE : Auth Delete Account with Email Confirmation](#DeleteAccountWithEmailConfirmation-delete-)<br>
 [DELETE : Auth Remove Email](#RemoveEmail-delete-)<br>
 [DELETE : Auth Unlink Social Identities](#UnlinkSocialIdentities-delete-)<br>
@@ -241,11 +245,13 @@ $access_token = "access_token"; //Required
 }';  //Required 
 $emailTemplate = "emailTemplate"; //Optional 
 $fields = null; //Optional 
-$nullSupport = "true"; //Optional 
+$nullSupport = true; //Optional 
 $smsTemplate = "smsTemplate"; //Optional 
-$verificationUrl = "verificationUrl"; //Optional
+$verificationUrl = "verificationUrl"; //Optional 
+$isVoiceOtp = false; //Optional
+$options = "options"; //Optional 
  
-$result = $authenticationAPI->updateProfileByAccessToken($access_token,$payload,$emailTemplate,$fields,$nullSupport,$smsTemplate,$verificationUrl);
+$result = $authenticationAPI->updateProfileByAccessToken($access_token,$payload,$emailTemplate,$fields,$nullSupport,$smsTemplate,$verificationUrl,$isVoiceOtp,$options);
  ```
 
  
@@ -568,9 +574,10 @@ $emailTemplate = "emailTemplate"; //Optional
 $fields = null; //Optional 
 $options = "options"; //Optional 
 $verificationUrl = "verificationUrl"; //Optional 
-$welcomeEmailTemplate = "welcomeEmailTemplate"; //Optional
+$welcomeEmailTemplate = "welcomeEmailTemplate"; //Optional 
+$isVoiceOtp = false; //Optional
  
-$result = $authenticationAPI->userRegistrationByEmail($payload,$sott,$emailTemplate,$fields,$options,$verificationUrl,$welcomeEmailTemplate);
+$result = $authenticationAPI->userRegistrationByEmail($payload,$sott,$emailTemplate,$fields,$options,$verificationUrl,$welcomeEmailTemplate,$isVoiceOtp);
  ```
 
  
@@ -597,9 +604,10 @@ $fields = null; //Optional
 $options = "options"; //Optional 
 $smsTemplate = "smsTemplate"; //Optional 
 $verificationUrl = "verificationUrl"; //Optional 
-$welcomeEmailTemplate = "welcomeEmailTemplate"; //Optional
+$welcomeEmailTemplate = "welcomeEmailTemplate"; //Optional 
+$isVoiceOtp = false; //Optional
  
-$result = $authenticationAPI->userRegistrationByCaptcha($payload,$emailTemplate,$fields,$options,$smsTemplate,$verificationUrl,$welcomeEmailTemplate);
+$result = $authenticationAPI->userRegistrationByCaptcha($payload,$emailTemplate,$fields,$options,$smsTemplate,$verificationUrl,$welcomeEmailTemplate,$isVoiceOtp);
  ```
 
  
@@ -682,7 +690,7 @@ This api call invalidates the active access token or expires an access token's v
  ```php
  
 $access_token = "access_token"; //Required 
-$preventRefresh = "true"; //Optional
+$preventRefresh = true; //Optional
  
 $result = $authenticationAPI->authInValidateAccessToken($access_token,$preventRefresh);
  ```
@@ -791,8 +799,9 @@ $verificationToken = "verificationToken"; //Required
 $fields = null; //Optional 
 $url = "url"; //Optional 
 $welcomeEmailTemplate = "welcomeEmailTemplate"; //Optional
- 
-$result = $authenticationAPI->verifyEmail($verificationToken,$fields,$url,$welcomeEmailTemplate);
+$uuid = "uuid"; //Optional 
+
+$result = $authenticationAPI->verifyEmail($verificationToken,$fields,$url,$welcomeEmailTemplate,$uuid);
  ```
 
  
@@ -822,6 +831,19 @@ $access_token = "access_token"; //Required
 $fields = null; //Optional
  
 $result = $authenticationAPI->acceptPrivacyPolicy($access_token,$fields);
+ ```
+
+ <h6 id="AuthSendVerificationEmailForLinkingSocialProfiles-get-">Auth send verification Email for linking social profiles (GET)</h6>
+
+ This API is used to Send verification email to the unverified email of the social profile. This API can be used only incase of optional verification workflow. [More info](https://www.loginradius.com/docs/api/v2/customer-identity-api/authentication/auth-send-verification-for-social-email/)
+
+
+ ```php
+ 
+$access_token = "access_token"; //Required 
+$clientguid = "clientguid"; //Required
+ 
+$result = $authenticationAPI->authSendVerificationEmailForLinkingSocialProfiles($access_token,$clientguid);
  ```
 
  
@@ -902,6 +924,8 @@ List of APIs in this Section:<br>
 [POST : Account Create](#CreateAccount-post-)<br>
 [POST : Forgot Password token](#GetForgotPasswordToken-post-)<br>
 [POST : Email Verification token](#GetEmailVerificationToken-post-)<br>
+[POST : Multipurpose Email Token Generation API](#MultipurposeEmailTokenGeneration-post-)<br>
+[POST : Multipurpose SMS OTP Generation API](#MultipurposeSMSOTPGeneration-post-)<br>
 [GET : Get Privacy Policy History By Uid](#GetPrivacyPolicyHistoryByUid-get-)<br>
 [GET : Account Profiles by Email](#GetAccountProfileByEmail-get-)<br>
 [GET : Account Profiles by Username](#GetAccountProfileByUserName-get-)<br>
@@ -914,6 +938,7 @@ List of APIs in this Section:<br>
 [GET : Account Identities by Email](#GetAccountIdentitiesByEmail-get-)<br>
 [DELETE : Account Delete](#DeleteAccountByUid-delete-)<br>
 [DELETE : Account Remove Email](#RemoveEmail-delete-)<br>
+[DELETE : Revoke All Refresh Token](#RevokeAllRefreshToken-delete-)<br>
 [DELETE : Delete User Profiles By Email](#AccountDeleteByEmail-delete-)<br>
 
 If you have not already initialized the Account object do so now
@@ -936,7 +961,7 @@ This API is used to update the information of existing accounts in your Cloud St
 }';  //Required 
 $uid = "uid"; //Required 
 $fields = null; //Optional 
-$nullSupport = "true"; //Optional
+$nullSupport = true; //Optional
  
 $result = $accountAPI->updateAccountByUid($payload,$uid,$fields,$nullSupport);
  ```
@@ -998,9 +1023,10 @@ This API Allows you to reset the phone no verification of an end user’s accoun
  ```php
  
 $uid = "uid"; //Required 
-$smsTemplate = "smsTemplate"; //Optional
+$smsTemplate = "smsTemplate"; //Optional 
+$isVoiceOtp = false; //Optional
  
-$result = $accountAPI->resetPhoneIDVerificationByUid($uid,$smsTemplate);
+$result = $accountAPI->resetPhoneIDVerificationByUid($uid,$smsTemplate,$isVoiceOtp);
  ```
 
  
@@ -1073,7 +1099,7 @@ This API Returns a Forgot Password Token it can also be used to send a Forgot Pa
 $email = "email"; //Required 
 $emailTemplate = "emailTemplate"; //Optional 
 $resetPasswordUrl = "resetPasswordUrl"; //Optional 
-$sendEmail = "true"; //Optional
+$sendEmail = true; //Optional
  
 $result = $accountAPI->getForgotPasswordToken($email,$emailTemplate,$resetPasswordUrl,$sendEmail);
  ```
@@ -1091,6 +1117,43 @@ $email = "email"; //Required
 $result = $accountAPI->getEmailVerificationToken($email);
  ```
 
+<h6 id="MultipurposeEmailTokenGeneration-post-">Multipurpose Email Token Generation API (POST)</h6>
+
+ This API generate Email tokens and Email OTPs for Email verification, Add email, Forgot password, Delete user, Passwordless login, Forgot pin, One-touch login and Auto login. [More info](https://www.loginradius.com/docs/api/v2/customer-identity-api/account/multipurpose-token-and-sms-otp-generation-api/multipurpose-email-token-generation/)
+
+
+ ```php
+
+ $payload = '{
+"clientguid" : "<clientguid>",
+"email" : "<email>",
+"name" : "<name>",
+"type" : "<type>",
+"uid" : "<uid>",
+"userName" : "<userName>"
+}';  //Required 
+$tokentype = "tokentype"; //Required
+ 
+$result = $accountAPI->multipurposeEmailTokenGeneration($payload,$tokentype);
+ ```
+
+ 
+<h6 id="MultipurposeSMSOTPGeneration-post-">Multipurpose SMS OTP Generation API (POST)</h6>
+
+ This API generates SMS OTP for Add phone, Phone Id verification, Forgot password, Forgot pin, One-touch login, smart login and Passwordless login. [More info](https://www.loginradius.com/docs/api/v2/customer-identity-api/account/multipurpose-token-and-sms-otp-generation-api/multipurpose-sms-otp-generation/)
+
+
+ ```php
+
+ $payload = '{
+"name" : "<name>",
+"phone" : "<phone>",
+"uid" : "<uid>"
+}';  //Required 
+$smsotptype = "smsotptype"; //Required
+ 
+$result = $accountAPI->multipurposeSMSOTPGeneration($payload,$smsotptype);
+ ```
  
 <h6 id="GetPrivacyPolicyHistoryByUid-get-">Get Privacy Policy History By Uid (GET)</h6> 
 
@@ -1254,6 +1317,18 @@ $fields = null; //Optional
 $result = $accountAPI->removeEmail($email,$uid,$fields);
  ```
 
+ <h6 id="RevokeAllRefreshToken-delete-">Revoke All Refresh Token (DELETE)</h6>
+
+ The Revoke All Refresh Access Token API is used to revoke all refresh tokens for a specific user. [More info](https://www.loginradius.com/docs/api/v2/customer-identity-api/refresh-token/revoke-all-refresh-token/)
+
+
+ ```php
+ 
+$uid = "uid"; //Required
+ 
+$result = $accountAPI->revokeAllRefreshToken($uid);
+ ```
+
  
 <h6 id="AccountDeleteByEmail-delete-">Delete User Profiles By Email (DELETE)</h6> 
 
@@ -1310,7 +1385,7 @@ The Refresh Access Token API is used to refresh the provider access token after 
  
 $access_Token = "access_Token"; //Required 
 $expiresIn = 0; //Optional 
-$isWeb = "true"; //Optional
+$isWeb = true; //Optional
  
 $result = $socialAPI->refreshAccessToken($access_Token,$expiresIn,$isWeb);
  ```
@@ -1604,9 +1679,10 @@ This API is used to validate the verification code sent to verify a user's phone
 $otp = "otp"; //Required 
 $phone = "phone"; //Required 
 $fields = null; //Optional 
-$smsTemplate = "smsTemplate"; //Optional
+$smsTemplate = "smsTemplate"; //Optional 
+$isVoiceOtp = false; //Optional
  
-$result = $phoneAuthenticationAPI->phoneVerificationByOTP($otp,$phone,$fields,$smsTemplate);
+$result = $phoneAuthenticationAPI->phoneVerificationByOTP($otp,$phone,$fields,$smsTemplate,$isVoiceOtp);
  ```
 
  
@@ -1619,9 +1695,10 @@ This API is used to consume the verification code sent to verify a user's phone 
  
 $access_token = "access_token"; //Required 
 $otp = "otp"; //Required 
-$smsTemplate = "smsTemplate"; //Optional
+$smsTemplate = "smsTemplate"; //Optional 
+$isVoiceOtp = false; //Optional
  
-$result = $phoneAuthenticationAPI->phoneVerificationOTPByAccessToken($access_token,$otp,$smsTemplate);
+$result = $phoneAuthenticationAPI->phoneVerificationOTPByAccessToken($access_token,$otp,$smsTemplate,$isVoiceOtp);
  ```
 
  
@@ -1634,9 +1711,10 @@ This API is used to update the login Phone Number of users
  
 $access_token = "access_token"; //Required 
 $phone = "phone"; //Required 
-$smsTemplate = "smsTemplate"; //Optional
+$smsTemplate = "smsTemplate"; //Optional 
+$isVoiceOtp = false; //Optional
  
-$result = $phoneAuthenticationAPI->updatePhoneNumber($access_token,$phone,$smsTemplate);
+$result = $phoneAuthenticationAPI->updatePhoneNumber($access_token,$phone,$smsTemplate,$isVoiceOtp);
  ```
 
  
@@ -1667,9 +1745,10 @@ This API is used to send the OTP to reset the account password.
  ```php
  
 $phone = "phone"; //Required 
-$smsTemplate = "smsTemplate"; //Optional
+$smsTemplate = "smsTemplate"; //Optional 
+$isVoiceOtp = false; //Optional
  
-$result = $phoneAuthenticationAPI->forgotPasswordByPhoneOTP($phone,$smsTemplate);
+$result = $phoneAuthenticationAPI->forgotPasswordByPhoneOTP($phone,$smsTemplate,$isVoiceOtp);
  ```
 
  
@@ -1681,9 +1760,10 @@ This API is used to resend a verification OTP to verify a user's Phone Number. T
  ```php
  
 $phone = "phone"; //Required 
-$smsTemplate = "smsTemplate"; //Optional
+$smsTemplate = "smsTemplate"; //Optional 
+$isVoiceOtp = false; //Optional
  
-$result = $phoneAuthenticationAPI->phoneResendVerificationOTP($phone,$smsTemplate);
+$result = $phoneAuthenticationAPI->phoneResendVerificationOTP($phone,$smsTemplate,$isVoiceOtp);
  ```
 
  
@@ -1726,7 +1806,9 @@ $smsTemplate = "smsTemplate"; //Optional
 $verificationUrl = "verificationUrl"; //Optional 
 $welcomeEmailTemplate = "welcomeEmailTemplate"; //Optional
 $emailTemplate = "emailTemplate"; //Optional
-$result = $phoneAuthenticationAPI->userRegistrationByPhone($payload,$sott,$fields,$options,$smsTemplate,$verificationUrl,$welcomeEmailTemplate,$emailTemplate);
+$isVoiceOtp = false; //Optional
+ 
+$result = $phoneAuthenticationAPI->userRegistrationByPhone($payload,$sott,$fields,$options,$smsTemplate,$verificationUrl,$welcomeEmailTemplate,$emailTemplate,$isVoiceOtp);
  ```
 
  
@@ -1763,16 +1845,16 @@ $result = $phoneAuthenticationAPI->removePhoneIDByAccessToken($access_token);
 
 List of APIs in this Section:<br>
 [PUT : Update MFA Setting](#MFAUpdateSetting-put-)<br>
-[PUT : Update MFA by Access Token](#MFAUpdateByAccessToken-put-)<br>
 [PUT : MFA Update Phone Number by Token](#MFAUpdatePhoneNumberByToken-put-)<br>
 [PUT : Verify MFA Email OTP by Access Token](#MFAValidateEmailOtpByAccessToken-put-)<br>
 [PUT : Update MFA Security Question by Access Token](#MFASecurityQuestionAnswerByAccessToken-put-)<br>
 [PUT : MFA Validate OTP](#MFAValidateOTPByPhone-put-)<br>
-[PUT : MFA Validate Google Auth Code](#MFAValidateGoogleAuthCode-put-)<br>
 [PUT : MFA Validate Backup code](#MFAValidateBackupCode-put-)<br>
 [PUT : MFA Update Phone Number](#MFAUpdatePhoneNumber-put-)<br>
 [PUT : Verify MFA Email OTP by MFA Token](#MFAValidateEmailOtp-put-)<br>
 [PUT : Update MFA Security Question by MFA Token](#MFASecurityQuestionAnswer-put-)<br>
+[PUT : MFA Validate Authenticator Code](#MFAValidateAuthenticatorCode-put-)<br>
+[PUT : MFA Verify Authenticator Code](#MFAVerifyAuthenticatorCode-put-)<br>
 [POST : MFA Email Login](#MFALoginByEmail-post-)<br>
 [POST : MFA UserName Login](#MFALoginByUserName-post-)<br>
 [POST : MFA Phone Login](#MFALoginByPhone-post-)<br>
@@ -1785,12 +1867,12 @@ List of APIs in this Section:<br>
 [GET : MFA Resend Otp](#MFAResendOTP-get-)<br>
 [GET : MFA Backup Code by UID](#MFABackupCodeByUid-get-)<br>
 [GET : MFA Reset Backup Code by UID](#MFAResetBackupCodeByUid-get-)<br>
-[DELETE : MFA Reset Google Authenticator by Token](#MFAResetGoogleAuthByToken-delete-)<br>
+[DELETE : MFA Reset Authenticator by Token](#MFAResetAuthenticatorByToken-delete-)<br>
 [DELETE : MFA Reset SMS Authenticator by Token](#MFAResetSMSAuthByToken-delete-)<br>
 [DELETE : Reset MFA Email OTP Authenticator By Access Token](#MFAResetEmailOtpAuthenticatorByAccessToken-delete-)<br>
 [DELETE : MFA Reset Security Question Authenticator By Access Token](#MFAResetSecurityQuestionAuthenticatorByAccessToken-delete-)<br>
 [DELETE : MFA Reset SMS Authenticator By UID](#MFAResetSMSAuthenticatorByUid-delete-)<br>
-[DELETE : MFA Reset Google Authenticator By UID](#MFAResetGoogleAuthenticatorByUid-delete-)<br>
+[DELETE : MFA Reset Authenticator By UID](#MFAResetAuthenticatorByUid-delete-)<br>
 [DELETE : Reset MFA Email OTP Authenticator Settings by Uid](#MFAResetEmailOtpAuthenticatorByUid-delete-)<br>
 [DELETE : Reset MFA Security Question Authenticator Settings by Uid](#MFAResetSecurityQuestionAuthenticatorByUid-delete-)<br>
 
@@ -1817,24 +1899,6 @@ $result = $multiFactorAuthenticationAPI->mfaUpdateSetting($access_token,$payload
  ```
 
  
-<h6 id="MFAUpdateByAccessToken-put-">Update MFA by Access Token (PUT)</h6> 
-
-This API is used to Enable Multi-factor authentication by access token on user login
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/google-authenticator/update-mfa-by-access-token/)
-
- ```php
- 
-$access_token = "access_token"; //Required
- $payload = '{
-"googleAuthenticatorCode" : "<googleAuthenticatorCode>"
-}';  //Required 
-$fields = null; //Optional 
-$smsTemplate = "smsTemplate"; //Optional
- 
-$result = $multiFactorAuthenticationAPI->mfaUpdateByAccessToken($access_token,$payload,$fields,$smsTemplate);
- ```
-
- 
 <h6 id="MFAUpdatePhoneNumberByToken-put-">MFA Update Phone Number by Token (PUT)</h6> 
 
 This API is used to update the Multi-factor authentication phone number by sending the verification OTP to the provided phone number
@@ -1844,9 +1908,11 @@ This API is used to update the Multi-factor authentication phone number by sendi
  
 $access_token = "access_token"; //Required 
 $phoneNo2FA = "phoneNo2FA"; //Required 
-$smsTemplate2FA = "smsTemplate2FA"; //Optional
- 
-$result = $multiFactorAuthenticationAPI->mfaUpdatePhoneNumberByToken($access_token,$phoneNo2FA,$smsTemplate2FA);
+$smsTemplate2FA = "smsTemplate2FA"; //Optional 
+$isVoiceOtp = false; //Optional
+$options = "options"; //Optional 
+
+$result = $multiFactorAuthenticationAPI->mfaUpdatePhoneNumberByToken($access_token,$phoneNo2FA,$smsTemplate2FA,$isVoiceOtp,$options);
  ```
 
  
@@ -1910,24 +1976,6 @@ $rbaIpEmailTemplate = "rbaIpEmailTemplate"; //Optional
 $result = $multiFactorAuthenticationAPI->mfaValidateOTPByPhone($payload,$secondFactorAuthenticationToken,$fields,$smsTemplate2FA,$rbaBrowserEmailTemplate,$rbaCityEmailTemplate,$rbaCountryEmailTemplate,$rbaIpEmailTemplate);
  ```
 
- 
-<h6 id="MFAValidateGoogleAuthCode-put-">MFA Validate Google Auth Code (PUT)</h6> 
-
-This API is used to login via Multi-factor-authentication by passing the google authenticator code.
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/google-authenticator/mfa-validate-google-auth-code/)
-
- ```php
- 
-$googleAuthenticatorCode = "googleAuthenticatorCode"; //Required 
-$secondFactorAuthenticationToken = "secondFactorAuthenticationToken"; //Required 
-$fields = null; //Optional 
-$rbaBrowserEmailTemplate = "rbaBrowserEmailTemplate"; //Optional 
-$rbaCityEmailTemplate = "rbaCityEmailTemplate"; //Optional 
-$rbaCountryEmailTemplate = "rbaCountryEmailTemplate"; //Optional 
-$rbaIpEmailTemplate = "rbaIpEmailTemplate"; //Optional
- 
-$result = $multiFactorAuthenticationAPI->mfaValidateGoogleAuthCode($googleAuthenticatorCode,$secondFactorAuthenticationToken,$fields,$rbaBrowserEmailTemplate,$rbaCityEmailTemplate,$rbaCountryEmailTemplate,$rbaIpEmailTemplate);
- ```
 
  
 <h6 id="MFAValidateBackupCode-put-">MFA Validate Backup code (PUT)</h6> 
@@ -1960,9 +2008,12 @@ This API is used to update (if configured) the phone number used for Multi-facto
  
 $phoneNo2FA = "phoneNo2FA"; //Required 
 $secondFactorAuthenticationToken = "secondFactorAuthenticationToken"; //Required 
-$smsTemplate2FA = "smsTemplate2FA"; //Optional
+$smsTemplate2FA = "smsTemplate2FA"; //Optional 
+$isVoiceOtp = false; //Optional
+$options = "options"; //Optional 
+
  
-$result = $multiFactorAuthenticationAPI->mfaUpdatePhoneNumber($phoneNo2FA,$secondFactorAuthenticationToken,$smsTemplate2FA);
+$result = $multiFactorAuthenticationAPI->mfaUpdatePhoneNumber($phoneNo2FA,$secondFactorAuthenticationToken,$smsTemplate2FA,$isVoiceOtp,$options);
  ```
 
  
@@ -2008,6 +2059,38 @@ $secondFactorAuthenticationToken = "secondFactorAuthenticationToken"; //Required
 $result = $multiFactorAuthenticationAPI->mfaSecurityQuestionAnswer($payload,$secondFactorAuthenticationToken);
  ```
 
+<h6 id="MFAValidateAuthenticatorCode-put-">MFA Validate Authenticator Code (PUT)</h6>
+
+
+ This API is used to login to a user's account during the second MFA step with an Authenticator Code. [More info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/authenticator/mfa-validate-authenticator-code/)
+
+
+ ```php
+
+$payload = '{ 
+"authenticatorCode" : "<authenticatorCode>"
+}';  //Required 
+$secondfactorauthenticationtoken = "secondfactorauthenticationtoken"; //Required 
+$fields = null; //Optional
+ 
+$result = $multiFactorAuthenticationAPI->mfaValidateAuthenticatorCode($payload,$secondfactorauthenticationtoken,$fields);
+ ```
+
+<h6 id="MFAVerifyAuthenticatorCode-put-">MFA Verify Authenticator Code (PUT)</h6>
+
+ This API is used to validate an Authenticator Code as part of the MFA process. [More info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/authenticator/mfa-verify-authenticator-code/)
+
+
+ ```php
+ 
+$access_token = "access_token"; //Required
+ $payload = '{
+"authenticatorCode" : "<authenticatorCode>"
+}';  //Required 
+$fields = null; //Optional
+ 
+$result = $multiFactorAuthenticationAPI->mfaVerifyAuthenticatorCode($access_token,$payload,$fields);
+ ```
  
 <h6 id="MFALoginByEmail-post-">MFA Email Login (POST)</h6> 
 
@@ -2023,10 +2106,12 @@ $fields = null; //Optional
 $loginUrl = "loginUrl"; //Optional 
 $smsTemplate = "smsTemplate"; //Optional 
 $smsTemplate2FA = "smsTemplate2FA"; //Optional 
-$verificationUrl = "verificationUrl"; //Optional
+$verificationUrl = "verificationUrl"; //Optional 
 $emailTemplate2FA = "emailTemplate2FA"; //Optional 
- 
-$result = $multiFactorAuthenticationAPI->mfaLoginByEmail($email,$password,$emailTemplate,$fields,$loginUrl,$smsTemplate,$smsTemplate2FA,$verificationUrl,$emailTemplate2FA);
+$isVoiceOtp = false; //Optional
+$options = "options"; //Optional 
+
+$result = $multiFactorAuthenticationAPI->mfaLoginByEmail($email,$password,$emailTemplate,$fields,$loginUrl,$smsTemplate,$smsTemplate2FA,$verificationUrl,$emailTemplate2FA,$isVoiceOtp,$options);
  ```
 
  
@@ -2044,10 +2129,11 @@ $fields = null; //Optional
 $loginUrl = "loginUrl"; //Optional 
 $smsTemplate = "smsTemplate"; //Optional 
 $smsTemplate2FA = "smsTemplate2FA"; //Optional 
-$verificationUrl = "verificationUrl"; //Optional
+$verificationUrl = "verificationUrl"; //Optional 
 $emailTemplate2FA = "emailTemplate2FA"; //Optional 
-
-$result = $multiFactorAuthenticationAPI->mfaLoginByUserName($password,$username,$emailTemplate,$fields,$loginUrl,$smsTemplate,$smsTemplate2FA,$verificationUrl,$emailTemplate2FA);
+$isVoiceOtp = false; //Optional
+ 
+$result = $multiFactorAuthenticationAPI->mfaLoginByUserName($password,$username,$emailTemplate,$fields,$loginUrl,$smsTemplate,$smsTemplate2FA,$verificationUrl,$emailTemplate2FA,$isVoiceOtp);
  ```
 
  
@@ -2065,10 +2151,12 @@ $fields = null; //Optional
 $loginUrl = "loginUrl"; //Optional 
 $smsTemplate = "smsTemplate"; //Optional 
 $smsTemplate2FA = "smsTemplate2FA"; //Optional 
-$verificationUrl = "verificationUrl"; //Optional
+$verificationUrl = "verificationUrl"; //Optional 
 $emailTemplate2FA = "emailTemplate2FA"; //Optional 
- 
-$result = $multiFactorAuthenticationAPI->mfaLoginByPhone($password,$phone,$emailTemplate,$fields,$loginUrl,$smsTemplate,$smsTemplate2FA,$verificationUrl,$emailTemplate2FA);
+$isVoiceOtp = false; //Optional
+$options = "options"; //Optional 
+
+$result = $multiFactorAuthenticationAPI->mfaLoginByPhone($password,$phone,$emailTemplate,$fields,$loginUrl,$smsTemplate,$smsTemplate2FA,$verificationUrl,$emailTemplate2FA,$isVoiceOtp,$options);
  ```
 
  
@@ -2122,9 +2210,9 @@ This API is used to configure the Multi-factor authentication after login by usi
  ```php
  
 $access_token = "access_token"; //Required 
-$smsTemplate2FA = "smsTemplate2FA"; //Optional
+$isVoiceOtp = false; //Optional
  
-$result = $multiFactorAuthenticationAPI->mfaConfigureByAccessToken($access_token,$smsTemplate2FA);
+$result = $multiFactorAuthenticationAPI->mfaConfigureByAccessToken($access_token,$isVoiceOtp);
  ```
 
  
@@ -2177,9 +2265,10 @@ This API is used to resending the verification OTP to the provided phone number
  ```php
  
 $secondFactorAuthenticationToken = "secondFactorAuthenticationToken"; //Required 
-$smsTemplate2FA = "smsTemplate2FA"; //Optional
+$smsTemplate2FA = "smsTemplate2FA"; //Optional 
+$isVoiceOtp = false; //Optional
  
-$result = $multiFactorAuthenticationAPI->mfaResendOTP($secondFactorAuthenticationToken,$smsTemplate2FA);
+$result = $multiFactorAuthenticationAPI->mfaResendOTP($secondFactorAuthenticationToken,$smsTemplate2FA,$isVoiceOtp);
  ```
 
  
@@ -2208,18 +2297,16 @@ $uid = "uid"; //Required
 $result = $multiFactorAuthenticationAPI->mfaResetBackupCodeByUid($uid);
  ```
 
- 
-<h6 id="MFAResetGoogleAuthByToken-delete-">MFA Reset Google Authenticator by Token (DELETE)</h6> 
+<h6 id="MFAResetAuthenticatorByToken-delete-">MFA Reset Authenticator by Token (DELETE)</h6>
 
-This API Resets the Google Authenticator configurations on a given account via the access token
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/google-authenticator/mfa-reset-google-authenticator-by-token/)
+ This API Resets the Authenticator configurations on a given account via the access_token. [More info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/authenticator/mfa-reset-authenticator-by-token/)
 
  ```php
  
 $access_token = "access_token"; //Required 
-$googleauthenticator = "true"; //Required
+$authenticator = true; //Required
  
-$result = $multiFactorAuthenticationAPI->mfaResetGoogleAuthByToken($access_token,$googleauthenticator);
+$result = $multiFactorAuthenticationAPI->mfaResetAuthenticatorByToken($access_token,$authenticator);
  ```
 
  
@@ -2231,7 +2318,7 @@ This API resets the SMS Authenticator configurations on a given account via the 
  ```php
  
 $access_token = "access_token"; //Required 
-$otpauthenticator = "true"; //Required
+$otpauthenticator = true; //Required
  
 $result = $multiFactorAuthenticationAPI->mfaResetSMSAuthByToken($access_token,$otpauthenticator);
  ```
@@ -2270,25 +2357,25 @@ This API resets the SMS Authenticator configurations on a given account via the 
 
  ```php
  
-$otpauthenticator = "true"; //Required 
+$otpauthenticator = true; //Required 
 $uid = "uid"; //Required
  
 $result = $multiFactorAuthenticationAPI->mfaResetSMSAuthenticatorByUid($otpauthenticator,$uid);
  ```
 
- 
-<h6 id="MFAResetGoogleAuthenticatorByUid-delete-">MFA Reset Google Authenticator By UID (DELETE)</h6> 
 
-This API resets the Google Authenticator configurations on a given account via the UID.
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/google-authenticator/mfa-reset-google-authenticator-by-uid/)
+ <h6 id="MFAResetAuthenticatorByUid-delete-">MFA Reset Authenticator By UID (DELETE)</h6>
+
+ This API resets the Authenticator configurations on a given account via the UID. [More info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/authenticator/mfa-reset-authenticator-by-uid/)
 
  ```php
  
-$googleauthenticator = "true"; //Required 
+$authenticator = true; //Required 
 $uid = "uid"; //Required
  
-$result = $multiFactorAuthenticationAPI->mfaResetGoogleAuthenticatorByUid($googleauthenticator,$uid);
+$result = $multiFactorAuthenticationAPI->mfaResetAuthenticatorByUid($authenticator,$uid);
  ```
+
 
  
 <h6 id="MFAResetEmailOtpAuthenticatorByUid-delete-">Reset MFA Email OTP Authenticator Settings by Uid (DELETE)</h6> 
@@ -2535,9 +2622,10 @@ This API sends the OTP to specified phone number
  $payload = '{
 "phone" : "<phone>"
 }';  //Required 
-$smsTemplate = "smsTemplate"; //Optional
+$smsTemplate = "smsTemplate"; //Optional 
+$isVoiceOtp = false; //Optional
  
-$result = $pinAuthenticationAPI->sendForgotPINSMSByPhone($payload,$smsTemplate);
+$result = $pinAuthenticationAPI->sendForgotPINSMSByPhone($payload,$smsTemplate,$isVoiceOtp);
  ```
 
  
@@ -2578,10 +2666,10 @@ $result = $pinAuthenticationAPI->inValidatePinSessionToken($session_token);
 List of APIs in this Section:<br>
 [PUT : Validate MFA by OTP](#MFAReAuthenticateByOTP-put-)<br>
 [PUT : Validate MFA by Backup Code](#MFAReAuthenticateByBackupCode-put-)<br>
-[PUT : Validate MFA by Google Authenticator Code](#MFAReAuthenticateByGoogleAuth-put-)<br>
 [PUT : Validate MFA by Password](#MFAReAuthenticateByPassword-put-)<br>
 [PUT : MFA Re-authentication by PIN](#VerifyPINAuthentication-put-)<br>
 [PUT : MFA Re-authentication by Email OTP](#ReAuthValidateEmailOtp-put-)<br>
+[PUT : MFA Step-Up Authentication by Authenticator Code](#MFAReAuthenticateByAuthenticatorCode-put-)<br>
 [POST : Verify Multifactor OTP Authentication](#VerifyMultiFactorOtpReauthentication-post-)<br>
 [POST : Verify Multifactor Password Authentication](#VerifyMultiFactorPasswordReauthentication-post-)<br>
 [POST : Verify Multifactor PIN Authentication](#VerifyMultiFactorPINReauthentication-post-)<br>
@@ -2626,21 +2714,6 @@ $access_token = "access_token"; //Required
 $result = $reAuthenticationAPI->mfaReAuthenticateByBackupCode($access_token,$payload);
  ```
 
- 
-<h6 id="MFAReAuthenticateByGoogleAuth-put-">Validate MFA by Google Authenticator Code (PUT)</h6> 
-
-This API is used to re-authenticate via Multi-factor-authentication by passing the google authenticator code
- [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/multi-factor-authentication/re-authentication/re-auth-by-google-authenticator-code)
-
- ```php
- 
-$access_token = "access_token"; //Required
- $payload = '{
-"googleAuthenticatorCode" : "<googleAuthenticatorCode>"
-}';  //Required
- 
-$result = $reAuthenticationAPI->mfaReAuthenticateByGoogleAuth($access_token,$payload);
- ```
 
  
 <h6 id="MFAReAuthenticateByPassword-put-">Validate MFA by Password (PUT)</h6> 
@@ -2691,6 +2764,21 @@ $access_token = "access_token"; //Required
 }';  //Required
  
 $result = $reAuthenticationAPI->reAuthValidateEmailOtp($access_token,$payload);
+ ```
+
+ <h6 id="MFAReAuthenticateByAuthenticatorCode-put-">MFA Step-Up Authentication by Authenticator Code (PUT)</h6>
+
+ This API is used to validate the triggered MFA authentication flow with the Authenticator Code. [More info](https://www.loginradius.com/docs/api/v2/customer-identity-api/re-authentication/mfa/re-auth-by-otp/)
+
+
+ ```php
+ 
+$access_token = "access_token"; //Required
+$payload = '{ 
+    "authenticatorCode" : "<authenticatorCode>"
+}';  //Required
+ 
+$result = $reAuthenticationAPI->mfaReAuthenticateByAuthenticatorCode($access_token,$payload);
  ```
 
  
@@ -2771,9 +2859,10 @@ This API is used to trigger the Multi-Factor Autentication workflow for the prov
  ```php
  
 $access_token = "access_token"; //Required 
-$smsTemplate2FA = "smsTemplate2FA"; //Optional
+$smsTemplate2FA = "smsTemplate2FA"; //Optional 
+$isVoiceOtp = false; //Optional
  
-$result = $reAuthenticationAPI->mfaReAuthenticate($access_token,$smsTemplate2FA);
+$result = $reAuthenticationAPI->mfaReAuthenticate($access_token,$smsTemplate2FA,$isVoiceOtp);
  ```
 
  
@@ -2911,7 +3000,7 @@ This API is used to check if consent is submitted for a particular event or not.
  
 $access_token = "access_token"; //Required 
 $event = "event"; //Required 
-$isCustom = "true"; //Required
+$isCustom = true; //Required
  
 $result = $consentManagementAPI->verifyConsentByAccessToken($access_token,$event,$isCustom);
  ```
@@ -3061,9 +3150,10 @@ This API is used to send one time password to a given phone number for a frictio
 "g-recaptcha-response" : "<g-recaptcha-response>",
 "phone" : "<phone>"
 }';  //Required 
-$smsTemplate = "smsTemplate"; //Optional
+$smsTemplate = "smsTemplate"; //Optional 
+$isVoiceOtp = false; //Optional
  
-$result = $oneTouchLoginAPI->oneTouchLoginByPhone($payload,$smsTemplate);
+$result = $oneTouchLoginAPI->oneTouchLoginByPhone($payload,$smsTemplate,$isVoiceOtp);
  ```
 
  
@@ -3127,9 +3217,10 @@ This API verifies an account by OTP and allows the customer to login.
 "phone" : "<phone>"
 }';  //Required 
 $fields = null; //Optional 
-$smsTemplate = "smsTemplate"; //Optional
+$smsTemplate = "smsTemplate"; //Optional 
+$isVoiceOtp = false; //Optional
  
-$result = $passwordLessLoginAPI->passwordlessLoginPhoneVerification($payload,$fields,$smsTemplate);
+$result = $passwordLessLoginAPI->passwordlessLoginPhoneVerification($payload,$fields,$smsTemplate,$isVoiceOtp);
  ```
 
  
@@ -3179,9 +3270,10 @@ API can be used to send a One-time Passcode (OTP) provided that the account has 
  ```php
  
 $phone = "phone"; //Required 
-$smsTemplate = "smsTemplate"; //Optional
+$smsTemplate = "smsTemplate"; //Optional 
+$isVoiceOtp = false; //Optional
  
-$result = $passwordLessLoginAPI->passwordlessLoginByPhone($phone,$smsTemplate);
+$result = $passwordLessLoginAPI->passwordlessLoginByPhone($phone,$smsTemplate,$isVoiceOtp);
  ```
 
  
@@ -3533,7 +3625,7 @@ This API retrieves a copy of the user data based on the Email
 $emailTemplate = "emailTemplate"; //Optional 
 $fields = null; //Optional 
 $loginUrl = "loginUrl"; //Optional 
-$passwordDelegation = "true"; //Optional 
+$passwordDelegation = true; //Optional 
 $passwordDelegationApp = "passwordDelegationApp"; //Optional 
 $rbaBrowserEmailTemplate = "rbaBrowserEmailTemplate"; //Optional 
 $rbaBrowserSmsTemplate = "rbaBrowserSmsTemplate"; //Optional 
@@ -3566,7 +3658,7 @@ This API retrieves a copy of the user data based on the Username
 $emailTemplate = "emailTemplate"; //Optional 
 $fields = null; //Optional 
 $loginUrl = "loginUrl"; //Optional 
-$passwordDelegation = "true"; //Optional 
+$passwordDelegation = true; //Optional 
 $passwordDelegationApp = "passwordDelegationApp"; //Optional 
 $rbaBrowserEmailTemplate = "rbaBrowserEmailTemplate"; //Optional 
 $rbaBrowserSmsTemplate = "rbaBrowserSmsTemplate"; //Optional 
@@ -3599,7 +3691,7 @@ This API retrieves a copy of the user data based on the Phone
 $emailTemplate = "emailTemplate"; //Optional 
 $fields = null; //Optional 
 $loginUrl = "loginUrl"; //Optional 
-$passwordDelegation = "true"; //Optional 
+$passwordDelegation = true; //Optional 
 $passwordDelegationApp = "passwordDelegationApp"; //Optional 
 $rbaBrowserEmailTemplate = "rbaBrowserEmailTemplate"; //Optional 
 $rbaBrowserSmsTemplate = "rbaBrowserSmsTemplate"; //Optional 
@@ -3651,6 +3743,7 @@ $result = $sottAPI->generateSott($timeDifference);
 ### NativeSocial API
 
 List of APIs in this Section:<br>
+[GET : Get Access Token via Custom JWT Token](#AccessTokenViaCustomJWTToken-get-)<br>
 [GET : Access Token via Facebook Token](#GetAccessTokenByFacebookAccessToken-get-)<br>
 [GET : Access Token via Twitter Token](#GetAccessTokenByTwitterAccessToken-get-)<br>
 [GET : Access Token via Google Token](#GetAccessTokenByGoogleAccessToken-get-)<br>
@@ -3666,6 +3759,18 @@ If you have not already initialized the NativeSocial object do so now
 $nativeSocialAPI = new NativeSocialAPI(); 
 ```
 
+<h6 id="AccessTokenViaCustomJWTToken-get-">Get Access Token via Custom JWT Token (GET)</h6>
+
+ This API is used to retrieve a LoginRadius access token by passing in a valid custom JWT token. [More info](https://www.loginradius.com/docs/api/v2/customer-identity-api/social-login/native-social-login-api/access-token-by-custom-jwt-token/)
+
+
+ ```php
+ 
+$id_Token = "id_Token"; //Required 
+$providername = "providername"; //Required
+ 
+$result = $nativeSocialAPI->accessTokenViaCustomJWTToken($id_Token,$providername);
+ ```
 
 <h6 id="GetAccessTokenByFacebookAccessToken-get-">Access Token via Facebook Token (GET)</h6> 
 
@@ -3866,6 +3971,33 @@ API can be used to unsubscribe a WebHook configured on your LoginRadius site.
 $result = $webHookAPI->webHookUnsubscribe($payload);
  ```
 
+
+### SlidingToken API
+
+
+List of APIs in this Section:<br>
+[GET : Get Sliding Access Token](#SlidingAccessToken-get-)<br>
+
+
+If you have not already initialized the SlidingToken object do so now
+```php
+$slidingTokenAPI = new SlidingTokenAPI(); 
+```
+
+
+<h6 id="SlidingAccessToken-get-"> (GET)</h6>
+
+ This API is used to get access token and refresh token with the expired/nonexpired access token. [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/refresh-token/sliding-access-token)
+
+
+
+```php
+
+$access_token = "access_token"; //Required
+ 
+$result = $slidingTokenAPI->slidingAccessToken($access_token);
+
+```
 ### Generate SOTT Manually
 
 SOTT is a secure one-time token that can be created using the API key, API secret, and a timestamp ( start time and end time ). You can manually create a SOTT using the following utility function.

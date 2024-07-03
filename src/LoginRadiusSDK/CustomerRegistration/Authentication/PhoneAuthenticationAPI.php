@@ -28,12 +28,13 @@ class PhoneAuthenticationAPI extends Functions
      * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
      * @param loginUrl Url where the user is logging from
      * @param smsTemplate SMS Template name
+     * @param options 
      * @return Response containing User Profile Data and access token
      * 9.2.3
     */
 
     public function loginByPhone($phoneAuthenticationModel, $fields = "",
-        $loginUrl = null, $smsTemplate = null)
+        $loginUrl = null, $smsTemplate = null, $options = "")
     {
         $resourcePath = "/identity/v2/auth/login";
         $queryParam = [];
@@ -47,6 +48,9 @@ class PhoneAuthenticationAPI extends Functions
         if ($smsTemplate != '') {
             $queryParam['smsTemplate'] = $smsTemplate;
         }
+        if ($options != '') {
+            $queryParam['options'] = $options;
+        }
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $phoneAuthenticationModel);
     }
        
@@ -56,11 +60,13 @@ class PhoneAuthenticationAPI extends Functions
      * This API is used to send the OTP to reset the account password.
      * @param phone New Phone Number
      * @param smsTemplate SMS Template name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response Containing Validation Data and SMS Data
      * 10.4
     */
 
-    public function forgotPasswordByPhoneOTP($phone, $smsTemplate = null)
+    public function forgotPasswordByPhoneOTP($phone, $smsTemplate = null,
+        $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/password/otp";
         $bodyParam = [];
@@ -69,6 +75,9 @@ class PhoneAuthenticationAPI extends Functions
         $queryParam['apiKey'] = Functions::getApiKey();
         if ($smsTemplate != '') {
             $queryParam['smsTemplate'] = $smsTemplate;
+        }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
         }
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, json_encode($bodyParam));
     }
@@ -98,12 +107,13 @@ class PhoneAuthenticationAPI extends Functions
      * @param phone New Phone Number
      * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
      * @param smsTemplate SMS Template name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response containing User Profile Data and access token
      * 11.1.1
     */
 
     public function phoneVerificationByOTP($otp, $phone,
-        $fields = "", $smsTemplate = null)
+        $fields = "", $smsTemplate = null, $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/phone/otp";
         $bodyParam = [];
@@ -119,6 +129,9 @@ class PhoneAuthenticationAPI extends Functions
         if ($smsTemplate != '') {
             $queryParam['smsTemplate'] = $smsTemplate;
         }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
+        }
         $queryParam['otp'] = $otp;
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, json_encode($bodyParam));
     }
@@ -130,12 +143,13 @@ class PhoneAuthenticationAPI extends Functions
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @param otp The Verification Code
      * @param smsTemplate SMS Template name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response containing Definition of Complete Validation data
      * 11.1.2
     */
 
     public function phoneVerificationOTPByAccessToken($accessToken, $otp,
-        $smsTemplate = null)
+        $smsTemplate = null, $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/phone/otp";
         $queryParam = [];
@@ -149,6 +163,9 @@ class PhoneAuthenticationAPI extends Functions
         if ($smsTemplate != '') {
             $queryParam['smsTemplate'] = $smsTemplate;
         }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
+        }
         $queryParam['access_token'] = $accessToken;
         $queryParam['otp'] = $otp;
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam);
@@ -160,11 +177,13 @@ class PhoneAuthenticationAPI extends Functions
      * This API is used to resend a verification OTP to verify a user's Phone Number. The user will receive a verification code that they will need to input
      * @param phone New Phone Number
      * @param smsTemplate SMS Template name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response Containing Validation Data and SMS Data
      * 11.2.1
     */
 
-    public function phoneResendVerificationOTP($phone, $smsTemplate = null)
+    public function phoneResendVerificationOTP($phone, $smsTemplate = null,
+        $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/phone/otp";
         $bodyParam = [];
@@ -173,6 +192,9 @@ class PhoneAuthenticationAPI extends Functions
         $queryParam['apiKey'] = Functions::getApiKey();
         if ($smsTemplate != '') {
             $queryParam['smsTemplate'] = $smsTemplate;
+        }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
         }
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, json_encode($bodyParam));
     }
@@ -184,12 +206,13 @@ class PhoneAuthenticationAPI extends Functions
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @param phone New Phone Number
      * @param smsTemplate SMS Template name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response Containing Validation Data and SMS Data
      * 11.2.2
     */
 
     public function phoneResendVerificationOTPByToken($accessToken, $phone,
-        $smsTemplate = null)
+        $smsTemplate = null, $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/phone/otp";
         $bodyParam = [];
@@ -201,6 +224,9 @@ class PhoneAuthenticationAPI extends Functions
         $queryParam['apiKey'] = Functions::getApiKey();
         if ($smsTemplate != '') {
             $queryParam['smsTemplate'] = $smsTemplate;
+        }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
         }
         $queryParam['access_token'] = $accessToken;
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, json_encode($bodyParam));
@@ -213,12 +239,13 @@ class PhoneAuthenticationAPI extends Functions
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @param phone New Phone Number
      * @param smsTemplate SMS Template name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response Containing Validation Data and SMS Data
      * 11.5
     */
 
     public function updatePhoneNumber($accessToken, $phone,
-        $smsTemplate = null)
+        $smsTemplate = null, $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/phone";
         $bodyParam = [];
@@ -230,6 +257,9 @@ class PhoneAuthenticationAPI extends Functions
         $queryParam['apiKey'] = Functions::getApiKey();
         if ($smsTemplate != '') {
             $queryParam['smsTemplate'] = $smsTemplate;
+        }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
         }
         $queryParam['access_token'] = $accessToken;
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, json_encode($bodyParam));
@@ -288,14 +318,16 @@ class PhoneAuthenticationAPI extends Functions
      * @param smsTemplate SMS Template name
      * @param verificationUrl Email verification url
      * @param welcomeEmailTemplate Name of the welcome email template
-     * @param emailTemplate Name of the email template
+     * @param emailTemplate 
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response containing Definition of Complete Validation, UserProfile data and Access Token
      * 17.1.2
     */
 
     public function userRegistrationByPhone($authUserRegistrationModel, $sott,
         $fields = "", $options = "", $smsTemplate = null,
-        $verificationUrl = null, $welcomeEmailTemplate = null,$emailTemplate = null)
+        $verificationUrl = null, $welcomeEmailTemplate = null,$emailTemplate = null,
+        $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/register";
         $queryParam = [];
@@ -312,14 +344,17 @@ class PhoneAuthenticationAPI extends Functions
         if ($smsTemplate != '') {
             $queryParam['smsTemplate'] = $smsTemplate;
         }
-        if ($emailTemplate != '') {
-            $queryParam['emailTemplate'] = $emailTemplate;
-        }
         if ($verificationUrl != '') {
             $queryParam['verificationUrl'] = $verificationUrl;
         }
         if ($welcomeEmailTemplate != '') {
             $queryParam['welcomeEmailTemplate'] = $welcomeEmailTemplate;
+        }
+        if ($emailTemplate != '') {
+            $queryParam['emailTemplate'] = $emailTemplate;
+        }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
         }
         $queryParam['sott'] = $sott;
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $authUserRegistrationModel);

@@ -1,6 +1,61 @@
 > **LoginRadius PHP SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://www.loginradius.com/docs/api/v2/deployment/sdk-libraries/php-library/)
 
 
+# Version 11.6.0
+
+Release on **July 03, 2024**
+
+## Added following APIs:
+- `MFAValidateAuthenticatorCode`
+- `MFAVerifyAuthenticatorCode`
+- `RevokeAllRefreshToken `
+- `MultipurposeEmailTokenGeneration`
+- `MultipurposeSMSOTPGeneration`
+- `MFAReAuthenticateByAuthenticatorCode`
+- `AuthSendVerificationEmailForLinkingSocialProfiles `
+- `SlidingAccessToken`
+- `AccessTokenViaCustomJWTToken`
+- `MFAResetAuthenticatorByToken`
+- `MFAResetAuthenticatorByUid`
+
+## Enhancements
+- Added `isVoiceOtp` parameter in `ResetPhoneIDVerificationByUid` API
+- Added `isVoiceOtp` parameter in `MFAConfigureByAccessToken` API
+- Added `isVoiceOtp` and `options` parameter in `MFAUpdatePhoneNumberByToken` API
+- Added `isVoiceOtp`, `emailTemplate2FA` and `options` parameter in `MFALoginByEmail` API
+- Added `isVoiceOtp` and `emailTemplate2FA` parameter in `MFALoginByUserName` API
+- Added `isVoiceOtp` , `emailTemplate2FA` and `options` parameter in `MFALoginByPhone` API
+- Added `isVoiceOtp` and `options` parameter in `MFAUpdatePhoneNumber` API
+- Added `isVoiceOtp` parameter in `MFAResendOTP` API
+- Added `isVoiceOtp` parameter in `MFAReAuthenticate` API
+- Added `isVoiceOtp` and `options` parameter in `UpdateProfileByAccessToken` API
+- Added `isVoiceOtp` parameter in `UserRegistrationByEmail` API
+- Added `isVoiceOtp` parameter in `UserRegistrationByCaptcha` API
+- Added `isVoiceOtp` parameter in `OneTouchLoginByPhone` API
+- Added `isVoiceOtp` parameter in `PasswordlessLoginPhoneVerification` API
+- Added `isVoiceOtp` parameter in `PasswordlessLoginByPhone` API
+- Added `isVoiceOtp` parameter in `ForgotPasswordByPhoneOTP` API
+- Added `isVoiceOtp` parameter in `PhoneVerificationByOTP` API
+- Added `isVoiceOtp` parameter in `PhoneVerificationOTPByAccessToken` API
+- Added `isVoiceOtp` parameter in `PhoneResendVerificationOTP` API
+- Added `isVoiceOtp` parameter in `UpdatePhoneNumber` API
+- Added `isVoiceOtp` and `emailTemplate` parameter in `UserRegistrationByPhone` API
+- Added `isVoiceOtp` parameter in `SendForgotPINSMSByPhone` API
+- Added `uuid` parameter in `VerifyEmail` API
+
+## Removed the following parameter
+
+-`smsTemplate2FA` parameter in `MFAConfigureByAccessToken` API
+
+
+
+## Removed (Deprecated) APIs:
+- `MFAValidateGoogleAuthCode`
+- `MFAReAuthenticateByGoogleAuth`
+- `MFAResetGoogleAuthByToken `
+- `MFAResetGoogleAuthenticatorByUid`
+- `MFAUpdateByAccessToken`
+
 # Version 11.5.0
 
 Release on **January 20, 2023**

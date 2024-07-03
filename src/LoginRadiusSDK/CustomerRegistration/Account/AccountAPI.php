@@ -379,11 +379,13 @@ class AccountAPI extends Functions
      * This API Allows you to reset the phone no verification of an end user’s account.
      * @param uid UID, the unified identifier for each user account
      * @param smsTemplate SMS Template name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response containing Definition of Complete Validation data
      * 18.27
     */
 
-    public function resetPhoneIDVerificationByUid($uid, $smsTemplate = "")
+    public function resetPhoneIDVerificationByUid($uid, $smsTemplate = "",
+        $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/manage/account/$uid/invalidatephone";
         $queryParam = [];
@@ -391,6 +393,9 @@ class AccountAPI extends Functions
         $queryParam['apiSecret'] = Functions::getApiSecret();
         if ($smsTemplate != '') {
             $queryParam['smsTemplate'] = $smsTemplate;
+        }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
         }
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam);
     }
@@ -492,6 +497,43 @@ class AccountAPI extends Functions
 
 
     /**
+     * The Revoke All Refresh Access Token API is used to revoke all refresh tokens for a specific user.
+     * @param uid UID, the unified identifier for each user account
+     * @return Response containing Definition of Delete Request
+     * 18.33
+    */
+
+    public function revokeAllRefreshToken($uid)
+    {
+        $resourcePath = "/identity/v2/manage/account/$uid/access_token/refresh/revoke";
+        $queryParam = [];
+        $queryParam['apiKey'] = Functions::getApiKey();
+        $queryParam['apiSecret'] = Functions::getApiSecret();
+        return Functions::_apiClientHandler('DELETE', $resourcePath, $queryParam);
+    }
+       
+
+
+    /**
+     * This API generate Email tokens and Email OTPs for Email verification, Add email, Forgot password, Delete user, Passwordless login, Forgot pin, One-touch login and Auto login.
+     * @param multiEmailToken Model Class containing Definition of payload for Multipurpose Email Token Generation API
+     * @param tokentype The identifier type for the token that we need to generate
+     * @return Response containing Definition for Complete MultiToken
+     * 18.34
+    */
+
+    public function multipurposeEmailTokenGeneration($multiEmailToken, $tokentype)
+    {
+        $resourcePath = "/identity/v2/manage/account/emailtoken/$tokentype";
+        $queryParam = [];
+        $queryParam['apiKey'] = Functions::getApiKey();
+        $queryParam['apiSecret'] = Functions::getApiSecret();
+        return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $multiEmailToken);
+    }
+       
+
+
+    /**
      * Note: This is intended for specific workflows where an email may be associated to multiple UIDs. This API is used to retrieve all of the identities (UID and Profiles), associated with a specified email in Cloud Storage.
      * @param email Email of the user
      * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
@@ -538,6 +580,23 @@ class AccountAPI extends Functions
     }
        
 
+
+    /**
+     * This API generates SMS OTP for Add phone, Phone Id verification, Forgot password, Forgot pin, One-touch login, smart login and Passwordless login.
+     * @param multiSmsOtp 
+     * @param smsotptype The identifier type for the OTP that we need to generate
+     * @return Response containing Definition for Complete MultiToken
+     * 18.44
+    */
+
+    public function multipurposeSMSOTPGeneration($multiSmsOtp, $smsotptype)
+    {
+        $resourcePath = "/identity/v2/manage/account/smsotp/$smsotptype";
+        $queryParam = [];
+        $queryParam['apiKey'] = Functions::getApiKey();
+        $queryParam['apiSecret'] = Functions::getApiSecret();
+        return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $multiSmsOtp);
+    }
 
     /**
      * This API is used to update a user's Uid. It will update all profiles, custom objects and consent management logs associated with the Uid.

@@ -25,12 +25,12 @@ class MultiFactorAuthenticationAPI extends Functions
     /**
      * This API is used to configure the Multi-factor authentication after login by using the access token when MFA is set as optional on the LoginRadius site.
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
-     * @param smsTemplate2FA SMS Template Name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response containing Definition of Complete Multi-Factor Authentication Settings data
      * 5.7
     */
 
-    public function mfaConfigureByAccessToken($accessToken, $smsTemplate2FA = null)
+    public function mfaConfigureByAccessToken($accessToken, $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/account/2fa";
         $queryParam = [];
@@ -38,8 +38,8 @@ class MultiFactorAuthenticationAPI extends Functions
             throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
         }
         $queryParam['apiKey'] = Functions::getApiKey();
-        if ($smsTemplate2FA != '') {
-            $queryParam['smsTemplate2FA'] = $smsTemplate2FA;
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
         }
         $queryParam['access_token'] = $accessToken;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
@@ -75,47 +75,18 @@ class MultiFactorAuthenticationAPI extends Functions
 
 
     /**
-     * This API is used to Enable Multi-factor authentication by access token on user login
-     * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
-     * @param multiFactorAuthModelByGoogleAuthenticatorCode Model Class containing Definition of payload for MultiFactorAuthModel By GoogleAuthenticator Code API
-     * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
-     * @param smsTemplate SMS Template name
-     * @return Response containing Definition for Complete profile data
-     * 5.10
-    */
-
-    public function mfaUpdateByAccessToken($accessToken, $multiFactorAuthModelByGoogleAuthenticatorCode,
-        $fields = "", $smsTemplate = null)
-    {
-        $resourcePath = "/identity/v2/auth/account/2fa/verification/googleauthenticatorcode";
-        $queryParam = [];
-        if ($accessToken === '' || ctype_space($accessToken)) {
-            throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
-        }
-        $queryParam['apiKey'] = Functions::getApiKey();
-        if ($fields != '') {
-            $queryParam['fields'] = $fields;
-        }
-        if ($smsTemplate != '') {
-            $queryParam['smsTemplate'] = $smsTemplate;
-        }
-        $queryParam['access_token'] = $accessToken;
-        return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $multiFactorAuthModelByGoogleAuthenticatorCode);
-    }
-       
-
-
-    /**
      * This API is used to update the Multi-factor authentication phone number by sending the verification OTP to the provided phone number
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @param phoneNo2FA Phone Number For 2FA
      * @param smsTemplate2FA SMS Template Name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
+     * @param options PreventVerificationEmail (Specifying this value prevents the verification email from being sent. Only applicable if you have the optional email verification flow)
      * @return Response containing Definition for Complete SMS data
      * 5.11
     */
 
     public function mfaUpdatePhoneNumberByToken($accessToken, $phoneNo2FA,
-        $smsTemplate2FA = null)
+        $smsTemplate2FA = null, $isVoiceOtp = false, $options = "")
     {
         $resourcePath = "/identity/v2/auth/account/2fa";
         $bodyParam = [];
@@ -128,6 +99,12 @@ class MultiFactorAuthenticationAPI extends Functions
         if ($smsTemplate2FA != '') {
             $queryParam['smsTemplate2FA'] = $smsTemplate2FA;
         }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
+        }
+        if ($options != '') {
+            $queryParam['options'] = $options;
+        }
         $queryParam['access_token'] = $accessToken;
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, json_encode($bodyParam));
     }
@@ -135,18 +112,18 @@ class MultiFactorAuthenticationAPI extends Functions
 
 
     /**
-     * This API Resets the Google Authenticator configurations on a given account via the access token
+     * This API Resets the Authenticator configurations on a given account via the access_token.
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
-     * @param googleauthenticator boolean type value,Enable google Authenticator Code.
+     * @param authenticator Pass true to remove Authenticator.
      * @return Response containing Definition of Delete Request
      * 5.12.1
     */
 
-    public function mfaResetGoogleAuthByToken($accessToken, $googleauthenticator)
+    public function mfaResetAuthenticatorByToken($accessToken, $authenticator)
     {
         $resourcePath = "/identity/v2/auth/account/2fa/authenticator";
         $bodyParam = [];
-        $bodyParam['googleauthenticator'] = $googleauthenticator;
+        $bodyParam['authenticator'] = $authenticator;
         $queryParam = [];
         if ($accessToken === '' || ctype_space($accessToken)) {
             throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
@@ -352,14 +329,16 @@ class MultiFactorAuthenticationAPI extends Functions
      * @param smsTemplate2FA SMS Template Name
      * @param verificationUrl Email verification url
      * @param emailTemplate2FA 2FA Email Template name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
+     * @param options PreventVerificationEmail (Specifying this value prevents the verification email from being sent. Only applicable if you have the optional email verification flow)
      * @return Complete user UserProfile data
      * 9.8.1
     */
 
     public function mfaLoginByEmail($email, $password,
         $emailTemplate = null, $fields = "",
-        $loginUrl = null, $smsTemplate = null, $smsTemplate2FA = null,
-        $verificationUrl = null, $emailTemplate2FA = null)
+        $loginUrl = null, $smsTemplate = null, $smsTemplate2FA = null, 
+        $verificationUrl = null, $emailTemplate2FA = null, $isVoiceOtp = false, $options = "")
     {
         $resourcePath = "/identity/v2/auth/login/2fa";
         $bodyParam = [];
@@ -388,6 +367,12 @@ class MultiFactorAuthenticationAPI extends Functions
         if ($emailTemplate2FA != '') {
             $queryParam['emailTemplate2FA'] = $emailTemplate2FA;
         }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
+        }
+        if ($options != '') {
+            $queryParam['options'] = $options;
+        }
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, json_encode($bodyParam));
     }
        
@@ -404,6 +389,7 @@ class MultiFactorAuthenticationAPI extends Functions
      * @param smsTemplate2FA SMS Template Name
      * @param verificationUrl Email verification url
      * @param emailTemplate2FA 2FA Email Template name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Complete user UserProfile data
      * 9.8.2
     */
@@ -411,7 +397,7 @@ class MultiFactorAuthenticationAPI extends Functions
     public function mfaLoginByUserName($password, $username,
         $emailTemplate = null, $fields = "",$loginUrl = null,
         $smsTemplate = null, $smsTemplate2FA = null,
-        $verificationUrl = null, $emailTemplate2FA = null)
+        $verificationUrl = null, $emailTemplate2FA = null, $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/login/2fa";
         $bodyParam = [];
@@ -440,6 +426,9 @@ class MultiFactorAuthenticationAPI extends Functions
         if ($emailTemplate2FA != '') {
             $queryParam['emailTemplate2FA'] = $emailTemplate2FA;
         }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
+        }
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, json_encode($bodyParam));
     }
        
@@ -456,6 +445,8 @@ class MultiFactorAuthenticationAPI extends Functions
      * @param smsTemplate2FA SMS Template Name
      * @param verificationUrl Email verification url
      * @param emailTemplate2FA 2FA Email Template name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
+     * @param options PreventVerificationEmail (Specifying this value prevents the verification email from being sent. Only applicable if you have the optional email verification flow)
      * @return Complete user UserProfile data
      * 9.8.3
     */
@@ -463,7 +454,7 @@ class MultiFactorAuthenticationAPI extends Functions
     public function mfaLoginByPhone($password, $phone,
         $emailTemplate = null, $fields = "",
         $loginUrl = null, $smsTemplate = null, $smsTemplate2FA = null,
-        $verificationUrl = null, $emailTemplate2FA = null)
+        $verificationUrl = null, $emailTemplate2FA = null, $isVoiceOtp = false, $options = "")
     {
         $resourcePath = "/identity/v2/auth/login/2fa";
         $bodyParam = [];
@@ -491,6 +482,12 @@ class MultiFactorAuthenticationAPI extends Functions
         }
         if ($emailTemplate2FA != '') {
             $queryParam['emailTemplate2FA'] = $emailTemplate2FA;
+        }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
+        }
+        if ($options != '') {
+            $queryParam['options'] = $options;
         }
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, json_encode($bodyParam));
     }
@@ -546,52 +543,6 @@ class MultiFactorAuthenticationAPI extends Functions
 
 
     /**
-     * This API is used to login via Multi-factor-authentication by passing the google authenticator code.
-     * @param googleAuthenticatorCode The code generated by google authenticator app after scanning QR code
-     * @param secondFactorAuthenticationToken SecondFactorAuthenticationToken
-     * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
-     * @param rbaBrowserEmailTemplate RbaBrowserEmailTemplate
-     * @param rbaCityEmailTemplate RbaCityEmailTemplate
-     * @param rbaCountryEmailTemplate RbaCountryEmailTemplate
-     * @param rbaIpEmailTemplate RbaIpEmailTemplate
-     * @return Complete user UserProfile data
-     * 9.13
-    */
-
-    public function mfaValidateGoogleAuthCode($googleAuthenticatorCode, $secondFactorAuthenticationToken,
-        $fields = "", $rbaBrowserEmailTemplate = null, $rbaCityEmailTemplate = null,
-        $rbaCountryEmailTemplate = null, $rbaIpEmailTemplate = null)
-    {
-        $resourcePath = "/identity/v2/auth/login/2fa/verification/googleauthenticatorcode";
-        $bodyParam = [];
-        $bodyParam['googleAuthenticatorCode'] = $googleAuthenticatorCode;
-        $queryParam = [];
-        $queryParam['apiKey'] = Functions::getApiKey();
-        if ($secondFactorAuthenticationToken === '' || ctype_space($secondFactorAuthenticationToken)) {
-            throw new LoginRadiusException(Functions::paramValidationMsg('secondFactorAuthenticationToken'));
-        }
-        if ($fields != '') {
-            $queryParam['fields'] = $fields;
-        }
-        if ($rbaBrowserEmailTemplate != '') {
-            $queryParam['rbaBrowserEmailTemplate'] = $rbaBrowserEmailTemplate;
-        }
-        if ($rbaCityEmailTemplate != '') {
-            $queryParam['rbaCityEmailTemplate'] = $rbaCityEmailTemplate;
-        }
-        if ($rbaCountryEmailTemplate != '') {
-            $queryParam['rbaCountryEmailTemplate'] = $rbaCountryEmailTemplate;
-        }
-        if ($rbaIpEmailTemplate != '') {
-            $queryParam['rbaIpEmailTemplate'] = $rbaIpEmailTemplate;
-        }
-        $queryParam['secondFactorAuthenticationToken'] = $secondFactorAuthenticationToken;
-        return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, json_encode($bodyParam));
-    }
-       
-
-
-    /**
      * This API is used to validate the backup code provided by the user and if valid, we return an access token allowing the user to login incases where Multi-factor authentication (MFA) is enabled and the secondary factor is unavailable. When a user initially downloads the Backup codes, We generate 10 codes, each code can only be consumed once. if any user attempts to go over the number of invalid login attempts configured in the Dashboard then the account gets blocked automatically
      * @param multiFactorAuthModelByBackupCode Model Class containing Definition of payload for MultiFactorAuth By BackupCode API
      * @param secondFactorAuthenticationToken A Uniquely generated MFA identifier token after successful authentication
@@ -640,12 +591,14 @@ class MultiFactorAuthenticationAPI extends Functions
      * @param phoneNo2FA Phone Number For 2FA
      * @param secondFactorAuthenticationToken A Uniquely generated MFA identifier token after successful authentication
      * @param smsTemplate2FA SMS Template Name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
+     * @param options PreventVerificationEmail (Specifying this value prevents the verification email from being sent. Only applicable if you have the optional email verification flow)
      * @return Response containing Definition for Complete SMS data
      * 9.16
     */
 
-    public function mfaUpdatePhoneNumber($phoneNo2FA, $secondFactorAuthenticationToken,
-        $smsTemplate2FA = null)
+    public function mfaUpdatePhoneNumber($phoneNo2FA, $secondFactorAuthenticationToken, $smsTemplate2FA = null,
+    $isVoiceOtp = false , $options = "")
     {
         $resourcePath = "/identity/v2/auth/login/2fa";
         $bodyParam = [];
@@ -658,6 +611,12 @@ class MultiFactorAuthenticationAPI extends Functions
         if ($smsTemplate2FA != '') {
             $queryParam['smsTemplate2FA'] = $smsTemplate2FA;
         }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
+        }
+        if ($options != '') {
+            $queryParam['options'] = $options;
+        }
         $queryParam['secondFactorAuthenticationToken'] = $secondFactorAuthenticationToken;
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, json_encode($bodyParam));
     }
@@ -668,11 +627,13 @@ class MultiFactorAuthenticationAPI extends Functions
      * This API is used to resending the verification OTP to the provided phone number
      * @param secondFactorAuthenticationToken A Uniquely generated MFA identifier token after successful authentication
      * @param smsTemplate2FA SMS Template Name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response containing Definition for Complete SMS data
      * 9.17
     */
 
-    public function mfaResendOTP($secondFactorAuthenticationToken, $smsTemplate2FA = null)
+    public function mfaResendOTP($secondFactorAuthenticationToken, $smsTemplate2FA = null,
+        $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/login/2fa/resend";
         $queryParam = [];
@@ -682,6 +643,9 @@ class MultiFactorAuthenticationAPI extends Functions
         }
         if ($smsTemplate2FA != '') {
             $queryParam['smsTemplate2FA'] = $smsTemplate2FA;
+        }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
         }
         $queryParam['secondFactorAuthenticationToken'] = $secondFactorAuthenticationToken;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
@@ -844,18 +808,18 @@ class MultiFactorAuthenticationAPI extends Functions
 
 
     /**
-     * This API resets the Google Authenticator configurations on a given account via the UID.
-     * @param googleauthenticator boolean type value,Enable google Authenticator Code.
+     * This API resets the Authenticator configurations on a given account via the UID.
+     * @param authenticator Pass true to remove Authenticator.
      * @param uid UID, the unified identifier for each user account
      * @return Response containing Definition of Delete Request
      * 18.21.2
     */
 
-    public function mfaResetGoogleAuthenticatorByUid($googleauthenticator, $uid)
+    public function mfaResetAuthenticatorByUid($authenticator, $uid)
     {
         $resourcePath = "/identity/v2/manage/account/2fa/authenticator";
         $bodyParam = [];
-        $bodyParam['googleauthenticator'] = $googleauthenticator;
+        $bodyParam['authenticator'] = $authenticator;
         $queryParam = [];
         $queryParam['apiKey'] = Functions::getApiKey();
         $queryParam['apiSecret'] = Functions::getApiSecret();
@@ -952,6 +916,60 @@ class MultiFactorAuthenticationAPI extends Functions
         }
         $queryParam['uid'] = $uid;
         return Functions::_apiClientHandler('DELETE', $resourcePath, $queryParam);
+    }
+       
+
+
+    /**
+     * This API is used to login to a user's account during the second MFA step with an Authenticator Code.
+     * @param multiFactorAuthModelByAuthenticatorCode Model Class containing Definition of payload for MultiFactorAuthModel By Authenticator Code API
+     * @param secondfactorauthenticationtoken A Uniquely generated MFA identifier token after successful authentication
+     * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
+     * @return Complete user UserProfile data
+     * 44.7
+    */
+
+    public function mfaValidateAuthenticatorCode($multiFactorAuthModelByAuthenticatorCode, $secondfactorauthenticationtoken,
+        $fields = "")
+    {
+        $resourcePath = "/identity/v2/auth/login/2fa/verification/authenticatorcode";
+        $queryParam = [];
+        $queryParam['apiKey'] = Functions::getApiKey();
+        if ($secondfactorauthenticationtoken === '' || ctype_space($secondfactorauthenticationtoken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('secondfactorauthenticationtoken'));
+        }
+        if ($fields != '') {
+            $queryParam['fields'] = $fields;
+        }
+        $queryParam['secondfactorauthenticationtoken'] = $secondfactorauthenticationtoken;
+        return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $multiFactorAuthModelByAuthenticatorCode);
+    }
+       
+
+
+    /**
+     * This API is used to validate an Authenticator Code as part of the MFA process.
+     * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
+     * @param multiFactorAuthModelByAuthenticatorCodeSecurityAnswer Model Class containing Definition of payload for MultiFactorAuthModel By Authenticator Code API with security answer
+     * @param fields The fields parameter filters the API response so that the response only includes a specific set of fields
+     * @return Complete user UserProfile data
+     * 44.8
+    */
+
+    public function mfaVerifyAuthenticatorCode($accessToken, $multiFactorAuthModelByAuthenticatorCodeSecurityAnswer,
+        $fields = "")
+    {
+        $resourcePath = "/identity/v2/auth/account/2fa/verification/authenticatorcode";
+        $queryParam = [];
+        if ($accessToken === '' || ctype_space($accessToken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
+        }
+        $queryParam['apiKey'] = Functions::getApiKey();
+        if ($fields != '') {
+            $queryParam['fields'] = $fields;
+        }
+        $queryParam['access_token'] = $accessToken;
+        return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $multiFactorAuthModelByAuthenticatorCodeSecurityAnswer);
     }
 
 }

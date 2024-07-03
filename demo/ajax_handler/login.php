@@ -255,14 +255,11 @@ function mfaValidate(array $request)
     } else {
         $authenticationObj = new MultiFactorAuthenticationAPI();
             $fields = '';
-            $rbaBrowserEmailTemplate = '';  
-            $rbaCityEmailTemplate = ''; 
-            $rbaCountryEmailTemplate = '';  
-            $rbaIpEmailTemplate = ''; 
-            $result = $authenticationObj->mFAValidateGoogleAuthCode($googleAuthCode, $secondFactorAuthenticationToken, $fields, $rbaBrowserEmailTemplate, $rbaCityEmailTemplate, $rbaCountryEmailTemplate, $rbaIpEmailTemplate);
+            $payload =  array('authenticatorCode' => $googleAuthCode);
+            $result = $authenticationObj->mfaValidateAuthenticatorCode($payload,$secondFactorAuthenticationToken,$fields);
             if ((isset($result->access_token) && $result->access_token != '')) {
                 $response['data'] = $result;
-                $response['message'] = "Google Auth Code successfully validated.";
+                $response['message'] = "Auth Code successfully validated.";
                 $response['status'] = 'success';
             }else if (isset($result->error_response)) {
                 $response['message'] = $result->error_response->Description;

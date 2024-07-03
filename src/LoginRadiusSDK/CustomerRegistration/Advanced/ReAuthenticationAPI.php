@@ -26,11 +26,13 @@ class ReAuthenticationAPI extends Functions
      * This API is used to trigger the Multi-Factor Autentication workflow for the provided access token
      * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
      * @param smsTemplate2FA SMS Template Name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response containing Definition of Complete Multi-Factor Authentication Settings data
      * 14.3
     */
 
-    public function mfaReAuthenticate($accessToken, $smsTemplate2FA = null)
+    public function mfaReAuthenticate($accessToken, $smsTemplate2FA = null,
+        $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/account/reauth/2fa";
         $queryParam = [];
@@ -40,6 +42,9 @@ class ReAuthenticationAPI extends Functions
         $queryParam['apiKey'] = Functions::getApiKey();
         if ($smsTemplate2FA != '') {
             $queryParam['smsTemplate2FA'] = $smsTemplate2FA;
+        }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
         }
         $queryParam['access_token'] = $accessToken;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
@@ -87,28 +92,6 @@ class ReAuthenticationAPI extends Functions
         $queryParam['apiKey'] = Functions::getApiKey();
         $queryParam['access_token'] = $accessToken;
         return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $reauthByBackupCodeModel);
-    }
-       
-
-
-    /**
-     * This API is used to re-authenticate via Multi-factor-authentication by passing the google authenticator code
-     * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
-     * @param reauthByGoogleAuthenticatorCodeModel Model Class containing Definition for MFA Reauthentication by Google Authenticator
-     * @return Complete user Multi-Factor Authentication Token data
-     * 14.6
-    */
-
-    public function mfaReAuthenticateByGoogleAuth($accessToken, $reauthByGoogleAuthenticatorCodeModel)
-    {
-        $resourcePath = "/identity/v2/auth/account/reauth/2fa/googleauthenticatorcode";
-        $queryParam = [];
-        if ($accessToken === '' || ctype_space($accessToken)) {
-            throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
-        }
-        $queryParam['apiKey'] = Functions::getApiKey();
-        $queryParam['access_token'] = $accessToken;
-        return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $reauthByGoogleAuthenticatorCodeModel);
     }
        
 
@@ -295,6 +278,28 @@ class ReAuthenticationAPI extends Functions
         $queryParam['apiKey'] = Functions::getApiKey();
         $queryParam['access_token'] = $accessToken;
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $securityQuestionAnswerUpdateModel);
+    }
+       
+
+
+    /**
+     * This API is used to validate the triggered MFA authentication flow with the Authenticator Code.
+     * @param accessToken Uniquely generated identifier key by LoginRadius that is activated after successful authentication.
+     * @param multiFactorAuthModelByAuthenticatorCode Model Class containing Definition of payload for MultiFactorAuthModel By Authenticator Code API
+     * @return Complete user Multi-Factor Authentication Token data
+     * 44.6
+    */
+
+    public function mfaReAuthenticateByAuthenticatorCode($accessToken, $multiFactorAuthModelByAuthenticatorCode)
+    {
+        $resourcePath = "/identity/v2/auth/account/reauth/2fa/authenticatorcode";
+        $queryParam = [];
+        if ($accessToken === '' || ctype_space($accessToken)) {
+            throw new LoginRadiusException(Functions::paramValidationMsg('accessToken'));
+        }
+        $queryParam['apiKey'] = Functions::getApiKey();
+        $queryParam['access_token'] = $accessToken;
+        return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $multiFactorAuthModelByAuthenticatorCode);
     }
 
 }

@@ -56,17 +56,22 @@ class OneTouchLoginAPI extends Functions
      * This API is used to send one time password to a given phone number for a frictionless login/registration.
      * @param oneTouchLoginByPhoneModel Model Class containing Definition of payload for OneTouchLogin By PhoneModel API
      * @param smsTemplate SMS Template name
+     * @param isVoiceOtp Boolean, pass true if you wish to trigger voice OTP
      * @return Response containing Definition of Complete Validation data
      * 1.4
     */
 
-    public function oneTouchLoginByPhone($oneTouchLoginByPhoneModel, $smsTemplate = null)
+    public function oneTouchLoginByPhone($oneTouchLoginByPhoneModel, $smsTemplate = null,
+        $isVoiceOtp = false)
     {
         $resourcePath = "/identity/v2/auth/onetouchlogin/phone";
         $queryParam = [];
         $queryParam['apiKey'] = Functions::getApiKey();
         if ($smsTemplate != '') {
             $queryParam['smsTemplate'] = $smsTemplate;
+        }
+        if ($isVoiceOtp != '') {
+            $queryParam['isVoiceOtp'] = $isVoiceOtp;
         }
         return Functions::_apiClientHandler('POST', $resourcePath, $queryParam, $oneTouchLoginByPhoneModel);
     }
