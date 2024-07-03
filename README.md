@@ -251,7 +251,7 @@ $verificationUrl = "verificationUrl"; //Optional
 $isVoiceOtp = false; //Optional
 $options = "options"; //Optional 
  
-$result = $authenticationAPI->updateProfileByAccessToken($access_token,$payload,$emailTemplate,$fields,$nullSupport,$smsTemplate,$verificationUrl,$options,$isVoiceOtp);
+$result = $authenticationAPI->updateProfileByAccessToken($access_token,$payload,$emailTemplate,$fields,$nullSupport,$smsTemplate,$verificationUrl,$isVoiceOtp,$options);
  ```
 
  
