@@ -2771,7 +2771,9 @@ $result = $reAuthenticationAPI->reAuthValidateEmailOtp($access_token,$payload);
  ```php
  
 $access_token = "access_token"; //Required
- $payload = '{  }';  //Required
+$payload = '{ 
+    "authenticatorCode" : "<authenticatorCode>"
+}';  //Required
  
 $result = $reAuthenticationAPI->mfaReAuthenticateByAuthenticatorCode($access_token,$payload);
  ```
@@ -3966,6 +3968,33 @@ API can be used to unsubscribe a WebHook configured on your LoginRadius site.
 $result = $webHookAPI->webHookUnsubscribe($payload);
  ```
 
+
+### SlidingToken API
+
+
+List of APIs in this Section:<br>
+[GET : Get Sliding Access Token](#SlidingAccessToken-get-)<br>
+
+
+If you have not already initialized the SlidingToken object do so now
+```php
+$slidingTokenAPI = new SlidingTokenAPI(); 
+```
+
+
+<h6 id="SlidingAccessToken-get-"> (GET)</h6>
+
+ This API is used to get access token and refresh token with the expired/nonexpired access token. [More Info](https://www.loginradius.com/docs/api/v2/customer-identity-api/refresh-token/sliding-access-token)
+
+
+
+```php
+
+$access_token = "access_token"; //Required
+ 
+$result = $slidingTokenAPI->slidingAccessToken($access_token);
+
+```
 ### Generate SOTT Manually
 
 SOTT is a secure one-time token that can be created using the API key, API secret, and a timestamp ( start time and end time ). You can manually create a SOTT using the following utility function.

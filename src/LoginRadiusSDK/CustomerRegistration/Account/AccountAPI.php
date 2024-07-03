@@ -620,5 +620,3 @@ class AccountAPI extends Functions
     }
 
 }
-
-}
