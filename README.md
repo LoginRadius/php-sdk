@@ -70,6 +70,8 @@ require_once "src/LoginRadiusSDK/CustomerRegistration/Advanced/WebHookAPI.php";
 
 require_once "src/LoginRadiusSDK/CustomerRegistration/Social/NativeSocialAPI.php";
 require_once "src/LoginRadiusSDK/CustomerRegistration/Social/SocialAPI.php";
+require_once "../../src/LoginRadiusSDK/CustomerRegistration/Authentication/SlidingTokenAPI.php";
+
 ```
 Modify the config.php file in the SDK to include your LoginRadius Credentials
 
@@ -135,6 +137,7 @@ use \LoginRadiusSDK\CustomerRegistration\Authentication\RiskBasedAuthenticationA
 use \LoginRadiusSDK\CustomerRegistration\Authentication\SmartLoginAPI;
 use \LoginRadiusSDK\CustomerRegistration\Social\SocialAPI;
 use \LoginRadiusSDK\CustomerRegistration\Social\NativeSocialAPI;
+use \LoginRadiusSDK\CustomerRegistration\Authentication\SlidingTokenAPI; 
 
 ```
 
@@ -242,10 +245,10 @@ $access_token = "access_token"; //Required
 }';  //Required 
 $emailTemplate = "emailTemplate"; //Optional 
 $fields = null; //Optional 
-$nullSupport = "true"; //Optional 
+$nullSupport = true; //Optional 
 $smsTemplate = "smsTemplate"; //Optional 
 $verificationUrl = "verificationUrl"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
 $options = "options"; //Optional 
  
 $result = $authenticationAPI->updateProfileByAccessToken($access_token,$payload,$emailTemplate,$fields,$nullSupport,$smsTemplate,$verificationUrl,$options,$isVoiceOtp);
@@ -572,7 +575,7 @@ $fields = null; //Optional
 $options = "options"; //Optional 
 $verificationUrl = "verificationUrl"; //Optional 
 $welcomeEmailTemplate = "welcomeEmailTemplate"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $authenticationAPI->userRegistrationByEmail($payload,$sott,$emailTemplate,$fields,$options,$verificationUrl,$welcomeEmailTemplate,$isVoiceOtp);
  ```
@@ -602,7 +605,7 @@ $options = "options"; //Optional
 $smsTemplate = "smsTemplate"; //Optional 
 $verificationUrl = "verificationUrl"; //Optional 
 $welcomeEmailTemplate = "welcomeEmailTemplate"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $authenticationAPI->userRegistrationByCaptcha($payload,$emailTemplate,$fields,$options,$smsTemplate,$verificationUrl,$welcomeEmailTemplate,$isVoiceOtp);
  ```
@@ -687,7 +690,7 @@ This api call invalidates the active access token or expires an access token's v
  ```php
  
 $access_token = "access_token"; //Required 
-$preventRefresh = "true"; //Optional
+$preventRefresh = true; //Optional
  
 $result = $authenticationAPI->authInValidateAccessToken($access_token,$preventRefresh);
  ```
@@ -958,7 +961,7 @@ This API is used to update the information of existing accounts in your Cloud St
 }';  //Required 
 $uid = "uid"; //Required 
 $fields = null; //Optional 
-$nullSupport = "true"; //Optional
+$nullSupport = true; //Optional
  
 $result = $accountAPI->updateAccountByUid($payload,$uid,$fields,$nullSupport);
  ```
@@ -1021,7 +1024,7 @@ This API Allows you to reset the phone no verification of an end user’s accoun
  
 $uid = "uid"; //Required 
 $smsTemplate = "smsTemplate"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $accountAPI->resetPhoneIDVerificationByUid($uid,$smsTemplate,$isVoiceOtp);
  ```
@@ -1096,7 +1099,7 @@ This API Returns a Forgot Password Token it can also be used to send a Forgot Pa
 $email = "email"; //Required 
 $emailTemplate = "emailTemplate"; //Optional 
 $resetPasswordUrl = "resetPasswordUrl"; //Optional 
-$sendEmail = "true"; //Optional
+$sendEmail = true; //Optional
  
 $result = $accountAPI->getForgotPasswordToken($email,$emailTemplate,$resetPasswordUrl,$sendEmail);
  ```
@@ -1382,7 +1385,7 @@ The Refresh Access Token API is used to refresh the provider access token after 
  
 $access_Token = "access_Token"; //Required 
 $expiresIn = 0; //Optional 
-$isWeb = "true"; //Optional
+$isWeb = true; //Optional
  
 $result = $socialAPI->refreshAccessToken($access_Token,$expiresIn,$isWeb);
  ```
@@ -1677,7 +1680,7 @@ $otp = "otp"; //Required
 $phone = "phone"; //Required 
 $fields = null; //Optional 
 $smsTemplate = "smsTemplate"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $phoneAuthenticationAPI->phoneVerificationByOTP($otp,$phone,$fields,$smsTemplate,$isVoiceOtp);
  ```
@@ -1693,7 +1696,7 @@ This API is used to consume the verification code sent to verify a user's phone 
 $access_token = "access_token"; //Required 
 $otp = "otp"; //Required 
 $smsTemplate = "smsTemplate"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $phoneAuthenticationAPI->phoneVerificationOTPByAccessToken($access_token,$otp,$smsTemplate,$isVoiceOtp);
  ```
@@ -1709,7 +1712,7 @@ This API is used to update the login Phone Number of users
 $access_token = "access_token"; //Required 
 $phone = "phone"; //Required 
 $smsTemplate = "smsTemplate"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $phoneAuthenticationAPI->updatePhoneNumber($access_token,$phone,$smsTemplate,$isVoiceOtp);
  ```
@@ -1743,7 +1746,7 @@ This API is used to send the OTP to reset the account password.
  
 $phone = "phone"; //Required 
 $smsTemplate = "smsTemplate"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $phoneAuthenticationAPI->forgotPasswordByPhoneOTP($phone,$smsTemplate,$isVoiceOtp);
  ```
@@ -1758,7 +1761,7 @@ This API is used to resend a verification OTP to verify a user's Phone Number. T
  
 $phone = "phone"; //Required 
 $smsTemplate = "smsTemplate"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $phoneAuthenticationAPI->phoneResendVerificationOTP($phone,$smsTemplate,$isVoiceOtp);
  ```
@@ -1803,7 +1806,7 @@ $smsTemplate = "smsTemplate"; //Optional
 $verificationUrl = "verificationUrl"; //Optional 
 $welcomeEmailTemplate = "welcomeEmailTemplate"; //Optional
 $emailTemplate = "emailTemplate"; //Optional
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $phoneAuthenticationAPI->userRegistrationByPhone($payload,$sott,$fields,$options,$smsTemplate,$verificationUrl,$welcomeEmailTemplate,$emailTemplate,$isVoiceOtp);
  ```
@@ -1906,7 +1909,7 @@ This API is used to update the Multi-factor authentication phone number by sendi
 $access_token = "access_token"; //Required 
 $phoneNo2FA = "phoneNo2FA"; //Required 
 $smsTemplate2FA = "smsTemplate2FA"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
 $options = "options"; //Optional 
 
 $result = $multiFactorAuthenticationAPI->mfaUpdatePhoneNumberByToken($access_token,$phoneNo2FA,$smsTemplate2FA,$isVoiceOtp,$options);
@@ -2006,7 +2009,7 @@ This API is used to update (if configured) the phone number used for Multi-facto
 $phoneNo2FA = "phoneNo2FA"; //Required 
 $secondFactorAuthenticationToken = "secondFactorAuthenticationToken"; //Required 
 $smsTemplate2FA = "smsTemplate2FA"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
 $options = "options"; //Optional 
 
  
@@ -2105,7 +2108,7 @@ $smsTemplate = "smsTemplate"; //Optional
 $smsTemplate2FA = "smsTemplate2FA"; //Optional 
 $verificationUrl = "verificationUrl"; //Optional 
 $emailTemplate2FA = "emailTemplate2FA"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
 $options = "options"; //Optional 
 
 $result = $multiFactorAuthenticationAPI->mfaLoginByEmail($email,$password,$emailTemplate,$fields,$loginUrl,$smsTemplate,$smsTemplate2FA,$verificationUrl,$emailTemplate2FA,$isVoiceOtp,$options);
@@ -2128,7 +2131,7 @@ $smsTemplate = "smsTemplate"; //Optional
 $smsTemplate2FA = "smsTemplate2FA"; //Optional 
 $verificationUrl = "verificationUrl"; //Optional 
 $emailTemplate2FA = "emailTemplate2FA"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $multiFactorAuthenticationAPI->mfaLoginByUserName($password,$username,$emailTemplate,$fields,$loginUrl,$smsTemplate,$smsTemplate2FA,$verificationUrl,$emailTemplate2FA,$isVoiceOtp);
  ```
@@ -2150,7 +2153,7 @@ $smsTemplate = "smsTemplate"; //Optional
 $smsTemplate2FA = "smsTemplate2FA"; //Optional 
 $verificationUrl = "verificationUrl"; //Optional 
 $emailTemplate2FA = "emailTemplate2FA"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
 $options = "options"; //Optional 
 
 $result = $multiFactorAuthenticationAPI->mfaLoginByPhone($password,$phone,$emailTemplate,$fields,$loginUrl,$smsTemplate,$smsTemplate2FA,$verificationUrl,$emailTemplate2FA,$isVoiceOtp,$options);
@@ -2207,7 +2210,7 @@ This API is used to configure the Multi-factor authentication after login by usi
  ```php
  
 $access_token = "access_token"; //Required 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $multiFactorAuthenticationAPI->mfaConfigureByAccessToken($access_token,$isVoiceOtp);
  ```
@@ -2263,7 +2266,7 @@ This API is used to resending the verification OTP to the provided phone number
  
 $secondFactorAuthenticationToken = "secondFactorAuthenticationToken"; //Required 
 $smsTemplate2FA = "smsTemplate2FA"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $multiFactorAuthenticationAPI->mfaResendOTP($secondFactorAuthenticationToken,$smsTemplate2FA,$isVoiceOtp);
  ```
@@ -2301,7 +2304,7 @@ $result = $multiFactorAuthenticationAPI->mfaResetBackupCodeByUid($uid);
  ```php
  
 $access_token = "access_token"; //Required 
-$authenticator = "true"; //Required
+$authenticator = true; //Required
  
 $result = $multiFactorAuthenticationAPI->mfaResetAuthenticatorByToken($access_token,$authenticator);
  ```
@@ -2315,7 +2318,7 @@ This API resets the SMS Authenticator configurations on a given account via the 
  ```php
  
 $access_token = "access_token"; //Required 
-$otpauthenticator = "true"; //Required
+$otpauthenticator = true; //Required
  
 $result = $multiFactorAuthenticationAPI->mfaResetSMSAuthByToken($access_token,$otpauthenticator);
  ```
@@ -2354,7 +2357,7 @@ This API resets the SMS Authenticator configurations on a given account via the 
 
  ```php
  
-$otpauthenticator = "true"; //Required 
+$otpauthenticator = true; //Required 
 $uid = "uid"; //Required
  
 $result = $multiFactorAuthenticationAPI->mfaResetSMSAuthenticatorByUid($otpauthenticator,$uid);
@@ -2367,7 +2370,7 @@ $result = $multiFactorAuthenticationAPI->mfaResetSMSAuthenticatorByUid($otpauthe
 
  ```php
  
-$authenticator = "true"; //Required 
+$authenticator = true; //Required 
 $uid = "uid"; //Required
  
 $result = $multiFactorAuthenticationAPI->mfaResetAuthenticatorByUid($authenticator,$uid);
@@ -2620,7 +2623,7 @@ This API sends the OTP to specified phone number
 "phone" : "<phone>"
 }';  //Required 
 $smsTemplate = "smsTemplate"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $pinAuthenticationAPI->sendForgotPINSMSByPhone($payload,$smsTemplate,$isVoiceOtp);
  ```
@@ -2857,7 +2860,7 @@ This API is used to trigger the Multi-Factor Autentication workflow for the prov
  
 $access_token = "access_token"; //Required 
 $smsTemplate2FA = "smsTemplate2FA"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $reAuthenticationAPI->mfaReAuthenticate($access_token,$smsTemplate2FA,$isVoiceOtp);
  ```
@@ -2997,7 +3000,7 @@ This API is used to check if consent is submitted for a particular event or not.
  
 $access_token = "access_token"; //Required 
 $event = "event"; //Required 
-$isCustom = "true"; //Required
+$isCustom = true; //Required
  
 $result = $consentManagementAPI->verifyConsentByAccessToken($access_token,$event,$isCustom);
  ```
@@ -3148,7 +3151,7 @@ This API is used to send one time password to a given phone number for a frictio
 "phone" : "<phone>"
 }';  //Required 
 $smsTemplate = "smsTemplate"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $oneTouchLoginAPI->oneTouchLoginByPhone($payload,$smsTemplate,$isVoiceOtp);
  ```
@@ -3215,7 +3218,7 @@ This API verifies an account by OTP and allows the customer to login.
 }';  //Required 
 $fields = null; //Optional 
 $smsTemplate = "smsTemplate"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $passwordLessLoginAPI->passwordlessLoginPhoneVerification($payload,$fields,$smsTemplate,$isVoiceOtp);
  ```
@@ -3268,7 +3271,7 @@ API can be used to send a One-time Passcode (OTP) provided that the account has 
  
 $phone = "phone"; //Required 
 $smsTemplate = "smsTemplate"; //Optional 
-$isVoiceOtp = "true"; //Optional
+$isVoiceOtp = true; //Optional
  
 $result = $passwordLessLoginAPI->passwordlessLoginByPhone($phone,$smsTemplate,$isVoiceOtp);
  ```
@@ -3622,7 +3625,7 @@ This API retrieves a copy of the user data based on the Email
 $emailTemplate = "emailTemplate"; //Optional 
 $fields = null; //Optional 
 $loginUrl = "loginUrl"; //Optional 
-$passwordDelegation = "true"; //Optional 
+$passwordDelegation = true; //Optional 
 $passwordDelegationApp = "passwordDelegationApp"; //Optional 
 $rbaBrowserEmailTemplate = "rbaBrowserEmailTemplate"; //Optional 
 $rbaBrowserSmsTemplate = "rbaBrowserSmsTemplate"; //Optional 
@@ -3655,7 +3658,7 @@ This API retrieves a copy of the user data based on the Username
 $emailTemplate = "emailTemplate"; //Optional 
 $fields = null; //Optional 
 $loginUrl = "loginUrl"; //Optional 
-$passwordDelegation = "true"; //Optional 
+$passwordDelegation = true; //Optional 
 $passwordDelegationApp = "passwordDelegationApp"; //Optional 
 $rbaBrowserEmailTemplate = "rbaBrowserEmailTemplate"; //Optional 
 $rbaBrowserSmsTemplate = "rbaBrowserSmsTemplate"; //Optional 
@@ -3688,7 +3691,7 @@ This API retrieves a copy of the user data based on the Phone
 $emailTemplate = "emailTemplate"; //Optional 
 $fields = null; //Optional 
 $loginUrl = "loginUrl"; //Optional 
-$passwordDelegation = "true"; //Optional 
+$passwordDelegation = true; //Optional 
 $passwordDelegationApp = "passwordDelegationApp"; //Optional 
 $rbaBrowserEmailTemplate = "rbaBrowserEmailTemplate"; //Optional 
 $rbaBrowserSmsTemplate = "rbaBrowserSmsTemplate"; //Optional 
