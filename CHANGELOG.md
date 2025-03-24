@@ -1,5 +1,37 @@
 > **LoginRadius PHP SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://www.loginradius.com/docs/api/v2/deployment/sdk-libraries/php-library/)
 
+# Version 11.7.0
+
+**Release Date:** March 24, 2025
+
+## Enhancements
+
+We've introduced a brand-new set of Webhook APIs, designed with enhanced functionality and flexibility. These new APIs support advanced features including:
+
+- Custom header configuration  
+- Query parameter support  
+- Webhook authentication methods (Bearer Token and Basic Auth)  
+- Support for a custom `Name` parameter to label each webhook subscription
+
+As part of this upgrade, the legacy Webhook APIs have been deprecated in favor of the new, more robust versions.
+
+## Newly Added APIs
+
+- `getWebhookSubscriptionDetail` – Retrieve detailed information about a specific webhook subscription  
+- `createWebhookSubscription` – Create a new webhook subscription with advanced configuration options  
+- `deleteWebhookSubscription` – Remove an existing webhook subscription  
+- `updateWebhookSubscription` – Modify an existing webhook subscription  
+- `listAllWebhooks` – Retrieve a list of all configured webhook subscriptions  
+- `getWebhookEvents` – Fetch available webhook events supported by the system  
+
+## Deprecated APIs
+
+The following legacy APIs have been deprecated:
+
+- `webHookUnsubscribe`  
+- `webhookTest`  
+- `webHookSubscribe`  
+- `getWebHookSubscribedURLs`  
 
 # Version 11.6.0
 
