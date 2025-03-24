@@ -3929,7 +3929,21 @@ This API is used to update a webhook subscription
  ```php
  
 $hookId = "hookId"; //Required
- $payload = '{  }';  //Required
+ $payload = '{
+    "Headers": {
+        "x-test-header": "qa"
+    },
+    "QueryParams": {
+        "apikey": "859faf40a7c54c209360b45376bf529f"
+    },
+    "Authentication": {
+        "AuthType": "Basic",
+        "BasicAuth": {
+        "Username": "lrqaadmin",
+        "Password": "ZBz6JcnZadxc2gB7sf5vby87zBIu6q"
+        }
+    }
+}';  //Required
  
 $result = $webHookAPI->updateWebhookSubscription($hookId,$payload);
  ```
@@ -3943,9 +3957,23 @@ This API is used to create a new webhook subscription on your LoginRadius site.
  ```php
 
  $payload = '{
-"event" : "<event>",
-"name" : "<name>",
-"targetUrl" : "<targetUrl>"
+    "event" : "<event>",
+    "name" : "<name>",
+    "targetUrl" : "<targetUrl>",
+    ,
+    "Headers": {
+    "Custom-Header": "headerValue"
+    },
+    "QueryParams": {
+        "apikey": "yourApiKey"
+     },
+    "Authentication": {
+        "AuthType": "Basic",
+        "BasicAuth": {
+        "Username": "yourUsername",
+        "Password": "yourPassword"
+        }
+    }
 }';  //Required
  
 $result = $webHookAPI->createWebhookSubscription($payload);
