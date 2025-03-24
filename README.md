@@ -3960,7 +3960,6 @@ This API is used to create a new webhook subscription on your LoginRadius site.
     "event" : "<event>",
     "name" : "<name>",
     "targetUrl" : "<targetUrl>",
-    ,
     "Headers": {
     "Custom-Header": "headerValue"
     },
