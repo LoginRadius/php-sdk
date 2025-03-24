@@ -3924,7 +3924,7 @@ $webHookAPI = new WebHookAPI();
 <h6 id="UpdateWebhookSubscription-put-">Update Webhook Subscription (PUT)</h6>
 
 This API is used to update a webhook subscription
- [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/webhook-update)
+ [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/update-webhook-subscription/)
 
  ```php
  
@@ -3952,7 +3952,7 @@ $result = $webHookAPI->updateWebhookSubscription($hookId,$payload);
 <h6 id="CreateWebhookSubscription-post-">Create Webhook Subscription (POST)</h6>
 
 This API is used to create a new webhook subscription on your LoginRadius site.
- [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/webhook-subscribe)
+ [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/create-webhook-subscription/)
 
  ```php
 
@@ -3982,7 +3982,7 @@ $result = $webHookAPI->createWebhookSubscription($payload);
 <h6 id="GetWebhookSubscriptionDetail-get-">Get Webhook Subscription Detail (GET)</h6>
 
 This API is used to get details of a webhook subscription by Id
- [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/webhook-subscribed-urls)
+ [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/get-webhook-subscription-details/)
 
  ```php
  
@@ -3995,7 +3995,7 @@ $result = $webHookAPI->getWebhookSubscriptionDetail($hookId);
 <h6 id="ListAllWebhooks-get-">List All Webhooks (GET)</h6>
 
 This API is used to get the list of all the webhooks
- [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/webhook-list)
+ [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/list-all-webhooks/)
 
  ```php
 
@@ -4007,7 +4007,7 @@ $result = $webHookAPI->listAllWebhooks();
 <h6 id="GetWebhookEvents-get-">Get Webhook Events (GET)</h6>
 
 This API is used to retrieve all the webhook events.
- [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/webhook-events)
+ [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/get-webhook-events/)
 
  ```php
 
@@ -4019,7 +4019,7 @@ $result = $webHookAPI->getWebhookEvents();
 <h6 id="DeleteWebhookSubscription-delete-">Delete Webhook Subscription (DELETE)</h6>
 
 This API is used to delete webhook subscription
- [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/webhook-unsubscribe)
+ [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/delete-webhook-subscription/)
 
  ```php
  
