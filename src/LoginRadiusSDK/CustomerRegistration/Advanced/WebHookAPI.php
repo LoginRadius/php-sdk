@@ -23,37 +23,33 @@ class WebHookAPI extends Functions
 
 
     /**
-     * This API is used to fatch all the subscribed URLs, for particular event
-     * @param event Allowed events: Login, Register, UpdateProfile, ResetPassword, ChangePassword, emailVerification, AddEmail, RemoveEmail, BlockAccount, DeleteAccount, SetUsername, AssignRoles, UnassignRoles, SetPassword, LinkAccount, UnlinkAccount, UpdatePhoneId, VerifyPhoneNumber, CreateCustomObject, UpdateCustomobject, DeleteCustomObject
-     * @return Response Containing List of Webhhook Data
+     * This API is used to get details of a webhook subscription by Id
+     * @param hookId Unique ID of the webhook
+     * @return Response containing Definition for Complete WebHook data
      * 40.1
     */
 
-    public function getWebHookSubscribedURLs($event)
+    public function getWebhookSubscriptionDetail($hookId)
     {
-        $resourcePath = "/api/v2/webhook";
+        $resourcePath = "/v2/manage/webhooks/$hookId";
         $queryParam = [];
         $queryParam['apikey'] = Functions::getApiKey();
         $queryParam['apisecret'] = Functions::getApiSecret();
-        if ($event === '' || ctype_space($event)) {
-            throw new LoginRadiusException(Functions::paramValidationMsg('event'));
-        }
-        $queryParam['event'] = $event;
         return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
        
 
 
     /**
-     * API can be used to configure a WebHook on your LoginRadius site. Webhooks also work on subscribe and notification model, subscribe your hook and get a notification. Equivalent to RESThook but these provide security on basis of signature and RESThook work on unique URL. Following are the events that are allowed by LoginRadius to trigger a WebHook service call.
+     * This API is used to create a new webhook subscription on your LoginRadius site.
      * @param webHookSubscribeModel Model Class containing Definition of payload for Webhook Subscribe API
-     * @return Response containing Definition of Complete Validation data
+     * @return Response containing Definition for Complete WebHook data
      * 40.2
     */
 
-    public function webHookSubscribe($webHookSubscribeModel)
+    public function createWebhookSubscription($webHookSubscribeModel)
     {
-        $resourcePath = "/api/v2/webhook";
+        $resourcePath = "/v2/manage/webhooks";
         $queryParam = [];
         $queryParam['apikey'] = Functions::getApiKey();
         $queryParam['apisecret'] = Functions::getApiSecret();
@@ -63,14 +59,51 @@ class WebHookAPI extends Functions
 
 
     /**
-     * API can be used to test a subscribed WebHook.
-     * @return Response containing Definition of Complete Validation data
+     * This API is used to delete webhook subscription
+     * @param hookId Unique ID of the webhook
+     * @return Response containing Definition of Delete Request
      * 40.3
     */
 
-    public function webhookTest()
+    public function deleteWebhookSubscription($hookId)
     {
-        $resourcePath = "/api/v2/webhook/test";
+        $resourcePath = "/v2/manage/webhooks/$hookId";
+        $queryParam = [];
+        $queryParam['apikey'] = Functions::getApiKey();
+        $queryParam['apisecret'] = Functions::getApiSecret();
+        return Functions::_apiClientHandler('DELETE', $resourcePath, $queryParam);
+    }
+       
+
+
+    /**
+     * This API is used to update a webhook subscription
+     * @param hookId Unique ID of the webhook
+     * @param webHookSubscriptionUpdateModel Model Class containing Definition for WebHookSubscriptionUpdateModel Property
+     * @return Response containing Definition for Complete WebHook data
+     * 40.4
+    */
+
+    public function updateWebhookSubscription($hookId, $webHookSubscriptionUpdateModel)
+    {
+        $resourcePath = "/v2/manage/webhooks/$hookId";
+        $queryParam = [];
+        $queryParam['apikey'] = Functions::getApiKey();
+        $queryParam['apisecret'] = Functions::getApiSecret();
+        return Functions::_apiClientHandler('PUT', $resourcePath, $queryParam, $webHookSubscriptionUpdateModel);
+    }
+       
+
+
+    /**
+     * This API is used to get the list of all the webhooks
+     * @return Response Containing List of Webhhook Data
+     * 40.5
+    */
+
+    public function listAllWebhooks()
+    {
+        $resourcePath = "/v2/manage/webhooks";
         $queryParam = [];
         $queryParam['apikey'] = Functions::getApiKey();
         $queryParam['apisecret'] = Functions::getApiSecret();
@@ -80,19 +113,18 @@ class WebHookAPI extends Functions
 
 
     /**
-     * API can be used to unsubscribe a WebHook configured on your LoginRadius site.
-     * @param webHookSubscribeModel Model Class containing Definition of payload for Webhook Subscribe API
-     * @return Response containing Definition of Delete Request
-     * 40.4
+     * This API is used to retrieve all the webhook events.
+     * @return Model Class containing Definition for WebHookEventModel Property
+     * 40.6
     */
 
-    public function webHookUnsubscribe($webHookSubscribeModel)
+    public function getWebhookEvents()
     {
-        $resourcePath = "/api/v2/webhook";
+        $resourcePath = "/v2/manage/webhooks/events";
         $queryParam = [];
         $queryParam['apikey'] = Functions::getApiKey();
         $queryParam['apisecret'] = Functions::getApiSecret();
-        return Functions::_apiClientHandler('DELETE', $resourcePath, $queryParam, $webHookSubscribeModel);
+        return Functions::_apiClientHandler('GET', $resourcePath, $queryParam);
     }
 
 }

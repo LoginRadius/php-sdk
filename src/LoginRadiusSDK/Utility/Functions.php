@@ -22,7 +22,7 @@ use LoginRadiusSDK\LoginRadiusException;
 class Functions
 {
 
-    const VERSION = '11.6.0';
+    const VERSION = '11.7.0';
 
     private static $_apikey;
     private static $_apisecret;

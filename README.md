@@ -37,7 +37,7 @@ curl -sS https://getcomposer.org/installer | php
 Next, run the Composer command to install the latest stable version of library:
 
 ```
-composer require loginradius/php-sdk:11.6.0
+composer require loginradius/php-sdk:11.7.0
 ```
 
 Include the following files in your Project Directory
@@ -3904,10 +3904,16 @@ $result = $nativeSocialAPI->getAccessTokenByGoogleAuthCode($google_authcode,$soc
 ### WebHook API
 
 List of APIs in this Section:<br>
-[POST : Webhook Subscribe](#WebHookSubscribe-post-)<br>
-[GET : Webhook Subscribed URLs](#GetWebHookSubscribedURLs-get-)<br>
-[GET : Webhook Test](#WebhookTest-get-)<br>
-[DELETE : WebHook Unsubscribe](#WebHookUnsubscribe-delete-)<br>
+
+### WebHook API
+
+List of APIs in this Section:<br>
+[PUT : Update Webhook Subscription](#UpdateWebhookSubscription-put-)<br>
+[POST : Create Webhook Subscription](#CreateWebhookSubscription-post-)<br>
+[GET : Get Webhook Subscription Detail](#GetWebhookSubscriptionDetail-get-)<br>
+[GET : List All Webhooks](#ListAllWebhooks-get-)<br>
+[GET : Get Webhook Events](#GetWebhookEvents-get-)<br>
+[DELETE : Delete Webhook Subscription](#DeleteWebhookSubscription-delete-)<br>
 
 If you have not already initialized the WebHook object do so now
 ```php
@@ -3915,60 +3921,111 @@ $webHookAPI = new WebHookAPI();
 ```
 
 
-<h6 id="WebHookSubscribe-post-">Webhook Subscribe (POST)</h6> 
+<h6 id="UpdateWebhookSubscription-put-">Update Webhook Subscription (PUT)</h6>
 
-API can be used to configure a WebHook on your LoginRadius site. Webhooks also work on subscribe and notification model, subscribe your hook and get a notification. Equivalent to RESThook but these provide security on basis of signature and RESThook work on unique URL. Following are the events that are allowed by LoginRadius to trigger a WebHook service call.
- [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/webhook-subscribe)
+This API is used to update a webhook subscription
+ [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/update-webhook-subscription/)
+
+ ```php
+ 
+$hookId = "hookId"; //Required
+ $payload = '{
+    "Headers": {
+        "x-test-header": "qa"
+    },
+    "QueryParams": {
+        "apikey": "859faf40a7c54c209360b45376bf529f"
+    },
+    "Authentication": {
+        "AuthType": "Basic",
+        "BasicAuth": {
+        "Username": "lrqaadmin",
+        "Password": "ZBz6JcnZadxc2gB7sf5vby87zBIu6q"
+        }
+    }
+}';  //Required
+ 
+$result = $webHookAPI->updateWebhookSubscription($hookId,$payload);
+ ```
+
+ 
+<h6 id="CreateWebhookSubscription-post-">Create Webhook Subscription (POST)</h6>
+
+This API is used to create a new webhook subscription on your LoginRadius site.
+ [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/create-webhook-subscription/)
 
  ```php
 
  $payload = '{
-"event" : "<event>",
-"targetUrl" : "<targetUrl>"
+    "event" : "<event>",
+    "name" : "<name>",
+    "targetUrl" : "<targetUrl>",
+    "Headers": {
+    "Custom-Header": "headerValue"
+    },
+    "QueryParams": {
+        "apikey": "yourApiKey"
+     },
+    "Authentication": {
+        "AuthType": "Basic",
+        "BasicAuth": {
+        "Username": "yourUsername",
+        "Password": "yourPassword"
+        }
+    }
 }';  //Required
  
-$result = $webHookAPI->webHookSubscribe($payload);
+$result = $webHookAPI->createWebhookSubscription($payload);
  ```
 
  
-<h6 id="GetWebHookSubscribedURLs-get-">Webhook Subscribed URLs (GET)</h6> 
+<h6 id="GetWebhookSubscriptionDetail-get-">Get Webhook Subscription Detail (GET)</h6>
 
-This API is used to fatch all the subscribed URLs, for particular event
- [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/webhook-subscribed-urls)
+This API is used to get details of a webhook subscription by Id
+ [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/get-webhook-subscription-details/)
 
  ```php
  
-$event = "event"; //Required
+$hookId = "hookId"; //Required
  
-$result = $webHookAPI->getWebHookSubscribedURLs($event);
+$result = $webHookAPI->getWebhookSubscriptionDetail($hookId);
  ```
 
  
-<h6 id="WebhookTest-get-">Webhook Test (GET)</h6> 
+<h6 id="ListAllWebhooks-get-">List All Webhooks (GET)</h6>
 
-API can be used to test a subscribed WebHook.
- [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/webhook-test)
+This API is used to get the list of all the webhooks
+ [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/list-all-webhooks/)
 
  ```php
 
  
-$result = $webHookAPI->webhookTest();
+$result = $webHookAPI->listAllWebhooks();
  ```
 
  
-<h6 id="WebHookUnsubscribe-delete-">WebHook Unsubscribe (DELETE)</h6> 
+<h6 id="GetWebhookEvents-get-">Get Webhook Events (GET)</h6>
 
-API can be used to unsubscribe a WebHook configured on your LoginRadius site.
- [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/webhook-unsubscribe)
+This API is used to retrieve all the webhook events.
+ [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/get-webhook-events/)
 
  ```php
 
- $payload = '{
-"event" : "<event>",
-"targetUrl" : "<targetUrl>"
-}';  //Required
  
-$result = $webHookAPI->webHookUnsubscribe($payload);
+$result = $webHookAPI->getWebhookEvents();
+ ```
+
+ 
+<h6 id="DeleteWebhookSubscription-delete-">Delete Webhook Subscription (DELETE)</h6>
+
+This API is used to delete webhook subscription
+ [More Info](https://www.loginradius.com/docs/api/v2/integrations/webhooks/delete-webhook-subscription/)
+
+ ```php
+ 
+$hookId = "hookId"; //Required
+ 
+$result = $webHookAPI->deleteWebhookSubscription($hookId);
  ```
 
 
