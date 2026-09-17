@@ -1,0 +1,478 @@
+<!doctype html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LoginRadius PHP SDK — demo</title>
+<link rel="stylesheet" href="demo.css" />
+
+<header>
+  <div>
+    <h1>LoginRadius PHP SDK</h1>
+    <p>
+      Every endpoint below comes from the shared demo contract in
+      manifest/sdk.yaml — the same nine routes every LoginRadius SDK demo
+      exposes. Only this page's design is PHP's own.
+    </p>
+  </div>
+</header>
+
+<div class="banner" id="banner"></div>
+
+<main>
+  <div class="card">
+    <h2>Register</h2>
+    <p class="hint">Mints a SOTT server-side; the browser never sees the secret.</p>
+    <label>First name <input id="r-first" /></label>
+    <label>Last name <input id="r-last" /></label>
+    <label>Email <input id="r-email" type="email" autocomplete="off" required /></label>
+    <label>Password <input id="r-pass" type="password" required minlength="8" /></label>
+    <button onclick="doRegister()">Register</button>
+    <pre id="r-out">—</pre>
+  </div>
+
+  <div class="card">
+    <h2>Session</h2>
+    <p class="hint">Log in, then log out to clear the demo session cookie.</p>
+    <label>Email <input id="l-email" type="email" autocomplete="off" required /></label>
+    <label>Password <input id="l-pass" type="password" required /></label>
+    <button onclick="doLogin()">Log in</button>
+    <pre id="l-out">—</pre>
+  </div>
+
+  <!-- Revealed by the login handler when the tenant answers with a challenge.
+       Hidden rather than absent so the ids are always present. -->
+  <div class="card" id="mfa-card" style="display:none">
+    <h2>Second factor required</h2>
+    <p class="hint">
+      The login returned a challenge. Its token is held in a separate
+      short-lived cookie — a session cookie will not open these routes.
+    </p>
+    <label>Email address <input id="mfa-email" type="email" /></label>
+    <button class="ghost" onclick="call('POST','/api/mfa/login/email',{email:v('mfa-email')},'mfa-out')">Email me an OTP</button>
+    <label style="margin-top:10px">Email OTP <input id="mfa-otp" autocomplete="one-time-code" /></label>
+    <button onclick="mfaVerifyEmail()">Verify email OTP</button>
+    <label style="margin-top:10px">Authenticator code <input id="mfa-totp" autocomplete="one-time-code" /></label>
+    <button onclick="mfaVerifyTotp()">Verify TOTP</button>
+    <pre id="mfa-out">—</pre>
+  </div>
+
+  <div class="card">
+    <h2>Passwordless login</h2>
+    <p class="hint">
+      No password: a one-time code is emailed or texted to an existing user,
+      then verified here to start a session. A tenant with MFA enabled still
+      enforces its second factor afterward, same as the Session card.
+    </p>
+    <label>Email <input id="pw-email" type="email" autocomplete="off" /></label>
+    <button onclick="pwlSendEmail()">Email me a code</button>
+    <label style="margin-top:10px">Email code <input id="pw-email-otp" autocomplete="one-time-code" /></label>
+    <button onclick="pwlVerifyEmail()">Verify email code</button>
+    <label style="margin-top:10px">Phone <input id="pw-phone" placeholder="+15551234567" /></label>
+    <button class="ghost" onclick="pwlSendPhone()">Text me a code</button>
+    <label style="margin-top:10px">SMS code <input id="pw-phone-otp" autocomplete="one-time-code" /></label>
+    <button class="ghost" onclick="pwlVerifyPhone()">Verify SMS code</button>
+    <pre id="pw-out">—</pre>
+  </div>
+
+  <div class="card">
+    <h2>Forgot password</h2>
+    <p class="hint">The reset token arrives by email and lands back on this page; the SMS route sends an OTP instead.</p>
+    <label>Email <input id="fp-email" type="email" /></label>
+    <button onclick="call('POST','/api/password/forgot',{email:v('fp-email')},'fp-out')">Send reset email</button>
+    <label style="margin-top:10px">Phone <input id="fp-phone" /></label>
+    <button class="ghost" onclick="call('POST','/api/password/otp',{phone:v('fp-phone')},'fp-out')">Send reset OTP</button>
+    <pre id="fp-out">—</pre>
+  </div>
+
+  <div class="card">
+    <h2>Reset password</h2>
+    <p class="hint">Paste the token from the reset email, or let the emailed link fill it in.</p>
+    <label>Reset token <input id="rt-token" /></label>
+    <label>New password <input id="rt-pass" type="password" /></label>
+    <button onclick="call('POST','/api/password/reset',{resetToken:v('rt-token'),password:v('rt-pass')},'rt-out')">Reset password</button>
+    <label style="margin-top:10px">Phone <input id="ro-phone" /></label>
+    <label>SMS OTP <input id="ro-otp" autocomplete="one-time-code" /></label>
+    <label>New password <input id="ro-pass" type="password" /></label>
+    <button class="ghost" onclick="call('PUT','/api/password/otp',{phone:v('ro-phone'),otp:v('ro-otp'),password:v('ro-pass')},'ro-out')">Reset with OTP</button>
+    <pre id="rt-out">—</pre>
+    <pre id="ro-out">—</pre>
+  </div>
+
+  <div class="card">
+    <h2>Change password</h2>
+    <p class="hint">Needs a signed-in session; returns 401 otherwise.</p>
+    <label>Current password <input id="cp-old" type="password" /></label>
+    <label>New password <input id="cp-new" type="password" /></label>
+    <button onclick="call('POST','/api/password/change',{oldPassword:v('cp-old'),newPassword:v('cp-new')},'c-out')">Change</button>
+    <pre id="c-out">—</pre>
+  </div>
+
+  <div class="card" id="card-profile">
+    <h2>Profile</h2>
+    <p class="hint">Needs a signed-in session; returns 401 otherwise.</p>
+    <button onclick="loadProfile()">Load profile</button>
+    <button class="ghost" onclick="doLogout()">Log out</button>
+    <pre id="pr-out">—</pre>
+  </div>
+
+  <div class="card">
+    <h2>Update profile</h2>
+    <label>First name <input id="u-first" /></label>
+    <label>Last name <input id="u-last" /></label>
+    <label>About <input id="u-about" /></label>
+    <button onclick="call('POST','/api/profile/update',{firstName:v('u-first'),lastName:v('u-last'),about:v('u-about')},'up-out')">Save changes</button>
+    <pre id="up-out">—</pre>
+  </div>
+
+  <div class="card">
+    <h2>Identifiers</h2>
+    <p class="hint">Add / remove need a signed-in session.</p>
+    <label>Add email <input id="ae-email" type="email" autocomplete="off" /></label>
+    <label>Type <input id="ae-type" placeholder="Secondary" /></label>
+    <button onclick="call('POST','/api/email/add',{email:v('ae-email'),type:v('ae-type')},'id-out')">Add email</button>
+    <label style="margin-top:10px">Remove email <input id="de-email" type="email" autocomplete="off" /></label>
+    <button class="ghost" onclick="call('POST','/api/email/delete',{email:v('de-email')},'id-out')">Delete email</button>
+    <label style="margin-top:10px">Phone number <input id="ph-phone" placeholder="+15551234567" /></label>
+    <button class="ghost" onclick="call('POST','/api/phone/update',{phone:v('ph-phone')},'id-out')">Update phone</button>
+    <pre id="id-out">—</pre>
+  </div>
+
+  <div class="card">
+    <h2>Delete account</h2>
+    <p class="hint">
+      The demo refuses any address other than the one you are signed in as. The
+      underlying API is admin-scoped and would delete any account in the tenant.
+    </p>
+    <label>Confirm your email <input id="da-email" type="email" /></label>
+    <button class="ghost" onclick="call('POST','/api/account/delete',{email:v('da-email')},'da-out')">Delete my account</button>
+    <pre id="da-out">—</pre>
+  </div>
+
+  <div class="card">
+    <h2>Custom Objects</h2>
+    <p class="hint">Needs a signed-in session.</p>
+    <label>Object name <input id="co-name" placeholder="MyObject" /></label>
+    <label>Record ID (UUID, for update / delete) <input id="co-id" /></label>
+    <label>Fields (key=value, one per line)
+      <textarea id="co-fields" rows="3" style="width:100%;margin-top:4px;padding:8px 10px;font:inherit;color:var(--fg);background:#fff;border:1px solid var(--line);border-radius:6px;resize:vertical" placeholder="field1=value1&#10;field2=value2"></textarea>
+    </label>
+    <button onclick="coCreate()">Create</button>
+    <button onclick="call('POST','/api/customobject/list',{objectname:v('co-name')},'co-out')">List</button>
+    <button onclick="coUpdate()">Update</button>
+    <button class="ghost" onclick="call('POST','/api/customobject/delete',{objectname:v('co-name'),objectrecordid:v('co-id')},'co-out')">Delete</button>
+    <pre id="co-out">—</pre>
+  </div>
+
+  <div class="card">
+    <h2>Access token</h2>
+    <p class="hint">
+      Refresh uses the <code>/manage/</code> operation. The native variant takes
+      the access token as a query parameter, which would put a bearer credential
+      into access and proxy logs. Refreshing rotates the session's tokens
+      server-side, so the cookie does not change.
+    </p>
+    <button onclick="call('POST','/api/token/refresh',{},'tok-out')">Refresh</button>
+    <button class="ghost" onclick="call('POST','/api/token/validate',{},'tok-out')">Validate</button>
+    <button class="ghost" onclick="call('GET','/api/session/active',null,'tok-out')">Active session</button>
+    <pre id="tok-out">—</pre>
+  </div>
+
+  <div class="card">
+    <h2>Multi-factor authentication</h2>
+    <label>Duo redirect URI <input id="mf-duo" placeholder="https://example.com/duo/callback" /></label>
+    <p class="hint">
+      Optional. Where Duo returns the user after its challenge — only needed if
+      this tenant has Duo configured. Left blank, the parameter is omitted
+      entirely rather than sent empty.
+    </p>
+    <button onclick="mfSettings()">Load settings</button>
+    <button class="ghost" onclick="call('GET','/api/mfa/backupcodes',null,'mf-out')">Generate backup codes</button>
+    <label style="margin-top:10px">Authenticator code <input id="mf-totp" autocomplete="one-time-code" /></label>
+    <button onclick="call('PUT','/api/mfa/totp',{totp:v('mf-totp')},'mf-out')">Enrol authenticator</button>
+    <pre id="mf-out">—</pre>
+  </div>
+
+  <div class="card">
+    <h2>Passkey</h2>
+    <p class="hint">
+      WebAuthn needs a secure context. <code>http://localhost</code> counts, so
+      this works as shipped; over plain HTTP on any other host the browser refuses.
+    </p>
+    <label>Identifier (email) <input id="pk-id" type="email" autocomplete="off" /></label>
+    <button onclick="doPasskeyRegister()">Create passkey</button>
+    <button class="ghost" onclick="doPasskeyLogin()">Sign in with passkey</button>
+    <pre id="pk-out">—</pre>
+  </div>
+</main>
+
+<script>
+  const v = (id) => document.getElementById(id).value;
+
+  function show(id, status, data) {
+    const el = document.getElementById(id);
+    el.className = status >= 200 && status < 300 ? 'ok' : 'err';
+    el.textContent =
+      'HTTP ' + status + '\n' +
+      (typeof data === 'string' ? data : JSON.stringify(data, null, 2));
+  }
+
+  async function call(method, path, body, out) {
+    const el = document.getElementById(out);
+    el.className = '';
+    el.textContent = 'requesting…';
+    try {
+      const res = await fetch(path, {
+        method: method,
+        headers: body ? { 'Content-Type': 'application/json' } : undefined,
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      const text = await res.text();
+      let data;
+      try { data = JSON.parse(text); } catch (e) { data = text; }
+      show(out, res.status, data);
+      return { status: res.status, data };
+    } catch (e) {
+      show(out, 0, String(e));
+      return { status: 0, data: String(e) };
+    }
+  }
+
+  // Loads the profile into the Profile card and scrolls to it — the same
+  // post-sign-in behavior Node's demo uses, so a successful login/MFA
+  // verification/passkey login all land the user in the same place here.
+  async function loadProfile() {
+    const r = await call('GET', '/api/profile', null, 'pr-out');
+    let p = (r && r.data && (r.data.profile ?? r.data.result ?? r.data.response)) ?? (r && r.data) ?? {};
+    if (typeof p === 'string') { try { p = JSON.parse(p); } catch (e) { p = {}; } }
+    if (p.FirstName) document.getElementById('u-first').value = p.FirstName;
+    if (p.LastName) document.getElementById('u-last').value = p.LastName;
+    if (p.About) document.getElementById('u-about').value = p.About;
+    return r;
+  }
+
+  async function goToProfile() {
+    await loadProfile();
+    document.getElementById('card-profile').scrollIntoView({behavior: 'smooth', block: 'start'});
+  }
+
+  // Standalone `required`/`minlength` inputs don't validate on a plain button
+  // click the way a <form required> submit would — reportValidity() runs the
+  // same native browser check (and shows the same tooltip) on demand, so a
+  // click with a blank/too-short field stops here instead of round-tripping
+  // to the server for the same "expected JSON {...}" 400 every time.
+  function checkRequired(...ids) {
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      if (el && !el.reportValidity()) return false;
+    }
+    return true;
+  }
+
+  async function doRegister() {
+    if (!checkRequired('r-email', 'r-pass')) return;
+    call('POST', '/api/auth/register', {
+      firstName: v('r-first'), lastName: v('r-last'), email: v('r-email'), password: v('r-pass'),
+    }, 'r-out');
+  }
+
+  async function doLogin() {
+    if (!checkRequired('l-email', 'l-pass')) return;
+    const r = await call('POST', '/api/auth/login', {email: v('l-email'), password: v('l-pass')}, 'l-out');
+    if (!r || r.status < 200 || r.status >= 300) return;
+    // Overwrites the raw response call() just displayed: the access token has
+    // no business sitting visible in the Session card once login succeeds,
+    // matching Node's demo, which never shows it there either.
+    if (r.data && r.data.mfa_required) {
+      show('l-out', r.status, 'Second factor required — complete the challenge below.');
+      document.getElementById('mfa-card').style.display = '';
+      document.getElementById('mfa-email').value = v('l-email');
+      return;
+    }
+    show('l-out', r.status, 'Signed in.');
+    goToProfile();
+  }
+
+  async function doLogout() {
+    await call('POST', '/api/auth/logout', {}, 'pr-out');
+    location.reload();
+  }
+
+  // ---- Passwordless login ----------------------------------------------
+
+  async function pwlSendEmail() {
+    const email = v('pw-email');
+    if (!email) { show('pw-out', 0, 'enter an email first'); return; }
+    await call('GET', '/api/auth/passwordless/email?email=' + encodeURIComponent(email), null, 'pw-out');
+  }
+
+  async function pwlVerifyEmail() {
+    const r = await call('POST', '/api/auth/passwordless/email/verify', {email: v('pw-email'), otp: v('pw-email-otp')}, 'pw-out');
+    if (r && r.status >= 200 && r.status < 300 && !(r.data && r.data.mfa_required)) goToProfile();
+  }
+
+  async function pwlSendPhone() {
+    const phone = v('pw-phone');
+    if (!phone) { show('pw-out', 0, 'enter a phone number first'); return; }
+    await call('GET', '/api/auth/passwordless/phone?phone=' + encodeURIComponent(phone), null, 'pw-out');
+  }
+
+  async function pwlVerifyPhone() {
+    const r = await call('PUT', '/api/auth/passwordless/phone/verify', {phone: v('pw-phone'), otp: v('pw-phone-otp')}, 'pw-out');
+    if (r && r.status >= 200 && r.status < 300 && !(r.data && r.data.mfa_required)) goToProfile();
+  }
+
+  async function mfaVerifyEmail() {
+    const r = await call('PUT', '/api/mfa/login/email', {email: v('mfa-email'), otp: v('mfa-otp')}, 'mfa-out');
+    if (r && r.status >= 200 && r.status < 300) {
+      document.getElementById('mfa-card').style.display = 'none';
+      goToProfile();
+    }
+  }
+
+  async function mfaVerifyTotp() {
+    const r = await call('PUT', '/api/mfa/login/totp', {totp: v('mfa-totp')}, 'mfa-out');
+    if (r && r.status >= 200 && r.status < 300) {
+      document.getElementById('mfa-card').style.display = 'none';
+      goToProfile();
+    }
+  }
+
+  function mfSettings() {
+    const duo = v('mf-duo');
+    const url = '/api/mfa/settings' + (duo ? ('?duoRedirectUri=' + encodeURIComponent(duo)) : '');
+    call('GET', url, null, 'mf-out');
+  }
+
+  // ---- WebAuthn -------------------------------------------------------------
+  // The API speaks standard WebAuthn: challenges arrive base64url-encoded and
+  // credentials must go back the same way. These helpers are the whole of the
+  // encoding work — ported from the Node demo's app.js, byte for byte.
+
+  const b64urlToBytes = (s) => {
+    const pad = s.replace(/-/g, '+').replace(/_/g, '/');
+    const bin = atob(pad + '='.repeat((4 - (pad.length % 4)) % 4));
+    return Uint8Array.from(bin, (c) => c.charCodeAt(0));
+  };
+
+  const bytesToB64url = (buf) =>
+    btoa(String.fromCharCode(...new Uint8Array(buf)))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+
+  /** The server hands back the options verbatim; only binary fields need decoding. */
+  function decodeCreationOptions(publicKey) {
+    const out = { ...publicKey, challenge: b64urlToBytes(publicKey.challenge) };
+    out.user = { ...publicKey.user, id: b64urlToBytes(publicKey.user.id) };
+    if (publicKey.excludeCredentials) {
+      out.excludeCredentials = publicKey.excludeCredentials.map((c) => ({ ...c, id: b64urlToBytes(c.id) }));
+    }
+    return out;
+  }
+
+  function decodeRequestOptions(publicKey) {
+    const out = { ...publicKey, challenge: b64urlToBytes(publicKey.challenge) };
+    if (publicKey.allowCredentials) {
+      out.allowCredentials = publicKey.allowCredentials.map((c) => ({ ...c, id: b64urlToBytes(c.id) }));
+    }
+    return out;
+  }
+
+  const serializeAttestation = (c) => ({
+    id: c.id,
+    rawId: bytesToB64url(c.rawId),
+    type: c.type,
+    authenticatorAttachment: c.authenticatorAttachment || undefined,
+    clientExtensionResults: c.getClientExtensionResults(),
+    response: {
+      clientDataJSON: bytesToB64url(c.response.clientDataJSON),
+      attestationObject: bytesToB64url(c.response.attestationObject),
+    },
+  });
+
+  const serializeAssertion = (c) => ({
+    id: c.id,
+    rawId: bytesToB64url(c.rawId),
+    type: c.type,
+    authenticatorAttachment: c.authenticatorAttachment || undefined,
+    response: {
+      clientDataJSON: bytesToB64url(c.response.clientDataJSON),
+      authenticatorData: bytesToB64url(c.response.authenticatorData),
+      signature: bytesToB64url(c.response.signature),
+      userHandle: c.response.userHandle ? bytesToB64url(c.response.userHandle) : null,
+    },
+  });
+
+  /** Runs the enrolment ceremony end to end. */
+  async function doPasskeyRegister() {
+    const identifier = v('pk-id');
+    const begin = await call('POST', '/api/passkey/register/begin', {identifier}, 'pk-out');
+    if (!begin || begin.status < 200 || begin.status >= 300) return;
+    const publicKey = begin.data?.result?.RegisterBeginCredential?.publicKey;
+    if (!publicKey) { show('pk-out', 502, {error: 'no WebAuthn options returned'}); return; }
+    let credential;
+    try {
+      credential = await navigator.credentials.create({ publicKey: decodeCreationOptions(publicKey) });
+    } catch (e) {
+      // A cancelled prompt lands here; so does a non-secure context.
+      show('pk-out', 0, {error: String(e.message || e)});
+      return;
+    }
+    await call('POST', '/api/passkey/register/finish', {
+      PasskeyCredential: serializeAttestation(credential),
+      Email: [{ Type: 'Primary', Value: identifier }],
+    }, 'pk-out');
+  }
+
+  /** Runs the login ceremony end to end. */
+  async function doPasskeyLogin() {
+    const identifier = v('pk-id');
+    const begin = await call('POST', '/api/passkey/login/begin', {identifier}, 'pk-out');
+    if (!begin || begin.status < 200 || begin.status >= 300) return;
+    const publicKey = begin.data?.result?.LoginBeginCredential?.publicKey;
+    if (!publicKey) { show('pk-out', 502, {error: 'no WebAuthn options returned'}); return; }
+    let assertion;
+    try {
+      assertion = await navigator.credentials.get({ publicKey: decodeRequestOptions(publicKey) });
+    } catch (e) {
+      show('pk-out', 0, {error: String(e.message || e)});
+      return;
+    }
+    const finish = await call('POST', '/api/passkey/login/finish', {
+      PasskeyCredential: serializeAssertion(assertion),
+      email: identifier,
+    }, 'pk-out');
+    if (finish && finish.status >= 200 && finish.status < 300) goToProfile();
+  }
+
+  // Parses the custom-object fields textarea into a flat object.
+  function parseFields() {
+    const out = {};
+    v('co-fields').split('\n').forEach(line => {
+      const eq = line.indexOf('=');
+      if (eq > 0) out[line.slice(0, eq).trim()] = line.slice(eq + 1).trim();
+    });
+    return out;
+  }
+
+  function coCreate() {
+    const body = Object.assign({objectname: v('co-name')}, parseFields());
+    call('POST', '/api/customobject/create', body, 'co-out');
+  }
+
+  function coUpdate() {
+    const body = Object.assign({objectname: v('co-name'), objectrecordid: v('co-id')}, parseFields());
+    call('POST', '/api/customobject/update', body, 'co-out');
+  }
+
+  // Banner for the email-verification redirect.
+  const q = new URLSearchParams(location.search);
+  if (q.has('verify')) {
+    const state = q.get('verify');
+    const banner = document.getElementById('banner');
+    banner.style.display = 'block';
+    banner.style.background = state === 'success' ? '#e7f6ed' : '#fdeceb';
+    banner.style.color = state === 'success' ? '#0a7f3f' : '#b42318';
+    banner.textContent =
+      'Email verification: ' + state + (q.get('message') ? ' — ' + q.get('message') : '');
+  }
+</script>
