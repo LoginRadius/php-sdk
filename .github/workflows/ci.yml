@@ -1,8 +1,9 @@
-# Maintained in SDK-FACTORY: languages/php/static/.github/workflows/ci.yml.mustache
-# An edit made in this repository is overwritten by the next sync — change it there.
+# GENERATED FILE — do not edit it in this repository.
+# This workflow is produced alongside the rest of this SDK and is overwritten
+# whenever the SDK is regenerated. Raise changes where the SDK is generated.
 #
-# The steps mirror languages/php/lang.yaml `verify:` (the factory's own gate),
-# with the pinned composer:2.7 / php:8.1-cli images replaced by setup-php.
+# These steps mirror this SDK's own build verification, with the pinned
+# composer:2.7 / php:8.1-cli images replaced by setup-php.
 name: CI
 
 on:
@@ -56,9 +57,9 @@ jobs:
     runs-on: ubuntu-latest
     # Advisory, not a gate. The generator's own .php-cs-fixer.dist.php has a
     # finder of in(__DIR__) excluding only vendor/test/tests, so it also lints
-    # src/Internal/OpenApi/ — generated code the factory formats on a
-    # best-effort basis (`|| true` in lang.yaml postRender). Failing the build
-    # on it would block every PR on noise nobody here can fix by hand.
+    # src/Internal/OpenApi/ — generated code, formatted on a best-effort basis.
+    # Failing the build on it would block every PR on noise nobody here can fix
+    # by hand.
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
@@ -74,6 +75,6 @@ jobs:
 
       # --allow-risky=yes: the ruleset enables strict_comparison/strict_param,
       # which php-cs-fixer classifies as risky and refuses to run without this.
-      # That ruleset is the generator's choice, not a factory override.
+      # That ruleset ships with this SDK rather than being overridden here.
       - name: Check formatting
         run: vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no --allow-risky=yes

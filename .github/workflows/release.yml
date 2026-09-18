@@ -1,5 +1,6 @@
-# Maintained in SDK-FACTORY: languages/php/static/.github/workflows/release.yml.mustache
-# An edit made in this repository is overwritten by the next sync — change it there.
+# GENERATED FILE — do not edit it in this repository.
+# This workflow is produced alongside the rest of this SDK and is overwritten
+# whenever the SDK is regenerated. Raise changes where the SDK is generated.
 #
 # Packagist has nothing to push to: it reads the repository and derives versions
 # from tags, normally via a webhook. So this workflow re-runs the gate, records
