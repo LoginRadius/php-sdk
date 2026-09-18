@@ -1,7 +1,7 @@
 <?php
 
 // Hand-written — unlike DemoRoutes, this is NOT part of the shared manifest
-// contract in manifest/sdk.yaml `demo.routes`. It extends the PHP demo with
+// contract in the shared SDK manifest `demo.routes`. It extends the PHP demo with
 // endpoints the other SDKs' demos also expose ad hoc, on top of the 9 routes
 // every language's demo shares.
 

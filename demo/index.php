@@ -68,7 +68,7 @@ $client = new Client($config);
 $sessions = new DemoSessions();
 $handlers = new DemoHandlers($client, $config, $sessions);
 
-// The API surface comes from DemoRoutes, generated from manifest/sdk.yaml,
+// The API surface comes from DemoRoutes, generated from the shared SDK manifest,
 // plus ExtendedRoutes (hand-written, not part of the shared contract — see
 // its header comment). Registering from the table (rather than by hand) is
 // what keeps every language's demo on the same endpoints: method checking and

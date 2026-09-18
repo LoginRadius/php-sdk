@@ -553,8 +553,8 @@ class Configuration
 
     /**
      * Generic {variable} substitutions for operation-level pinned hosts, set
-     * by the facade from manifest/sdk.yaml's operationServers.tenantVariables.
-     * Added by sdk-factory's post-generate hook, not by openapi-generator.
+     * by the facade from the shared SDK manifest's operationServers.tenantVariables.
+     * Added by the LoginRadius SDK generator, not by openapi-generator.
      *
      * @var array<string, string>
      */
@@ -584,7 +584,7 @@ class Configuration
      * entirely in favour of this value when it is set — the generated layer
      * exposes no per-operation "use this host instead" override, so this is
      * the only way an explicit base URL can win for the operations the spec
-     * pins elsewhere too. Added by sdk-factory's post-generate hook, not by
+     * pins elsewhere too. Added by the SDK generator's post-generate hook, not by
      * openapi-generator.
      */
     protected ?string $loginRadiusBaseUrlOverride = null;

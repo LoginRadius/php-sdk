@@ -16,7 +16,7 @@ final class Demo
     /**
      * Holds the second-factor authentication token from a challenge login, in
      * a cookie SEPARATE from the session cookie — the manifest's declared
-     * name (`manifest/sdk.yaml` demo.mfaTokenCookie: lr_mfa), matched here by
+     * name (the shared SDK manifest demo.mfaTokenCookie: lr_mfa), matched here by
      * hand since this route family predates PHP's generated contract. A
      * half-authenticated user must never hold anything the session cookie
      * check would accept, so this is deliberately its own cookie rather than

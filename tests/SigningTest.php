@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  * admin-console-backend/lib/services/loginradius-v2-sdk/lr.js — against these
  * exact inputs. They are not copied from this SDK's own output, so this test
  * proves the port matches the known-working algorithm rather than merely
- * matching itself. Mirrors languages/node/static/__tests__/signing.test.ts.
+ * matching itself. Mirrors the Node SDK's signing.test.ts.
  */
 final class SigningTest extends TestCase
 {

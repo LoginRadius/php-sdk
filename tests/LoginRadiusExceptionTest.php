@@ -9,10 +9,10 @@ use LoginRadius\Sdk\LoginRadiusException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Asserts manifest/sdk.yaml's concrete error-classification values: the
+ * Asserts the shared SDK manifest's concrete error-classification values: the
  * predicates' status codes, the envelope shapes tried in order, and the
  * case-insensitive field-alias probing. A manifest change is supposed to
- * break this test. Mirrors languages/node/static/__tests__/errors.test.ts
+ * break this test. Mirrors the Node SDK's errors.test.ts
  * case for case.
  */
 final class LoginRadiusExceptionTest extends TestCase

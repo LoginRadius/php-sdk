@@ -23,7 +23,7 @@ final class ClientTest extends TestCase
 
         // A representative subset, not the full 50+ services — this is a
         // wiring smoke test, not a service-discovery test (that lives in
-        // sdk-factory's tools/derive-services.mjs against the generated tree).
+        // the SDK generator against the generated tree).
         $this->assertInstanceOf(\LoginRadius\Sdk\Internal\OpenApi\Api\UserApi::class, $client->user);
         $this->assertInstanceOf(\LoginRadius\Sdk\Internal\OpenApi\Api\LoginApi::class, $client->login);
         $this->assertInstanceOf(\LoginRadius\Sdk\Internal\OpenApi\Api\RegistrationApi::class, $client->registration);

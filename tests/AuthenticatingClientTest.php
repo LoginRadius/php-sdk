@@ -16,10 +16,10 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
 /**
- * Asserts manifest/sdk.yaml's concrete credential wiring: which header or
+ * Asserts the shared SDK manifest's concrete credential wiring: which header or
  * query parameter each credential lands in, Authorization precedence, and
  * that a default header can never mask a credential. Mirrors
- * languages/node/static/__tests__/auth.test.ts case for case.
+ * the Node SDK's auth.test.ts case for case.
  */
 final class AuthenticatingClientTest extends TestCase
 {

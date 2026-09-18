@@ -8,10 +8,10 @@ use LoginRadius\Sdk\Config;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Asserts manifest/sdk.yaml's concrete values — base-URL precedence and the
+ * Asserts the shared SDK manifest's concrete values — base-URL precedence and the
  * "at least one credential" validation. A manifest change is supposed to
  * break this test, so a behavioural change cannot land silently. Mirrors
- * languages/node/static/__tests__/config.test.ts case for case.
+ * the Node SDK's config.test.ts case for case.
  */
 final class ConfigTest extends TestCase
 {

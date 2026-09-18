@@ -17,8 +17,8 @@ use PHPUnit\Framework\TestCase;
  * token that is silently rejected.
  *
  * If this test fails, the implementation has diverged, not the expectation.
- * The shared parameters live in sdk-factory's manifest/sdk.yaml under `sott:`.
- * Mirrors languages/node/static/__tests__/sott.test.ts.
+ * The shared parameters live in the SDK generator's shared configuration under `sott:`.
+ * Mirrors the Node SDK's sott.test.ts.
  */
 final class SottTest extends TestCase
 {
