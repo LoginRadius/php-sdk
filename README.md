@@ -1,5 +1,7 @@
 # LoginRadius PHP SDK — v12
 
+[![CI](https://github.com/LoginRadius/php-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/LoginRadius/php-sdk/actions/workflows/ci.yml)
+
 Generated from the LoginRadius OpenAPI specification. Every LoginRadius SDK —
 Go, Node.js, Java, .NET, and PHP — is rendered from that one spec plus one
 shared behavioural manifest, so credentials, base-URL precedence, error
