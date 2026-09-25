@@ -1,0 +1,116 @@
+# GENERATED FILE — do not edit it in this repository.
+# This workflow is produced alongside the rest of this SDK and is overwritten
+# whenever the SDK is regenerated. Raise changes where the SDK is generated.
+#
+# Packagist has nothing to push to: it reads the repository and derives versions
+# from tags, normally via a webhook. So this workflow re-runs the gate, records
+# the GitHub Release, and only nudges Packagist in case the webhook is absent.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing tag to release (e.g. v12.0.0-rc.1)'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Release loginradius/php-sdk
+    runs-on: ubuntu-latest
+    # Requires a human approval on the 'release' environment. The Packagist
+    # credentials belong on that environment, not on the repository.
+    environment: release
+    permissions:
+      contents: write   # create the GitHub Release
+    # Job-level, not step-level: a step's own `if:` is evaluated before its
+    # `env:` block exists, so the Packagist skip below cannot see them there.
+    env:
+      PACKAGIST_USERNAME: ${{ secrets.PACKAGIST_USERNAME }}
+      PACKAGIST_TOKEN: ${{ secrets.PACKAGIST_TOKEN }}
+    steps:
+      - name: Resolve tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "name=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.tag.outputs.name }}
+          fetch-depth: 0
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: curl, json, mbstring
+          coverage: none
+
+      # composer.json carries an explicit "version" for this SDK, and Packagist
+      # will believe it over the tag. If the two disagree, customers get a
+      # version string that does not match what they installed.
+      - name: Tag matches composer.json and the SDK version
+        run: |
+          expected='12.0.0-rc.1'
+          declared="$(php -r 'echo json_decode(file_get_contents("composer.json"))->version ?? "";')"
+          tag='${{ steps.tag.outputs.name }}'
+          if [ "${declared}" != "${expected}" ]; then
+            echo "::error::composer.json version ${declared} does not match the generated SDK version ${expected}"
+            exit 1
+          fi
+          if [ "${tag}" != "v${expected}" ]; then
+            echo "::error::tag ${tag} does not match the generated SDK version v${expected}"
+            exit 1
+          fi
+
+      - name: Validate composer.json
+        # --no-check-publish is dropped here on purpose: at release time the
+        # package must actually be publishable, which is the one moment that
+        # check is worth failing on.
+        run: composer validate --no-check-all
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-progress --no-interaction
+
+      - name: Test
+        run: vendor/bin/phpunit --testdox
+
+      - name: Create the GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag.outputs.name }}
+        run: |
+          if gh release view "${TAG}" >/dev/null 2>&1; then
+            echo "release ${TAG} already exists — nothing to do"
+            exit 0
+          fi
+          PRERELEASE='--prerelease'
+          gh release create "${TAG}" --verify-tag --title "${TAG}" \
+            --notes-file CHANGELOG.md ${PRERELEASE}
+
+      # Only needed when the GitHub->Packagist webhook is not configured. Left
+      # non-fatal and skipped when the secrets are absent: Packagist picking the
+      # tag up by itself is the normal path, and a missing optional credential
+      # must not fail a release that has already happened.
+      - name: Notify Packagist
+        if: ${{ env.PACKAGIST_USERNAME != '' && env.PACKAGIST_TOKEN != '' }}
+        continue-on-error: true
+        run: |
+          curl --silent --show-error --fail-with-body \
+            -X POST \
+            -H 'Content-Type: application/json' \
+            -d '{"repository":{"url":"https://github.com/${{ github.repository }}"}}' \
+            "https://packagist.org/api/update-package?username=${PACKAGIST_USERNAME}&apiToken=${PACKAGIST_TOKEN}"
