@@ -1,0 +1,80 @@
+# GENERATED FILE — do not edit it in this repository.
+# This workflow is produced alongside the rest of this SDK and is overwritten
+# whenever the SDK is regenerated. Raise changes where the SDK is generated.
+#
+# These steps mirror this SDK's own build verification, with the pinned
+# composer:2.7 / php:8.1-cli images replaced by setup-php.
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 8.1 is composer.json's declared floor — a promise to
+        # customers, and testing only above it never discovers the promise is
+        # broken. The newer versions are there to catch deprecations early.
+        php: ['8.1', '8.2', '8.3', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          # The extensions composer.json requires.
+          extensions: curl, json, mbstring
+          coverage: none
+
+      - name: Validate composer.json
+        run: composer validate --no-check-publish --no-check-all
+
+      # `update`, not `install`: composer.lock is gitignored for this SDK (see
+      # .gitignore), so there is no lock to install from. That also means CI
+      # resolves fresh dependencies on every run, which is the point for a
+      # library — it is what notices an incompatible upstream release.
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-progress --no-interaction
+
+      - name: Test
+        run: vendor/bin/phpunit --testdox
+
+  style:
+    name: Code style
+    runs-on: ubuntu-latest
+    # Advisory, not a gate. The generator's own .php-cs-fixer.dist.php has a
+    # finder of in(__DIR__) excluding only vendor/test/tests, so it also lints
+    # src/Internal/OpenApi/ — generated code, formatted on a best-effort basis.
+    # Failing the build on it would block every PR on noise nobody here can fix
+    # by hand.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: curl, json, mbstring
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-progress --no-interaction
+
+      # --allow-risky=yes: the ruleset enables strict_comparison/strict_param,
+      # which php-cs-fixer classifies as risky and refuses to run without this.
+      # That ruleset ships with this SDK rather than being overridden here.
+      - name: Check formatting
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no --allow-risky=yes

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Hand-maintained — points at the facade's own tests/, not the generator's
+  test/ (deleted by hooks/post-generate.sh). Protected from being overwritten
+  by openapi/.openapi-generator-ignore.
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true">
+    <testsuites>
+        <testsuite name="facade">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
